@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` 1`] = `
+<div
+  class="spinner spinner-indeterminate"
+  data-testid="small--1"
+>
+  <svg
+    class="spinner-inner"
+    height="20"
+    width="20"
+  >
+    <circle
+      class="circle"
+      cx="10"
+      cy="10"
+      fill="transparent"
+      r="9"
+      stroke-dasharray="56.5"
+      stroke-width="2"
+    />
+    <circle
+      class="progress"
+      cx="10"
+      cy="10"
+      fill="transparent"
+      r="9"
+      stroke-dasharray="56.5"
+      stroke-dashoffset="42.375"
+      stroke-width="2"
+    />
+  </svg>
+</div>
+`;
+
+exports[` 2`] = `
+<div
+  class="spinner"
+  data-testid="small-10"
+>
+  <svg
+    class="spinner-inner"
+    height="20"
+    width="20"
+  >
+    <circle
+      class="circle"
+      cx="10"
+      cy="10"
+      fill="transparent"
+      r="9"
+      stroke-dasharray="56.5"
+      stroke-width="2"
+    />
+    <circle
+      class="progress"
+      cx="10"
+      cy="10"
+      fill="transparent"
+      r="9"
+      stroke-dasharray="56.5"
+      stroke-dashoffset="50.85"
+      stroke-width="2"
+    />
+  </svg>
+</div>
+`;

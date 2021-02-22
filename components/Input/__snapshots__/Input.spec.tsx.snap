@@ -1,0 +1,134 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Input Renders disabled input 1`] = `
+<div
+  class="flex flex-col w-full px-0"
+>
+  <label
+    class="mb-2 text-sm font-medium app-greyish-brown"
+    for="Default"
+    id="Default"
+  >
+    Default
+  </label>
+  <input
+    class="app-input app-disabled"
+    data-testid="input-test"
+    disabled=""
+    placeholder=""
+    type="text"
+  />
+  
+</div>
+`;
+
+exports[`Input Renders error 1`] = `
+<div
+  class="flex flex-col w-full px-0"
+>
+  <label
+    class="mb-2 text-sm font-medium app-greyish-brown"
+    for="Default"
+    id="Default"
+  >
+    Default
+  </label>
+  <input
+    class="app-input"
+    data-testid="input-test"
+    placeholder=""
+    type="text"
+  />
+  <p
+    class="pt-2 text-sm app-red"
+  >
+    error
+  </p>
+</div>
+`;
+
+exports[`Input Renders input 1`] = `
+<div
+  class="flex flex-col w-full px-0"
+>
+  <label
+    class="mb-2 text-sm font-medium app-greyish-brown"
+    for="Default"
+    id="Default"
+  >
+    Default
+  </label>
+  <input
+    class="app-input"
+    data-testid="input-test"
+    placeholder=""
+    type="text"
+  />
+  
+</div>
+`;
+
+exports[`Input Renders input with maxLength 1`] = `
+<div
+  class="flex flex-col w-full px-0"
+>
+  <label
+    class="mb-2 text-sm font-medium app-greyish-brown"
+    for="Default"
+    id="Default"
+  >
+    Default
+  </label>
+  <input
+    class="app-input"
+    data-testid="input-test"
+    maxlength="6"
+    placeholder=""
+    type="text"
+  />
+  
+</div>
+`;
+
+exports[`Input Renders input with placeholder 1`] = `
+<div
+  class="flex flex-col w-full px-0"
+>
+  <label
+    class="mb-2 text-sm font-medium app-greyish-brown"
+    for="Default"
+    id="Default"
+  >
+    Default
+  </label>
+  <input
+    class="app-input"
+    data-testid="input-test"
+    placeholder="Placeholder"
+    type="text"
+  />
+  
+</div>
+`;
+
+exports[`Input Renders readonly input 1`] = `
+<div
+  class="flex flex-col w-full px-0"
+>
+  <label
+    class="mb-2 text-sm font-medium app-greyish-brown"
+    for="Default"
+    id="Default"
+  >
+    Default
+  </label>
+  <input
+    class="app-input"
+    data-testid="input-test"
+    placeholder=""
+    readonly=""
+    type="text"
+  />
+  
+</div>
+`;

@@ -1,0 +1,41 @@
+.spinner {
+  display: block;
+}
+.spinner .progress {
+  transition: 300ms stroke-dashoffset;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  stroke: #0035c1;
+}
+.spinner .circle {
+  stroke: rgba(0, 0, 0, 0.2);
+}
+.spinner.spinner-indeterminate .spinner-inner {
+  transform: translateZ(0);
+  animation: load8 1.1s infinite linear;
+  -webkit-animation: load8 1.1s infinite linear;
+  -ms-transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+@-webkit-keyframes load8 {
+  0% {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes load8 {
+  0% {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+  }
+}

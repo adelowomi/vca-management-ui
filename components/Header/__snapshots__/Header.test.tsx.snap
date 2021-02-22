@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="Header__HeaderContaier-sc-1c6lzu5-0 kuOhAr"
+  >
+    <img
+      alt="logo"
+      height="35"
+      loading="lazy"
+      src="/images/logo-colored-on-white.svg"
+      width="126"
+    />
+  </div>
+</DocumentFragment>
+`;

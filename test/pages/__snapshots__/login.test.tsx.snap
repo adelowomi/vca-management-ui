@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login page matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="login__Container-sc-7sqdhs-0 ddvMVP"
+  >
+    <div
+      class="Header__HeaderContaier-sc-1c6lzu5-0 kuOhAr"
+    >
+      <img
+        alt="logo"
+        height="35"
+        loading="lazy"
+        src="/images/logo-colored-on-white.svg"
+        width="126"
+      />
+    </div>
+    <div
+      class="login__LoginContainer-sc-7sqdhs-2 hwzkcZ"
+    >
+      <div
+        class="login__TitleContainer-sc-7sqdhs-1 fuBqCD"
+      >
+        <h1
+          class="login__Title-sc-7sqdhs-3 ggOqgW"
+        >
+          Sign in
+        </h1>
+        <h1
+          class="login__Title-sc-7sqdhs-3 ggOqgW"
+        >
+          with Qaltrak
+        </h1>
+      </div>
+      <a
+        href="/api/auth/login"
+      >
+        <button
+          aria-label="Login Button"
+          class="Button-sc-13zys56-0 fnSWHi"
+          width="345px"
+        >
+          Sign In
+        </button>
+      </a>
+      <div
+        class="login__SignUpContainer-sc-7sqdhs-4 gQqXrp"
+      >
+        <span>
+          Not a member?
+        </span>
+        <div
+          class="login__SignUpButton-sc-7sqdhs-5 gIHnID"
+        >
+          <a
+            href="/signup"
+          >
+            Sign up
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

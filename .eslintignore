@@ -1,0 +1,11 @@
+**/node_modules/*
+**/out/*
+**/out_publish/*
+**/out_functions/*
+**/.next/*
+**/.idea/*
+**/plop-templates
+package.json
+out_functions
+out_publish
+cypress/*

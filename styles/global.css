@@ -1,0 +1,136 @@
+/* ./styles/global.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.app-blue {
+  color: #0035c1;
+}
+.app-blue-bkg {
+  color: rgba(0, 53, 193, 0.1);
+}
+.app-indigo {
+  color: #0c1a38;
+}
+.app-blue {
+  color: #0035c1;
+}
+.app-greyish-brown {
+  color: #595959;
+}
+.app-white {
+  color: #fff;
+}
+.app-red {
+  color: #b70303;
+}
+.app-icon {
+  position: relative;
+  box-sizing: content-box;
+  display: inline-flex;
+  width: 24px;
+  min-width: 0;
+  height: 24px;
+  min-height: 0;
+  line-height: 0;
+  fill: #0c1a38;
+}
+
+.app-icon i {
+  display: flex;
+  margin: auto;
+}
+
+.app-icon svg {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.app-avatar-icon {
+  width: 32;
+  height: 32;
+  clip-path: circle(128px at 50% 50%);
+  border-radius: 50%;
+  overflow: hidden;
+}
+.shipment-card-grid-1 {
+  display: grid;
+  grid-template-columns: 60px 138px 1fr;
+}
+.shipment-card-grid-2 {
+  display: grid;
+  grid-template-columns: 198px 180px;
+}
+.app-form-select {
+  border-radius: 4px;
+  border: solid 1px #595959;
+  width: 100%;
+  padding-left: 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.app-select-disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+  transition: opacity 100ms;
+}
+.app-form-select-list {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 55px;
+  border: 1px solid #595959;
+  border-radius: 4px;
+  list-style-type: none;
+  padding: 0px;
+  background-color: #fff;
+  z-index: 2;
+  max-height: 250px;
+  overflow: auto;
+}
+.app-form-select-list li {
+  padding: 6px 12px;
+  cursor: pointer;
+  color: #0c1a38;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.app-form-select-list li:hover {
+  background-color: hsl(0, 0%, 80%);
+}
+
+.app-input {
+  z-index: 1;
+  min-width: 40px;
+  height: 34px;
+  padding: 15px;
+  margin: 0;
+  font-size: 0.875rem;
+  background: #fff;
+  border: 1px #595959 solid;
+  border-radius: 3px;
+}
+
+.app-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transition: opacity 100ms;
+}
+
+.app-input:not([disabled]):not([readonly]),
+.app-textarea:not([disabled]):not([readonly]),
+.app-select:not([disabled]):not([readonly]) {
+  transition: background-color 100ms, background 100ms, color 100ms;
+}
+
+.app-input[readonly],
+.app-textarea[readonly],
+.app-select[readonly],
+.app-input-readonly.app-input,
+.app-input-readonly.app-textarea,
+.app-input-readonly.app-select {
+  cursor: default;
+  background: rgba(0, 0, 0, 0.1);
+  border: 0;
+}
