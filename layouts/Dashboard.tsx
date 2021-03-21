@@ -5,13 +5,9 @@ import Sidebar from '../components/Sidebar';
 
 const Dashboard = ({ children }): JSX.Element => {
   const [sidebar, setSidebar] = React.useState(false);
-  const [userMenu, setuserMenu] = React.useState(false);
 
   const showSidebar = () => {
     setSidebar(!sidebar);
-  };
-  const showUsermenu = () => {
-    setuserMenu(!userMenu);
   };
 
   return (
@@ -24,11 +20,7 @@ const Dashboard = ({ children }): JSX.Element => {
 
         {/* NAV BAR  */}
         <div className="flex flex-col w-0 flex-1 overflow-hidden">
-          <Navbar
-            showSidebar={showSidebar}
-            userMenu={userMenu}
-            showUsermenu={showUsermenu}
-          />
+          <Navbar showSidebar={showSidebar} />
           <main
             className="flex-1 relative overflow-y-auto focus:outline-none"
             tabIndex={0}

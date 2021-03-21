@@ -1,11 +1,11 @@
-import React from 'react'
+import React from 'react';
 
 const about: React.FC = () => {
-    return (
-        <div>
-        <h1>About page</h1>
-        </div>
-    )
-}
+  return (
+    <div>
+      <h1>Welcome to about Us</h1>
+    </div>
+  );
+};
 
-export default about
+export default about;
