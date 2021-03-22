@@ -1,7 +1,8 @@
 import '../styles/global.css';
 
+import { getSession, UserProvider } from '@auth0/nextjs-auth0';
 import { BaseProvider } from 'baseui';
-import { AppProps } from 'next/app';
+import App, { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -24,32 +25,53 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   const { locale, defaultLocale } = useRouter();
   const messages = locales[locale];
 
-  const apolloClient = useApollo(pageProps.initialApolloState);
+  const apolloClient = useApollo(
+    pageProps.initialApolloState,
+    pageProps.idToken
+  );
 
   return (
-    <ApolloProvider client={apolloClient}>
-      <StyletronProvider value={styletron}>
-        <BaseProvider theme={appThemes}>
-          <ThemeProvider theme={theme()}>
-            <IntlProvider
-              locale={locale}
-              defaultLocale={defaultLocale}
-              messages={messages}
-            >
-              <Head>
-                <title>Qaltrak</title>
-                <meta name="Description" content="Qaltrak" />
-              </Head>
-              <Container>
-                <GlobalStyles />
-                <Component {...pageProps} />
-              </Container>
-            </IntlProvider>
-          </ThemeProvider>
-        </BaseProvider>
-      </StyletronProvider>
-    </ApolloProvider>
+    <UserProvider>
+      <ApolloProvider client={apolloClient}>
+        <StyletronProvider value={styletron}>
+          <BaseProvider theme={appThemes}>
+            <ThemeProvider theme={theme()}>
+              <IntlProvider
+                locale={locale}
+                defaultLocale={defaultLocale}
+                messages={messages}
+              >
+                <Head>
+                  <title>Qaltrak</title>
+                  <meta name="Description" content="Qaltrak" />
+                </Head>
+                <Container>
+                  <GlobalStyles />
+                  <Component {...pageProps} />
+                </Container>
+              </IntlProvider>
+            </ThemeProvider>
+          </BaseProvider>
+        </StyletronProvider>
+      </ApolloProvider>
+    </UserProvider>
   );
+};
+
+MyApp.getInitialProps = async (appContext) => {
+  const session = await getSession(appContext.ctx.req, appContext.ctx.res);
+  const appProps = await App.getInitialProps(appContext);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  return { pageProps: { ...appProps.pageProps, ...session } };
 };
 
 export default MyApp;

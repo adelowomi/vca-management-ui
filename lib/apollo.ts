@@ -1,7 +1,6 @@
 import {
   ApolloClient,
   ApolloProvider,
-  HttpLink,
   InMemoryCache,
   NormalizedCacheObject,
 } from '@apollo/client';
@@ -15,18 +14,19 @@ export type ResolverContext = {
   res?: ServerResponse;
 };
 
-function createApolloClient() {
+function createApolloClient(authToken: string) {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: new HttpLink({
-      uri: process.env.API_URL || 'http://localhost:3000',
-    }),
+    uri: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
     cache: new InMemoryCache(),
+    headers: {
+      authorization: `Bearer ${authToken}`,
+    },
   });
 }
 
-export function initializeApollo(initialState: any = null) {
-  const _apolloClient = apolloClient ?? createApolloClient();
+export function initializeApollo(initialState: any = null, authToken: string) {
+  const _apolloClient = apolloClient ?? createApolloClient(authToken);
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
   // get hydrated here
@@ -41,8 +41,10 @@ export function initializeApollo(initialState: any = null) {
   return _apolloClient;
 }
 
-function useApollo(initialState: any) {
-  return useMemo(() => initializeApollo(initialState), [initialState]);
+function useApollo(initialState: any, authToken: string) {
+  return useMemo(() => initializeApollo(initialState, authToken), [
+    initialState,
+  ]);
 }
 
 export { ApolloProvider, useApollo };
