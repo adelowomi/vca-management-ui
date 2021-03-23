@@ -22,7 +22,7 @@ const Container = styled.div`
 `;
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
-  const { locale, defaultLocale, push } = useRouter();
+  const { locale, defaultLocale } = useRouter();
   const messages = locales[locale];
   // if (!pageProps.idToken) {
 
