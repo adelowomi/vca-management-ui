@@ -22,9 +22,11 @@ const Container = styled.div`
 `;
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
-  const { locale, defaultLocale } = useRouter();
+  const { locale, defaultLocale, push } = useRouter();
   const messages = locales[locale];
+  // if (!pageProps.idToken) {
 
+  // }
   const apolloClient = useApollo(
     pageProps.initialApolloState,
     pageProps.idToken
@@ -63,12 +65,7 @@ MyApp.getInitialProps = async (appContext) => {
   const appProps = await App.getInitialProps(appContext);
 
   if (!session) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
+    return { pageProps: {} };
   }
 
   return { pageProps: { ...appProps.pageProps, ...session } };
