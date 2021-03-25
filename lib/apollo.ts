@@ -17,7 +17,7 @@ export type ResolverContext = {
 function createApolloClient(authToken: string) {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    uri: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+    uri: process.env.NEXT_PUBLIC_API_URL,
     cache: new InMemoryCache(),
     headers: {
       authorization: `Bearer ${authToken}`,
