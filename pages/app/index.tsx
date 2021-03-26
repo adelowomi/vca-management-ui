@@ -1,47 +1,51 @@
 import { gql, useQuery } from '@apollo/client';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
-import Link from 'next/link';
 import React from 'react';
 
+import { useAppContext } from '../../context/state';
 import Dashboard from '../../layouts/Dashboard';
 
-const SITES_QUERY = gql`
-  query Sites {
-    sites {
-      name
+const PAGES_QUERY = gql`
+  query Pages($siteId: String!) {
+    pages(siteId: $siteId) {
       id
-      createdBy {
-        businessName
-        firstName
-        lastName
-        phone
-        industry
+      name
+      tags
+      site
+      hero {
+        type
+        mediaUrl
+        heading
+        hasAction
+        actoinText
+        actoinSlug
+        location
       }
     }
   }
 `;
 
 const index = () => {
-  const { data, error, loading } = useQuery(SITES_QUERY);
+  const site: any = useAppContext();
+  const { data, error, loading } = useQuery(PAGES_QUERY, {
+    variables: { siteId: site.id },
+  });
+  console.log(site);
   console.log('DATA', data);
   if (error) {
-    console.log('ERROR', error.message);
-    console.log('ERROR GRAPH', error.graphQLErrors);
+    console.error(error.message);
+    console.error(error.graphQLErrors);
   }
-  console.log('LOADING', loading);
+
+  if (loading) {
+    return <div>Loading</div>;
+  }
 
   return (
     <Dashboard>
       <h1 className="text-lg text-black text-">Component Dashboard</h1>
-      {data && (
-        <>
-          {data.feed.links.map((link) => (
-            <Link key={link.id} href={`/${link.name}`} />
-          ))}
-        </>
-      )}
     </Dashboard>
   );
 };
-// export default withPageAuthRequired(index);
-export default index;
+export default withPageAuthRequired(index);
+// export default index;
