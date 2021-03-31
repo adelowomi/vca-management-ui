@@ -1,9 +1,98 @@
+import { gql, useMutation } from '@apollo/client';
 import Link from 'next/link';
 import React from 'react';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
 import DropdownRender from './Dropdown';
 
+const animatedComponents = makeAnimated();
+const tags = [
+  { value: 'bank', label: 'banks' },
+  { value: 'economy', label: 'economy' },
+  { value: 'finance', label: 'finance' },
+  { value: 'country', label: 'country' },
+  { value: 'church', label: 'church' },
+  { value: 'tech', label: 'tech' },
+];
+
+const ADD_PAGE = gql`
+  mutation CreatePage($CreatePageInput: String!) {
+    createPage(createPageInput: CreatePageInput) {
+      id
+    }
+  }
+`;
+
 const AddNewPage = () => {
+  const [header, setHeader] = React.useState('');
+  const [state, setState] = React.useState({
+    pageTitle: '',
+    site: '6049f500c013677d9fafd4ea',
+    mediaUrl: '',
+    headerText: '',
+    captionText: '',
+    actionText: '',
+    bodyTitle: '',
+    bodyDescription: '',
+    ctaLink: '',
+    headerType: '',
+    tags: [],
+    location: 'LEFT',
+  });
+  const [createPage, { data }] = useMutation(ADD_PAGE);
+
+  const onButtonClick = (e: any) => {
+    setHeader(e.target.value);
+  };
+
+  const handleChange = (e: any) => {
+    const value = e.target.value;
+    setState({
+      ...state,
+      [e.target.name]: value,
+    });
+  };
+
+  const onSelect = (data: any) => {
+    const arr = data.map((el) => el.value);
+    setState({
+      ...state,
+      tags: arr,
+    });
+  };
+  const onSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    createPage({
+      variables: {
+        createPageInput: {
+          name: state.pageTitle,
+          tags: state.tags,
+          site: state.site,
+          hero: {
+            caption: state.captionText,
+            type: 'Bank',
+            mediaUrl: state.mediaUrl,
+            heading: state.headerText,
+            hasAction: true,
+            actoinText: state.actionText,
+            actoinSlug: state.ctaLink,
+            location: state.location,
+          },
+        },
+      },
+    });
+  };
+
+  React.useEffect(() => {
+    setState({
+      ...state,
+      headerType: header,
+    });
+  }, [header]);
+  // console.log(header);
+  // console.log('STATE: ', state);
+
   return (
     <div className="px-5">
       <div className="breadCrumb">
@@ -15,7 +104,7 @@ const AddNewPage = () => {
                 {/* <!-- Heroicon name: solid/chevron-right --> */}
                 <a
                   href="#"
-                  className=" font-medium text-base text-black hover:text-gray-700"
+                  className="font-medium text-base text-black hover:text-gray-700"
                 >
                   Pages
                 </a>
@@ -56,11 +145,13 @@ const AddNewPage = () => {
           <div className="w-72">
             <input
               type="text"
-              name="first_name"
-              id="first_name"
+              name="pageTitle"
+              value={state.pageTitle}
+              onChange={handleChange}
+              id="pageTitle"
               placeholder="Page Title"
-              autoComplete="given-name"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-3 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm placeholder-gray-600"
+              autoComplete="pageTitle"
+              className="mt-1 block w-full border cursor-pointer border-gray-300 rounded-md shadow-sm py-3 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm placeholder-gray-600"
             />
           </div>
           <div className="">
@@ -94,24 +185,32 @@ const AddNewPage = () => {
             </div>
             <div className="header-button-group flex justify-start space-x-3 ">
               <button
+                onClick={onButtonClick}
+                value="headerTypeOne"
                 type="button"
                 className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Header Type 1
               </button>
               <button
+                value="headerTypeTwo"
+                onClick={onButtonClick}
                 type="button"
                 className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Header Type 2
               </button>
               <button
+                value="headerTypeThree"
+                onClick={onButtonClick}
                 type="button"
                 className="inline-flex items-center px-3 py-2 border  shadow-sm text-base font-medium rounded-md text-indigo-700 bg-indigo-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Header Type 3
               </button>
               <button
+                value="headerTypeFour"
+                onClick={onButtonClick}
                 type="button"
                 className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
@@ -122,9 +221,12 @@ const AddNewPage = () => {
               <div className=" col-span-3">
                 <label className="text-gray-700 font-medium">Media URL</label>
                 <input
+                  name="mediaUrl"
+                  value={state.mediaUrl}
+                  onChange={handleChange}
                   type="text"
                   placeholder="https://star-studded-bricks-1440by551.png"
-                  className="w-full mt-2 mb-6 px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-green-500"
+                  className="w-full mt-2 mb-6 px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500"
                 />
               </div>
             </div>
@@ -133,8 +235,11 @@ const AddNewPage = () => {
                 <label className="text-gray-700 font-medium">Header Text</label>
                 <input
                   type="text"
+                  name="headerText"
+                  value={state.headerText}
+                  onChange={handleChange}
                   placeholder="RoloBank"
-                  className="w-full mt-2 mb-6 px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-green-500"
+                  className="w-full mt-2 mb-6 px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500"
                 />
               </div>
             </div>
@@ -144,11 +249,30 @@ const AddNewPage = () => {
                   Text Position
                 </label>
                 <div className="flex space-x-3 mt-2 text-gray-500">
-                  <a className="text-sm">Left</a>
-                  <a className="text-sm text-blue-800 border-b-2 border-blue-800">
+                  <a
+                    href="#"
+                    className="focus:border-b-2 focus:border-blue-800 focus:text-blue-800  text-sm cursor-pointer "
+                  >
+                    Left
+                  </a>
+                  {/* <a
+                    href="#"
+                    className="text-sm text-blue-800 border-b-2 border-blue-800 focus:text-blue-800 cursor-pointer "
+                  >
+                    Right
+                  </a> */}
+                  <a
+                    href="#"
+                    className="text-sm focus:text-blue-800 cursor-pointer "
+                  >
                     Right
                   </a>
-                  <a className="text-sm">Bottom</a>
+                  <a
+                    href="#"
+                    className="text-sm cursor-pointer focus:text-blue-800"
+                  >
+                    Bottom
+                  </a>
                 </div>
               </div>
             </div>
@@ -158,11 +282,27 @@ const AddNewPage = () => {
                   Caption Text
                 </label>
                 <input
+                  name="captionText"
+                  value={state.captionText}
+                  onChange={handleChange}
                   type="text"
                   placeholder="WE ARE A BANK OF THE YOUNG AND FOR YOUNG"
-                  className="w-full mt-2 mb-6 px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-green-500"
+                  className="w-full mt-2 mb-6 px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500"
                 />
               </div>
+            </div>
+            <div className="mt-1 mb-5 w-96">
+              <label className="text-gray-700 font-medium">Tags</label>
+              <Select
+                // defaultValue={[tags[2], tags[3]]}
+                isMulti
+                name="tags"
+                options={tags}
+                className="basic-multi-select"
+                classNamePrefix="select"
+                components={animatedComponents}
+                onChange={onSelect}
+              />
             </div>
             <div className="inputSection2 mt-1 grid grid-cols-7">
               <div className=" col-span-3">
@@ -176,23 +316,35 @@ const AddNewPage = () => {
                   >
                     Inactive
                   </button>
-                  <button
+                  <input
                     style={{ background: '#F2F2F2', color: '#A3A3A3' }}
-                    type="button"
-                    className="inline-flex font-light items-center pr-11 pl-3 py-2 border border-gray-300 shadow-sm text-sm italic rounded-md text-gray-500  hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Action Text
-                  </button>
+                    name="actionText"
+                    value={state.actionText}
+                    onChange={handleChange}
+                    type="text"
+                    placeholder="Action Text"
+                    className="inline-flex font-light items-center  pl-3  border border-gray-300 shadow-sm text-sm italic rounded-md text-gray-500  focus:outline-none focus:border-indigo-500"
+                  />
                 </div>
                 <input
                   style={{ background: '#F2F2F2', color: '#A3A3A3' }}
+                  name="ctaLink"
+                  value={state.ctaLink}
+                  onChange={handleChange}
                   type="text"
                   placeholder="CTA (call to action)link"
-                  className="w-full mt-2 mb-6 px-4 py-2 border rounded-lg italic text-gray-700 focus:outline-none focus:border-green-500"
+                  className="w-full mt-2 mb-6 px-4 py-2 border rounded-lg italic text-gray-700 focus:outline-none focus:border-indigo-500"
                 />
               </div>
             </div>
           </div>
+          <button
+            onClick={onSubmit}
+            type="button"
+            className="inline-flex mt-4 items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-white bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            persist all
+          </button>
           {/* First preview section */}
           <div>
             <div className="mb-2">
@@ -209,13 +361,13 @@ const AddNewPage = () => {
               <div className="buttons space-x-3 mt-5 flex">
                 <button
                   type="button"
-                  className="inline-flex items-center px-6 py-2 border  shadow-sm text-base font-medium leading-7 rounded-md text-white bg-indigo-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="inline-flex items-center px-6 py-2 border  shadow-sm text-base font-medium leading-7 rounded-md text-white bg-indigo-500  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:bg-white focus:text-gray-500"
                 >
                   Add Widget
                 </button>
                 <button
                   type="button"
-                  className="inline-flex items-center px-5 py-2 border  shadow-sm text-base font-medium rounded-md text-gray-500 bg-gray-100 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="inline-flex items-center px-5 py-2 border  shadow-sm text-base font-medium rounded-md text-gray-500 bg-gray-100 focus:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:text-white"
                 >
                   Add Item
                 </button>
@@ -227,6 +379,9 @@ const AddNewPage = () => {
                   </label>
                   <input
                     type="text"
+                    name="bodyTitle"
+                    value={state.bodyTitle}
+                    onChange={handleChange}
                     className="w-full mt-2 px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-green-500"
                   />
                 </div>
@@ -237,6 +392,9 @@ const AddNewPage = () => {
                     Description
                   </label>
                   <input
+                    name="bodyDescription"
+                    value={state.bodyDescription}
+                    onChange={handleChange}
                     type="text"
                     className="w-full mt-2  px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-green-500"
                   />

@@ -83,7 +83,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   }
 
   return (
-    <AppWrapper value={pageProps.sites.data['sites'][0]}>
+    <AppWrapper value={pageProps.sites?.data['sites'][0]}>
       <UserProvider>
         <ApolloProvider client={apolloClient}>
           <StyletronProvider value={styletron}>
