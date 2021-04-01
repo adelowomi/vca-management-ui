@@ -17,8 +17,8 @@ const tags = [
 ];
 
 const ADD_PAGE = gql`
-  mutation CreatePage($CreatePageInput: String!) {
-    createPage(createPageInput: CreatePageInput) {
+  mutation CreatePage($createPageInput: CreatePageInput!) {
+    createPage(createPageInput: $createPageInput) {
       id
     }
   }
