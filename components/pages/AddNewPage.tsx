@@ -24,11 +24,12 @@ const ADD_PAGE = gql`
   }
 `;
 
-const AddNewPage = () => {
+const AddNewPage = ({ site }) => {
+  console.log(site);
   const [header, setHeader] = React.useState('');
   const [state, setState] = React.useState({
     pageTitle: '',
-    site: '6049f500c013677d9fafd4ea',
+    site,
     mediaUrl: '',
     headerText: '',
     captionText: '',

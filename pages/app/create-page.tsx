@@ -26,7 +26,7 @@ const PAGES_QUERY = gql`
   }
 `;
 
-const CreatePage = () => {
+const CreatePage = (props) => {
   const site: any = useAppContext();
   const { data, error, loading } = useQuery(PAGES_QUERY, {
     variables: { siteId: site.id },
@@ -43,7 +43,7 @@ const CreatePage = () => {
   }
   return (
     <Dashboard>
-      <AddNewPage />
+      <AddNewPage site={props.sites.data.sites[0].id} />
     </Dashboard>
   );
 };
