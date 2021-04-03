@@ -83,32 +83,30 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   }
 
   return (
-    <AppWrapper value={pageProps.sites?.data['sites'][0]}>
-      <UserProvider>
-        <ApolloProvider client={apolloClient}>
-          <StyletronProvider value={styletron}>
-            <BaseProvider theme={appThemes}>
-              <ThemeProvider theme={theme()}>
-                <IntlProvider
-                  locale={locale}
-                  defaultLocale={defaultLocale}
-                  messages={messages}
-                >
-                  <Head>
-                    <title>Qaltrak</title>
-                    <meta name="Description" content="Qaltrak" />
-                  </Head>
-                  <Container>
-                    <GlobalStyles />
-                    <Component {...pageProps} />
-                  </Container>
-                </IntlProvider>
-              </ThemeProvider>
-            </BaseProvider>
-          </StyletronProvider>
-        </ApolloProvider>
-      </UserProvider>
-    </AppWrapper>
+    <UserProvider>
+      <ApolloProvider client={apolloClient}>
+        <StyletronProvider value={styletron}>
+          <BaseProvider theme={appThemes}>
+            <ThemeProvider theme={theme()}>
+              <IntlProvider
+                locale={locale}
+                defaultLocale={defaultLocale}
+                messages={messages}
+              >
+                <Head>
+                  <title>Qaltrak</title>
+                  <meta name="Description" content="Qaltrak" />
+                </Head>
+                <Container>
+                  <GlobalStyles />
+                  <Component {...pageProps} />
+                </Container>
+              </IntlProvider>
+            </ThemeProvider>
+          </BaseProvider>
+        </StyletronProvider>
+      </ApolloProvider>
+    </UserProvider>
   );
 };
 

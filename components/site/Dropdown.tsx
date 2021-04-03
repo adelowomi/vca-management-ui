@@ -66,24 +66,24 @@ const Dropdown = ({ color }) => {
               <a
                 href="#"
                 className={
-                  'text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent ' +
+                  'text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent hover:bg-indigo-100 ' +
                   (color === 'white' ? ' text-gray-800' : 'text-white')
                 }
                 onClick={(e) => e.preventDefault()}
               >
-                Action
+                Save
               </a>
               <a
                 href="#"
                 className={
-                  'text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent ' +
+                  'text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent hover:bg-indigo-100 ' +
                   (color === 'white' ? ' text-gray-800' : 'text-white')
                 }
                 onClick={(e) => e.preventDefault()}
               >
-                Another action
+                Publish
               </a>
-              <a
+              {/* <a
                 href="#"
                 className={
                   'text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent ' +
@@ -92,9 +92,9 @@ const Dropdown = ({ color }) => {
                 onClick={(e) => e.preventDefault()}
               >
                 Something else here
-              </a>
-              <div className="h-0 my-2 border border-solid border-t-0 border-gray-900 opacity-25" />
-              <a
+              </a> */}
+              {/* <div className="h-0 my-2 border border-solid border-t-0 border-gray-900 opacity-25" /> */}
+              {/* <a
                 href="#"
                 className={
                   'text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent ' +
@@ -103,7 +103,7 @@ const Dropdown = ({ color }) => {
                 onClick={(e) => e.preventDefault()}
               >
                 Seprated link
-              </a>
+              </a> */}
             </div>
           </div>
         </div>

@@ -13,7 +13,9 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-export const Home = ({ user }): JSX.Element => {
+export const Home = (props): JSX.Element => {
+  const { user } = props;
+
   const router = useRouter();
 
   if (user) {

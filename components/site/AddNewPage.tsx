@@ -1,10 +1,12 @@
 import { gql, useMutation } from '@apollo/client';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import React from 'react';
+// validation library
+import { useForm } from 'react-hook-form';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-
-import DropdownRender from './Dropdown';
+import * as z from 'zod';
 
 const animatedComponents = makeAnimated();
 const tags = [
@@ -24,11 +26,12 @@ const ADD_PAGE = gql`
   }
 `;
 
-const AddNewPage = () => {
+const AddNewPage = ({ siteId }) => {
   const [header, setHeader] = React.useState('');
+  const [location, setLocation] = React.useState('');
   const [state, setState] = React.useState({
     pageTitle: '',
-    site: '6049f500c013677d9fafd4ea',
+    site: siteId,
     mediaUrl: '',
     headerText: '',
     captionText: '',
@@ -38,7 +41,7 @@ const AddNewPage = () => {
     ctaLink: '',
     headerType: '',
     tags: [],
-    location: 'LEFT',
+    location: '',
   });
   const [createPage, { data }] = useMutation(ADD_PAGE);
 
@@ -54,13 +57,18 @@ const AddNewPage = () => {
     });
   };
 
-  const onSelect = (data: any) => {
+  const onSelectTags = (data: any) => {
     const arr = data.map((el) => el.value);
     setState({
       ...state,
       tags: arr,
     });
   };
+
+  const locationButtonClick = (e) => {
+    setLocation(e.target.text);
+  };
+
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     createPage({
@@ -87,11 +95,24 @@ const AddNewPage = () => {
   React.useEffect(() => {
     setState({
       ...state,
+      location: location.toUpperCase(),
       headerType: header,
     });
-  }, [header]);
-  // console.log(header);
-  // console.log('STATE: ', state);
+  }, [header, location]);
+
+  const schema = z.object({
+    pageTitle: z.string().nonempty({ message: 'Required' }),
+  });
+
+  // console.log('STATE', state);
+
+  const {
+    register,
+    handleSubmit,
+    //  errors
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
 
   return (
     <div className="px-5">
@@ -139,11 +160,16 @@ const AddNewPage = () => {
           </ol>
         </nav>
       </div>
-      <form action="" className="form mt-5">
+      <form
+        action=""
+        className="form mt-5"
+        onSubmit={handleSubmit((data) => console.log(data))}
+      >
         {/* <div className="grid grid-cols-3 gap-4"> */}
         <div className="flex flex-1 justify-between">
           <div className="w-72">
             <input
+              ref={register}
               type="text"
               name="pageTitle"
               value={state.pageTitle}
@@ -165,7 +191,13 @@ const AddNewPage = () => {
                 </a>
               </div>
               <div className="mx-10">
-                <DropdownRender />
+                <button
+                  // onClick={onSubmit}
+                  type="submit"
+                  className="inline-flex items-center outline-none  px-6 py-2 border border-indigo-300 shadow-sm text-lg font-medium rounded-md text-white bg-indigo-500"
+                >
+                  Publish
+                </button>
               </div>
               <div>
                 <button className="px-5 py-3 text-lg font-medium rounded text-indigo-700 bg-indigo-100 leading-6">
@@ -251,24 +283,21 @@ const AddNewPage = () => {
                 <div className="flex space-x-3 mt-2 text-gray-500">
                   <a
                     href="#"
+                    onClick={locationButtonClick}
                     className="focus:border-b-2 focus:border-blue-800 focus:text-blue-800  text-sm cursor-pointer "
                   >
                     Left
                   </a>
-                  {/* <a
-                    href="#"
-                    className="text-sm text-blue-800 border-b-2 border-blue-800 focus:text-blue-800 cursor-pointer "
-                  >
-                    Right
-                  </a> */}
                   <a
                     href="#"
+                    onClick={locationButtonClick}
                     className="text-sm focus:text-blue-800 cursor-pointer "
                   >
                     Right
                   </a>
                   <a
                     href="#"
+                    onClick={locationButtonClick}
                     className="text-sm cursor-pointer focus:text-blue-800"
                   >
                     Bottom
@@ -301,7 +330,7 @@ const AddNewPage = () => {
                 className="basic-multi-select"
                 classNamePrefix="select"
                 components={animatedComponents}
-                onChange={onSelect}
+                onChange={onSelectTags}
               />
             </div>
             <div className="inputSection2 mt-1 grid grid-cols-7">
@@ -338,13 +367,13 @@ const AddNewPage = () => {
               </div>
             </div>
           </div>
-          <button
+          {/* <button
             onClick={onSubmit}
             type="button"
             className="inline-flex mt-4 items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-white bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             persist all
-          </button>
+          </button> */}
           {/* First preview section */}
           <div>
             <div className="mb-2">
