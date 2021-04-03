@@ -15,7 +15,6 @@ const Container = styled.div`
 
 export const Home = (props): JSX.Element => {
   const { user } = props;
-
   const router = useRouter();
 
   if (user) {

@@ -163,7 +163,7 @@ const AddNewPage = ({ siteId }) => {
       <form
         action=""
         className="form mt-5"
-        onSubmit={handleSubmit((data) => console.log(data))}
+        // onSubmit={handleSubmit((data) => console.log(data))}
       >
         {/* <div className="grid grid-cols-3 gap-4"> */}
         <div className="flex flex-1 justify-between">
@@ -192,7 +192,7 @@ const AddNewPage = ({ siteId }) => {
               </div>
               <div className="mx-10">
                 <button
-                  // onClick={onSubmit}
+                  onClick={onSubmit}
                   type="submit"
                   className="inline-flex items-center outline-none  px-6 py-2 border border-indigo-300 shadow-sm text-lg font-medium rounded-md text-white bg-indigo-500"
                 >
