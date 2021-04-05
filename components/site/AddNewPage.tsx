@@ -169,7 +169,7 @@ const AddNewPage = ({ siteId }) => {
         <div className="flex flex-1 justify-between">
           <div className="w-72">
             <input
-              ref={register}
+              ref={...register('pagetitle')}
               type="text"
               name="pageTitle"
               value={state.pageTitle}
