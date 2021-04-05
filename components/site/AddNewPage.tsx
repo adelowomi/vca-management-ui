@@ -163,13 +163,13 @@ const AddNewPage = ({ siteId }) => {
       <form
         action=""
         className="form mt-5"
-        // onSubmit={handleSubmit((data) => console.log(data))}
+        onSubmit={handleSubmit((data) => console.log(data))}
       >
         {/* <div className="grid grid-cols-3 gap-4"> */}
         <div className="flex flex-1 justify-between">
           <div className="w-72">
             <input
-              // ref={register}
+              {...register('pagetitle')}
               type="text"
               name="pageTitle"
               value={state.pageTitle}
