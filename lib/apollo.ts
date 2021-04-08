@@ -15,6 +15,14 @@ export type ResolverContext = {
 };
 
 export function createApolloClient(authToken: string) {
+  if (authToken === "") {
+    return new ApolloClient({
+      ssrMode: typeof window === 'undefined',
+      uri: process.env.NEXT_PUBLIC_API_URL,
+      cache: new InMemoryCache(),
+    });
+  }
+
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     uri: process.env.NEXT_PUBLIC_API_URL,

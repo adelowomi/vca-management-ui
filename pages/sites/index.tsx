@@ -40,7 +40,7 @@ const Sites = (props) => {
         return (
           <div className="text-blue-500" key={el.id}>
             <span className="pr-8 text-black">{++count}</span>
-            <Link href={`/sites/${el.id}}`}>
+            <Link href={`/sites/${el.id}`}>
               <a>{el.name}</a>
             </Link>
           </div>

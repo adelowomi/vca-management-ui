@@ -1,23 +1,23 @@
+import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 
 import AddNewPage from '../../../../components/site/AddNewPage';
 import Layout from '../../../../layouts/Dashboard';
 
-const index = (props) => {
-  const {
-    sites: {
-      data: { sites },
-    },
-  } = props;
+const index = ({ token }) => {
   const router = useRouter();
-  // const { sid } = router.query;
-  // console.log(sites);
+  const { siteId } = router.query;
 
   return (
     <Layout>
-      <AddNewPage siteId={sites[0].id} />
+      <AddNewPage siteId={siteId} token={token} />
     </Layout>
   );
 };
 
-export default index;
+export async function getServerSideProps(ctx) {
+  const session = getSession(ctx.req, ctx.res);
+  return { props: { token: session?.idToken } };
+}
+
+export default withPageAuthRequired(index);

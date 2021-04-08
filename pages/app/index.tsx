@@ -30,8 +30,6 @@ const index = () => {
   const { data, error, loading } = useQuery(PAGES_QUERY, {
     variables: { siteId: site.id },
   });
-  // console.log(site);
-  // console.log('DATA', data);
   if (error) {
     console.error(error.message);
     console.error(error.graphQLErrors);
@@ -48,4 +46,3 @@ const index = () => {
   );
 };
 export default withPageAuthRequired(index);
-// export default index;

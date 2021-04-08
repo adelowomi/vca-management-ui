@@ -8,6 +8,8 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import * as z from 'zod';
 
+import { ADD_PAGE } from '../../graphql/schema';
+
 const animatedComponents = makeAnimated();
 const tags = [
   { value: 'bank', label: 'banks' },
@@ -18,15 +20,7 @@ const tags = [
   { value: 'tech', label: 'tech' },
 ];
 
-const ADD_PAGE = gql`
-  mutation CreatePage($createPageInput: CreatePageInput!) {
-    createPage(createPageInput: $createPageInput) {
-      id
-    }
-  }
-`;
-
-const AddNewPage = ({ siteId }) => {
+const AddNewPage = ({ siteId, token }) => {
   const [header, setHeader] = React.useState('');
   const [location, setLocation] = React.useState('');
   const [state, setState] = React.useState({
@@ -104,8 +98,6 @@ const AddNewPage = ({ siteId }) => {
     pageTitle: z.string().nonempty({ message: 'Required' }),
   });
 
-  // console.log('STATE', state);
-
   const {
     register,
     handleSubmit,
@@ -169,7 +161,7 @@ const AddNewPage = ({ siteId }) => {
         <div className="flex flex-1 justify-between">
           <div className="w-72">
             <input
-              {...register('pagetitle')}
+              {...register('pageTitle')}
               type="text"
               name="pageTitle"
               value={state.pageTitle}
@@ -375,14 +367,14 @@ const AddNewPage = ({ siteId }) => {
             persist all
           </button> */}
           {/* First preview section */}
-          <div>
+          {/* <div>
             <div className="mb-2">
               <h3 className="ml-3 text-sm ">Preview</h3>
             </div>
             <div className="rounded-lg text-sm  bg-white overflow-hidden shadow  px-3 h-40"></div>
-          </div>
+          </div> */}
           {/* End of first Preview Section */}
-          <div className="bodySection mt-12">
+          {/* <div className="bodySection mt-12">
             <div className="mb-1">
               <h3 className="ml-3 text-sm ">Body</h3>
             </div>
@@ -443,13 +435,13 @@ const AddNewPage = ({ siteId }) => {
                 </div>
               </div>
             </div>
-          </div>
-          <div className="mt-10">
+          </div> */}
+          {/* <div className="mt-10">
             <div className="mb-2">
               <h3 className="ml-3 text-sm ">Preview</h3>
             </div>
             <div className="rounded-lg text-sm  bg-white overflow-hidden shadow  px-3 h-40"></div>
-          </div>
+          </div> */}
         </div>
       </form>
     </div>
