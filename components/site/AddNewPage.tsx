@@ -1,4 +1,4 @@
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import React from 'react';
@@ -20,7 +20,7 @@ const tags = [
   { value: 'tech', label: 'tech' },
 ];
 
-const AddNewPage = ({ siteId, token }) => {
+const AddNewPage = ({ siteId }) => {
   const [header, setHeader] = React.useState('');
   const [location, setLocation] = React.useState('');
   const [state, setState] = React.useState({
@@ -37,7 +37,7 @@ const AddNewPage = ({ siteId, token }) => {
     tags: [],
     location: '',
   });
-  const [createPage, { data }] = useMutation(ADD_PAGE);
+  const [createPage] = useMutation(ADD_PAGE);
 
   const onButtonClick = (e: any) => {
     setHeader(e.target.value);
@@ -155,7 +155,7 @@ const AddNewPage = ({ siteId, token }) => {
       <form
         action=""
         className="form mt-5"
-        onSubmit={handleSubmit((data) => console.log(data))}
+        onSubmit={handleSubmit((data) => data)}
       >
         {/* <div className="grid grid-cols-3 gap-4"> */}
         <div className="flex flex-1 justify-between">

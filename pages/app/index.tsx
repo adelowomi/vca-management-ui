@@ -1,29 +1,10 @@
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import React from 'react';
 
 import { useAppContext } from '../../context/state';
+import { PAGES_QUERY } from '../../graphql/schema';
 import Dashboard from '../../layouts/Dashboard';
-
-const PAGES_QUERY = gql`
-  query Pages($siteId: String!) {
-    pages(siteId: $siteId) {
-      id
-      name
-      tags
-      site
-      hero {
-        type
-        mediaUrl
-        heading
-        hasAction
-        actoinText
-        actoinSlug
-        location
-      }
-    }
-  }
-`;
 
 const index = () => {
   const site: any = useAppContext();
@@ -42,6 +23,7 @@ const index = () => {
   return (
     <Dashboard>
       <h1 className="text-lg text-black text-">Component Dashboard</h1>
+      {JSON.stringify(data)}
     </Dashboard>
   );
 };

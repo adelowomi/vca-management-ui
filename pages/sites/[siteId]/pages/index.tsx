@@ -185,31 +185,24 @@ const Pages = ({
                         </tr>
                       </thead>
                       <tbody>
-                        {pages.map((el) => (
+                        {pages.map((el: any) => (
                           <tr
                             className={`${
                               count++ % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                            } key=${el.id}`}
+                            }`}
+                            key={el.id}
                           >
                             <td className="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
                               <input type="checkbox" name="" id="" />
                             </td>
 
                             <td className="px-6 py-2  whitespace-nowrap text-sm font-medium text-black">
-                              <Link
-                                href={`/sites/${el.site}/pages/${el.name
-                                  .split(' ')
-                                  .join('_')}`}
-                              >
+                              <Link href={`/sites/${el.site}/pages/${el.id}`}>
                                 {el.name}
                               </Link>
                             </td>
                             <td className="px-6 py-2 cursor-pointer whitespace-nowrap text-sm text-gray-500">
-                              <Link
-                                href={`/sites/${el.site}/pages/${el.name
-                                  .split(' ')
-                                  .join('_')}`}
-                              >
+                              <Link href={`/sites/${el.site}/pages/${el.id}`}>
                                 <span>
                                   <p>{`${el.createdBy.firstName} ${el.createdBy.lastName}`}</p>
                                   <p className="text-black text-xs">
@@ -219,11 +212,7 @@ const Pages = ({
                               </Link>
                             </td>
                             <td className="px-6 py-2 cursor-pointer whitespace-nowrap text-sm  text-gray-500">
-                              <Link
-                                href={`/sites/${el.site}/pages/${el.name
-                                  .split(' ')
-                                  .join('_')}`}
-                              >
+                              <Link href={`/sites/${el.site}/pages/${el.id}`}>
                                 <span>
                                   <p>Published</p>
                                   <p>{moment(el.createdAt).format('llll')}</p>
