@@ -4,13 +4,13 @@ import { useRouter } from 'next/router';
 import AddNewPage from '../../../../components/site/AddNewPage';
 import Layout from '../../../../layouts/Dashboard';
 
-const index = ({ token }) => {
+const index = () => {
   const router = useRouter();
   const { siteId } = router.query;
 
   return (
     <Layout>
-      <AddNewPage siteId={siteId} token={token} />
+      <AddNewPage siteId={siteId} />
     </Layout>
   );
 };
