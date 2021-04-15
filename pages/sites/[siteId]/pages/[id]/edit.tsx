@@ -15,9 +15,7 @@ const animatedComponents = makeAnimated();
 
 const editPage = ({ page, token }) => {
   const [modalIsOpen, setModalOpen] = React.useState(false);
-  const [toggle, setToggle] = React.useState(page.hero.hasAction);
   const client = createApolloClient(token);
-
   const [state, setState] = React.useState({
     pageTitle: page.name,
     site: page.site,
@@ -31,6 +29,7 @@ const editPage = ({ page, token }) => {
     location: page.hero.location,
     hasAction: page.hero.hasAction,
   });
+  const [toggle, setToggle] = React.useState(state.hasAction);
 
   const closeModal = () => {
     setModalOpen(false);
@@ -103,6 +102,7 @@ const editPage = ({ page, token }) => {
       location: '',
       hasAction: false,
     });
+    setToggle(false);
     setModalOpen(true);
   };
 

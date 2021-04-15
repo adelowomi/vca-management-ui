@@ -35,7 +35,7 @@ const SITE_QUERY = gql`
   }
 `;
 
-export const PAGES_QUERY = gql`
+const PAGES_QUERY = gql`
   query Page($siteId: String!) {
     pages(siteId: $siteId) {
       id
@@ -132,6 +132,7 @@ export {
   ADD_PAGE,
   EDIT_PAGE,
   PAGE_QUERY,
+  PAGES_QUERY,
   SITE_QUERY,
   SITES_QUERY,
   useMutationHook,
