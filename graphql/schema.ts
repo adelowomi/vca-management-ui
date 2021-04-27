@@ -36,7 +36,7 @@ const SITE_QUERY = gql`
 `;
 
 const PAGES_QUERY = gql`
-  query Page($siteId: String!) {
+  query Pages($siteId: String!) {
     pages(siteId: $siteId) {
       id
       name
@@ -108,6 +108,22 @@ const ADD_PAGE = gql`
     }
   }
 `;
+const ADD_WIDGET = gql`
+  mutation CreateWidget($createWidgetInput: CreateWidgetInput!) {
+    createWidget(createWidgetInput: $createWidgetInput) {
+      description
+      disable
+      title
+      items {
+        mediaUrl
+        slug
+        id
+      }
+      page
+      type
+    }
+  }
+`;
 
 const EDIT_PAGE = gql`
   mutation updatePage($updatePageInput: UpdatePageInput!, $pageId: String!) {
@@ -128,9 +144,68 @@ const EDIT_PAGE = gql`
     }
   }
 `;
+const GET_ALL_ITEMS_QUERY = gql`
+  query GetAllItems(
+    $limit: Int
+    $offset: Int
+    $filter: FilterInput
+    $siteId: String!
+  ) {
+    getAllItems(
+      filter: $filter
+      limit: $limit
+      offset: $offset
+      siteId: $siteId
+    ) {
+      id
+      type
+      mediaUrl
+      slug
+      content
+      draft
+      featured
+      category
+      tags
+      createdBy {
+        userId
+        id
+        userId
+        firstName
+        lastName
+        phone
+        businessName
+        industry
+        accountType
+        createdAt
+        updatedAt
+        address {
+          line
+          lineAlt
+          city
+          state
+          postalCode
+          placeId
+          country
+          location {
+            type
+            coordinates
+          }
+        }
+      }
+      updatedBy {
+        firstName
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export {
   ADD_PAGE,
+  ADD_WIDGET,
   EDIT_PAGE,
+  GET_ALL_ITEMS_QUERY,
   PAGE_QUERY,
   PAGES_QUERY,
   SITE_QUERY,

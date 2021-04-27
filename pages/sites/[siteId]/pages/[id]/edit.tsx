@@ -1,4 +1,4 @@
-import { getSession, Session } from '@auth0/nextjs-auth0';
+import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Link from 'next/link';
 import React from 'react';
 import Select from 'react-select';
@@ -7,14 +7,22 @@ import makeAnimated from 'react-select/animated';
 import { tags } from '../../../../../assets/data/data';
 import ToggleButton from '../../../../../components/ToggleButton/ToggleButton';
 import MyDialog from '../../../../../components/utilsGroup/Modal';
-import { EDIT_PAGE, PAGE_QUERY } from '../../../../../graphql/schema';
+import SiteEditModal from '../../../../../components/utilsGroup/SiteEditModal';
+import {
+  ADD_WIDGET,
+  EDIT_PAGE,
+  GET_ALL_ITEMS_QUERY,
+  PAGE_QUERY,
+} from '../../../../../graphql/schema';
 import Layout from '../../../../../layouts/Dashboard';
 import { createApolloClient } from '../../../../../lib/apollo';
 
 const animatedComponents = makeAnimated();
 
-const editPage = ({ page, token }) => {
+const editPage = ({ page, token, items }) => {
   const [modalIsOpen, setModalOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+
   const client = createApolloClient(token);
   const [state, setState] = React.useState({
     pageTitle: page.name,
@@ -28,7 +36,14 @@ const editPage = ({ page, token }) => {
     tags: page.tags,
     location: page.hero.location,
     hasAction: page.hero.hasAction,
+    widgetDescription: '',
+    widgetTitle: '',
+    widgetPageId: page.id,
+    widgetDisable: false,
+    widgetType: 'ITEM',
+    widgetItems: [],
   });
+
   const [toggle, setToggle] = React.useState(state.hasAction);
 
   const closeModal = () => {
@@ -60,7 +75,7 @@ const editPage = ({ page, token }) => {
   const locationButtonClick = (e: any) => {
     setState({
       ...state,
-      location: e.target.texttoUpperCase(),
+      location: e.target.text.toUpperCase(),
     });
   };
 
@@ -101,15 +116,48 @@ const editPage = ({ page, token }) => {
       tags: [],
       location: '',
       hasAction: false,
+      widgetDescription: '',
+      widgetTitle: '',
+      widgetPageId: '',
+      widgetDisable: false,
+      widgetType: '',
+      widgetItems: [],
     });
     setToggle(false);
-    setModalOpen(true);
+    setModalOpen(!modalIsOpen);
   };
-
+  const createWidget = () => {
+    client.mutate({
+      mutation: ADD_WIDGET,
+      variables: {
+        createWidgetInput: {
+          description: state.widgetDescription,
+          disable: state.widgetDisable,
+          title: state.widgetTitle,
+          items: state.widgetItems,
+          page: state.widgetPageId,
+          type: state.widgetType,
+        },
+      },
+    });
+    setOpen(!open);
+  };
   return (
     <Layout>
       <div className="px-5">
-        <MyDialog closeModal={closeModal} modalIsOpen={modalIsOpen} />
+        <MyDialog
+          closeModal={closeModal}
+          modalIsOpen={modalIsOpen}
+          siteId={page.site}
+        />
+        <SiteEditModal
+          open={open}
+          setOpen={setOpen}
+          items={items}
+          state={state}
+          setState={setState}
+          onClick={createWidget}
+        />
         <div className="breadCrumb">
           <nav className="flex" aria-label="Breadcrumb">
             <ol className="flex items-center space-x-4">
@@ -382,6 +430,78 @@ const editPage = ({ page, token }) => {
                 </div>
               </div>
             </div>
+            <div className="mt-6">
+              <div className="mb-2">
+                <h3 className="ml-3 text-sm ">Preview</h3>
+              </div>
+              <div className="rounded-lg text-sm  bg-white overflow-hidden shadow  px-3 h-40"></div>
+            </div>
+            {/* End of first Preview Section */}
+            <div className="bodySection mt-12">
+              <div className="mb-1">
+                <h3 className="ml-3 text-sm ">Body</h3>
+              </div>
+              <div className="rounded-lg text-sm  bg-white overflow-hidden shadow  px-3">
+                <div className="buttons space-x-3 mt-5 flex">
+                  <button
+                    type="button"
+                    className="inline-flex items-center px-6 py-2 border  shadow-sm text-base font-medium leading-7 rounded-md text-white bg-indigo-500  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:bg-white focus:text-gray-500"
+                  >
+                    Enable Widget
+                  </button>
+                </div>
+                <div className="inputSection mt-6 grid grid-cols-7">
+                  <div className=" col-span-3">
+                    <label className="text-gray-700 font-medium text-sm">
+                      Title
+                    </label>
+                    <input
+                      type="text"
+                      name="widgetTitle"
+                      value={state.widgetTitle}
+                      onChange={handleChange}
+                      className="w-full mt-2 px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-green-500"
+                    />
+                  </div>
+                </div>
+                <div className="inputSection mt-1 grid grid-cols-7">
+                  <div className=" col-span-3">
+                    <label className="text-gray-700 font-medium text-sm">
+                      Description
+                    </label>
+                    <input
+                      name="widgetDescription"
+                      value={state.widgetDescription}
+                      onChange={handleChange}
+                      type="text"
+                      className="w-full mt-2  px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-green-500"
+                    />
+                  </div>
+                </div>
+                <div className="inputSection mt-1 mb-10 grid grid-cols-7">
+                  <div className=" col-span-3">
+                    <label className="text-gray-700 font-medium text-sm">
+                      Add Items
+                    </label>
+                    <div className="dropDown_wrapper flex flex-col">
+                      <button
+                        onClick={() => setOpen(!open)}
+                        type="button"
+                        className="w-full mt-2 px-4 py-3 border bg-indigo-500 rounded-lg text-white  focus:outline-none focus:border-indigo-500"
+                      >
+                        Select from a list of posts
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-10">
+              <div className="mb-2">
+                <h3 className="ml-3 text-sm ">Preview</h3>
+              </div>
+              <div className="rounded-lg text-sm  bg-white overflow-hidden shadow  px-3 h-40"></div>
+            </div>
           </div>
         </form>
       </div>
@@ -401,11 +521,30 @@ export async function getServerSideProps(ctx) {
     variables: { siteId, pageId },
   });
 
+  const {
+    data: { getAllItems },
+  } = await client.query({
+    query: GET_ALL_ITEMS_QUERY,
+    variables: {
+      // limit: 3,
+      // offset: 3,
+      siteId: page.site,
+      filter: {
+        singleFilter: {
+          field: 'pageId',
+          operator: 'EQ',
+          value: page.id,
+        },
+      },
+    },
+  });
+
   return {
     props: {
       page,
       token: session.idToken,
+      items: getAllItems,
     },
   };
 }
-export default editPage;
+export default withPageAuthRequired(editPage);

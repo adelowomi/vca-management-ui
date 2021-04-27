@@ -3,7 +3,7 @@ import { CheckIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import React, { Fragment, useRef } from 'react';
 
-export default function MyModal({ modalIsOpen, closeModal }) {
+export default function MyModal({ modalIsOpen, closeModal, siteId }) {
   const cancelButtonRef = useRef();
   return (
     <Transition show={modalIsOpen} as={Fragment}>
@@ -73,9 +73,7 @@ export default function MyModal({ modalIsOpen, closeModal }) {
                   className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-500 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
                   onClick={closeModal}
                 >
-                  <Link href="/sites/60541bb457f1e20015fb15d4/pages">
-                    Go back to Pages
-                  </Link>
+                  <Link href={`/sites/${siteId}/pages`}>Go back to Pages</Link>
                 </button>
               </div>
             </div>
