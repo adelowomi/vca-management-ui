@@ -7,6 +7,7 @@ import makeAnimated from 'react-select/animated';
 import { tags } from '../../../../../assets/data/data';
 import ToggleButton from '../../../../../components/ToggleButton/ToggleButton';
 import MyDialog from '../../../../../components/utilsGroup/Modal';
+import SiteEditDropdown from '../../../../../components/utilsGroup/SiteEditDropDown';
 import SiteEditModal from '../../../../../components/utilsGroup/SiteEditModal';
 import {
   ADD_WIDGET,
@@ -266,8 +267,13 @@ const editPage = ({ page, token, items }) => {
             </div>
           </div>
           <div className="headerSection">
-            <div className="mt-8 mb-1">
-              <h3 className="ml-3 text-sm ">Header</h3>
+            <div className="mt-8 mb-1 flex flex-row justify-between items-center">
+              <div>
+                <h3 className="ml-3 text-sm ">Header</h3>
+              </div>
+              <div className="pb-2">
+                <SiteEditDropdown />
+              </div>
             </div>
             <div className="rounded-lg text-sm  bg-white overflow-hidden shadow  px-3">
               <div className="mt-4 mb-3">
@@ -279,7 +285,8 @@ const editPage = ({ page, token, items }) => {
                   value="headerTypeOne"
                   data-headertype="headerTypeOne"
                   type="button"
-                  className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className={`inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                  `}
                 >
                   Header Type 1
                 </button>
@@ -288,7 +295,8 @@ const editPage = ({ page, token, items }) => {
                   data-headertype="headerTypeTwo"
                   onClick={onButtonClick}
                   type="button"
-                  className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className={`inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                  `}
                 >
                   Header Type 2
                 </button>
@@ -409,7 +417,7 @@ const editPage = ({ page, token, items }) => {
                     <ToggleButton enabled={toggle} setEnabled={setToggle} />
 
                     <input
-                      style={{ background: '#F2F2F2', color: '#A3A3A3' }}
+                      // style={{ background: '#F2F2F2', color: '#A3A3A3' }}
                       name="actionText"
                       value={state.actionText}
                       onChange={handleChange}
@@ -419,7 +427,7 @@ const editPage = ({ page, token, items }) => {
                     />
                   </div>
                   <input
-                    style={{ background: '#F2F2F2', color: '#A3A3A3' }}
+                    // style={{ background: '#F2F2F2', color: '#A3A3A3' }}
                     name="ctaLink"
                     value={state.ctaLink}
                     onChange={handleChange}
@@ -429,12 +437,6 @@ const editPage = ({ page, token, items }) => {
                   />
                 </div>
               </div>
-            </div>
-            <div className="mt-6">
-              <div className="mb-2">
-                <h3 className="ml-3 text-sm ">Preview</h3>
-              </div>
-              <div className="rounded-lg text-sm  bg-white overflow-hidden shadow  px-3 h-40"></div>
             </div>
             {/* End of first Preview Section */}
             <div className="bodySection mt-12">
@@ -526,8 +528,6 @@ export async function getServerSideProps(ctx) {
   } = await client.query({
     query: GET_ALL_ITEMS_QUERY,
     variables: {
-      // limit: 3,
-      // offset: 3,
       siteId: page.site,
       filter: {
         singleFilter: {
