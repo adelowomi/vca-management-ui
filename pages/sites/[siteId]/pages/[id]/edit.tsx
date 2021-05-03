@@ -6,9 +6,9 @@ import makeAnimated from 'react-select/animated';
 
 import { tags } from '../../../../../assets/data/data';
 import ToggleButton from '../../../../../components/ToggleButton/ToggleButton';
-import MyDialog from '../../../../../components/utilsGroup/Modal';
-import SiteEditDropdown from '../../../../../components/utilsGroup/SiteEditDropDown';
-import SiteEditModal from '../../../../../components/utilsGroup/SiteEditModal';
+import MyDialog from '../../../../../components/utils-group/Modal';
+import SiteEditDropdown from '../../../../../components/utils-group/SiteEditDropDown';
+import SiteEditModal from '../../../../../components/utils-group/SiteEditModal';
 import {
   ADD_WIDGET,
   EDIT_PAGE,
