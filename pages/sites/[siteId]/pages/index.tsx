@@ -248,7 +248,29 @@ export async function getServerSideProps(ctx) {
 
   const pages = await client.query({
     query: PAGES_QUERY,
-    variables: { siteId: ctx.query.siteId },
+    variables: {
+      filter: {
+        combinedFilter: {
+          logicalOperator: 'OR',
+          filters: [
+            {
+              singleFilter: {
+                field: 'siteId',
+                operator: 'EQ',
+                value: ctx.query.siteId,
+              },
+            },
+            {
+              singleFilter: {
+                field: 'site',
+                operator: 'EQ',
+                value: ctx.query.siteId,
+              },
+            },
+          ],
+        },
+      },
+    },
   });
 
   return { props: { pages } };

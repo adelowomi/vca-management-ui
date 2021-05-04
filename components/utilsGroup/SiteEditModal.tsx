@@ -3,6 +3,7 @@ import { Fragment, useRef, useState } from 'react';
 import React from 'react';
 
 import Tab from './Tab';
+
 export default function SiteEditModal({
   open,
   setOpen,
@@ -140,11 +141,10 @@ export default function SiteEditModal({
                     </h3>
                   </div>
                 </div>
-                {/* _______ */}
                 <div>
                   <button
                     className="flex rounded-lg bg-indigo-500 py-2 px-4 text-white"
-                    onClick={onClick}
+                    onClick={() => onClick(setSelected)}
                   >
                     Done
                   </button>
@@ -154,7 +154,6 @@ export default function SiteEditModal({
                 <div className="text-indigo-500 text-sm italic font-light mt-5">
                   <h6>You can only add 8 items to a widget</h6>
                 </div>
-                {/* --------- */}
                 <div className="mb-8 space-y-2 mt-3 cursor-pointer transition duration-500 ease-in-out">
                   <Tab isSelected={selectedTab === tabs[0]}>
                     {getPaginatedData().map((item: any) => (
@@ -201,7 +200,6 @@ export default function SiteEditModal({
                     ))}
                   </Tab>
                 </div>
-                {/* ------------ */}
               </div>
               <div className="bg-gray-200 h-20 flex flex-row justify-between px-5 items-center">
                 <div className="outline-none">

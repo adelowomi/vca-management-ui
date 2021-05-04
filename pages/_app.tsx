@@ -7,6 +7,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
+import { ToastProvider } from 'react-toast-notifications';
 import styled, { ThemeProvider } from 'styled-components';
 import { Provider as StyletronProvider } from 'styletron-react';
 
@@ -42,8 +43,14 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                   <meta name="Description" content="Qaltrak" />
                 </Head>
                 <Container>
-                  <GlobalStyles />
-                  <Component {...pageProps} />
+                  <ToastProvider
+                    autoDismiss={true}
+                    autoDismissTimeout={2000}
+                    transitionDuration={100}
+                  >
+                    <GlobalStyles />
+                    <Component {...pageProps} />
+                  </ToastProvider>
                 </Container>
               </IntlProvider>
             </ThemeProvider>

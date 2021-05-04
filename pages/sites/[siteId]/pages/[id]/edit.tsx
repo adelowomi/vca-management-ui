@@ -3,11 +3,12 @@ import Link from 'next/link';
 import React from 'react';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import { useToasts } from 'react-toast-notifications';
 
 import { tags } from '../../../../../assets/data/data';
 import ToggleButton from '../../../../../components/ToggleButton/ToggleButton';
 import MyDialog from '../../../../../components/utilsGroup/Modal';
-import SiteEditDropdown from '../../../../../components/utilsGroup/SiteEditDropDown';
+import SiteEditDropdown from '../../../../../components/utilsGroup/SiteEditDropdown';
 import SiteEditModal from '../../../../../components/utilsGroup/SiteEditModal';
 import {
   ADD_WIDGET,
@@ -44,7 +45,7 @@ const editPage = ({ page, token, items }) => {
     widgetType: 'ITEM',
     widgetItems: [],
   });
-
+  const { addToast } = useToasts();
   const [toggle, setToggle] = React.useState(state.hasAction);
 
   const closeModal = () => {
@@ -80,30 +81,34 @@ const editPage = ({ page, token, items }) => {
     });
   };
 
-  const onSubmit = (e: any) => {
+  const onSubmit = async (e: any) => {
     e.preventDefault();
-
-    client.mutate({
-      mutation: EDIT_PAGE,
-      variables: {
-        updatePageInput: {
-          name: state.pageTitle,
-          tags: state.tags,
-          site: state.site,
-          hero: {
-            caption: state.captionText,
-            type: state.headerType,
-            mediaUrl: state.mediaUrl,
-            heading: state.headerText,
-            hasAction: toggle,
-            actionText: state.actionText,
-            actionSlug: state.ctaLink,
-            location: state.location,
+    try {
+      await client.mutate({
+        mutation: EDIT_PAGE,
+        variables: {
+          updatePageInput: {
+            name: state.pageTitle,
+            tags: state.tags,
+            site: state.site,
+            hero: {
+              caption: state.captionText,
+              type: state.headerType,
+              mediaUrl: state.mediaUrl,
+              heading: state.headerText,
+              hasAction: toggle,
+              actionText: state.actionText,
+              actionSlug: state.ctaLink,
+              location: state.location,
+            },
           },
+          pageId: page.id,
         },
-        pageId: page.id,
-      },
-    });
+      });
+      addToast('Page is successfully Edited', { appearance: 'success' });
+    } catch (error) {
+      addToast(error.message, { appearance: 'error' });
+    }
 
     setState({
       pageTitle: '',
@@ -127,22 +132,30 @@ const editPage = ({ page, token, items }) => {
     setToggle(false);
     setModalOpen(!modalIsOpen);
   };
-  const createWidget = () => {
-    client.mutate({
-      mutation: ADD_WIDGET,
-      variables: {
-        createWidgetInput: {
-          description: state.widgetDescription,
-          disable: state.widgetDisable,
-          title: state.widgetTitle,
-          items: state.widgetItems,
-          page: state.widgetPageId,
-          type: state.widgetType,
+  const createWidget = async (setSelected) => {
+    try {
+      await client.mutate({
+        mutation: ADD_WIDGET,
+        variables: {
+          createWidgetInput: {
+            description: state.widgetDescription,
+            disable: state.widgetDisable,
+            title: state.widgetTitle,
+            items: state.widgetItems,
+            page: state.widgetPageId,
+            type: state.widgetType,
+          },
         },
-      },
-    });
-    setOpen(!open);
+      });
+      setSelected([]);
+      addToast('Widget is successfully created', { appearance: 'success' });
+      setOpen(!open);
+    } catch (error) {
+      addToast(error.message, { appearance: 'error' });
+      setOpen(!open);
+    }
   };
+
   return (
     <Layout>
       <div className="px-5">
@@ -285,7 +298,14 @@ const editPage = ({ page, token, items }) => {
                   value="headerTypeOne"
                   data-headertype="headerTypeOne"
                   type="button"
-                  className={`inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                  className={`
+                  ${
+                    state.headerType === 'headerTypeOne'
+                      ? 'bg-indigo-200 text-indigo-600 '
+                      : ''
+                  }
+                  inline-flex items-center px-3 py-2 border shadow-sm text-base font-medium rounded-md text-gray-500 focus:outline-none 
+                 
                   `}
                 >
                   Header Type 1
@@ -295,7 +315,14 @@ const editPage = ({ page, token, items }) => {
                   data-headertype="headerTypeTwo"
                   onClick={onButtonClick}
                   type="button"
-                  className={`inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                  className={`
+                  ${
+                    state.headerType === 'headerTypeTwo'
+                      ? 'bg-indigo-200 text-indigo-600 '
+                      : ''
+                  }
+                  inline-flex items-center px-3 py-2 border shadow-sm text-base font-medium rounded-md text-gray-500  focus:outline-none 
+                 
                   `}
                 >
                   Header Type 2
@@ -305,7 +332,15 @@ const editPage = ({ page, token, items }) => {
                   data-headertype="headerTypeThree"
                   onClick={onButtonClick}
                   type="button"
-                  className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className={`
+                  ${
+                    state.headerType === 'headerTypeThree'
+                      ? 'bg-indigo-200 text-indigo-600 '
+                      : ''
+                  }
+                  inline-flex items-center px-3 py-2 border shadow-sm text-base font-medium rounded-md text-gray-500  focus:outline-none 
+                 
+                  `}
                 >
                   Header Type 3
                 </button>
@@ -314,7 +349,15 @@ const editPage = ({ page, token, items }) => {
                   data-headertype="headerTypeFour"
                   onClick={onButtonClick}
                   type="button"
-                  className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className={`
+                  ${
+                    state.headerType === 'headerTypeFour'
+                      ? 'bg-indigo-200 text-indigo-600 '
+                      : ''
+                  }
+                  inline-flex items-center px-3 py-2 border shadow-sm text-base font-medium rounded-md text-gray-500  focus:outline-none 
+                 
+                  `}
                 >
                   Header Type 4
                 </button>
@@ -520,7 +563,29 @@ export async function getServerSideProps(ctx) {
     data: { page },
   } = await client.query({
     query: PAGE_QUERY,
-    variables: { siteId, pageId },
+    variables: {
+      filter: {
+        combinedFilter: {
+          logicalOperator: 'OR',
+          filters: [
+            {
+              singleFilter: {
+                field: '_id',
+                operator: 'EQ',
+                value: pageId,
+              },
+            },
+            {
+              singleFilter: {
+                field: 'site',
+                operator: 'EQ',
+                value: ctx.query.siteId,
+              },
+            },
+          ],
+        },
+      },
+    },
   });
 
   const {
@@ -528,7 +593,7 @@ export async function getServerSideProps(ctx) {
   } = await client.query({
     query: GET_ALL_ITEMS_QUERY,
     variables: {
-      siteId: page.site,
+      siteId: siteId,
       filter: {
         singleFilter: {
           field: 'pageId',

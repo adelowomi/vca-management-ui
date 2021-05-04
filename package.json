@@ -60,6 +60,7 @@
     "react-intl": "^5.10.9",
     "react-select": "^3.1.1",
     "react-spring": "^9.1.1",
+    "react-toast-notifications": "^2.4.4",
     "react-use": "^17.2.3",
     "styled-components": "^5.0.0",
     "styletron-engine-atomic": "^1.4.6",

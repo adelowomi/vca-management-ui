@@ -36,8 +36,8 @@ const SITE_QUERY = gql`
 `;
 
 const PAGES_QUERY = gql`
-  query Pages($siteId: String!) {
-    pages(siteId: $siteId) {
+  query Pages($limit: Int, $offset: Int, $filter: FilterInput) {
+    pages(filter: $filter, limit: $limit, offset: $offset) {
       id
       name
       tags
@@ -50,6 +50,7 @@ const PAGES_QUERY = gql`
       }
       hero {
         type
+        caption
         mediaUrl
         heading
         hasAction
@@ -62,8 +63,8 @@ const PAGES_QUERY = gql`
 `;
 
 const PAGE_QUERY = gql`
-  query Page($siteId: String!, $pageId: String!) {
-    page(siteId: $siteId, pageId: $pageId) {
+  query Page($limit: Int, $offset: Int, $filter: FilterInput) {
+    page(filter: $filter, limit: $limit, offset: $offset) {
       id
       name
       tags
