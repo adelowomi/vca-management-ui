@@ -5,7 +5,7 @@ import { useToasts } from 'react-toast-notifications';
 import { ADD_WIDGET } from '../../../graphql/schema';
 import { createApolloClient } from '../../../lib/apollo';
 import { NewsWidget } from '../../NewsWidget/NewsWidget';
-import AddItemsModal from '../../utils-group/addItemsModal';
+import AddItemsModal from '../../utilsGroup/addItemsModal';
 
 type WidgetProps = {
   pageId: string;
@@ -50,7 +50,7 @@ type WidgetProps = {
     updatedAt: Date;
   }[];
 };
-const CreateWidget: React.FC<WidgetProps> = ({
+export const CreateWidget: React.FC<WidgetProps> = ({
   pageId,
   token,
   items,
@@ -197,13 +197,3 @@ const CreateWidget: React.FC<WidgetProps> = ({
     </>
   );
 };
-
-export async function getServerSideProps(ctx) {
-  const session = getSession(ctx.req, ctx.res);
-  return {
-    props: {
-      token: session.idToken,
-    },
-  };
-}
-export default CreateWidget;

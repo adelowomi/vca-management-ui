@@ -6,12 +6,12 @@ import { useToasts } from 'react-toast-notifications';
 import { tags } from '../../../assets/data/data';
 import { ADD_PAGE } from '../../../graphql/schema';
 import { createApolloClient } from '../../../lib/apollo';
-import AddMenuItemsDropdown from '../../utils-group/addMenuItemsDropdown';
-import BreadCrumb from './breadCrumb';
-import { CallToAction } from './callToAction';
-import { PageControls } from './pageControls';
-import { PageHeaderStyle } from './pageHeaderStyle';
-import { Textposition } from './textPosition';
+import AddMenuItemsDropdown from '../../utilsGroup/addMenuItemsDropdown';
+import { BreadCrumb } from './BreadCrumb';
+import { CallToAction } from './CallToAction';
+import { PageControls } from './PageControls';
+import { PageHeaderStyle } from './PageHeaderStyle';
+import { Textposition } from './TextPosition';
 
 const animatedComponents = makeAnimated();
 

@@ -5,7 +5,7 @@ type breadeCrumbProps = {
   type: string;
   pageName?: string;
 };
-const BreadCrumb: React.FC<breadeCrumbProps> = ({ type, pageName }) => {
+export const BreadCrumb: React.FC<breadeCrumbProps> = ({ type, pageName }) => {
   return (
     <div className="breadCrumb">
       {/* <!-- This example requires Tailwind CSS v2.0+ --> */}
@@ -83,4 +83,3 @@ const BreadCrumb: React.FC<breadeCrumbProps> = ({ type, pageName }) => {
     </div>
   );
 };
-export default BreadCrumb;

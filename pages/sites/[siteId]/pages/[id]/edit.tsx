@@ -5,14 +5,14 @@ import makeAnimated from 'react-select/animated';
 import { useToasts } from 'react-toast-notifications';
 
 import { tags } from '../../../../../assets/data/data';
-import BreadCrumb from '../../../../../components/page/create/breadCrumb';
-import { CallToAction } from '../../../../../components/page/create/callToAction';
-import CreateWidget from '../../../../../components/page/create/createWidget';
-import { PageControls } from '../../../../../components/page/create/pageControls';
-import { PageHeaderStyle } from '../../../../../components/page/create/pageHeaderStyle';
-import { Textposition } from '../../../../../components/page/create/textPosition';
-import AddMenuItemsDropdown from '../../../../../components/utils-group/addMenuItemsDropdown';
-import MyDialog from '../../../../../components/utils-group/Modal';
+import { BreadCrumb } from '../../../../../components/Page/create/BreadCrumb';
+import { CallToAction } from '../../../../../components/Page/create/CallToAction';
+import { CreateWidget } from '../../../../../components/Page/create/CreateWidget';
+import { PageControls } from '../../../../../components/Page/create/PageControls';
+import { PageHeaderStyle } from '../../../../../components/Page/create/PageHeaderStyle';
+import { Textposition } from '../../../../../components/Page/create/TextPosition';
+import AddMenuItemsDropdown from '../../../../../components/utilsGroup/addMenuItemsDropdown';
+import MyDialog from '../../../../../components/utilsGroup/Modal';
 import {
   EDIT_PAGE,
   GET_ALL_ITEMS_QUERY,
