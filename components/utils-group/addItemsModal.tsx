@@ -4,14 +4,14 @@ import React from 'react';
 
 import Tab from './Tab';
 
-export default function SiteEditModal({
+const AddItemsModal: React.FC<any> = ({
   open,
   setOpen,
   items,
   state,
   setState,
   onClick,
-}) {
+}): JSX.Element => {
   const cancelButtonRef = useRef();
   const [selected, setSelected] = useState([]);
   const dataLimit = 3;
@@ -228,4 +228,6 @@ export default function SiteEditModal({
       </Dialog>
     </Transition.Root>
   );
-}
+};
+
+export default AddItemsModal;

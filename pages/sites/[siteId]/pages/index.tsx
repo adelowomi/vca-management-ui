@@ -251,18 +251,10 @@ export async function getServerSideProps(ctx) {
     variables: {
       filter: {
         combinedFilter: {
-          logicalOperator: 'OR',
           filters: [
             {
               singleFilter: {
                 field: 'siteId',
-                operator: 'EQ',
-                value: ctx.query.siteId,
-              },
-            },
-            {
-              singleFilter: {
-                field: 'site',
                 operator: 'EQ',
                 value: ctx.query.siteId,
               },

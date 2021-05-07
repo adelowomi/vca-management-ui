@@ -1,19 +1,12 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 
-const people = [
-  { name: 'Link menu to page' },
-  { name: 'Arlene Mccoy' },
-  { name: 'Devon Webb' },
-  { name: 'Tom Cook' },
-  { name: 'Tanya Fox' },
-  { name: 'Hellen Schmidt' },
-];
-
-export default function SiteEditDropdown() {
-  const [selected, setSelected] = useState(people[0]);
-
+export default function AddMenuItemsDropdown({
+  menuItems,
+  selected,
+  setSelected,
+}) {
   return (
     <div className="w-60">
       <Listbox value={selected} onChange={setSelected}>
@@ -40,9 +33,9 @@ export default function SiteEditDropdown() {
                   static
                   className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                 >
-                  {people.map((person, personIdx) => (
+                  {menuItems.map((item, itemIdx) => (
                     <Listbox.Option
-                      key={personIdx}
+                      key={itemIdx}
                       className={({ active }) =>
                         `${
                           active
@@ -51,7 +44,7 @@ export default function SiteEditDropdown() {
                         }
                           cursor-default select-none relative py-2 pl-10 pr-4`
                       }
-                      value={person}
+                      value={item}
                     >
                       {({ selected, active }) => (
                         <>
@@ -60,7 +53,7 @@ export default function SiteEditDropdown() {
                               selected ? 'font-medium' : 'font-normal'
                             } block truncate`}
                           >
-                            {person.name}
+                            {item.name}
                           </span>
                           {selected ? (
                             <span

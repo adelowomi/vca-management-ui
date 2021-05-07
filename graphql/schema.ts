@@ -119,6 +119,8 @@ const ADD_WIDGET = gql`
         mediaUrl
         slug
         id
+        content
+        category
       }
       page
       type
@@ -132,6 +134,7 @@ const EDIT_PAGE = gql`
       id
       name
       tags
+      menuItem
       hero {
         type
         caption
@@ -201,12 +204,32 @@ const GET_ALL_ITEMS_QUERY = gql`
     }
   }
 `;
+const GET_SITE_MENUITEMS = gql`
+ query SiteMenuItems($limit: Int, $offset: Int, $filter: FilterInput){
+  siteMenuItems(filter: $filter, limit: $limit , offset: $offset){
+    
+    id
+    name
+    header {
+      menuItems {
+        id
+        name
+        slug
+        description
+      }
+    }
+    page
+  }
+  }
+
+`;
 
 export {
   ADD_PAGE,
   ADD_WIDGET,
   EDIT_PAGE,
   GET_ALL_ITEMS_QUERY,
+  GET_SITE_MENUITEMS,
   PAGE_QUERY,
   PAGES_QUERY,
   SITE_QUERY,

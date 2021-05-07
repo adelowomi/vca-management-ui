@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PageHeaderStyle should render PageHeaderStyle snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="header-button-group flex justify-start space-x-3 "
+  >
+    <button
+      class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      type="button"
+      value="headerTypeOne"
+    >
+      Header Type 1
+    </button>
+    <button
+      class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      type="button"
+      value="headerTypeTwo"
+    >
+      Header Type 2
+    </button>
+    <button
+      class="inline-flex items-center px-3 py-2 border  shadow-sm text-base font-medium rounded-md text-indigo-700 bg-indigo-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      type="button"
+      value="headerTypeThree"
+    >
+      Header Type 3
+    </button>
+    <button
+      class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      type="button"
+      value="headerTypeFour"
+    >
+      Header Type 4
+    </button>
+  </div>
+</DocumentFragment>
+`;

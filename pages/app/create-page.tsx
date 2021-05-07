@@ -1,10 +1,10 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import React from 'react';
 
-import AddNewPage from '../../components/site/AddNewPage';
+import CreatePage from '../../components/page/create/createPage';
 import Dashboard from '../../layouts/Dashboard';
 
-const CreatePage = (props) => {
+const AddPage = (props) => {
   const {
     sites: {
       data: { sites },
@@ -13,9 +13,9 @@ const CreatePage = (props) => {
 
   return (
     <Dashboard>
-      <AddNewPage siteId={sites[0].id} />
+      <CreatePage siteId={sites[0].id} />
     </Dashboard>
   );
 };
 
-export default withPageAuthRequired(CreatePage);
+export default withPageAuthRequired(AddPage);

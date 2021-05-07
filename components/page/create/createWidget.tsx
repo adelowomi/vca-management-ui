@@ -1,20 +1,70 @@
 import { getSession } from '@auth0/nextjs-auth0';
 import React from 'react';
+import { useToasts } from 'react-toast-notifications';
 
-import { ADD_WIDGET } from '../../graphql/schema';
-import { createApolloClient } from '../../lib/apollo';
-import SiteEditModal from '../utilsGroup/SiteEditModal';
+import { ADD_WIDGET } from '../../../graphql/schema';
+import { createApolloClient } from '../../../lib/apollo';
+import { NewsWidget } from '../../NewsWidget/NewsWidget';
+import AddItemsModal from '../../utils-group/addItemsModal';
 
 type WidgetProps = {
   pageId: string;
   token: string;
+  items: {
+    id: string;
+    type: string;
+    mediaUrl: string;
+    slug: string;
+    content: string;
+    draft: string;
+    featured: string;
+    category: string;
+    tags: [string];
+    createdBy: {
+      userId: string;
+      id: string;
+      firstName: string;
+      lastName: string;
+      phone: string;
+      businessName: string;
+      industry: string;
+      accountType: string;
+      createdAt: Date;
+      updatedAt: Date;
+      address: {
+        line: string;
+        lineAlt: null | string;
+        city: string;
+        state: string;
+        postalCode: string;
+        placeId: string;
+        country: string;
+        location: {
+          type: string;
+          coordinates: [number];
+        };
+      };
+    };
+    updatedBy: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+  }[];
 };
 const CreateWidget: React.FC<WidgetProps> = ({
   pageId,
   token,
+  items,
 }): JSX.Element => {
   const [open, setOpen] = React.useState(false);
+  const [widgetData, setWidgetData] = React.useState<{
+    description: string;
+    disable: boolean;
+    title: string;
+    items: [string];
+  }>();
+
   const client = createApolloClient(token);
+  const { addToast } = useToasts();
 
   const [state, setState] = React.useState({
     widgetDescription: '',
@@ -32,21 +82,39 @@ const CreateWidget: React.FC<WidgetProps> = ({
       [e.target.name]: value,
     });
   };
-  const createWidget = () => {
-    client.mutate({
-      mutation: ADD_WIDGET,
-      variables: {
-        createWidgetInput: {
-          description: state.widgetDescription,
-          disable: state.widgetDisable,
-          title: state.widgetTitle,
-          items: state.widgetItems,
-          page: state.widgetPageId,
-          type: state.widgetType,
+  const createWidget = async () => {
+    try {
+      const {
+        data: { createWidget },
+      } = await client.mutate({
+        mutation: ADD_WIDGET,
+        variables: {
+          createWidgetInput: {
+            description: state.widgetDescription,
+            disable: state.widgetDisable,
+            title: state.widgetTitle,
+            items: state.widgetItems,
+            page: state.widgetPageId,
+            type: state.widgetType,
+          },
         },
-      },
-    });
-    setOpen(!open);
+      });
+      setState({
+        widgetDescription: '',
+        widgetTitle: '',
+        widgetPageId: '',
+        widgetDisable: false,
+        widgetType: '',
+        widgetItems: [],
+      });
+      setWidgetData({ ...createWidget });
+
+      addToast('Widget is successfully created', { appearance: 'success' });
+      setOpen(!open);
+    } catch (error) {
+      addToast(error.message, { appearance: 'error' });
+      setOpen(!open);
+    }
   };
 
   return (
@@ -107,11 +175,21 @@ const CreateWidget: React.FC<WidgetProps> = ({
             </div>
           </div>
         </div>
+        <div className="mt-10">
+          <div className="mb-2">
+            <h3 className="ml-3 text-sm ">Preview</h3>
+          </div>
+          <div className="rounded-lg text-sm  bg-white  shadow  px-3 h-auto">
+            {widgetData && widgetData.title && (
+              <NewsWidget news={widgetData} contain />
+            )}
+          </div>
+        </div>
       </div>
-      <SiteEditModal
+      <AddItemsModal
         open={open}
         setOpen={setOpen}
-        items
+        items={items}
         state={state}
         setState={setState}
         onClick={createWidget}
