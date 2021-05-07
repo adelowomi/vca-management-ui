@@ -1,7 +1,7 @@
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 
-import CreatePage from '../../../../components/Page/create/CreatePage';
+import CreatePage from '../../../../components/Page/Create/CreatePage';
 import { GET_SITE_MENUITEMS } from '../../../../graphql/schema';
 import Layout from '../../../../layouts/Dashboard';
 import { createApolloClient } from '../../../../lib/apollo';
