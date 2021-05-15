@@ -15,7 +15,7 @@ export default {
     xl: 1280,
   },
   colors: {
-    blue: '#0035c1',
+    blue: '#1890FF',
     blueBkg: 'rgba(0, 53, 193, 0.1)',
     darkIndigo: '#0c1a38',
     white: '#fff',

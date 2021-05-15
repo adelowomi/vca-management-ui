@@ -1,15 +1,16 @@
 import React from 'react';
 
 import { fireEvent, render, screen } from '../../../test/testUtils';
-import { PageHeaderStyle } from './PageHeaderStyle';
+import { PageControls } from './PageControls';
 
 describe('PageHeaderStyle', () => {
   it('should render PageHeaderStyle snapshot', () => {
     const mockOnButtonClick = jest.fn();
     const { asFragment } = render(
-      <PageHeaderStyle
-        onButtonClick={mockOnButtonClick}
-        headerType="headerTypeOne"
+      <PageControls
+        handleChange={mockOnButtonClick}
+        onSubmit={mockOnButtonClick}
+        title="hello"
       />
     );
     expect(asFragment()).toMatchSnapshot();
@@ -18,9 +19,10 @@ describe('PageHeaderStyle', () => {
   it('should render PageHeaderStyle snapshot', () => {
     const mockOnButtonClick = jest.fn();
     render(
-      <PageHeaderStyle
-        onButtonClick={mockOnButtonClick}
-        headerType="headerTypeOne"
+      <PageControls
+        handleChange={mockOnButtonClick}
+        onSubmit={mockOnButtonClick}
+        title="hello"
       />
     );
     fireEvent.click(screen.getByText('Header Type 1'));

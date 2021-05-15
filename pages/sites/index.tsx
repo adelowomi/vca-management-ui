@@ -1,39 +1,17 @@
-import { gql } from '@apollo/client';
 import { getSession } from '@auth0/nextjs-auth0';
 import Link from 'next/link';
 import React from 'react';
 
-import Layout from '../../layouts/Dashboard';
+import Layout from '../../components/Layout/Layout';
+import { SITES_QUERY } from '../../graphql';
 import { createApolloClient } from '../../lib/apollo';
 
-const SITE_QUERY = gql`
-  query Sites {
-    sites {
-      id
-      name
-      header {
-        name
-        type
-        menuItems {
-          id
-          name
-          slug
-          description
-        }
-      }
-    }
-  }
-`;
-
-const Sites = (props) => {
-  const {
-    sites: {
-      data: { sites },
-    },
-  } = props;
+const Sites = ({ sites, error }) => {
   let count = 0;
 
-  return (
+  return error ? (
+    <div>{error}</div>
+  ) : (
     <Layout>
       <h1 className="text-lg">Welcome to all sites Sites</h1>
       {sites.map((el) => {
@@ -62,9 +40,14 @@ export async function getServerSideProps(ctx) {
   }
   const client = createApolloClient(session.idToken);
 
-  const sites = await client.query({ query: SITE_QUERY });
-
-  return { props: { sites } };
+  try {
+    const {
+      data: { sites },
+    } = await client.query({ query: SITES_QUERY });
+    return { props: { sites } };
+  } catch (error) {
+    return { props: { error: 'Error loading........' } };
+  }
 }
 
 export default Sites;

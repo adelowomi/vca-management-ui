@@ -11,32 +11,12 @@ interface IsidebarProps {
 const Sidebar: React.FC<IsidebarProps> = ({ showSidebar, sidebar }) => {
   return (
     <>
-      {/*-----------------*/}
       <div className={`${sidebar ? 'show' : 'hidden'}`}>
         <div className="fixed inset-0 flex z-40">
-          {/*
-        Off-canvas menu overlay, show/hide based on off-canvas menu state.
-
-        Entering: "transition-opacity ease-linear duration-300"
-          From: "opacity-0"
-          To: "opacity-100"
-        Leaving: "transition-opacity ease-linear duration-300"
-          From: "opacity-100"
-          To: "opacity-0"
-      */}
           <div className="fixed inset-0">
             <div className="absolute inset-0 bg-gray-600 opacity-75"></div>
           </div>
-          {/*
-        Off-canvas menu, show/hide based on off-canvas menu state.
 
-        Entering: "transition ease-in-out duration-300 transform"
-          From: "-translate-x-full"
-          To: "translate-x-0"
-        Leaving: "transition ease-in-out duration-300 transform"
-          From: "translate-x-0"
-          To: "-translate-x-full"
-      */}
           <div className="relative flex-1 flex flex-col max-w-xs w-full bg-white">
             <div className="absolute top-0 right-0 -mr-12 pt-2">
               <button
@@ -44,7 +24,6 @@ const Sidebar: React.FC<IsidebarProps> = ({ showSidebar, sidebar }) => {
                 onClick={showSidebar}
               >
                 <span className="sr-only">Close sidebar</span>
-                {/* Heroicon name: outline/x */}
                 <svg
                   className="h-6 w-6 text-white"
                   xmlns="http://www.w3.org/2000/svg"
@@ -71,11 +50,8 @@ const Sidebar: React.FC<IsidebarProps> = ({ showSidebar, sidebar }) => {
                 />
               </div>
               <nav className="mt-5 px-2 space-y-1">
-                {/* Current: "bg-gray-100 text-gray-900", Default: "text-gray-600 hover:bg-gray-50 hover:text-gray-900" */}
                 <Link href="#">
                   <a className="bg-gray-100 text-gray-900 group flex items-center px-2 py-6 text-lg font-medium rounded-md">
-                    {/* Current: "text-gray-500", Default: "text-gray-400 group-hover:text-gray-500" */}
-                    {/* Heroicon name: outline/home */}
                     <svg
                       className="text-gray-500 mr-4 h-6 w-6"
                       xmlns="http://www.w3.org/2000/svg"
@@ -96,7 +72,6 @@ const Sidebar: React.FC<IsidebarProps> = ({ showSidebar, sidebar }) => {
                 </Link>
                 <Link href="#">
                   <a className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-6 text-lg font-medium rounded-md">
-                    {/* Heroicon name: outline/users */}
                     <svg
                       className="text-gray-400 group-hover:text-gray-500 mr-4 h-6 w-6"
                       xmlns="http://www.w3.org/2000/svg"
@@ -117,7 +92,6 @@ const Sidebar: React.FC<IsidebarProps> = ({ showSidebar, sidebar }) => {
                 </Link>
                 <Link href="#">
                   <a className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-6 text-lg font-medium rounded-md">
-                    {/* Heroicon name: outline/folder */}
                     <svg
                       className="text-gray-400 group-hover:text-gray-500 mr-4 h-6 w-6"
                       xmlns="http://www.w3.org/2000/svg"
@@ -228,7 +202,6 @@ const Sidebar: React.FC<IsidebarProps> = ({ showSidebar, sidebar }) => {
           </div>
         </div>
       </div>
-      {/*-----------------*/}
 
       {/* Static sidebar for desktop */}
       <div className="hidden md:flex md:flex-shrink-0">

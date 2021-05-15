@@ -5,21 +5,21 @@ import makeAnimated from 'react-select/animated';
 import { useToasts } from 'react-toast-notifications';
 
 import { tags } from '../../../../../assets/data/data';
+import Layout from '../../../../../components/Layout/Layout';
 import { BreadCrumb } from '../../../../../components/Page/Create/BreadCrumb';
 import { CallToAction } from '../../../../../components/Page/Create/CallToAction';
 import { CreateWidget } from '../../../../../components/Page/Create/CreateWidget';
 import { PageControls } from '../../../../../components/Page/Create/PageControls';
 import { PageHeaderStyle } from '../../../../../components/Page/Create/PageHeaderStyle';
 import { Textposition } from '../../../../../components/Page/Create/TextPosition';
-import AddMenuItemsDropdown from '../../../../../components/utilsGroup/addMenuItemsDropdown';
+import { AddMenuItemsDropdown } from '../../../../../components/utilsGroup/AddMenuItemsDropdown';
 import MyDialog from '../../../../../components/utilsGroup/Modal';
 import {
   EDIT_PAGE,
   GET_ALL_ITEMS_QUERY,
   GET_SITE_MENUITEMS,
   PAGE_QUERY,
-} from '../../../../../graphql/schema';
-import Layout from '../../../../../layouts/Dashboard';
+} from '../../../../../graphql';
 import { createApolloClient } from '../../../../../lib/apollo';
 
 const animatedComponents = makeAnimated();
@@ -184,7 +184,10 @@ const editPage = ({ page, token, items, error, menuItems }) => {
               <div className="mt-4 mb-3">
                 <h3 className="text-sm ">Style</h3>
               </div>
-              <PageHeaderStyle onButtonClick={onButtonClick} state={state} />
+              <PageHeaderStyle
+                onButtonClick={onButtonClick}
+                headerType={state.headerType}
+              />
               <div className="inputSection mt-6 grid grid-cols-7">
                 <div className=" col-span-3">
                   <label className="text-gray-700 font-medium">Media URL</label>

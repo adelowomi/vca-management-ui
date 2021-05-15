@@ -1,11 +1,9 @@
-import { getSession } from '@auth0/nextjs-auth0';
 import React from 'react';
 import { useToasts } from 'react-toast-notifications';
 
-import { ADD_WIDGET } from '../../../graphql/schema';
+import { ADD_WIDGET } from '../../../graphql';
 import { createApolloClient } from '../../../lib/apollo';
-import { NewsWidget } from '../../NewsWidget/NewsWidget';
-import AddItemsModal from '../../utilsGroup/addItemsModal';
+import AddItemsModal from '../../utilsGroup/AddItemsModal';
 
 type WidgetProps = {
   pageId: string;
@@ -56,12 +54,12 @@ export const CreateWidget: React.FC<WidgetProps> = ({
   items,
 }): JSX.Element => {
   const [open, setOpen] = React.useState(false);
-  const [widgetData, setWidgetData] = React.useState<{
-    description: string;
-    disable: boolean;
-    title: string;
-    items: [string];
-  }>();
+  // const [widgetData, setWidgetData] = React.useState<{
+  //   description: string;
+  //   disable: boolean;
+  //   title: string;
+  //   items: [string];
+  // }>();
 
   const client = createApolloClient(token);
   const { addToast } = useToasts();
@@ -84,9 +82,7 @@ export const CreateWidget: React.FC<WidgetProps> = ({
   };
   const createWidget = async () => {
     try {
-      const {
-        data: { createWidget },
-      } = await client.mutate({
+      await client.mutate({
         mutation: ADD_WIDGET,
         variables: {
           createWidgetInput: {
@@ -107,8 +103,6 @@ export const CreateWidget: React.FC<WidgetProps> = ({
         widgetType: '',
         widgetItems: [],
       });
-      setWidgetData({ ...createWidget });
-
       addToast('Widget is successfully created', { appearance: 'success' });
       setOpen(!open);
     } catch (error) {
@@ -179,11 +173,7 @@ export const CreateWidget: React.FC<WidgetProps> = ({
           <div className="mb-2">
             <h3 className="ml-3 text-sm ">Preview</h3>
           </div>
-          <div className="rounded-lg text-sm  bg-white  shadow  px-3 h-auto">
-            {widgetData && widgetData.title && (
-              <NewsWidget news={widgetData} contain />
-            )}
-          </div>
+          <div className="rounded-lg text-sm  bg-white  shadow  px-3 h-auto"></div>
         </div>
       </div>
       <AddItemsModal

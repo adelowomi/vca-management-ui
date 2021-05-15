@@ -5,11 +5,11 @@ export interface PageControlsProps {
   onSubmit: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-export function PageControls({
+export const PageControls = ({
   title,
   handleChange,
   onSubmit,
-}: PageControlsProps) {
+}: PageControlsProps) => {
   return (
     <div className="flex flex-1 justify-between">
       <div className="w-72">
@@ -54,4 +54,4 @@ export function PageControls({
       </div>
     </div>
   );
-}
+};

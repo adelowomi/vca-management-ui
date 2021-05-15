@@ -4,9 +4,9 @@ import makeAnimated from 'react-select/animated';
 import { useToasts } from 'react-toast-notifications';
 
 import { tags } from '../../../assets/data/data';
-import { ADD_PAGE } from '../../../graphql/schema';
+import { ADD_PAGE } from '../../../graphql';
 import { createApolloClient } from '../../../lib/apollo';
-import AddMenuItemsDropdown from '../../utilsGroup/addMenuItemsDropdown';
+import { AddMenuItemsDropdown } from '../../utilsGroup/AddMenuItemsDropdown';
 import { BreadCrumb } from './BreadCrumb';
 import { CallToAction } from './CallToAction';
 import { PageControls } from './PageControls';
@@ -136,7 +136,10 @@ const CreatePage = ({ siteId, token, menuItems }) => {
             <div className="mt-4 mb-3">
               <h3 className="text-sm ">Style</h3>
             </div>
-            <PageHeaderStyle onButtonClick={onButtonClick} state={state} />
+            <PageHeaderStyle
+              onButtonClick={onButtonClick}
+              headerType={state.headerType}
+            />
             <div className="inputSection mt-6 grid grid-cols-7">
               <div className=" col-span-3">
                 <label className="text-gray-700 font-medium">Media URL</label>

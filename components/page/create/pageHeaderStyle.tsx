@@ -2,12 +2,12 @@ import * as React from 'react';
 
 export interface PageHeaderStyleProps {
   onButtonClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  state: any;
+  headerType: string;
 }
 
 export function PageHeaderStyle({
   onButtonClick,
-  state,
+  headerType,
 }: PageHeaderStyleProps) {
   return (
     <div className="header-button-group flex justify-start space-x-3 ">
@@ -17,11 +17,7 @@ export function PageHeaderStyle({
         data-headertype="headerTypeOne"
         type="button"
         className={`
-      ${
-        state && state.headerType === 'headerTypeOne'
-          ? 'bg-indigo-200 text-indigo-600 '
-          : ''
-      }
+      ${headerType === 'headerTypeOne' ? 'bg-indigo-200 text-indigo-600 ' : ''}
       inline-flex items-center px-3 py-2 border shadow-sm text-base font-medium rounded-md text-gray-500 focus:outline-none 
      
       `}
@@ -34,11 +30,7 @@ export function PageHeaderStyle({
         onClick={onButtonClick}
         type="button"
         className={`
-      ${
-        state && state.headerType === 'headerTypeTwo'
-          ? 'bg-indigo-200 text-indigo-600 '
-          : ''
-      }
+      ${headerType === 'headerTypeTwo' ? 'bg-indigo-200 text-indigo-600 ' : ''}
       inline-flex items-center px-3 py-2 border shadow-sm text-base font-medium rounded-md text-gray-500  focus:outline-none 
      
       `}
@@ -52,9 +44,7 @@ export function PageHeaderStyle({
         type="button"
         className={`
       ${
-        state && state.headerType === 'headerTypeThree'
-          ? 'bg-indigo-200 text-indigo-600 '
-          : ''
+        headerType === 'headerTypeThree' ? 'bg-indigo-200 text-indigo-600 ' : ''
       }
       inline-flex items-center px-3 py-2 border shadow-sm text-base font-medium rounded-md text-gray-500  focus:outline-none 
      
@@ -68,11 +58,7 @@ export function PageHeaderStyle({
         onClick={onButtonClick}
         type="button"
         className={`
-      ${
-        state && state.headerType === 'headerTypeFour'
-          ? 'bg-indigo-200 text-indigo-600 '
-          : ''
-      }
+      ${headerType === 'headerTypeFour' ? 'bg-indigo-200 text-indigo-600 ' : ''}
       inline-flex items-center px-3 py-2 border shadow-sm text-base font-medium rounded-md text-gray-500  focus:outline-none 
      
       `}

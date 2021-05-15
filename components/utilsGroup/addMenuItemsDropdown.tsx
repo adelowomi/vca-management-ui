@@ -2,11 +2,7 @@ import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { Fragment } from 'react';
 
-export default function AddMenuItemsDropdown({
-  menuItems,
-  selected,
-  setSelected,
-}) {
+export function AddMenuItemsDropdown({ menuItems, selected, setSelected }) {
   return (
     <div className="w-60">
       <Listbox value={selected} onChange={setSelected}>
