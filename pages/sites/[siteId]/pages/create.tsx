@@ -21,24 +21,12 @@ const Container = tw.div`
 px-20
 `;
 
-const SectionOne = tw.div`
-flex
-flex-row
-justify-between
-`;
-const SectionTwo = tw.div`
-mt-10
+const RowSection = tw.div`
 flex
 flex-row
 `;
 
-const SectionThree = tw.div`
-mt-8
-flex
-flex-col
-`;
-
-const SectionFour = tw.div`
+const ColumnSection = tw.div`
 mt-8
 flex
 flex-col
@@ -69,8 +57,10 @@ const Input = styled.input`
   border: 1px solid #828282;
   box-sizing: border-box;
   border-radius: 2px;
-  width: 100%;
+  display: flex;
+  align-content: center;
   text-align: left;
+  outline: none;
 
   ::placeholder {
     padding-left: 6px;
@@ -85,6 +75,8 @@ const Input = styled.input`
     padding-left: 10px;
   }
   :focus {
+    /* outline: none; */
+    /* outline-color: #1890ff; */
   }
 `;
 const Label = styled.label`
@@ -114,7 +106,7 @@ const HeaderTypeBtn = styled.button<IheaderTypeBtn>`
   box-sizing: border-box;
   border-radius: 2px;
   background: ${({ active }) => (active ? 'rgba(24, 144, 255, 0.1)' : '#fff')};
-  padding: 17px 30px;
+  padding: 17px 0px;
   color: ${({ active }) => (active ? '#1890FF' : '#828282')};
   font-family: Inter;
   font-style: normal;
@@ -123,20 +115,26 @@ const HeaderTypeBtn = styled.button<IheaderTypeBtn>`
   line-height: 19px;
   display: flex;
   width: 11.2rem;
-  align-items: center;
+  display: flex;
+  justify-content: center;
+  text-align: center;
   :focus {
     outline: none;
   }
 `;
-
-const HeaderPositionWrapper = styled.div`
+const ShadowBtn = styled.button`
+  background-color: #e8f4ff;
+  border-radius: 2px;
+  color: #1890ff;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
+  justify-content: center;
+  text-align: center;
+  :focus {
+    outline: none;
+  }
 `;
 const ImageSelectBox = styled.div`
-  width: 23.8rem;
+  /* width: 23.8rem; */
   background: rgba(24, 144, 255, 0.1);
   border: 1px dashed #1890ff;
   border-radius: 2px;
@@ -153,15 +151,19 @@ const ImageSelectBox = styled.div`
     color: #1890ff;
   }
 `;
-
+const HeaderPositionWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+`;
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+`;
 const index = () => {
-  // const router = useRouter();
-  // const { siteId } = router.query;
-
   return (
     <Layout>
       <Container>
-        <SectionOne>
+        <RowSection className="justify-between">
           <H1>Add a new page</H1>
           <div className="flex flex-row justify-start space-x-5">
             <Btn color="primary" $bg="secondary" $px="sm">
@@ -172,8 +174,8 @@ const index = () => {
               Save & Publish
             </Btn>
           </div>
-        </SectionOne>
-        <SectionTwo className="space-x-7">
+        </RowSection>
+        <RowSection className="space-x-7 mt-10">
           <FormGroup className="">
             <Label htmlFor="pageTitle" className="mb-6">
               Page Title
@@ -187,16 +189,16 @@ const index = () => {
             <Label htmlFor="pageTitle" className="flex mb-6 ">
               Add menu to page
               <span className="ml-2"></span>
-              <QuestionMarkCircleIcon className="h-6 w-6" />
+              <QuestionMarkCircleIcon className="h-6 w-6 text-black" />
             </Label>
             <Input
               className="py-4 px-17 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Select menu"
             />
           </FormGroup>
-        </SectionTwo>
-        <hr className="border-gray-400 border--5 w-full mt-8" />
-        <SectionThree>
+        </RowSection>
+        <hr className="border-gray-400 border-5 w-full mt-8" />
+        <ColumnSection>
           <H2 className="mb-6">1. Hero Type</H2>
           <HeaderTypeWrapper>
             <HeaderTypeBtn>Header Type 1</HeaderTypeBtn>
@@ -205,14 +207,107 @@ const index = () => {
             <HeaderTypeBtn>Header Type 4</HeaderTypeBtn>
           </HeaderTypeWrapper>
           <H2 className="mt-6">Media Image</H2>
-          <ImageSelectBox className="mt-5 flex items-center justify-center cursor-pointer">
+          <ImageSelectBox className="mt-5 w-96 flex items-center justify-center cursor-pointer">
             <p>+ Select from media gallery</p>
           </ImageSelectBox>
-        </SectionThree>
+        </ColumnSection>
 
-        <SectionFour>
-          <HeaderPositionWrapper></HeaderPositionWrapper>
-        </SectionFour>
+        <ColumnSection>
+          <HeaderPositionWrapper>
+            <div className="flex flex-col w-full">
+              <H2 className="mb-5">Header Text</H2>
+              <div className="w-full">
+                <Input className="py-4 w-96 " placeholder="Enter text" />
+              </div>
+            </div>
+            <div className="flex flex-col w-full ml-6">
+              <H2 className="mb-5">Text Position</H2>
+              <div className="flex flex-row justify-between space-x-3">
+                <HeaderTypeBtn className="">Left</HeaderTypeBtn>
+                <HeaderTypeBtn active={true}>Right</HeaderTypeBtn>
+                <HeaderTypeBtn>Centre</HeaderTypeBtn>
+              </div>
+            </div>
+            <div className="flex flex-col w-full">
+              <H2 className="mb-4 mt-6">Caption Text</H2>
+              <div className="w-full">
+                <Input className="py-4 w-96 " placeholder="Enter text" />
+              </div>
+            </div>
+          </HeaderPositionWrapper>
+        </ColumnSection>
+        <ColumnSection>
+          <Grid className="space-x-5">
+            <div className="flex flex-col w-full">
+              <H2 className="mb-5">Call to action button</H2>
+              <div className="w-full">
+                <Input className="py-4 w-72 " placeholder="Inactive" />
+              </div>
+            </div>
+
+            <div className="w-full mt-12">
+              <Input className="py-4 w-72 " placeholder="Action Text" />
+            </div>
+
+            <div className="w-full mt-12">
+              <Input
+                className="py-4 w-full "
+                placeholder="Enter CTA (call to action Link)"
+              />
+            </div>
+            <div className="mt-5">
+              <ShadowBtn className="py-4 px-10 shadow-sm rounded text-sm -ml-5 font-bold">
+                Preview body
+              </ShadowBtn>
+            </div>
+          </Grid>
+        </ColumnSection>
+        <hr className="border-gray-400 border-5 w-full mt-8" />
+        <ColumnSection>
+          <Grid className="space-x-5">
+            <div className="flex flex-col w-full">
+              <H2 className="mb-5">Widget section</H2>
+              <div className="w-full">
+                <Input className="py-4 w-72" placeholder="Add a title" />
+              </div>
+            </div>
+
+            <div className="w-full mt-12">
+              <Input className="py-4 w-72 " placeholder="Description" />
+            </div>
+
+            <div className="w-full mt-12">
+              <ImageSelectBox className="flex w-full items-center justify-center cursor-pointer">
+                <p>+ Add posts</p>
+              </ImageSelectBox>
+            </div>
+            <div className="mt-5">
+              <ShadowBtn className="py-4 px-10 shadow-sm rounded text-sm -ml-5 font-bold">
+                Preview body
+              </ShadowBtn>
+            </div>
+          </Grid>
+        </ColumnSection>
+        <hr className="border-gray-400 border-5 w-full mt-8" />
+        <ColumnSection>
+          <H2 className="mt-4">3. Post section</H2>
+          <ImageSelectBox className="mt-5 w-96 flex items-center justify-center cursor-pointer">
+            <p>+ Add posts</p>
+          </ImageSelectBox>
+          <div className="mt-5">
+            <ShadowBtn className="py-4 px-10 shadow-sm rounded text-sm font-bold">
+              Preview body
+            </ShadowBtn>
+          </div>
+        </ColumnSection>
+        <hr className="border-gray-400 border-5 w-full mt-8" />
+        <ColumnSection>
+          <div className="">
+            <ShadowBtn className="py-4 px-10 shadow-sm rounded text-sm font-bold">
+              Save as draft
+            </ShadowBtn>
+          </div>
+        </ColumnSection>
       </Container>
     </Layout>
   );

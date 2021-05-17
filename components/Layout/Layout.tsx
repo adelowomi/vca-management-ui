@@ -1,44 +1,70 @@
 import { Dialog, Transition } from '@headlessui/react';
-import {
-  BellIcon,
-  CalendarIcon,
-  ChartBarIcon,
-  ChevronDownIcon,
-  HomeIcon,
-  InboxIcon,
-  MenuAlt2Icon,
-  MenuIcon,
-  NewspaperIcon,
-  PhotographIcon,
-  UsersIcon,
-  XIcon,
-} from '@heroicons/react/outline';
+import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import { SearchIcon } from '@heroicons/react/solid';
-import { Fragment, useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { Fragment, useState } from 'react';
+import {
+  RiArrowDownSLine,
+  RiBarChartLine,
+  RiFileEditLine,
+  RiImageAddLine,
+  RiLayoutLine,
+  RiMapPinUserLine,
+  RiNumbersLine,
+  RiPagesLine,
+  RiPaletteLine,
+  RiSettings4Line,
+} from 'react-icons/ri';
+import styled from 'styled-components';
+
+import { ExitIcon } from '../AssetsSVG';
+interface AnchorTagProps {
+  current: boolean;
+}
+const AnchorTag = styled.a<AnchorTagProps>`
+  border-left: ${({ current }) => (current ? '8px solid #1890FF' : '')};
+  background: ${({ current }) => (current ? ' rgba(24, 144, 255, 0.1)' : '')};
+  color: ${({ current }) => (current ? '#1890FF' : 'rgba(75, 85, 99, 0.9)')};
+  font-weight: ${({ current }) => (current ? '700' : '400')};
+
+  :hover {
+    background: ${({ current }) => (current ? '' : 'rgba(249, 250, 251, 0.9)')};
+  }
+`;
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, current: true },
-  { name: 'Pages', href: '/pages', icon: UsersIcon, current: false },
-  { name: 'News', href: '/news', icon: NewspaperIcon, current: false },
+  { name: 'Dashboard', href: '/dashboard', icon: RiNumbersLine, current: true },
+  { name: 'Pages', href: 'pages', icon: RiLayoutLine, current: false },
+  { name: 'News', href: 'news', icon: RiPagesLine, current: false },
   {
     name: 'Performance',
-    href: '/performance',
-    icon: CalendarIcon,
+    href: 'performance',
+    icon: RiBarChartLine,
     current: false,
   },
-  { name: 'Posts', href: '/posts', icon: InboxIcon, current: false },
+  { name: 'Posts', href: '/posts', icon: RiFileEditLine, current: false },
   {
     name: 'Media Gallery',
-    href: '/media-gallery',
-    icon: PhotographIcon,
+    href: 'media-gallery',
+    icon: RiImageAddLine,
     current: false,
   },
-  { name: 'Social', href: '/social', icon: MenuAlt2Icon, current: false },
-  { name: 'Style', href: '/style', icon: ChartBarIcon, current: false },
+  {
+    name: 'Social',
+    href: '/social',
+    icon: RiMapPinUserLine,
+    current: false,
+  },
+  {
+    name: 'Style',
+    href: '/style',
+    icon: RiPaletteLine,
+    current: false,
+  },
   {
     name: 'Website Settings',
-    href: '/website-settings',
-    icon: NewspaperIcon,
+    href: 'website-settings',
+    icon: RiSettings4Line,
     current: false,
   },
 ];
@@ -48,6 +74,12 @@ function classNames(...classes) {
 }
 export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const {
+    asPath,
+    query: { siteId },
+  } = useRouter();
+
+  const routes = asPath.split('/');
 
   return (
     <div className="h-screen flex overflow-hidden bg-gray-100">
@@ -107,16 +139,16 @@ export default function Layout({ children }) {
                 />
               </div>
               <div className="mt-5 flex-1 h-0 overflow-y-auto">
-                <nav className="px-2 space-y-1">
+                <nav className="flex-1 px- bg-white space-y-3">
                   {navigation.map((item) => (
                     <a
                       key={item.name}
                       href={item.href}
                       className={classNames(
                         item.current
-                          ? 'bg-gray-100 text-gray-900'
+                          ? 'bg-blue-100 border-blue-500 border-l-8 text-gray-900'
                           : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                        'group flex items-center px-2 py-2 text-base font-medium rounded-md'
+                        'group flex items-center px-5 py-4 text-base font-normal'
                       )}
                     >
                       <item.icon
@@ -124,7 +156,7 @@ export default function Layout({ children }) {
                           item.current
                             ? 'text-gray-500'
                             : 'text-gray-400 group-hover:text-gray-500',
-                          'mr-4 h-6 w-6'
+                          'mr-3 h-6 w-6'
                         )}
                         aria-hidden="true"
                       />
@@ -133,6 +165,14 @@ export default function Layout({ children }) {
                   ))}
                 </nav>
               </div>
+              {/* sidebar footer */}
+              <div className="flex-shrink-0 flex border-t border-gray-200 w-full py-5">
+                <div className="flex flex-row items-center text-gray-500 justify- w-full space-x-5 ml-6">
+                  <span className="cursor-pointer">{ExitIcon}</span>
+                  <p>Exit website</p>
+                </div>
+              </div>
+              {/* End of sidebar footer */}
             </div>
           </Transition.Child>
           <div className="flex-shrink-0 w-14" aria-hidden="true">
@@ -158,32 +198,35 @@ export default function Layout({ children }) {
             <div className="mt-10 flex-grow flex flex-col">
               <nav className="flex-1 px- bg-white space-y-3">
                 {navigation.map((item) => (
-                  <a
+                  <AnchorTag
+                    current={routes.includes(item.href) ? true : false}
                     key={item.name}
-                    href={item.href}
+                    href={`/sites/${siteId}/${item.href}`}
                     className={classNames(
-                      item.current
-                        ? 'bg-blue-100 border-blue-500 border-l-8 text-gray-900'
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                       'group flex items-center px-5 py-4 text-base font-normal'
                     )}
                   >
                     <item.icon
                       className={classNames(
-                        item.current
-                          ? 'text-gray-500'
-                          : 'text-gray-400 group-hover:text-gray-500',
+                        routes.includes(item.href)
+                          ? 'text-blue-400 text-base font-extrabold'
+                          : 'text-gray-500 group-hover:text-gray-500',
                         'mr-3 h-6 w-6'
                       )}
                       aria-hidden="true"
                     />
                     {item.name}
-                  </a>
+                  </AnchorTag>
                 ))}
               </nav>
             </div>
             {/* sidebar footer */}
-            <div className="flex-shrink-0 flex border-t border-gray-200 p-"></div>
+            <div className="flex-shrink-0 flex border-t border-gray-200 w-full py-5">
+              <div className="flex flex-row items-center text-gray-500 justify- w-full space-x-5 ml-6">
+                <span className="cursor-pointer">{ExitIcon}</span>
+                <p>Exit website</p>
+              </div>
+            </div>
             {/* End of sidebar footer */}
           </div>
         </div>
@@ -225,16 +268,36 @@ export default function Layout({ children }) {
               <div className="notification-icon-wrapper border-r border-gray-100 px-5">
                 <button className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                   <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
+
+                  <svg
+                    width="25"
+                    height="24"
+                    viewBox="0 0 25 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M5 18H19V11.031C19 7.148 15.866 4 12 4C8.134 4 5 7.148 5 11.031V18ZM12 2C16.97 2 21 6.043 21 11.031V20H3V11.031C3 6.043 7.03 2 12 2ZM9.5 21H14.5C14.5 21.663 14.2366 22.2989 13.7678 22.7678C13.2989 23.2366 12.663 23.5 12 23.5C11.337 23.5 10.7011 23.2366 10.2322 22.7678C9.76339 22.2989 9.5 21.663 9.5 21Z"
+                      fill="black"
+                    />
+                    <circle
+                      cx="19.5"
+                      cy="9.5"
+                      r="4.5"
+                      fill="#1890FF"
+                      stroke="white"
+                      strokeWidth="2"
+                    />
+                  </svg>
                 </button>
               </div>
               <div className="user-dropdown-wrapper text-blue-500 ">
-                <button className="flex items-center space-x-1 font-bold focus:outline-none">
+                <button
+                  className="flex items-center space-x-1 font-bold focus:outline-none"
+                  style={{ color: '#1890FF' }}
+                >
                   <span>Username</span>
-                  <ChevronDownIcon
-                    className="h-5 w-4 font-bold"
-                    aria-hidden="true"
-                  />
+                  <RiArrowDownSLine className="h-5 w-4 " aria-hidden="true" />
                 </button>
               </div>
             </div>

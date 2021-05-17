@@ -18,31 +18,6 @@ type WidgetProps = {
     featured: string;
     category: string;
     tags: [string];
-    createdBy: {
-      userId: string;
-      id: string;
-      firstName: string;
-      lastName: string;
-      phone: string;
-      businessName: string;
-      industry: string;
-      accountType: string;
-      createdAt: Date;
-      updatedAt: Date;
-      address: {
-        line: string;
-        lineAlt: null | string;
-        city: string;
-        state: string;
-        postalCode: string;
-        placeId: string;
-        country: string;
-        location: {
-          type: string;
-          coordinates: [number];
-        };
-      };
-    };
     updatedBy: string | null;
     createdAt: Date;
     updatedAt: Date;
@@ -54,13 +29,6 @@ export const CreateWidget: React.FC<WidgetProps> = ({
   items,
 }): JSX.Element => {
   const [open, setOpen] = React.useState(false);
-  // const [widgetData, setWidgetData] = React.useState<{
-  //   description: string;
-  //   disable: boolean;
-  //   title: string;
-  //   items: [string];
-  // }>();
-
   const client = createApolloClient(token);
   const { addToast } = useToasts();
 
