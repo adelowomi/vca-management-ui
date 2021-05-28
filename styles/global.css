@@ -4,6 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+input:focus {
+  outline: none;
+}
+button:focus {
+  outline: none;
+}
+
 .app-blue {
   color: #0035c1;
 }

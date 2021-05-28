@@ -29,7 +29,7 @@ const navigation = [
   { name: 'Posts', href: '/posts', icon: InboxIcon, current: false },
   {
     name: 'Media Gallery',
-    href: '/media-gallery',
+    href: '/media',
     icon: PhotographIcon,
     current: false,
   },
@@ -243,8 +243,8 @@ export default function Layout({ children }) {
         </div>
 
         <main className="flex-1 relative overflow-y-auto focus:outline-none">
-          <div className="py-6">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+          <div className="">
+            <div className="max-w-7xl px-4 sm:px-6 md:px-8 bg-white ">
               {/* Replace with your content */}
               {children}
               {/* /End replace */}
