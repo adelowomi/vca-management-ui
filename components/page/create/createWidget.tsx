@@ -1,156 +1,106 @@
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import React from 'react';
-import { useToasts } from 'react-toast-notifications';
 
-import { ADD_WIDGET } from '../../../graphql';
-import { createApolloClient } from '../../../lib/apollo';
-import AddItemsModal from '../../utilsGroup/AddItemsModal';
+import { ITEMS } from '../../../assets/data/data';
+import { widgetvalidator } from '../../../helpers/widgetValidator';
+import { widgetUseForm } from '../../../hooks/widgetUseForm';
+import { NewsWidget } from '../../NewsWidget/NewsWidget';
+import { SelectItemsModal } from '../../utilsGroup/SelectItemsModal';
+import { ShadowBtn } from './PageButtons';
+import { Input } from './PageInput';
+import { ColumnSection, Grid, H2, ImageSelectBox } from './pageStyledElements';
 
 type WidgetProps = {
-  pageId: string;
-  token: string;
+  pageId: string | string[];
+  client: ApolloClient<NormalizedCacheObject>;
   items: {
     id: string;
-    type: string;
     mediaUrl: string;
-    slug: string;
+    title: string;
     content: string;
-    draft: string;
-    featured: string;
-    category: string;
-    tags: [string];
-    updatedBy: string | null;
-    createdAt: Date;
-    updatedAt: Date;
   }[];
 };
+
 export const CreateWidget: React.FC<WidgetProps> = ({
   pageId,
-  token,
+  client,
   items,
 }): JSX.Element => {
+  const { handleSubmit, state, errors, setState, handleChange } = widgetUseForm(
+    widgetvalidator,
+    client,
+    pageId
+  );
   const [open, setOpen] = React.useState(false);
-  const client = createApolloClient(token);
-  const { addToast } = useToasts();
-
-  const [state, setState] = React.useState({
-    widgetDescription: '',
-    widgetTitle: '',
-    widgetPageId: pageId,
-    widgetDisable: false,
-    widgetType: 'ITEM',
-    widgetItems: [],
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const value = e.target.value;
-    setState({
-      ...state,
-      [e.target.name]: value,
-    });
-  };
-  const createWidget = async () => {
-    try {
-      await client.mutate({
-        mutation: ADD_WIDGET,
-        variables: {
-          createWidgetInput: {
-            description: state.widgetDescription,
-            disable: state.widgetDisable,
-            title: state.widgetTitle,
-            items: state.widgetItems,
-            page: state.widgetPageId,
-            type: state.widgetType,
-          },
-        },
-      });
-      setState({
-        widgetDescription: '',
-        widgetTitle: '',
-        widgetPageId: '',
-        widgetDisable: false,
-        widgetType: '',
-        widgetItems: [],
-      });
-      addToast('Widget is successfully created', { appearance: 'success' });
-      setOpen(!open);
-    } catch (error) {
-      addToast(error.message, { appearance: 'error' });
-      setOpen(!open);
-    }
-  };
+  // console.log('ERROR', errors);
+  // console.log('STATE', state);
 
   return (
     <>
-      <div className="bodySection mt-12">
-        <div className="mb-1">
-          <h3 className="ml-3 text-sm ">Body</h3>
-        </div>
-        <div className="rounded-lg text-sm  bg-white overflow-hidden shadow  px-3">
-          <div className="buttons space-x-3 mt-5 flex">
-            <button
-              type="button"
-              className="inline-flex items-center px-6 py-2 border  shadow-sm text-base font-medium leading-7 rounded-md text-white bg-indigo-500  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:bg-white focus:text-gray-500"
-            >
-              Enable Widget
-            </button>
-          </div>
-          <div className="inputSection mt-6 grid grid-cols-7">
-            <div className=" col-span-3">
-              <label className="text-gray-700 font-medium text-sm">Title</label>
-              <input
-                type="text"
+      <ColumnSection>
+        <Grid className="space-x-5">
+          <div className="flex flex-col w-full">
+            <H2 className="mb-5">2. Widget section</H2>
+            <div className="w-full">
+              <Input
+                className="py-4 w-72"
+                placeholder="Add a title"
                 name="widgetTitle"
+                onChange={handleChange}
                 value={state.widgetTitle}
-                onChange={handleChange}
-                className="w-full mt-2 px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-green-500"
               />
+              {errors && errors.widgetTitle && (
+                <span className="text-red-500 mt-1 text-sm font-medium">
+                  {errors.widgetTitle}
+                </span>
+              )}
             </div>
           </div>
-          <div className="inputSection mt-1 grid grid-cols-7">
-            <div className=" col-span-3">
-              <label className="text-gray-700 font-medium text-sm">
-                Description
-              </label>
-              <input
-                name="widgetDescription"
-                value={state.widgetDescription}
-                onChange={handleChange}
-                type="text"
-                className="w-full mt-2  px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-green-500"
-              />
-            </div>
+
+          <div className="w-full mt-12">
+            <Input
+              className="py-4 w-72 "
+              placeholder="Description"
+              name="widgetDescription"
+              onChange={handleChange}
+              value={state.widgetDescription}
+            />
+            {errors && errors.widgetDescription && (
+              <span className="text-red-500 mt-1 text-sm font-medium">
+                {errors.widgetDescription}
+              </span>
+            )}
           </div>
-          <div className="inputSection mt-1 mb-10 grid grid-cols-7">
-            <div className=" col-span-3">
-              <label className="text-gray-700 font-medium text-sm">
-                Add Items
-              </label>
-              <div className="dropDown_wrapper flex flex-col">
-                <button
-                  onClick={() => setOpen(!open)}
-                  type="button"
-                  className="w-full mt-2 px-4 py-3 border bg-indigo-500 rounded-lg text-white  focus:outline-none focus:border-indigo-500"
-                >
-                  Select from a list of posts
-                </button>
-              </div>
-            </div>
+
+          <div className="w-full mt-12">
+            <ImageSelectBox
+              onClick={() => setOpen(!open)}
+              className="flex w-full items-center justify-center cursor-pointer"
+            >
+              <p>+ Add posts</p>
+            </ImageSelectBox>
+            {errors && errors.widgetItems && (
+              <span className="text-red-500 mt-1 text-sm font-medium">
+                {errors.widgetItems}
+              </span>
+            )}
           </div>
+        </Grid>
+        <div className="mt-5">
+          <ShadowBtn className="py-4 px-10 shadow-sm rounded text-sm font-bold">
+            Preview body
+          </ShadowBtn>
         </div>
-        <div className="mt-10">
-          <div className="mb-2">
-            <h3 className="ml-3 text-sm ">Preview</h3>
-          </div>
-          <div className="rounded-lg text-sm  bg-white  shadow  px-3 h-auto"></div>
-        </div>
-      </div>
-      <AddItemsModal
+        <NewsWidget items={ITEMS} contain={true} />
+      </ColumnSection>
+      <SelectItemsModal
         open={open}
         setOpen={setOpen}
-        items={items}
-        state={state}
         setState={setState}
-        onClick={createWidget}
+        state={state}
+        handleSubmit={handleSubmit}
+        items={items}
+        type="widget"
       />
     </>
   );

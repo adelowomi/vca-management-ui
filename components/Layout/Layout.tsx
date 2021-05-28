@@ -1,6 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
-import { SearchIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import React, { Fragment, useState } from 'react';
 import {
@@ -18,6 +17,7 @@ import {
 import styled from 'styled-components';
 
 import { ExitIcon } from '../AssetsSVG';
+import { PageSearchInput } from '../Page/Create/PageSearchInput';
 interface AnchorTagProps {
   current: boolean;
 }
@@ -33,7 +33,7 @@ const AnchorTag = styled.a<AnchorTagProps>`
 `;
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: RiNumbersLine, current: true },
+  { name: 'Dashboard', href: 'dashboard', icon: RiNumbersLine, current: true },
   { name: 'Pages', href: 'pages', icon: RiLayoutLine, current: false },
   { name: 'News', href: 'news', icon: RiPagesLine, current: false },
   {
@@ -42,7 +42,7 @@ const navigation = [
     icon: RiBarChartLine,
     current: false,
   },
-  { name: 'Posts', href: '/posts', icon: RiFileEditLine, current: false },
+  { name: 'Posts', href: 'posts', icon: RiFileEditLine, current: false },
   {
     name: 'Media Gallery',
     href: 'media-gallery',
@@ -51,13 +51,13 @@ const navigation = [
   },
   {
     name: 'Social',
-    href: '/social',
+    href: 'social',
     icon: RiMapPinUserLine,
     current: false,
   },
   {
     name: 'Style',
-    href: '/style',
+    href: 'style',
     icon: RiPaletteLine,
     current: false,
   },
@@ -246,25 +246,7 @@ export default function Layout({ children }) {
 
           <div className="flex-1 px-4 flex justify-end items-center w-screen">
             <div className="flex flex-row items-center w-full justify-end space-x-3">
-              <div
-                className="flex border-grey-light border bg-gray-50 py-1 w-96"
-                style={{ backgroundColor: '#F2F2F2' }}
-              >
-                <button className="focus:outline-none">
-                  <span className="w-auto flex justify-end items-center text-grey p-2 outline-none">
-                    <SearchIcon
-                      className="h-5 w-6 text-gray-500 font-light"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </button>
-                <input
-                  className="w-full rounded mr-4 bg-gray-200 outline-none"
-                  type="text"
-                  placeholder="Search"
-                  style={{ backgroundColor: '#F2F2F2' }}
-                />
-              </div>
+              <PageSearchInput />
               <div className="notification-icon-wrapper border-r border-gray-100 px-5">
                 <button className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                   <span className="sr-only">View notifications</span>

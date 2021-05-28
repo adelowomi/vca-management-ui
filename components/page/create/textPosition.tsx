@@ -1,65 +1,101 @@
 import * as React from 'react';
 
+import { errorProps } from '../../../types/interfaces';
+import { HeaderTypeBtn } from './PageButtons';
+import { Input } from './PageInput';
+import { ColumnSection, H2, HeaderPositionWrapper } from './pageStyledElements';
+
 export interface TextpositionProps {
   locationButtonClick: (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void;
   textPosition: string;
+  headerText: string;
+  captionText: string;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  errors: errorProps;
 }
 
 export function Textposition({
   locationButtonClick,
   textPosition,
+  handleChange,
+  headerText,
+  captionText,
+  errors,
 }: TextpositionProps) {
   return (
-    <div className="inputSection3 mt-1 ">
-      <div className="">
-        <label className="text-gray-700 font-medium">Text Position</label>
-        <div className="flex space-x-3 mt-2 text-gray-500">
-          <a
-            href="#"
-            onClick={locationButtonClick}
-            className={`
-            ${
-              textPosition === 'left'
-                ? 'border-b border-blue-800 text-blue-800'
-                : ''
-            }
-
-            focus:border-b-2 focus:text-blue-800  text-sm cursor-pointer `}
-          >
-            Left
-          </a>
-          <a
-            href="#"
-            onClick={locationButtonClick}
-            className={`
-            ${
-              textPosition === 'right'
-                ? 'border-b border-blue-800 text-blue-800'
-                : ''
-            }
-
-            focus:border-b-2 focus:text-blue-800  text-sm cursor-pointer `}
-          >
-            Right
-          </a>
-          <a
-            href="#"
-            onClick={locationButtonClick}
-            className={`
-            ${
-              textPosition === 'bottom'
-                ? 'border-b border-blue-800 text-blue-800'
-                : ''
-            }
-
-            focus:border-b-2 focus:text-blue-800  text-sm cursor-pointer `}
-          >
-            Bottom
-          </a>
-        </div>
-      </div>
-    </div>
+    <>
+      <ColumnSection>
+        <HeaderPositionWrapper>
+          <div className="flex flex-col w-full">
+            <H2 className="mb-5">Header Text</H2>
+            <div className="w-full">
+              <Input
+                className="py-4 w-96 "
+                placeholder="Enter text"
+                onChange={handleChange}
+                name="headerText"
+                value={headerText}
+              />
+            </div>
+            {errors && errors.headerText && (
+              <span className="text-red-500 mt-1 text-sm font-medium">
+                {errors.headerText}
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col w-full ml-6">
+            <H2 className="mb-5">Text Position</H2>
+            <div className="flex flex-row justify-between space-x-3">
+              <HeaderTypeBtn
+                active={textPosition === 'LEFT' ? true : false}
+                value="LEFT"
+                data-textposition="LEFT"
+                onClick={locationButtonClick}
+                type="button"
+              >
+                Left
+              </HeaderTypeBtn>
+              <HeaderTypeBtn
+                active={textPosition === 'RIGHT' ? true : false}
+                value="RIGHT"
+                data-textposition="RIGHT"
+                onClick={locationButtonClick}
+                type="button"
+              >
+                Right
+              </HeaderTypeBtn>
+              <HeaderTypeBtn
+                active={textPosition === 'CENTER' ? true : false}
+                value="CENTER"
+                data-textposition="CENTER"
+                onClick={locationButtonClick}
+                type="button"
+              >
+                Centre
+              </HeaderTypeBtn>
+            </div>
+          </div>
+          <div className="flex flex-col w-full">
+            <H2 className="mb-4 mt-6">Caption Text</H2>
+            <div className="w-full">
+              <Input
+                className="py-4 w-96 "
+                placeholder="Enter text"
+                onChange={handleChange}
+                name="captionText"
+                value={captionText}
+              />
+            </div>
+            {errors && errors.captionText && (
+              <span className="text-red-500 mt-2 text-sm font-medium">
+                {errors.captionText}
+              </span>
+            )}
+          </div>
+        </HeaderPositionWrapper>
+      </ColumnSection>
+    </>
   );
 }

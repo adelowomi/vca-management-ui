@@ -28,6 +28,23 @@ const GET_ALL_ITEMS_QUERY = gql`
 
   `;
 
+
+const EDIT_ITEM = gql`
+  mutation($updateItemInput: UpdatedItemInput!, $itemId: String!) {
+    updateItem(updateItemInput: $updateItemInput, itemId: $itemId) {
+    id
+    mediaUrl
+    content
+    category
+    slug
+    type
+    featured
+    description
+    tags
+    }
+  }
+`;
+
 export {
-    GET_ALL_ITEMS_QUERY
-}
+  EDIT_ITEM,
+  GET_ALL_ITEMS_QUERY}

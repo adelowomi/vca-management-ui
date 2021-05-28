@@ -1,51 +1,98 @@
 import * as React from 'react';
 
-import ToggleButton from '../../ToggleButton/ToggleButton';
+import { ErrorProps } from '../../../types/interfaces';
+import { Hero } from '../../Hero/Hero';
+import { ShadowBtn } from './PageButtons';
+import { SelectButton } from './PageButtons/SelectButton';
+import { Input } from './PageInput';
+import { ColumnSection, Grid, H2 } from './pageStyledElements';
 
 export interface CallToActionProps {
   actionText: string;
   ctaLink: string;
-  // hasAction: boolean;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  // setHasAction: (hasAction: boolean) => void;
-  toggle: boolean;
-  setToggle: (toggle: boolean) => void;
+  hasAction?: boolean | string;
+  errors: ErrorProps;
 }
 
-export function CallToAction({
+const hero = {
+  mediaUrl:
+    'https://vca-documents.s3.ca-central-1.amazonaws.com/0e/dab8e757d64f37b2a9c475b9d88d9a/hero.png',
+  actionText: 'Click me',
+  heading: 'The utlimate source to get everything you’re looking for! ',
+  location: 'LEFT',
+  hasAction: true,
+  caption: 'page caption',
+  type: 'headerTypeOne',
+};
+const options = [
+  { id: 'false', name: 'Inactive' },
+  { id: 'true', name: 'active' },
+];
+
+export const CallToAction: React.FC<CallToActionProps> = ({
   actionText,
   ctaLink,
   handleChange,
-  toggle,
-  setToggle,
-}: CallToActionProps) {
+  errors,
+  hasAction,
+}) => {
   return (
-    <div className="inputSection2 mt-1 grid grid-cols-7">
-      <div className=" col-span-3">
-        <label className="text-gray-700 font-medium">
-          Call To Actions Button
-        </label>
-        <div className="flex space-x-2 mt-2 items-center justify-self-center">
-          <ToggleButton enabled={toggle} setEnabled={setToggle} />
+    <>
+      <ColumnSection>
+        <Grid className="space-x-5">
+          <div className="flex flex-col w-full">
+            <H2 className="mb-5">Call to action button</H2>
+            <div className="w-full">
+              <SelectButton
+                name="hasAction"
+                caption="Select action"
+                px={5}
+                py={4}
+                handleChange={handleChange}
+                value={hasAction}
+                options={options}
+              />
+            </div>
+          </div>
 
-          <input
-            name="actionText"
-            value={actionText}
-            onChange={handleChange}
-            type="text"
-            placeholder="Action Text"
-            className="inline-flex font-light items-center  pl-3 py-3 border border-gray-300 shadow-sm text-sm italic rounded-md text-gray-500  focus:outline-none focus:border-indigo-500"
-          />
+          <div className="w-full mt-12">
+            <Input
+              className="py-4 w-72 "
+              placeholder="Action Text"
+              onChange={handleChange}
+              name="actionText"
+              value={actionText}
+            />
+            {errors && errors.actionText && (
+              <span className="text-red-500 mt-1 text-sm font-medium">
+                {errors.actionText}
+              </span>
+            )}
+          </div>
+
+          <div className="w-full mt-12">
+            <Input
+              className="py-4 w-full "
+              placeholder="Enter CTA (call to action Link)"
+              onChange={handleChange}
+              name="ctaLink"
+              value={ctaLink}
+            />
+            {errors && errors.ctaLink && (
+              <span className="text-red-500 mt-1 text-sm font-medium">
+                {errors.ctaLink}
+              </span>
+            )}
+          </div>
+        </Grid>
+        <div className="mt-5">
+          <ShadowBtn className="py-4 px-10 shadow-sm rounded text-sm font-bold">
+            Preview header
+          </ShadowBtn>
         </div>
-        <input
-          name="ctaLink"
-          value={ctaLink}
-          onChange={handleChange}
-          type="text"
-          placeholder="CTA (call to action)link"
-          className="w-full mt-2 mb-6 px-4 py-2 border rounded-lg italic text-gray-700 focus:outline-none focus:border-indigo-500"
-        />
-      </div>
-    </div>
+        <Hero hero={hero} />
+      </ColumnSection>
+    </>
   );
-}
+};
