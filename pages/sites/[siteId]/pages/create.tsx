@@ -30,7 +30,7 @@ const create = ({ token, menuItems }) => {
     errors,
     setState,
     handleChange,
-  } = useForm(validator, client, { siteId });
+  } = useForm(validator, client, { siteId, type: 'add' });
 
   // console.log('ERRORS', errors);
   // console.log('State', state);

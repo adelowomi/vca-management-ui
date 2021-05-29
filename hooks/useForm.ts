@@ -19,7 +19,13 @@ interface StateProps {
     hasAction: boolean | string,
 }
 
-const useForm = (validate: any, client: any, { siteId, pageId, page }: { siteId?: string[] | string, pageId?: string[] | string, page?: any }) => {
+const useForm = (validate: any, client: any,
+    { siteId, pageId, page, type }
+        : {
+            siteId?: string[] | string,
+            pageId?: string[] | string,
+            page?: any, type: string
+        }) => {
 
 
     const [state, setState] = React.useState<StateProps>({
@@ -93,6 +99,7 @@ const useForm = (validate: any, client: any, { siteId, pageId, page }: { siteId?
     }
     const updatePage = async () => {
         try {
+
             await client.mutate({
                 mutation: EDIT_PAGE,
                 variables: {
@@ -106,7 +113,7 @@ const useForm = (validate: any, client: any, { siteId, pageId, page }: { siteId?
                             type: state.headerType,
                             mediaUrl: state.mediaUrl,
                             heading: state.headerText,
-                            hasAction: state.hasAction,
+                            hasAction: stringToBoolean(state.hasAction.toString()),
                             actionText: state.actionText,
                             actionSlug: state.ctaLink,
                             location: state.location.toLocaleUpperCase(),
@@ -117,7 +124,7 @@ const useForm = (validate: any, client: any, { siteId, pageId, page }: { siteId?
             });
             addToast('Page is successfully Edited', { appearance: 'success' });
         } catch (error) {
-            addToast('Page could not be created!', { appearance: 'error' });
+            addToast('Page could not be Edited!', { appearance: 'error' });
         }
     }
     const handleChange = (e) => {
@@ -129,10 +136,10 @@ const useForm = (validate: any, client: any, { siteId, pageId, page }: { siteId?
     };
 
     React.useEffect(() => {
-        if (Object.keys(errors).length === 0 && isSubmitting) {
+        if (Object.keys(errors).length === 0 && isSubmitting && type === 'add') {
             createPage()
         }
-        if (Object.keys(errors).length === 0 && isSubmitting && page) {
+        if (Object.keys(errors).length === 0 && isSubmitting && type === 'edit') {
             updatePage()
         }
 

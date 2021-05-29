@@ -35,7 +35,7 @@ const edit = ({ token, menuItems, page, items }) => {
     errors,
     setState,
     handleChange,
-  } = useForm(validator, client, { siteId, pageId, page });
+  } = useForm(validator, client, { siteId, pageId, page, type: 'edit' });
 
   const onButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
