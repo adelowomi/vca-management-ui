@@ -1,7 +1,7 @@
 import '../styles/global.css';
 
 import { UserProvider } from '@auth0/nextjs-auth0';
-import { BaseProvider } from 'baseui';
+import { BaseProvider, LightTheme } from 'baseui';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -14,7 +14,6 @@ import { Provider as StyletronProvider } from 'styletron-react';
 import * as locales from '../content/locale';
 import { ApolloProvider, useApollo } from '../lib/apollo';
 import { GlobalStyles, theme } from '../styles';
-import { appThemes } from '../styles/baseui-theme';
 import { styletron } from '../styletron';
 
 const Container = styled.div`
@@ -31,7 +30,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     <UserProvider>
       <ApolloProvider client={apolloClient}>
         <StyletronProvider value={styletron}>
-          <BaseProvider theme={appThemes}>
+          <BaseProvider theme={LightTheme}>
             <ThemeProvider theme={theme()}>
               <IntlProvider
                 locale={locale}
