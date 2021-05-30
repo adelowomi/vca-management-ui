@@ -1,7 +1,7 @@
 import { getSession } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 
-import Layout from '../../../components/Layout/Dashboard';
+import Layout from '../../../components/Layout/Layout';
 const index = () => {
   const router = useRouter();
   const { siteId } = router.query;

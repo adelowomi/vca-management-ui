@@ -1,62 +1,42 @@
 import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { useRouter } from 'next/router';
 import React from 'react';
-import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
-import { useToasts } from 'react-toast-notifications';
 
-import { tags } from '../../../../../assets/data/data';
 import Layout from '../../../../../components/Layout/Layout';
-import { BreadCrumb } from '../../../../../components/Page/Create/BreadCrumb';
 import { CallToAction } from '../../../../../components/Page/Create/CallToAction';
 import { CreateWidget } from '../../../../../components/Page/Create/CreateWidget';
+import { ShadowBtn } from '../../../../../components/Page/Create/PageButtons';
 import { PageControls } from '../../../../../components/Page/Create/PageControls';
 import { PageHeaderStyle } from '../../../../../components/Page/Create/PageHeaderStyle';
-import { Textposition } from '../../../../../components/Page/Create/TextPosition';
-import { AddMenuItemsDropdown } from '../../../../../components/utilsGroup/AddMenuItemsDropdown';
-import MyDialog from '../../../../../components/utilsGroup/Modal';
+import { PagePosts } from '../../../../../components/Page/Create/PagePosts';
 import {
-  EDIT_PAGE,
+  ColumnSection,
+  Container,
+} from '../../../../../components/Page/Create/pageStyledElements';
+import { PageTitle } from '../../../../../components/Page/Create/PageTitle';
+import { Textposition } from '../../../../../components/Page/Create/TextPosition';
+import {
   GET_ALL_ITEMS_QUERY,
   GET_SITE_MENUITEMS,
   PAGE_QUERY,
 } from '../../../../../graphql';
+import { validator } from '../../../../../helpers/validator';
+import useForm from '../../../../../hooks/useForm';
 import { createApolloClient } from '../../../../../lib/apollo';
 
-const animatedComponents = makeAnimated();
-
-const editPage = ({ page, token, items, error, menuItems }) => {
-  if (error) {
-    return <div>{error}</div>;
-  }
-  const [modalIsOpen, setModalOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState(menuItems[0]);
+const edit = ({ token, menuItems, page, items }) => {
   const client = createApolloClient(token);
-  const [state, setState] = React.useState({
-    pageTitle: page.name,
-    site: page.site,
-    mediaUrl: page.hero.mediaUrl,
-    headerText: page.hero.heading,
-    captionText: page.hero.caption,
-    actionText: page.hero.actionText,
-    ctaLink: page.hero.actionSlug,
-    headerType: page.hero.type,
-    tags: page.tags,
-    menuItem: page.menuItem,
-    location: page.hero.location,
-    hasAction: page.hero.hasAction,
-    widgetDescription: '',
-    widgetTitle: '',
-    widgetPageId: page.id,
-    widgetDisable: false,
-    widgetType: 'ITEM',
-    widgetItems: [],
-  });
-  const { addToast } = useToasts();
-  const [toggle, setToggle] = React.useState(state.hasAction);
+  const {
+    query: { siteId, id: pageId },
+  } = useRouter();
+  const {
+    handleSubmit,
+    state,
+    errors,
+    setState,
+    handleChange,
+  } = useForm(validator, client, { siteId, pageId, page, type: 'edit' });
 
-  const closeModal = () => {
-    setModalOpen(false);
-  };
   const onButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -66,209 +46,63 @@ const editPage = ({ page, token, items, error, menuItems }) => {
     });
   };
 
-  const handleChange = (e: any) => {
-    const value = e.target.value;
-    setState({
-      ...state,
-      [e.target.name]: value,
-    });
-  };
-
-  const onSelectTags = (data: any) => {
-    const arr = data && data.map((el) => el.value);
-    setState({
-      ...state,
-      tags: arr,
-    });
-  };
-
   const locationButtonClick = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-  ) => {
-    setState({
-      ...state,
-      location: e.currentTarget.text.toLowerCase(),
-    });
-  };
-  React.useEffect(() => {
-    setState({ ...state, hasAction: toggle });
-    setState({ ...state, menuItem: selected && selected.id });
-  }, [toggle, selected]);
-
-  const onSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    e.preventDefault();
-    try {
-      await client.mutate({
-        mutation: EDIT_PAGE,
-        variables: {
-          updatePageInput: {
-            name: state.pageTitle,
-            tags: state.tags,
-            site: state.site,
-            menuItem: state.menuItem,
-            hero: {
-              caption: state.captionText,
-              type: state.headerType,
-              mediaUrl: state.mediaUrl,
-              heading: state.headerText,
-              hasAction: toggle,
-              actionText: state.actionText,
-              actionSlug: state.ctaLink,
-              location: state.location.toLocaleUpperCase(),
-            },
-          },
-          pageId: page.id,
-        },
-      });
-      addToast('Page is successfully Edited', { appearance: 'success' });
-    } catch (error) {
-      addToast('Page could not be created!', { appearance: 'error' });
-    }
-
     setState({
-      pageTitle: '',
-      site: '',
-      mediaUrl: '',
-      headerText: '',
-      captionText: '',
-      actionText: '',
-      ctaLink: '',
-      headerType: '',
-      menuItem: '',
-      tags: [],
-      location: '',
-      hasAction: false,
-      widgetDescription: '',
-      widgetTitle: '',
-      widgetPageId: '',
-      widgetDisable: false,
-      widgetType: '',
-      widgetItems: [],
+      ...state,
+      location: e.currentTarget.dataset.textposition,
     });
-    setToggle(false);
-    setModalOpen(!modalIsOpen);
   };
 
   return (
     <Layout>
-      <div className="px-5">
-        <MyDialog
-          closeModal={closeModal}
-          modalIsOpen={modalIsOpen}
-          siteId={page.site}
+      <Container>
+        <PageControls onSubmit={handleSubmit} title="Edit page" />
+        <PageTitle
+          pageTitle={state.pageTitle}
+          handleChange={handleChange}
+          errors={errors}
+          menuItem={state.menuItem}
+          options={menuItems}
         />
-        <BreadCrumb type="edit" pageName={page.name} />
+        <hr className="border-gray-400 border-5 w-full mt-8" />
+        <PageHeaderStyle
+          onButtonClick={onButtonClick}
+          headerType={state.headerType}
+        />
 
-        <form action="" className="form mt-5">
-          <PageControls
-            handleChange={handleChange}
-            onSubmit={onSubmit}
-            title={state.pageTitle}
-          />
-          <div className="headerSection">
-            <div className="mt-8 mb-1 flex flex-row justify-between items-center">
-              <div>
-                <h3 className="ml-3 text-sm ">Header</h3>
-              </div>
-              <div className="pb-2">
-                <AddMenuItemsDropdown
-                  menuItems={menuItems}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-              </div>
-            </div>
-            <div className="rounded-lg text-sm  bg-white overflow-hidden shadow  px-3">
-              <div className="mt-4 mb-3">
-                <h3 className="text-sm ">Style</h3>
-              </div>
-              <PageHeaderStyle
-                onButtonClick={onButtonClick}
-                headerType={state.headerType}
-              />
-              <div className="inputSection mt-6 grid grid-cols-7">
-                <div className=" col-span-3">
-                  <label className="text-gray-700 font-medium">Media URL</label>
-                  <input
-                    name="mediaUrl"
-                    value={state.mediaUrl}
-                    onChange={handleChange}
-                    type="text"
-                    placeholder="https://star-studded-bricks-1440by551.png"
-                    className="w-full mt-2 mb-6 px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500"
-                  />
-                </div>
-              </div>
-              <div className="inputSection2 mt-1 grid grid-cols-7">
-                <div className=" col-span-3">
-                  <label className="text-gray-700 font-medium">
-                    Header Text
-                  </label>
-                  <input
-                    type="text"
-                    name="headerText"
-                    value={state.headerText}
-                    onChange={handleChange}
-                    placeholder="RoloBank"
-                    className="w-full mt-2 mb-6 px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500"
-                  />
-                </div>
-              </div>
-              <Textposition
-                locationButtonClick={locationButtonClick}
-                textPosition={state.location}
-              />
-              <div className="inputSection2 mt-5 grid grid-cols-7">
-                <div className=" col-span-3">
-                  <label className="text-gray-700 font-medium">
-                    Caption Text
-                  </label>
-                  <input
-                    name="captionText"
-                    value={state.captionText}
-                    onChange={handleChange}
-                    type="text"
-                    placeholder="WE ARE A BANK OF THE YOUNG AND FOR YOUNG"
-                    className="w-full mt-2 mb-6 px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500"
-                  />
-                </div>
-              </div>
-              <div className="mt-1 mb-5 w-96">
-                <label className="text-gray-700 font-medium">Tags</label>
-                <Select
-                  defaultValue={[
-                    {
-                      value: state && state.tags && state.tags[0],
-                      label: state && state.tags && state.tags[0],
-                    },
-                    {
-                      value: state && state.tags && state.tags[1],
-                      label: state && state.tags && state.tags[1],
-                    },
-                  ]}
-                  isMulti
-                  name="tags"
-                  options={tags}
-                  className="basic-multi-select"
-                  classNamePrefix="select"
-                  components={animatedComponents}
-                  onChange={onSelectTags}
-                />
-              </div>
-              <CallToAction
-                toggle={toggle}
-                actionText={state.actionText}
-                ctaLink={state.ctaLink}
-                handleChange={handleChange}
-                setToggle={setToggle}
-              />
-            </div>
-            <CreateWidget pageId={page.id} items={items} token={token} />
+        <Textposition
+          headerText={state.headerText}
+          handleChange={handleChange}
+          locationButtonClick={locationButtonClick}
+          textPosition={state.location}
+          captionText={state.captionText}
+          errors={errors}
+        />
+
+        <CallToAction
+          actionText={state.actionText}
+          handleChange={handleChange}
+          ctaLink={state.ctaLink}
+          errors={errors}
+          hasAction={state.hasAction}
+        />
+        <hr className="border-gray-400 border-5 w-full mt-8" />
+
+        <CreateWidget client={client} pageId={pageId} items={items} />
+
+        <hr className="border-gray-400 border-5 w-full mt-8" />
+        <PagePosts items={items} client={client} pageId={pageId} />
+        <hr className="border-gray-400 border-5 w-full mt-8" />
+        <ColumnSection>
+          <div className="">
+            <ShadowBtn className="py-4 px-10 shadow-sm rounded text-sm font-bold">
+              Save as draft
+            </ShadowBtn>
           </div>
-        </form>
-      </div>
+        </ColumnSection>
+      </Container>
     </Layout>
   );
 };
@@ -362,4 +196,5 @@ export async function getServerSideProps(ctx) {
     };
   }
 }
-export default withPageAuthRequired(editPage);
+
+export default withPageAuthRequired(edit);

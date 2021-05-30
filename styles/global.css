@@ -3,6 +3,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('./slick/slick-theme.css');
+@import url('./slick/slick.css');
 
 input:focus {
   outline: none;
@@ -11,6 +13,14 @@ button:focus {
   outline: none;
 }
 
+.slick-slide {
+  padding: 0 0.5rem;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: black !important;
+}
 .app-blue {
   color: #0035c1;
 }

@@ -1,5 +1,13 @@
 import * as React from 'react';
 
+import { HeaderTypeBtn } from './PageButtons';
+import {
+  ColumnSection,
+  H2,
+  HeaderTypeWrapper,
+  ImageSelectBox,
+} from './pageStyledElements';
+
 export interface PageHeaderStyleProps {
   onButtonClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   headerType: string;
@@ -10,61 +18,52 @@ export function PageHeaderStyle({
   headerType,
 }: PageHeaderStyleProps) {
   return (
-    <div className="header-button-group flex justify-start space-x-3 ">
-      <button
-        onClick={onButtonClick}
-        value="headerTypeOne"
-        data-headertype="headerTypeOne"
-        type="button"
-        className={`
-      ${headerType === 'headerTypeOne' ? 'bg-indigo-200 text-indigo-600 ' : ''}
-      inline-flex items-center px-3 py-2 border shadow-sm text-base font-medium rounded-md text-gray-500 focus:outline-none 
-     
-      `}
-      >
-        Header Type 1
-      </button>
-      <button
-        value="headerTypeTwo"
-        data-headertype="headerTypeTwo"
-        onClick={onButtonClick}
-        type="button"
-        className={`
-      ${headerType === 'headerTypeTwo' ? 'bg-indigo-200 text-indigo-600 ' : ''}
-      inline-flex items-center px-3 py-2 border shadow-sm text-base font-medium rounded-md text-gray-500  focus:outline-none 
-     
-      `}
-      >
-        Header Type 2
-      </button>
-      <button
-        value="headerTypeThree"
-        data-headertype="headerTypeThree"
-        onClick={onButtonClick}
-        type="button"
-        className={`
-      ${
-        headerType === 'headerTypeThree' ? 'bg-indigo-200 text-indigo-600 ' : ''
-      }
-      inline-flex items-center px-3 py-2 border shadow-sm text-base font-medium rounded-md text-gray-500  focus:outline-none 
-     
-      `}
-      >
-        Header Type 3
-      </button>
-      <button
-        value="headerTypeFour"
-        data-headertype="headerTypeFour"
-        onClick={onButtonClick}
-        type="button"
-        className={`
-      ${headerType === 'headerTypeFour' ? 'bg-indigo-200 text-indigo-600 ' : ''}
-      inline-flex items-center px-3 py-2 border shadow-sm text-base font-medium rounded-md text-gray-500  focus:outline-none 
-     
-      `}
-      >
-        Header Type 4
-      </button>
-    </div>
+    <>
+      <ColumnSection>
+        <H2 className="mb-6">1. Hero Type</H2>
+        <HeaderTypeWrapper>
+          <HeaderTypeBtn
+            value="headerTypeOne"
+            data-headertype="headerTypeOne"
+            onClick={onButtonClick}
+            type="button"
+            active={headerType === 'headerTypeOne' ? true : false}
+          >
+            Header Type 1
+          </HeaderTypeBtn>
+          <HeaderTypeBtn
+            active={headerType === 'headerTypeTwo' ? true : false}
+            value="headerTypeTwo"
+            data-headertype="headerTypeTwo"
+            onClick={onButtonClick}
+            type="button"
+          >
+            Header Type 2
+          </HeaderTypeBtn>
+          <HeaderTypeBtn
+            value="headerTypeThree"
+            data-headertype="headerTypeThree"
+            onClick={onButtonClick}
+            type="button"
+            active={headerType === 'headerTypeThree' ? true : false}
+          >
+            Header Type 3
+          </HeaderTypeBtn>
+          <HeaderTypeBtn
+            value="headerTypeFour"
+            data-headertype="headerTypeFour"
+            onClick={onButtonClick}
+            type="button"
+            active={headerType === 'headerTypeFour' ? true : false}
+          >
+            Header Type 4
+          </HeaderTypeBtn>
+        </HeaderTypeWrapper>
+        <H2 className="mt-6">Media Image</H2>
+        <ImageSelectBox className="mt-5 w-96 flex items-center justify-center cursor-pointer">
+          <p>+ Select from media gallery</p>
+        </ImageSelectBox>
+      </ColumnSection>
+    </>
   );
 }

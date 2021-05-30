@@ -31,6 +31,7 @@ query Page($limit: Int, $offset: Int, $filter: FilterInput) {
     name
     tags
     site
+    menuItem
     createdAt
     hero {
       type
@@ -67,11 +68,12 @@ mutation CreatePage($createPageInput: CreatePageInput!) {
 }
 `;
 const EDIT_PAGE = gql`
-  mutation updatePage($updatePageInput: UpdatePageInput!, $pageId: String!) {
+  mutation($updatePageInput: UpdatePageInput!, $pageId: String!) {
     updatePage(updatePageInput: $updatePageInput, pageId: $pageId) {
       id
       name
       tags
+      site
       menuItem
       hero {
         type
@@ -87,7 +89,8 @@ const EDIT_PAGE = gql`
   }
 `;
 export {
-    ADD_PAGE,
-    EDIT_PAGE,
-    PAGE_QUERY,
-    PAGES_QUERY}
+  ADD_PAGE,
+  EDIT_PAGE,
+  PAGE_QUERY,
+  PAGES_QUERY
+}

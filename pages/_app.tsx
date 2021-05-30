@@ -44,7 +44,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                 <Container>
                   <ToastProvider
                     autoDismiss={true}
-                    autoDismissTimeout={2000}
+                    autoDismissTimeout={4000}
                     transitionDuration={100}
                   >
                     <GlobalStyles />
