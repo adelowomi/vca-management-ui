@@ -288,7 +288,7 @@ export default function Layout({ children }) {
         </div>
 
         <main className="flex-1 relative overflow-y-auto focus:outline-none">
-          <div className="">
+          <div className="bg-white">
             <div className="max-w-7xl px-4 sm:p-6 md:p-8 bg-white m-auto">
               {/* Replace with your content */}
               {children}

@@ -3,10 +3,10 @@
 exports[`Home page matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="pages__Container-p34c7u-0 dyNBtp"
+    class="pages__Container-p34c7u-0 gIMfLh"
   >
     <div
-      class="Header__HeaderContaier-sc-1c6lzu5-0 kuOhAr"
+      class="Header__HeaderContaier-sc-1c6lzu5-0 juFbtD"
     >
       <img
         alt="logo"
@@ -20,7 +20,7 @@ exports[`Home page matches snapshot 1`] = `
       >
         <button
           aria-label="Logout"
-          class="Button-sc-13zys56-0 Header__LogoutButton-sc-1c6lzu5-1 jCamPe cyUcyo"
+          class="Button-sc-13zys56-0 Header__LogoutButton-sc-1c6lzu5-1 dIxKay eHYymE"
           width="100px"
         >
           Logout
@@ -28,7 +28,7 @@ exports[`Home page matches snapshot 1`] = `
       </a>
     </div>
     <button
-      class="Button-sc-13zys56-0 fnSWHi"
+      class="Button-sc-13zys56-0 duRoaC"
       width="345px"
     >
       Signed in as name

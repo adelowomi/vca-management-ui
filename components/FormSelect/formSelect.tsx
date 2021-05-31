@@ -3,15 +3,10 @@ import { useState } from 'react';
 
 import { ChevronDown } from '../AssetsSVG';
 
-const options = [
-  { id: 1, name: 'Image', unavailable: false },
-  { id: 2, name: 'Video', unavailable: false },
-  { id: 3, name: 'Document', unavailable: false },
-];
-
 interface Item {
   id: number;
   name: string;
+  value: string;
   unavailable: boolean;
 }
 
@@ -21,6 +16,7 @@ interface FormSelectProps {
   error: any;
   onChange(item: Item): void;
   errorText: string;
+  options: Item[];
 }
 
 const FormSelect: React.FunctionComponent<FormSelectProps> = ({
@@ -28,6 +24,7 @@ const FormSelect: React.FunctionComponent<FormSelectProps> = ({
   error,
   onChange,
   errorText,
+  options,
 }) => {
   const inputStyle =
     error?.type === 'required'
