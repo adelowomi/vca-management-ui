@@ -1,7 +1,7 @@
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import React from 'react';
 
-import { ITEMS } from '../../../assets/data/data';
+// import { ITEMS } from '../../../assets/data/data';
 import { widgetvalidator } from '../../../helpers/widgetValidator';
 import { widgetUseForm } from '../../../hooks/widgetUseForm';
 import { NewsWidget } from '../../NewsWidget/NewsWidget';
@@ -19,21 +19,22 @@ type WidgetProps = {
     title: string;
     content: string;
   }[];
+  widget: any;
 };
 
 export const CreateWidget: React.FC<WidgetProps> = ({
   pageId,
   client,
   items,
+  widget,
 }): JSX.Element => {
   const { handleSubmit, state, errors, setState, handleChange } = widgetUseForm(
     widgetvalidator,
     client,
-    pageId
+    pageId,
+    widget
   );
   const [open, setOpen] = React.useState(false);
-  // console.log('ERROR', errors);
-  // console.log('STATE', state);
 
   return (
     <>
@@ -91,7 +92,12 @@ export const CreateWidget: React.FC<WidgetProps> = ({
             Preview body
           </ShadowBtn>
         </div>
-        <NewsWidget items={ITEMS} contain={true} />
+        <NewsWidget
+          items={state.widgetItems}
+          title={state.widgetTitle}
+          desc={state.widgetDescription}
+          contain={true}
+        />
       </ColumnSection>
       <SelectItemsModal
         open={open}

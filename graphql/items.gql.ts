@@ -15,6 +15,15 @@ const GET_ALL_ITEMS_QUERY = gql`
       id
       type
       mediaUrl
+      media{
+      image{
+        small
+      }
+      video
+      document{
+        url
+      }
+    }
       slug
       content
       draft
@@ -47,4 +56,5 @@ const EDIT_ITEM = gql`
 
 export {
   EDIT_ITEM,
-  GET_ALL_ITEMS_QUERY}
+  GET_ALL_ITEMS_QUERY
+}

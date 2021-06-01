@@ -47,11 +47,15 @@ interface CardsProps {
 type newsWidgetProps = {
   items: CardsProps[];
   contain: boolean;
+  title: string;
+  desc: string;
 };
 
 export const NewsWidget: React.FC<newsWidgetProps> = ({
   items,
   contain = true,
+  title,
+  desc,
 }) => {
   const sliderRef = useRef(null);
 
@@ -64,15 +68,14 @@ export const NewsWidget: React.FC<newsWidgetProps> = ({
   const gotoPrevious = () => {
     sliderRef.current.slickPrev();
   };
+
   return contain ? (
     <div className="w-full mx-auto bg-gray-50 relative mt-6">
       <div className="container mx-auto py-16 font-sans w-4/5">
         <div className="mb-10 ">
-          <h1 className="font-medium text-3xl text-center mb-3">
-            Get all the latest news
-          </h1>
+          <h1 className="font-medium text-3xl text-center mb-3">{title}</h1>
           <h1 className="text-gray-400 text-xl font-normal text-center">
-            See the latest coverage from the inside team
+            {desc}
           </h1>
         </div>
         <div className="flex justify-between w-10/12 absolute top-1/2 z-30 lg:left-28 left-9">

@@ -21,38 +21,39 @@ interface CardsProps {
     title: string;
     content: string;
   };
-  setSelected: any;
+  selectedArr: any;
   selected: any;
   count: number;
+  exists: boolean;
 }
 export const PostItemCard: React.FC<CardsProps> = ({
   item: { id, mediaUrl, content, title },
-  setSelected,
+  selectedArr,
   selected,
   count,
+  exists,
 }) => {
   const ref = React.useRef<HTMLInputElement>(null);
-
   const handleClick = (id: string | number) => {
     const newArr = [...selected];
     const finder = newArr.findIndex((el) => el === id);
     if (newArr.length === count) {
-      ref.current.checked = null;
+      // ref.current.checked = null;
 
       if (finder > -1) {
         newArr.splice(finder, 1);
       }
-      setSelected(newArr);
+      selectedArr(newArr);
       return;
     } else {
-      ref.current.checked = !ref.current.checked;
+      // ref.current.checked = !ref.current.checked;
     }
     if (finder > -1) {
       newArr.splice(finder, 1);
     } else {
       newArr.push(id);
     }
-    setSelected(newArr);
+    selectedArr(newArr);
   };
 
   return (
@@ -68,7 +69,7 @@ export const PostItemCard: React.FC<CardsProps> = ({
             alt="news image"
           />
           <div className="relative -top-36 left-2 ">
-            <Input type="checkbox" ref={ref} />
+            <Input type="checkbox" ref={ref} checked={exists} />
           </div>
         </div>
         <div className="px-3 py-4">

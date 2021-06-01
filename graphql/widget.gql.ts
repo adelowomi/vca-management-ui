@@ -17,6 +17,48 @@ const ADD_WIDGET = gql`
     }
   }
 `;
+const GET_WIDGET = gql`
+query($filter: FilterInput){
+  widget(filter: $filter){
+    id
+    title
+    type
+    page
+    description
+    items{
+      id
+      slug
+      mediaUrl
+      featured
+    }
+   
+  }
+}
+`
+const EDIT_WIDGET = gql`
+mutation($updateWidgetInput: UpdateWidgetInput!, $widgetId: String!){
+  updateWidget(updateWidgetInput: $updateWidgetInput, widgetId: $widgetId){
+    page
+      description
+    disable
+    title
+    items{
+      content
+      category
+      draft
+      mediaUrl
+      slug
+      id
+    }
+    page
+    type
+
+  }
+
+}
+
+`;
 export {
-    ADD_WIDGET,
-};
+  ADD_WIDGET,
+  EDIT_WIDGET,
+  GET_WIDGET};

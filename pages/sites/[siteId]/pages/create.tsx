@@ -32,9 +32,6 @@ const create = ({ token, menuItems }) => {
     handleChange,
   } = useForm(validator, client, { siteId, type: 'add' });
 
-  // console.log('ERRORS', errors);
-  // console.log('State', state);
-
   const onButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -56,7 +53,11 @@ const create = ({ token, menuItems }) => {
   return (
     <Layout>
       <Container>
-        <PageControls onSubmit={handleSubmit} title="Add a new page" />
+        <PageControls
+          onSubmit={handleSubmit}
+          title="Add a new page"
+          siteId={siteId}
+        />
         <PageTitle
           pageTitle={state.pageTitle}
           handleChange={handleChange}

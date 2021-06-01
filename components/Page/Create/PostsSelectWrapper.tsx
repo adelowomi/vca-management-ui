@@ -2,7 +2,6 @@ import React from 'react';
 import { RiCloseLine } from 'react-icons/ri';
 import styled from 'styled-components';
 
-// import { ITEMS } from '../../../assets/data/data';
 import { SelectButton } from './PageButtons/SelectButton';
 import { PageSearchInput } from './PageSearchInput';
 import { H1 } from './pageStyledElements';
@@ -14,7 +13,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* align-items: center; */
 `;
 
 const Row = styled.div`
@@ -37,7 +35,8 @@ export const PostSelectWrapper = ({
   items,
   type,
 }) => {
-  const [selected, setSelected] = React.useState([]);
+  const arr = state && state.widgetItems ? [...state.widgetItems] : [];
+  const [selected, setSelected] = React.useState(arr);
 
   React.useEffect(() => {
     if (type === 'posts') {
@@ -48,10 +47,15 @@ export const PostSelectWrapper = ({
     } else if (type === 'widget') {
       setState({
         ...state,
-        widgetItems: selected,
+        widgetItems: [...selected],
       });
     }
   }, [selected]);
+  const selectedArr = (arr: any) => {
+    setSelected([...arr]);
+  };
+
+  // console.log('SELECTED', state);
 
   return (
     <Container>
@@ -100,9 +104,12 @@ export const PostSelectWrapper = ({
           <PostItemCard
             key={item.id}
             item={item}
-            setSelected={setSelected}
+            selectedArr={selectedArr}
             selected={selected}
             count={type === 'posts' ? 1 : 8}
+            exists={
+              selected.findIndex((el) => el === item.id) > -1 ? true : false
+            }
           />
         ))}
       </div>

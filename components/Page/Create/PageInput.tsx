@@ -23,11 +23,11 @@ export const Input = styled.input`
     z-index: 10;
   }
   :focus {
-    border: #fff;
+    /* border: #fff; */
     padding-left: 15px;
     text-align: left;
     ::placeholder {
-      color: #fff;
+      /* color: #fff; */
     }
   }
 `;

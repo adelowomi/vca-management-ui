@@ -80,6 +80,7 @@ export const SelectItemsModal: React.FC<SelectItemsModalProps> = ({
                 items={items}
                 type={type}
               />
+              {/* {console.log('ITEMS', items)} */}
             </div>
           </Transition.Child>
         </div>
