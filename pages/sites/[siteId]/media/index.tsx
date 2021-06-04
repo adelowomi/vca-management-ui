@@ -10,8 +10,7 @@ import { createApolloClient } from '../../../../lib/apollo';
 
 function ListMedia({ medias }) {
   const router = useRouter();
-  console.log(router);
-  const page = parseInt(router.query?.page as string, 10);
+  const page = parseInt(router.query?.page as string, 10) || 0;
   const nextPage = `${router.asPath.split('?')[0]}?page=${page + 1}`;
   const prevPage = `${router.asPath.split('?')[0]}?page=${
     page - 1 < 0 ? 0 : page - 1
