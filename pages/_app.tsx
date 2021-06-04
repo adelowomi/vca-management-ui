@@ -19,6 +19,7 @@ import { styletron } from '../styletron';
 const Container = styled.div`
   margin: 0 auto;
   font-family: 'Avenir Next';
+  min-width: 1280px;
 `;
 
 const MyApp = ({ Component, pageProps }: AppProps) => {

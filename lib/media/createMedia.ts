@@ -1,4 +1,16 @@
-export enum ContectType {
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { Uppy } from '@uppy/core';
+import { useUppy } from '@uppy/react';
+import Transloadit from '@uppy/transloadit';
+import {
+  FieldValues,
+  UseFormGetValues,
+  UseFormSetValue,
+} from 'react-hook-form';
+
+import { CREATE_MEDIA } from '../../graphql/media/mutation';
+
+export enum ContentType {
   IMAGE = 'IMAGE',
   DOCUMENT = 'DOCUMENT',
   VIDEO = 'VIDEO',
@@ -6,7 +18,7 @@ export enum ContectType {
 export const CreateUploadinput = (result, uploadFormValues) => {
   let media = {};
   switch (uploadFormValues.type) {
-    case ContectType.IMAGE:
+    case ContentType.IMAGE:
       media = {
         name: uploadFormValues.name,
         description: uploadFormValues.description,
@@ -20,12 +32,15 @@ export const CreateUploadinput = (result, uploadFormValues) => {
         },
       };
       break;
-    case ContectType.DOCUMENT:
+    case ContentType.DOCUMENT:
       media = {
         name: uploadFormValues.name,
         description: uploadFormValues.description,
         type: uploadFormValues.type,
-        document: '',
+        document: {
+          assembly: result['transloadit'][0]['assembly_id'],
+          url: result['transloadit'][0]['results'][':original'][0]['ssl_url'],
+        },
       };
       break;
 
@@ -33,4 +48,57 @@ export const CreateUploadinput = (result, uploadFormValues) => {
       break;
   }
   return media;
+};
+
+export const CreateUppyInstance = (
+  params: string,
+  signature: string,
+  getValues: UseFormGetValues<FieldValues>,
+  setSuccess: ({ id: string, message: any }) => void,
+  setError: (error: any) => void,
+  client: ApolloClient<NormalizedCacheObject>,
+  setValue: UseFormSetValue<FieldValues>
+) => {
+  return useUppy(() => {
+    return new Uppy({
+      meta: { type: 'avatar' },
+      restrictions: { maxNumberOfFiles: 1 },
+      autoProceed: false,
+    })
+      .use(Transloadit, {
+        params,
+        signature,
+        waitForEncoding: true,
+      })
+      .on('complete', (result) => {
+        const uploadFormValues = getValues();
+        const uploadedInput = CreateUploadinput(result, uploadFormValues);
+        client
+          .mutate({
+            mutation: CREATE_MEDIA,
+            variables: {
+              createMediaInput: uploadedInput,
+            },
+          })
+          .then(
+            (values) => {
+              setSuccess({ id: values.data.createMedia.id, message: values });
+            },
+            (error) => {
+              console.error(error);
+              setError(true);
+            }
+          );
+      })
+      .on('file-added', (result) => {
+        setValue('upload', result);
+      })
+      .on('file-removed', () => {
+        setValue('upload', null);
+      })
+      .on('error', (error) => {
+        console.error(error);
+        setError(true);
+      });
+  });
 };

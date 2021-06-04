@@ -24,3 +24,28 @@ export const CREATE_MEDIA = gql`
     }
   }
 `;
+
+export const GET_ALL_MEDIA = gql`
+  query medias($limit: Int, $skip: Int) {
+    medias(limit: $limit, skip: $skip) {
+      id
+      createdAt
+      updatedAt
+      name
+      description
+      type
+      document {
+        assembly
+        url
+      }
+      video
+      image {
+        assembly
+        small
+        medium
+        large
+        xLarge
+      }
+    }
+  }
+`;

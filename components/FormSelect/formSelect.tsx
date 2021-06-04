@@ -11,12 +11,12 @@ interface Item {
 }
 
 interface FormSelectProps {
-  items?: Item[];
   label: string;
   error: any;
   onChange(item: Item): void;
   errorText: string;
   options: Item[];
+  defaultOption: Item;
 }
 
 const FormSelect: React.FunctionComponent<FormSelectProps> = ({
@@ -25,12 +25,13 @@ const FormSelect: React.FunctionComponent<FormSelectProps> = ({
   onChange,
   errorText,
   options,
+  defaultOption,
 }) => {
   const inputStyle =
     error?.type === 'required'
       ? 'text-left text-base text-gray-700 font-semibold w-96 h-14 mt-6 shadow-sm block w-96 h-14 sm:text-sm border border-red-500 rounded-sm pl-4'
       : 'text-left text-base text-gray-700 font-semibold w-96 h-14 mt-6 shadow-sm block w-96 h-14 sm:text-sm border border-gray-400 rounded-sm pl-4';
-  const [selectedPerson, setSelectedPerson] = useState(options[0]);
+  const [selectedPerson, setSelectedPerson] = useState(defaultOption);
 
   return (
     <div>
