@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 export default function EditMedia({ id }) {
-  return <div>{`Edit ${id}`}</div>;
+  return <div>{`View ${id}`}</div>;
 }
 
 export function getServerSideProps(ctx) {

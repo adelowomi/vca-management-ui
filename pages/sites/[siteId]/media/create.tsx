@@ -43,7 +43,7 @@ export const CreateMedia = ({ imageParams, imageSignature, token }) => {
   } = useForm();
 
   const clientSuccessCallback = ({ id }: { id: string; message: any }) => {
-    router.push(`/sites/${router.query.siteId}/media/${id}/edit`);
+    router.push(`/sites/${router.query.siteId}/media/${id}/view`);
   };
   const uppy = CreateUppyInstance(
     imageParams,
