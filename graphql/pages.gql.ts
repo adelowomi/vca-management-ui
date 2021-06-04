@@ -34,6 +34,13 @@ query Page($filter: FilterInput) {
     menuItem
     createdAt
     hero {
+      media{
+        image{
+          small
+          medium
+          large
+        }
+      }
       type
       caption
       mediaUrl

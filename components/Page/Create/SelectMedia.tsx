@@ -2,10 +2,10 @@ import React from 'react';
 import { RiCloseLine } from 'react-icons/ri';
 import styled from 'styled-components';
 
+import { MediaCard } from './MediaCard';
 import { SelectButton } from './PageButtons/SelectButton';
 import { PageSearchInput } from './PageSearchInput';
 import { H1 } from './pageStyledElements';
-import { PostItemCard } from './PostItemCard';
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -27,29 +27,27 @@ const options = [
   { id: 'type', name: 'Media type' },
 ];
 
-export const PostSelectWrapper = ({
+export const SelectMedia = ({
   setOpen,
   setState,
   state,
-  handleSubmit,
-  items,
-  type,
+  // handleSubmit,
+  medias,
 }) => {
-  const arr = state && state.widgetItems ? [...state.widgetItems] : [];
-  const [selected, setSelected] = React.useState(arr);
+  const [selected, setSelected] = React.useState([]);
 
   React.useEffect(() => {
-    if (type === 'posts') {
-      setState({
-        ...state,
-        itemId: selected[selected.length - 1],
-      });
-    } else if (type === 'widget') {
-      setState({
-        ...state,
-        widgetItems: [...selected],
-      });
-    }
+    setState({
+      ...state,
+      mediaUrl: selected[selected.length - 1]?.image.small,
+    });
+    // } else if (media.type === 'VIDEO') {
+    //   inputRef.current.checked = !inputRef.current.checked;
+    //   setState({ ...state, mediaUrl: media.video });
+    //   inputRef.current.checked = !inputRef.current.checked;
+    // } else if (media.type === 'DOCUMENT') {
+    //   setState({ ...state, mediaUrl: media.document.url });
+    // }
   }, [selected]);
 
   const selectedArr = (arr: any) => {
@@ -89,26 +87,23 @@ export const PostSelectWrapper = ({
           </div>
         </div>
         <div>
-          <button
+          {/* <button
             style={{ background: '#1890FF' }}
             className="py-3.5 px-8 text-white rounded-sm font-bold text-sm focus:outline-none"
             onClick={handleSubmit(setOpen)}
           >
-            Add Media
-          </button>
+            Add media
+          </button> */}
         </div>
       </Row>
       <div className="grid grid-cols-4 gap-4 mt-8">
-        {items.map((item) => (
-          <PostItemCard
-            key={item.id}
-            item={item}
+        {medias.map((media) => (
+          <MediaCard
+            key={media.id}
+            media={media}
             selectedArr={selectedArr}
             selected={selected}
-            count={type === 'posts' ? 1 : 8}
-            exists={
-              selected.findIndex((el) => el === item.id) > -1 ? true : false
-            }
+            count={1}
           />
         ))}
       </div>

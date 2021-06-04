@@ -2,34 +2,15 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useRef } from 'react';
 import React from 'react';
 
-import { WidgetStateProps } from '../../types/interfaces';
-import { PostSelectWrapper } from '../Page/Create/PostsSelectWrapper';
+import { SelectMedia } from '../Page/Create/SelectMedia';
 
-interface SelectItemsModalProps {
-  state: WidgetStateProps | any;
-  // setState: React.Dispatch<
-  //   React.SetStateAction<WidgetStateProps}>
-  // >;
-  setState: React.Dispatch<React.SetStateAction<any>>;
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  handleSubmit: any;
-  items: {
-    id: string;
-    mediaUrl: string;
-    title: string;
-    content: string;
-  }[];
-  type: string;
-}
-export const SelectItemsModal: React.FC<SelectItemsModalProps> = ({
+export const SelectMediaModal = ({
   open,
   setOpen,
-  setState,
+  medias,
   state,
+  setState,
   handleSubmit,
-  items,
-  type,
 }): JSX.Element => {
   const cancelButtonRef = useRef();
 
@@ -72,13 +53,12 @@ export const SelectItemsModal: React.FC<SelectItemsModalProps> = ({
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <div className="inline-block align-bottom bg-white w-full text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-7xl sm:w-full">
-              <PostSelectWrapper
+              <SelectMedia
                 setOpen={setOpen}
-                setState={setState}
+                medias={medias}
                 state={state}
+                setState={setState}
                 handleSubmit={handleSubmit}
-                items={items}
-                type={type}
               />
             </div>
           </Transition.Child>

@@ -107,7 +107,12 @@ const Pages = ({ pages }) => {
                         scope="col"
                         className="px-6 tracking-wider font-light py-4"
                       >
-                        <input type="checkbox" name="" id="" />
+                        <input
+                          type="checkbox"
+                          name=""
+                          id=""
+                          className="h-5 w-6"
+                        />
                       </th>
                       <th scope="col" className="px-6 tracking-wider">
                         Page Title
@@ -129,7 +134,7 @@ const Pages = ({ pages }) => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
                           <input
                             type="checkbox"
-                            className="px-3"
+                            className="px-3 h-5 w-6 border border-gray-300"
                             name=""
                             id=""
                           />

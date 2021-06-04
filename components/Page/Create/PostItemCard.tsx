@@ -26,8 +26,8 @@ interface CardsProps {
   count: number;
   exists: boolean;
 }
-export const PostItemCard: React.FC<CardsProps> = ({
-  item: { id, mediaUrl, content, title },
+export const PostItemCard = ({
+  item,
   selectedArr,
   selected,
   count,
@@ -59,13 +59,13 @@ export const PostItemCard: React.FC<CardsProps> = ({
   return (
     <>
       <div
-        onClick={() => handleClick(id)}
+        onClick={() => handleClick(item.id)}
         className="group w-full overflow-hidden border border-gray-400 hover:shadow-lg bg-white shadow-md"
       >
         <div className="h-40 w-full">
           <img
             className="w-full h-full object-cover"
-            src={mediaUrl}
+            src={item.media.image.small}
             alt="news image"
           />
           <div className="relative -top-36 left-2 ">
@@ -73,8 +73,8 @@ export const PostItemCard: React.FC<CardsProps> = ({
           </div>
         </div>
         <div className="px-3 py-4">
-          <h1 className="font-semibold text-lg mb-2">{title}</h1>
-          <p className="text-gray-700 text-sm">{content}</p>
+          <h1 className="font-semibold text-lg mb-2">{item.category}</h1>
+          <p className="text-gray-700 text-sm">{item.description}</p>
         </div>
       </div>
     </>

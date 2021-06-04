@@ -14,7 +14,16 @@ const GET_ALL_ITEMS_QUERY = gql`
     ) {
       id
       type
+      description
+      content
+      featured
+      slug
+      draft
+      category
       mediaUrl
+      createdAt
+      updatedAt
+      tags
       media{
       image{
         small
@@ -24,14 +33,6 @@ const GET_ALL_ITEMS_QUERY = gql`
         url
       }
     }
-      slug
-      content
-      draft
-      featured
-      category
-      tags
-      createdAt
-      updatedAt
     }
   }
 

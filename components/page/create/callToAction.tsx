@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { ErrorProps } from '../../../types/interfaces';
-import { Hero } from '../../Hero/Hero';
 import { ShadowBtn } from './PageButtons';
 import { SelectButton } from './PageButtons/SelectButton';
 import { Input } from './PageInput';
@@ -15,16 +14,6 @@ export interface CallToActionProps {
   errors: ErrorProps;
 }
 
-const hero = {
-  mediaUrl:
-    'https://vca-documents.s3.ca-central-1.amazonaws.com/0e/dab8e757d64f37b2a9c475b9d88d9a/hero.png',
-  actionText: 'Click me',
-  heading: 'The utlimate source to get everything you’re looking for! ',
-  location: 'LEFT',
-  hasAction: true,
-  caption: 'page caption',
-  type: 'headerTypeOne',
-};
 const options = [
   { id: 'false', name: 'Inactive' },
   { id: 'true', name: 'active' },
@@ -91,7 +80,7 @@ export const CallToAction: React.FC<CallToActionProps> = ({
             Preview header
           </ShadowBtn>
         </div>
-        <Hero hero={hero} />
+        {/* <Hero hero={hero} /> */}
       </ColumnSection>
     </>
   );

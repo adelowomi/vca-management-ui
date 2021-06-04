@@ -2,6 +2,7 @@ import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Hero } from '../../../../../components/Hero/Hero';
 import Layout from '../../../../../components/Layout/Layout';
 import { CallToAction } from '../../../../../components/Page/Create/CallToAction';
 import { CreateWidget } from '../../../../../components/Page/Create/CreateWidget';
@@ -21,11 +22,12 @@ import {
   GET_WIDGET,
   PAGE_QUERY,
 } from '../../../../../graphql';
+import { GET_ALL_MEDIA } from '../../../../../graphql/media.gql';
 import { validator } from '../../../../../helpers/validator';
 import useForm from '../../../../../hooks/useForm';
 import { createApolloClient } from '../../../../../lib/apollo';
 
-const edit = ({ token, menuItems, page, items, error, widget }) => {
+const edit = ({ token, menuItems, page, items, error, widget, medias }) => {
   const client = createApolloClient(token);
   const {
     query: { siteId, id: pageId },
@@ -78,6 +80,10 @@ const edit = ({ token, menuItems, page, items, error, widget }) => {
         <PageHeaderStyle
           onButtonClick={onButtonClick}
           headerType={state.headerType}
+          medias={medias}
+          state={state}
+          setState={setState}
+          handleSubmit={handleSubmit}
         />
 
         <Textposition
@@ -96,6 +102,17 @@ const edit = ({ token, menuItems, page, items, error, widget }) => {
           errors={errors}
           hasAction={state.hasAction}
         />
+        <div className="mt-5 mb-5">
+          <Hero
+            mediaUrl={state.mediaUrl}
+            actionText={state.actionText}
+            heading={state.pageTitle}
+            location={state.location}
+            hasAction={state.hasAction}
+            caption={state.captionText}
+            type={state.headerType}
+          />
+        </div>
         <hr className="border-gray-400 border-5 w-full mt-8" />
         {/* {console.log('Edit ITEMS', items)} */}
         <CreateWidget
@@ -123,7 +140,7 @@ const edit = ({ token, menuItems, page, items, error, widget }) => {
 export async function getServerSideProps(ctx) {
   const { siteId, id: pageId } = ctx.query;
   const session: Session = getSession(ctx.req, ctx.res);
-  const client = createApolloClient(session.idToken);
+  const client = createApolloClient(session?.idToken);
 
   try {
     const {
@@ -156,6 +173,16 @@ export async function getServerSideProps(ctx) {
         },
       },
     });
+
+    const {
+      data: { medias },
+    } = await client.query({
+      query: GET_ALL_MEDIA,
+      variables: {
+        filter: {},
+      },
+    });
+
     const {
       data: {
         siteMenuItems: {
@@ -195,7 +222,6 @@ export async function getServerSideProps(ctx) {
         },
       },
     });
-
     return {
       props: {
         page,
@@ -203,6 +229,7 @@ export async function getServerSideProps(ctx) {
         items: getAllItems,
         menuItems,
         widget,
+        medias,
       },
     };
   } catch (error) {
