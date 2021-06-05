@@ -34,27 +34,21 @@ const SITES_QUERY = gql`
 `;
 
 const GET_SITE_MENUITEMS = gql`
- query SiteMenuItems($limit: Int, $offset: Int, $filter: FilterInput){
-  siteMenuItems(filter: $filter, limit: $limit , offset: $offset){
-    
-    id
-    name
-    header {
-      menuItems {
-        id
-        name
-        slug
-        description
+  query SiteMenuItems($limit: Int, $offset: Int, $filter: FilterInput) {
+    siteMenuItems(filter: $filter, limit: $limit, offset: $offset) {
+      id
+      name
+      header {
+        menuItems {
+          id
+          name
+          slug
+          description
+        }
       }
+      page
     }
-    page
   }
-  }
-
 `;
 
-export {
-    GET_SITE_MENUITEMS,
-    SITE_QUERY,
-    SITES_QUERY,
-}
+export { GET_SITE_MENUITEMS, SITE_QUERY, SITES_QUERY };

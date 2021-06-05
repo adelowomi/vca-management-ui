@@ -17,6 +17,4 @@ const ADD_WIDGET = gql`
     }
   }
 `;
-export {
-    ADD_WIDGET,
-};
+export { ADD_WIDGET };

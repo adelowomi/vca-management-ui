@@ -36,10 +36,10 @@ export interface WidgetStateProps {
   widgetPageId: string | string[];
   widgetDisable: boolean;
   widgetType: string;
-  widgetItems: string[],
+  widgetItems: string[];
 }
 export interface WidgetErrorProps {
   widgetDescription?: string;
   widgetTitle?: string;
-  widgetItems: string[],
+  widgetItems: string[];
 }
