@@ -38,7 +38,7 @@ export const PostItemCard = ({
     const newArr = [...selected];
     const finder = newArr.findIndex((el) => el === id);
     if (newArr.length === count) {
-      // ref.current.checked = null;
+      ref.current.checked = null;
 
       if (finder > -1) {
         newArr.splice(finder, 1);
@@ -46,7 +46,7 @@ export const PostItemCard = ({
       selectedArr(newArr);
       return;
     } else {
-      // ref.current.checked = !ref.current.checked;
+      ref.current.checked = !ref.current.checked;
     }
     if (finder > -1) {
       newArr.splice(finder, 1);
@@ -59,7 +59,7 @@ export const PostItemCard = ({
   return (
     <>
       <div
-        onClick={() => handleClick(item.id)}
+        onClick={() => handleClick(item)}
         className="group w-full overflow-hidden border border-gray-400 hover:shadow-lg bg-white shadow-md"
       >
         <div className="h-40 w-full">
@@ -69,7 +69,7 @@ export const PostItemCard = ({
             alt="news image"
           />
           <div className="relative -top-36 left-2 ">
-            <Input type="checkbox" ref={ref} checked={exists} />
+            <Input type="checkbox" ref={ref} defaultChecked={exists} />
           </div>
         </div>
         <div className="px-3 py-4">

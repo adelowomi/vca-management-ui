@@ -82,7 +82,6 @@ export function PageHeaderStyle({
           medias={medias}
           state={state}
           setState={setState}
-          handleSubmit={handleSubmit}
         />
       </ColumnSection>
     </>

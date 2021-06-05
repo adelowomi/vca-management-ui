@@ -29,7 +29,7 @@ export const widgetUseForm = (validate: any, client: ApolloClient<NormalizedCach
     });
     // console.log('WIDGET STATE', state);
 
-    const [errors, setErrors] = React.useState<WidgetErrorProps | {}>({});
+    const [errors, setErrors] = React.useState<WidgetErrorProps>({});
     const [isSubmitting, setIsSubmitting] = React.useState(false);
     const { addToast } = useToasts();
 

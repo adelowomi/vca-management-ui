@@ -114,7 +114,6 @@ const edit = ({ token, menuItems, page, items, error, widget, medias }) => {
           />
         </div>
         <hr className="border-gray-400 border-5 w-full mt-8" />
-        {/* {console.log('Edit ITEMS', items)} */}
         <CreateWidget
           client={client}
           pageId={pageId}
