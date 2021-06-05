@@ -1,0 +1,769 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`List media page matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class=""
+  >
+    <div
+      class="h-screen flex overflow-hidden bg-gray-100"
+    >
+      <div
+        class="hidden md:flex md:flex-shrink-0"
+      >
+        <div
+          class="flex flex-col w-64"
+        >
+          <div
+            class="flex flex-col flex-grow border-r border-gray-200 pt-5 pb-4 bg-white overflow-y-auto"
+          >
+            <div
+              class="flex flex-row items-center flex-start flex-shrink-0 px-4"
+            >
+              <button
+                class="mr-2 pl-2 focus:outline-none"
+              >
+                <span
+                  class="sr-only"
+                >
+                  Open sidebar
+                </span>
+                <svg
+                  aria-hidden="true"
+                  class="h-10 w-6 text-black"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4 6h16M4 12h16M4 18h16"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  />
+                </svg>
+              </button>
+              <p
+                class="text-black font-medium text-lg"
+              >
+                STORYBOARD
+                <span
+                  class="text-black font-bold"
+                >
+                  VCA
+                </span>
+              </p>
+            </div>
+            <div
+              class="mt-10 flex-grow flex flex-col"
+            >
+              <nav
+                class="flex-1 px- bg-white space-y-3"
+              >
+                <a
+                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  href="/sites/undefined/dashboard"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="text-gray-500 group-hover:text-gray-500 mr-3 h-6 w-6"
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g>
+                      <path
+                        d="M0 0h24v24H0z"
+                        fill="none"
+                      />
+                      <path
+                        d="M9 18H4v-8h5v8zm-2-2v-4H6v4h1zm6 0V8h-1v8h1zm2 2h-5V6h5v12zm4-2V4h-1v12h1zm2 2h-5V2h5v16zm1 4H3v-2h19v2z"
+                      />
+                    </g>
+                  </svg>
+                  Dashboard
+                </a>
+                <a
+                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  href="/sites/undefined/pages"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="text-gray-500 group-hover:text-gray-500 mr-3 h-6 w-6"
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g>
+                      <path
+                        d="M0 0h24v24H0z"
+                        fill="none"
+                      />
+                      <path
+                        d="M5 8h14V5H5v3zm9 11v-9H5v9h9zm2 0h3v-9h-3v9zM4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"
+                      />
+                    </g>
+                  </svg>
+                  Pages
+                </a>
+                <a
+                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  href="/sites/undefined/news"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="text-gray-500 group-hover:text-gray-500 mr-3 h-6 w-6"
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g>
+                      <path
+                        d="M0 0h24v24H0z"
+                        fill="none"
+                      />
+                      <path
+                        d="M5 8v12h14V8H5zm0-2h14V4H5v2zm15 16H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1zM7 10h4v4H7v-4zm0 6h10v2H7v-2zm6-5h4v2h-4v-2z"
+                      />
+                    </g>
+                  </svg>
+                  News
+                </a>
+                <a
+                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  href="/sites/undefined/performance"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="text-gray-500 group-hover:text-gray-500 mr-3 h-6 w-6"
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g>
+                      <path
+                        d="M0 0h24v24H0z"
+                        fill="none"
+                      />
+                      <path
+                        d="M3 12h2v9H3v-9zm16-4h2v13h-2V8zm-8-6h2v19h-2V2z"
+                      />
+                    </g>
+                  </svg>
+                  Performance
+                </a>
+                <a
+                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  href="/sites/undefined/posts"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="text-gray-500 group-hover:text-gray-500 mr-3 h-6 w-6"
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g>
+                      <path
+                        d="M0 0h24v24H0z"
+                        fill="none"
+                      />
+                      <path
+                        d="M21 6.757l-2 2V4h-9v5H5v11h14v-2.757l2-2v5.765a.993.993 0 0 1-.993.992H3.993A1 1 0 0 1 3 20.993V8l6.003-6h10.995C20.55 2 21 2.455 21 2.992v3.765zm.778 2.05l1.414 1.415L15.414 18l-1.416-.002.002-1.412 7.778-7.778z"
+                      />
+                    </g>
+                  </svg>
+                  Posts
+                </a>
+                <a
+                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  href="/sites/undefined/media-gallery"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="text-gray-500 group-hover:text-gray-500 mr-3 h-6 w-6"
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g>
+                      <path
+                        d="M0 0h24v24H0z"
+                        fill="none"
+                      />
+                      <path
+                        d="M21 15v3h3v2h-3v3h-2v-3h-3v-2h3v-3h2zm.008-12c.548 0 .992.445.992.993V13h-2V5H4v13.999L14 9l3 3v2.829l-3-3L6.827 19H14v2H2.992A.993.993 0 0 1 2 20.007V3.993A1 1 0 0 1 2.992 3h18.016zM8 7a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"
+                      />
+                    </g>
+                  </svg>
+                  Media Gallery
+                </a>
+                <a
+                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  href="/sites/undefined/social"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="text-gray-500 group-hover:text-gray-500 mr-3 h-6 w-6"
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g>
+                      <path
+                        d="M0 0h24v24H0z"
+                        fill="none"
+                      />
+                      <path
+                        d="M17.084 15.812a7 7 0 1 0-10.168 0A5.996 5.996 0 0 1 12 13a5.996 5.996 0 0 1 5.084 2.812zm-8.699 1.473L12 20.899l3.615-3.614a4 4 0 0 0-7.23 0zM12 23.728l-6.364-6.364a9 9 0 1 1 12.728 0L12 23.728zM12 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 2a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"
+                      />
+                    </g>
+                  </svg>
+                  Social
+                </a>
+                <a
+                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  href="/sites/undefined/style"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="text-gray-500 group-hover:text-gray-500 mr-3 h-6 w-6"
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g>
+                      <path
+                        d="M0 0h24v24H0z"
+                        fill="none"
+                      />
+                      <path
+                        d="M12 2c5.522 0 10 3.978 10 8.889a5.558 5.558 0 0 1-5.556 5.555h-1.966c-.922 0-1.667.745-1.667 1.667 0 .422.167.811.422 1.1.267.3.434.689.434 1.122C13.667 21.256 12.9 22 12 22 6.478 22 2 17.522 2 12S6.478 2 12 2zm-1.189 16.111a3.664 3.664 0 0 1 3.667-3.667h1.966A3.558 3.558 0 0 0 20 10.89C20 7.139 16.468 4 12 4a8 8 0 0 0-.676 15.972 3.648 3.648 0 0 1-.513-1.86zM7.5 12a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm9 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM12 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"
+                      />
+                    </g>
+                  </svg>
+                  Style
+                </a>
+                <a
+                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  href="/sites/undefined/website-settings"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="text-gray-500 group-hover:text-gray-500 mr-3 h-6 w-6"
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g>
+                      <path
+                        d="M0 0h24v24H0z"
+                        fill="none"
+                      />
+                      <path
+                        d="M2 12c0-.865.11-1.703.316-2.504A3 3 0 0 0 4.99 4.867a9.99 9.99 0 0 1 4.335-2.505 3 3 0 0 0 5.348 0 9.99 9.99 0 0 1 4.335 2.505 3 3 0 0 0 2.675 4.63c.206.8.316 1.638.316 2.503 0 .865-.11 1.703-.316 2.504a3 3 0 0 0-2.675 4.629 9.99 9.99 0 0 1-4.335 2.505 3 3 0 0 0-5.348 0 9.99 9.99 0 0 1-4.335-2.505 3 3 0 0 0-2.675-4.63C2.11 13.704 2 12.866 2 12zm4.804 3c.63 1.091.81 2.346.564 3.524.408.29.842.541 1.297.75A4.993 4.993 0 0 1 12 18c1.26 0 2.438.471 3.335 1.274.455-.209.889-.46 1.297-.75A4.993 4.993 0 0 1 17.196 15a4.993 4.993 0 0 1 2.77-2.25 8.126 8.126 0 0 0 0-1.5A4.993 4.993 0 0 1 17.195 9a4.993 4.993 0 0 1-.564-3.524 7.989 7.989 0 0 0-1.297-.75A4.993 4.993 0 0 1 12 6a4.993 4.993 0 0 1-3.335-1.274 7.99 7.99 0 0 0-1.297.75A4.993 4.993 0 0 1 6.804 9a4.993 4.993 0 0 1-2.77 2.25 8.126 8.126 0 0 0 0 1.5A4.993 4.993 0 0 1 6.805 15zM12 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-2a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+                      />
+                    </g>
+                  </svg>
+                  Website Settings
+                </a>
+              </nav>
+            </div>
+            <div
+              class="flex-shrink-0 flex border-t border-gray-200 w-full py-5"
+            >
+              <div
+                class="flex flex-row items-center text-gray-500 justify- w-full space-x-5 ml-6"
+              >
+                <span
+                  class="cursor-pointer"
+                >
+                  <svg
+                    fill="none"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    width="20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M4.265 1.807L5.412 3.446C4.01818 4.42177 2.97176 5.8165 2.42474 7.4276C1.87772 9.03869 1.8586 10.7822 2.37015 12.4049C2.88171 14.0276 3.89729 15.445 5.26937 16.4511C6.64146 17.4572 8.29858 17.9996 10 17.9996C11.7014 17.9996 13.3585 17.4572 14.7306 16.4511C16.1027 15.445 17.1183 14.0276 17.6299 12.4049C18.1414 10.7822 18.1223 9.03869 17.5753 7.4276C17.0282 5.8165 15.9818 4.42177 14.588 3.446L15.735 1.807C17.053 2.72843 18.1289 3.95446 18.8715 5.38087C19.614 6.80728 20.0012 8.39189 20 10C20 15.523 15.523 20 10 20C4.477 20 2.59023e-06 15.523 2.59023e-06 10C-0.00115543 8.39189 0.385992 6.80728 1.12853 5.38087C1.87107 3.95446 2.94705 2.72843 4.265 1.807ZM9 10V0H11V10H9Z"
+                      fill="#828282"
+                    />
+                  </svg>
+                </span>
+                <p>
+                  Exit website
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex flex-col w-0 flex-1 overflow-hidden"
+      >
+        <div
+          class="relative z-10 flex-shrink-0 flex h-16 bg-white shadow"
+        >
+          <button
+            class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+          >
+            <span
+              class="sr-only"
+            >
+              Open sidebar
+            </span>
+            <svg
+              aria-hidden="true"
+              class="h-6 w-6 text-black"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 6h16M4 12h16M4 18h16"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              />
+            </svg>
+          </button>
+          <div
+            class="flex-1 px-4 flex justify-end items-center w-screen"
+          >
+            <div
+              class="flex flex-row items-center w-full justify-end space-x-3"
+            >
+              <div
+                class="flex border-grey-light border bg-gray-50 py-1 w-96"
+                style="background-color: rgb(242, 242, 242);"
+              >
+                <button
+                  class="focus:outline-none"
+                >
+                  <span
+                    class="w-auto flex justify-end items-center text-grey p-2 outline-none"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="h-5 w-6 text-gray-500 font-light"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        clip-rule="evenodd"
+                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                        fill-rule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                </button>
+                <input
+                  class="w-full rounded mr-4 bg-gray-200 outline-none"
+                  placeholder="Search"
+                  style="background-color: rgb(242, 242, 242);"
+                  type="text"
+                />
+              </div>
+              <div
+                class="notification-icon-wrapper border-r border-gray-100 px-5"
+              >
+                <button
+                  class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  <span
+                    class="sr-only"
+                  >
+                    View notifications
+                  </span>
+                  <svg
+                    fill="none"
+                    height="24"
+                    viewBox="0 0 25 24"
+                    width="25"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M5 18H19V11.031C19 7.148 15.866 4 12 4C8.134 4 5 7.148 5 11.031V18ZM12 2C16.97 2 21 6.043 21 11.031V20H3V11.031C3 6.043 7.03 2 12 2ZM9.5 21H14.5C14.5 21.663 14.2366 22.2989 13.7678 22.7678C13.2989 23.2366 12.663 23.5 12 23.5C11.337 23.5 10.7011 23.2366 10.2322 22.7678C9.76339 22.2989 9.5 21.663 9.5 21Z"
+                      fill="black"
+                    />
+                    <circle
+                      cx="19.5"
+                      cy="9.5"
+                      fill="#1890FF"
+                      r="4.5"
+                      stroke="white"
+                      stroke-width="2"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div
+                class="user-dropdown-wrapper text-blue-500 "
+              >
+                <button
+                  class="flex items-center space-x-1 font-bold focus:outline-none"
+                  style="color: rgb(24, 144, 255);"
+                >
+                  <span>
+                    Username
+                  </span>
+                  <svg
+                    aria-hidden="true"
+                    class="h-5 w-4 "
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g>
+                      <path
+                        d="M0 0h24v24H0z"
+                        fill="none"
+                      />
+                      <path
+                        d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z"
+                      />
+                    </g>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <main
+          class="flex-1 relative overflow-y-auto focus:outline-none"
+        >
+          <div
+            class="bg-white"
+          >
+            <div
+              class="max-w-7xl px-4 sm:p-6 md:p-8 bg-white m-auto"
+            >
+              <div
+                class="flex flex-col"
+              >
+                <div
+                  class="mt-12 mx-auto grid gap-5 grid-cols-3 xl:grid-cols-4 lg:max-w-none"
+                >
+                  <div
+                    class="flex flex-col"
+                  >
+                    <div
+                      class=""
+                    >
+                      <img
+                        alt=""
+                        class="h-44 w-full object-cover"
+                      />
+                    </div>
+                    <div
+                      class="px-6 py-4 border border-vca-grey-4"
+                    >
+                      <div
+                        class="flex flex-row mb-4"
+                      >
+                        <div>
+                          <svg
+                            fill="none"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M16 4C16.2652 4 16.5196 4.10536 16.7071 4.29289C16.8946 4.48043 17 4.73478 17 5V9.2L22.213 5.55C22.288 5.49746 22.3759 5.4665 22.4672 5.4605C22.5586 5.4545 22.6498 5.4737 22.731 5.51599C22.8122 5.55829 22.8802 5.62206 22.9276 5.70035C22.9751 5.77865 23.0001 5.86846 23 5.96V18.04C23.0001 18.1315 22.9751 18.2214 22.9276 18.2996C22.8802 18.3779 22.8122 18.4417 22.731 18.484C22.6498 18.5263 22.5586 18.5455 22.4672 18.5395C22.3759 18.5335 22.288 18.5025 22.213 18.45L17 14.8V19C17 19.2652 16.8946 19.5196 16.7071 19.7071C16.5196 19.8946 16.2652 20 16 20H2C1.73478 20 1.48043 19.8946 1.29289 19.7071C1.10536 19.5196 1 19.2652 1 19V5C1 4.73478 1.10536 4.48043 1.29289 4.29289C1.48043 4.10536 1.73478 4 2 4H16ZM15 6H3V18H15V6ZM7.4 8.829C7.47611 8.82879 7.55069 8.8503 7.615 8.891L11.97 11.663C12.0266 11.6992 12.0731 11.749 12.1054 11.8079C12.1376 11.8668 12.1545 11.9329 12.1545 12C12.1545 12.0671 12.1376 12.1332 12.1054 12.1921C12.0731 12.251 12.0266 12.3008 11.97 12.337L7.615 15.11C7.55434 15.1487 7.48438 15.1703 7.41248 15.1725C7.34059 15.1748 7.26941 15.1576 7.20646 15.1228C7.14351 15.088 7.0911 15.0368 7.05477 14.9747C7.01844 14.9127 6.99951 14.8419 7 14.77V9.23C7 9.009 7.18 8.83 7.4 8.83V8.829ZM21 8.84L17 11.64V12.358L21 15.158V8.84Z"
+                              fill="#4F4F4F"
+                            />
+                          </svg>
+                        </div>
+                        <div
+                          class="text-vca-grey-2 text-base font-bold ml-2"
+                          role="heading"
+                        >
+                          Animation
+                        </div>
+                      </div>
+                      <div
+                        class="text-vca-grey-3"
+                      >
+                        Animation description
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="flex flex-col"
+                  >
+                    <div
+                      class=""
+                    >
+                      <img
+                        alt=""
+                        class="h-44 w-full object-cover"
+                        src="https://vca-documents.s3.ca-central-1.amazonaws.com/1e/abe1d0a4eb46459091206bfd305e6c/Media.png"
+                      />
+                    </div>
+                    <div
+                      class="px-6 py-4 border border-vca-grey-4"
+                    >
+                      <div
+                        class="flex flex-row mb-4"
+                      >
+                        <div>
+                          <svg
+                            fill="none"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 5H4V19L13.292 9.706C13.4795 9.51853 13.7338 9.41321 13.999 9.41321C14.2642 9.41321 14.5185 9.51853 14.706 9.706L20 15.01V5ZM2 3.993C2.00183 3.73038 2.1069 3.47902 2.29251 3.29322C2.47813 3.10742 2.72938 3.00209 2.992 3H21.008C21.556 3 22 3.445 22 3.993V20.007C21.9982 20.2696 21.8931 20.521 21.7075 20.7068C21.5219 20.8926 21.2706 20.9979 21.008 21H2.992C2.72881 20.9997 2.4765 20.895 2.29049 20.7088C2.10448 20.5226 2 20.2702 2 20.007V3.993ZM8 11C7.46957 11 6.96086 10.7893 6.58579 10.4142C6.21071 10.0391 6 9.53043 6 9C6 8.46957 6.21071 7.96086 6.58579 7.58579C6.96086 7.21071 7.46957 7 8 7C8.53043 7 9.03914 7.21071 9.41421 7.58579C9.78929 7.96086 10 8.46957 10 9C10 9.53043 9.78929 10.0391 9.41421 10.4142C9.03914 10.7893 8.53043 11 8 11Z"
+                              fill="#4F4F4F"
+                            />
+                          </svg>
+                        </div>
+                        <div
+                          class="text-vca-grey-2 text-base font-bold ml-2"
+                          role="heading"
+                        >
+                          Media page
+                        </div>
+                      </div>
+                      <div
+                        class="text-vca-grey-3"
+                      >
+                        Media page description
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="flex flex-col"
+                  >
+                    <div
+                      class="w-full h-44 justify-center items-center bg-blue-100 flex flex-col"
+                    >
+                      <svg
+                        fill="none"
+                        height="100"
+                        viewBox="0 0 100 100"
+                        width="100"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M76.5625 95.3125H23.4375C20.9511 95.3125 18.5665 94.3248 16.8084 92.5666C15.0502 90.8085 14.0625 88.4239 14.0625 85.9375V14.0625C14.0625 11.5761 15.0502 9.19153 16.8084 7.43337C18.5665 5.67522 20.9511 4.6875 23.4375 4.6875H67.1875L85.9375 23.4375V85.9375C85.9375 88.4239 84.9498 90.8085 83.1916 92.5666C81.4335 94.3248 79.0489 95.3125 76.5625 95.3125Z"
+                          fill="#ADCDEA"
+                        />
+                        <path
+                          d="M26.5625 26.5625H42.1875V45.3125H26.5625V26.5625Z"
+                          fill="#316FAA"
+                        />
+                        <path
+                          d="M14 70H86V85.625C86 88.1114 85.0106 90.496 83.2494 92.2541C81.4882 94.0123 79.0994 95 76.6087 95H23.3913C20.9006 95 18.5119 94.0123 16.7506 92.2541C14.9894 90.496 14 88.1114 14 85.625V70Z"
+                          fill="#316FAA"
+                        />
+                        <path
+                          d="M30.7878 76.1152H35.5427C36.615 76.1152 37.4324 76.1973 37.9949 76.3613C38.7507 76.584 39.3982 76.9795 39.9373 77.5479C40.4763 78.1162 40.8865 78.8135 41.1677 79.6396C41.449 80.46 41.5896 81.4736 41.5896 82.6807C41.5896 83.7412 41.4578 84.6553 41.1941 85.4229C40.8718 86.3604 40.4119 87.1191 39.8142 87.6992C39.363 88.1387 38.7537 88.4814 37.9861 88.7275C37.4119 88.9092 36.6443 89 35.6833 89H30.7878V76.1152ZM33.3894 78.2949V86.8291H35.3318C36.0583 86.8291 36.5828 86.7881 36.905 86.7061C37.3269 86.6006 37.6755 86.4219 37.9509 86.1699C38.2322 85.918 38.4607 85.5049 38.6365 84.9307C38.8123 84.3506 38.9001 83.5625 38.9001 82.5664C38.9001 81.5703 38.8123 80.8057 38.6365 80.2725C38.4607 79.7393 38.2146 79.3232 37.8982 79.0244C37.5818 78.7256 37.1804 78.5234 36.6941 78.418C36.3308 78.3359 35.6189 78.2949 34.5583 78.2949H33.3894Z"
+                          fill="white"
+                        />
+                        <path
+                          d="M43.2771 82.6367C43.2771 81.3242 43.4734 80.2227 43.866 79.332C44.1589 78.6758 44.5574 78.0869 45.0613 77.5654C45.571 77.0439 46.1277 76.6572 46.7312 76.4053C47.5339 76.0654 48.4597 75.8955 49.5085 75.8955C51.407 75.8955 52.9246 76.4844 54.0613 77.6621C55.2039 78.8398 55.7751 80.4775 55.7751 82.5752C55.7751 84.6553 55.2097 86.2842 54.0789 87.4619C52.948 88.6338 51.4363 89.2197 49.5437 89.2197C47.6277 89.2197 46.1042 88.6367 44.9734 87.4707C43.8425 86.2988 43.2771 84.6875 43.2771 82.6367ZM45.9578 82.5488C45.9578 84.0078 46.2947 85.1152 46.9685 85.8711C47.6423 86.6211 48.4978 86.9961 49.5349 86.9961C50.572 86.9961 51.4216 86.624 52.0837 85.8799C52.7517 85.1299 53.0857 84.0078 53.0857 82.5137C53.0857 81.0371 52.7605 79.9355 52.1101 79.209C51.4656 78.4824 50.6072 78.1191 49.5349 78.1191C48.4626 78.1191 47.5984 78.4883 46.9421 79.2266C46.2859 79.959 45.9578 81.0664 45.9578 82.5488Z"
+                          fill="white"
+                        />
+                        <path
+                          d="M66.0583 84.2627L68.5808 85.0625C68.1941 86.4688 67.5496 87.5146 66.6472 88.2002C65.7507 88.8799 64.6111 89.2197 63.2283 89.2197C61.5173 89.2197 60.1111 88.6367 59.0095 87.4707C57.908 86.2988 57.3572 84.6992 57.3572 82.6719C57.3572 80.5273 57.9109 78.8633 59.0183 77.6797C60.1257 76.4902 61.5818 75.8955 63.3865 75.8955C64.9626 75.8955 66.2429 76.3613 67.2273 77.293C67.8132 77.8438 68.2527 78.6348 68.5457 79.666L65.9705 80.2812C65.8181 79.6133 65.4988 79.0859 65.0125 78.6992C64.532 78.3125 63.946 78.1191 63.2546 78.1191C62.2996 78.1191 61.5232 78.4619 60.9255 79.1475C60.3337 79.833 60.0378 80.9434 60.0378 82.4785C60.0378 84.1074 60.3308 85.2676 60.9167 85.959C61.5027 86.6504 62.2644 86.9961 63.2019 86.9961C63.8933 86.9961 64.488 86.7764 64.9861 86.3369C65.4841 85.8975 65.8416 85.2061 66.0583 84.2627Z"
+                          fill="white"
+                        />
+                        <path
+                          d="M85.9375 23.4375H76.5625C74.0761 23.4375 71.6915 22.4498 69.9334 20.6916C68.1752 18.9335 67.1875 16.5489 67.1875 14.0625V4.6875L85.9375 23.4375Z"
+                          fill="#639BD1"
+                        />
+                        <path
+                          d="M73.4375 34.375H48.4375C48.0231 34.375 47.6257 34.2104 47.3326 33.9174C47.0396 33.6243 46.875 33.2269 46.875 32.8125C46.875 32.3981 47.0396 32.0007 47.3326 31.7076C47.6257 31.4146 48.0231 31.25 48.4375 31.25H73.4375C73.8519 31.25 74.2493 31.4146 74.5424 31.7076C74.8354 32.0007 75 32.3981 75 32.8125C75 33.2269 74.8354 33.6243 74.5424 33.9174C74.2493 34.2104 73.8519 34.375 73.4375 34.375Z"
+                          fill="#639BD1"
+                        />
+                        <path
+                          d="M54.6875 40.625H48.4375C48.0231 40.625 47.6257 40.4604 47.3326 40.1674C47.0396 39.8743 46.875 39.4769 46.875 39.0625C46.875 38.6481 47.0396 38.2507 47.3326 37.9576C47.6257 37.6646 48.0231 37.5 48.4375 37.5H54.6875C55.1019 37.5 55.4993 37.6646 55.7924 37.9576C56.0854 38.2507 56.25 38.6481 56.25 39.0625C56.25 39.4769 56.0854 39.8743 55.7924 40.1674C55.4993 40.4604 55.1019 40.625 54.6875 40.625Z"
+                          fill="#639BD1"
+                        />
+                        <path
+                          d="M73.4375 46.875H48.4375C48.0231 46.875 47.6257 46.7104 47.3326 46.4174C47.0396 46.1243 46.875 45.7269 46.875 45.3125C46.875 44.8981 47.0396 44.5007 47.3326 44.2076C47.6257 43.9146 48.0231 43.75 48.4375 43.75H73.4375C73.8519 43.75 74.2493 43.9146 74.5424 44.2076C74.8354 44.5007 75 44.8981 75 45.3125C75 45.7269 74.8354 46.1243 74.5424 46.4174C74.2493 46.7104 73.8519 46.875 73.4375 46.875Z"
+                          fill="#639BD1"
+                        />
+                        <path
+                          d="M62.5 53.125H26.5625C26.1481 53.125 25.7507 52.9604 25.4576 52.6674C25.1646 52.3743 25 51.9769 25 51.5625C25 51.1481 25.1646 50.7507 25.4576 50.4576C25.7507 50.1646 26.1481 50 26.5625 50H62.5C62.9144 50 63.3118 50.1646 63.6049 50.4576C63.8979 50.7507 64.0625 51.1481 64.0625 51.5625C64.0625 51.9769 63.8979 52.3743 63.6049 52.6674C63.3118 52.9604 62.9144 53.125 62.5 53.125Z"
+                          fill="#639BD1"
+                        />
+                        <path
+                          d="M73.4375 40.625H60.9375C60.5231 40.625 60.1257 40.4604 59.8326 40.1674C59.5396 39.8743 59.375 39.4769 59.375 39.0625C59.375 38.6481 59.5396 38.2507 59.8326 37.9576C60.1257 37.6646 60.5231 37.5 60.9375 37.5H73.4375C73.8519 37.5 74.2493 37.6646 74.5424 37.9576C74.8354 38.2507 75 38.6481 75 39.0625C75 39.4769 74.8354 39.8743 74.5424 40.1674C74.2493 40.4604 73.8519 40.625 73.4375 40.625Z"
+                          fill="#639BD1"
+                        />
+                        <path
+                          d="M73.4375 53.125H68.75C68.3356 53.125 67.9382 52.9604 67.6451 52.6674C67.3521 52.3743 67.1875 51.9769 67.1875 51.5625C67.1875 51.1481 67.3521 50.7507 67.6451 50.4576C67.9382 50.1646 68.3356 50 68.75 50H73.4375C73.8519 50 74.2493 50.1646 74.5424 50.4576C74.8354 50.7507 75 51.1481 75 51.5625C75 51.9769 74.8354 52.3743 74.5424 52.6674C74.2493 52.9604 73.8519 53.125 73.4375 53.125Z"
+                          fill="#639BD1"
+                        />
+                        <path
+                          d="M35.9375 59.375H26.5625C26.1481 59.375 25.7507 59.2104 25.4576 58.9174C25.1646 58.6243 25 58.2269 25 57.8125C25 57.3981 25.1646 57.0007 25.4576 56.7076C25.7507 56.4146 26.1481 56.25 26.5625 56.25H35.9375C36.3519 56.25 36.7493 56.4146 37.0424 56.7076C37.3354 57.0007 37.5 57.3981 37.5 57.8125C37.5 58.2269 37.3354 58.6243 37.0424 58.9174C36.7493 59.2104 36.3519 59.375 35.9375 59.375Z"
+                          fill="#639BD1"
+                        />
+                        <path
+                          d="M57.8125 59.375H42.1875C41.7731 59.375 41.3757 59.2104 41.0826 58.9174C40.7896 58.6243 40.625 58.2269 40.625 57.8125C40.625 57.3981 40.7896 57.0007 41.0826 56.7076C41.3757 56.4146 41.7731 56.25 42.1875 56.25H57.8125C58.2269 56.25 58.6243 56.4146 58.9174 56.7076C59.2104 57.0007 59.375 57.3981 59.375 57.8125C59.375 58.2269 59.2104 58.6243 58.9174 58.9174C58.6243 59.2104 58.2269 59.375 57.8125 59.375Z"
+                          fill="#639BD1"
+                        />
+                        <path
+                          d="M73.4375 59.375H64.0625C63.6481 59.375 63.2507 59.2104 62.9576 58.9174C62.6646 58.6243 62.5 58.2269 62.5 57.8125C62.5 57.3981 62.6646 57.0007 62.9576 56.7076C63.2507 56.4146 63.6481 56.25 64.0625 56.25H73.4375C73.8519 56.25 74.2493 56.4146 74.5424 56.7076C74.8354 57.0007 75 57.3981 75 57.8125C75 58.2269 74.8354 58.6243 74.5424 58.9174C74.2493 59.2104 73.8519 59.375 73.4375 59.375Z"
+                          fill="#639BD1"
+                        />
+                        <path
+                          d="M60.9375 28.125H48.4375C48.0231 28.125 47.6257 27.9604 47.3326 27.6674C47.0396 27.3743 46.875 26.9769 46.875 26.5625C46.875 26.1481 47.0396 25.7507 47.3326 25.4576C47.6257 25.1646 48.0231 25 48.4375 25H60.9375C61.3519 25 61.7493 25.1646 62.0424 25.4576C62.3354 25.7507 62.5 26.1481 62.5 26.5625C62.5 26.9769 62.3354 27.3743 62.0424 27.6674C61.7493 27.9604 61.3519 28.125 60.9375 28.125Z"
+                          fill="#639BD1"
+                        />
+                      </svg>
+                    </div>
+                    <div
+                      class="px-6 py-4 border border-vca-grey-4"
+                    >
+                      <div
+                        class="flex flex-row mb-4"
+                      >
+                        <div>
+                          <svg
+                            fill="none"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M19 22H5C4.20435 22 3.44129 21.6839 2.87868 21.1213C2.31607 20.5587 2 19.7956 2 19V3C2 2.73478 2.10536 2.48043 2.29289 2.29289C2.48043 2.10536 2.73478 2 3 2H17C17.2652 2 17.5196 2.10536 17.7071 2.29289C17.8946 2.48043 18 2.73478 18 3V15H22V19C22 19.7956 21.6839 20.5587 21.1213 21.1213C20.5587 21.6839 19.7956 22 19 22ZM18 17V19C18 19.2652 18.1054 19.5196 18.2929 19.7071C18.4804 19.8946 18.7348 20 19 20C19.2652 20 19.5196 19.8946 19.7071 19.7071C19.8946 19.5196 20 19.2652 20 19V17H18ZM16 20V4H4V19C4 19.2652 4.10536 19.5196 4.29289 19.7071C4.48043 19.8946 4.73478 20 5 20H16ZM6 7H14V9H6V7ZM6 11H14V13H6V11ZM6 15H11V17H6V15Z"
+                              fill="#4F4F4F"
+                            />
+                          </svg>
+                        </div>
+                        <div
+                          class="text-vca-grey-2 text-base font-bold ml-2"
+                          role="heading"
+                        >
+                          Color
+                        </div>
+                      </div>
+                      <div
+                        class="text-vca-grey-3"
+                      >
+                        color description
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="mt-9 flex flex-row justify-between"
+                >
+                  <a
+                    aria-label="Previous"
+                    href="?page=0"
+                  >
+                    <div
+                      class="mt-4 flex flex-row"
+                    >
+                      <svg
+                        class="h-6 w-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                    <div
+                      class="ml-2"
+                    >
+                      Previous
+                    </div>
+                  </a>
+                  <a
+                    aria-label="Next"
+                    href="?page=1"
+                  >
+                    <div
+                      class="mr-2 mt-4 flex flex-row"
+                    >
+                      Next
+                    </div>
+                    <div>
+                      <svg
+                        class="h-6 w-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M14 5l7 7m0 0l-7 7m7-7H3"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+  <div
+    class=""
+  />
+</DocumentFragment>
+`;

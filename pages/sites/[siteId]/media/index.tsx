@@ -8,7 +8,7 @@ import { MediaItemCard } from '../../../../components/MediaItem/MediaItemCard';
 import { GET_ALL_MEDIA } from '../../../../graphql/media/mutation';
 import { createApolloClient } from '../../../../lib/apollo';
 
-function ListMedia({ medias }) {
+export function ListMedia({ medias }) {
   const router = useRouter();
   const page = parseInt(router.query?.page as string, 10) || 0;
   const nextPage = `${router.asPath.split('?')[0]}?page=${page + 1}`;
@@ -24,47 +24,43 @@ function ListMedia({ medias }) {
           ))}
         </div>
         <div className="mt-9 flex flex-row justify-between">
-          <Link href={`${prevPage}`}>
-            <a className="mt-4 flex flex-row">
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                  />
-                </svg>
-              </div>
-              <div className="ml-2">Previous</div>
-            </a>
+          <Link aria-label="Previous" href={`${prevPage}`}>
+            <div className="mt-4 flex flex-row">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
+              </svg>
+            </div>
+            <div className="ml-2">Previous</div>
           </Link>
-          <Link href={`${nextPage}`}>
-            <a className="mt-4 flex flex-row">
-              <div className="mr-2">Next</div>
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                  />
-                </svg>
-              </div>
-            </a>
+          <Link aria-label="Next" href={`${nextPage}`}>
+            <div className="mr-2 mt-4 flex flex-row">Next</div>
+            <div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                />
+              </svg>
+            </div>
           </Link>
         </div>
       </div>

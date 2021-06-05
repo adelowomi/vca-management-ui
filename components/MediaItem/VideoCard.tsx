@@ -24,7 +24,10 @@ export const VideoCard = ({ media }) => {
               />
             </svg>
           </div>
-          <div className="text-vca-grey-2 text-base font-bold ml-2">
+          <div
+            role="heading"
+            className="text-vca-grey-2 text-base font-bold ml-2"
+          >
             {media.name}
           </div>
         </div>

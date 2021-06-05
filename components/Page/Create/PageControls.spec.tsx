@@ -7,25 +7,15 @@ describe('PageHeaderStyle', () => {
   it('should render PageHeaderStyle snapshot', () => {
     const mockOnButtonClick = jest.fn();
     const { asFragment } = render(
-      <PageControls
-        handleChange={mockOnButtonClick}
-        onSubmit={mockOnButtonClick}
-        title="hello"
-      />
+      <PageControls onSubmit={mockOnButtonClick} title="hello" />
     );
     expect(asFragment()).toMatchSnapshot();
   });
 
   it('should render PageHeaderStyle snapshot', () => {
     const mockOnButtonClick = jest.fn();
-    render(
-      <PageControls
-        handleChange={mockOnButtonClick}
-        onSubmit={mockOnButtonClick}
-        title="hello"
-      />
-    );
-    fireEvent.click(screen.getByText('Header Type 1'));
+    render(<PageControls onSubmit={mockOnButtonClick} title="hello" />);
+    fireEvent.click(screen.getByText('Save & Publish'));
     expect(mockOnButtonClick).toHaveBeenCalledTimes(1);
   });
 });
