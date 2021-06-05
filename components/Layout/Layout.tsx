@@ -82,7 +82,7 @@ export default function Layout({ children }) {
   const routes = asPath.split('/');
 
   return (
-    <div className="h-screen flex overflow-hidden bg-gray-100">
+    <div className="h-screen flex overflow-hidden bg-white">
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
           as="div"

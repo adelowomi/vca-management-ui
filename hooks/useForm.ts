@@ -39,7 +39,7 @@ const useForm = (
     site: (page && page.site) || siteId,
     menuItem: (page && page.menuItem) || '',
     mediaUrl:
-      (page && page.menuItem) ||
+      (page && page.hero.media.image.medium) ||
       `https://res.cloudinary.com/harmonic-coder/image/upload/v1616629484/crew-IXHNBGTKJfw-unsplash_m3g2mg.png`,
     headerText: (page && page.hero.heading) || '',
     captionText: (page && page.hero.caption) || '',

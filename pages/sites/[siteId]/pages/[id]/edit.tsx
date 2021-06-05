@@ -2,6 +2,7 @@ import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Hero } from '../../../../../components/Hero/Hero';
 import Layout from '../../../../../components/Layout/Layout';
 import { CallToAction } from '../../../../../components/Page/Create/CallToAction';
 import { CreateWidget } from '../../../../../components/Page/Create/CreateWidget';
@@ -18,13 +19,15 @@ import { Textposition } from '../../../../../components/Page/Create/TextPosition
 import {
   GET_ALL_ITEMS_QUERY,
   GET_SITE_MENUITEMS,
+  GET_WIDGET,
   PAGE_QUERY,
 } from '../../../../../graphql';
+import { GET_ALL_MEDIA } from '../../../../../graphql/media.gql';
 import { validator } from '../../../../../helpers/validator';
 import useForm from '../../../../../hooks/useForm';
 import { createApolloClient } from '../../../../../lib/apollo';
 
-const edit = ({ token, menuItems, page, items }) => {
+const edit = ({ token, menuItems, page, items, error, widget, medias }) => {
   const client = createApolloClient(token);
   const {
     query: { siteId, id: pageId },
@@ -54,11 +57,18 @@ const edit = ({ token, menuItems, page, items }) => {
       location: e.currentTarget.dataset.textposition,
     });
   };
+  if (error) {
+    return <div>error: {error}</div>;
+  }
 
   return (
     <Layout>
       <Container>
-        <PageControls onSubmit={handleSubmit} title="Edit page" />
+        <PageControls
+          onSubmit={handleSubmit}
+          title="Edit page"
+          siteId={siteId}
+        />
         <PageTitle
           pageTitle={state.pageTitle}
           handleChange={handleChange}
@@ -70,6 +80,10 @@ const edit = ({ token, menuItems, page, items }) => {
         <PageHeaderStyle
           onButtonClick={onButtonClick}
           headerType={state.headerType}
+          medias={medias}
+          state={state}
+          setState={setState}
+          handleSubmit={handleSubmit}
         />
 
         <Textposition
@@ -88,9 +102,25 @@ const edit = ({ token, menuItems, page, items }) => {
           errors={errors}
           hasAction={state.hasAction}
         />
+        <div className="mt-5 mb-5">
+          <Hero
+            mediaUrl={state.mediaUrl}
+            actionText={state.actionText}
+            heading={state.pageTitle}
+            location={state.location}
+            hasAction={state.hasAction}
+            caption={state.captionText}
+            type={state.headerType}
+          />
+        </div>
         <hr className="border-gray-400 border-5 w-full mt-8" />
-
-        <CreateWidget client={client} pageId={pageId} items={items} />
+        {/* {console.log('Edit ITEMS', items)} */}
+        <CreateWidget
+          client={client}
+          pageId={pageId}
+          items={items}
+          widget={widget}
+        />
 
         <hr className="border-gray-400 border-5 w-full mt-8" />
         <PagePosts items={items} client={client} pageId={pageId} />
@@ -109,8 +139,8 @@ const edit = ({ token, menuItems, page, items }) => {
 
 export async function getServerSideProps(ctx) {
   const { siteId, id: pageId } = ctx.query;
-  const client = createApolloClient('');
   const session: Session = getSession(ctx.req, ctx.res);
+  const client = createApolloClient(session?.idToken);
 
   try {
     const {
@@ -119,24 +149,10 @@ export async function getServerSideProps(ctx) {
       query: PAGE_QUERY,
       variables: {
         filter: {
-          combinedFilter: {
-            logicalOperator: 'OR',
-            filters: [
-              {
-                singleFilter: {
-                  field: '_id',
-                  operator: 'EQ',
-                  value: pageId,
-                },
-              },
-              {
-                singleFilter: {
-                  field: 'site',
-                  operator: 'EQ',
-                  value: ctx.query.siteId,
-                },
-              },
-            ],
+          singleFilter: {
+            field: '_id',
+            operator: 'EQ',
+            value: pageId,
           },
         },
       },
@@ -150,13 +166,23 @@ export async function getServerSideProps(ctx) {
         siteId: siteId,
         filter: {
           singleFilter: {
-            field: 'pageId',
+            field: 'siteId',
             operator: 'EQ',
-            value: page.id,
+            value: siteId,
           },
         },
       },
     });
+
+    const {
+      data: { medias },
+    } = await client.query({
+      query: GET_ALL_MEDIA,
+      variables: {
+        filter: {},
+      },
+    });
+
     const {
       data: {
         siteMenuItems: {
@@ -182,12 +208,28 @@ export async function getServerSideProps(ctx) {
       },
     });
 
+    const {
+      data: { widget },
+    } = await client.query({
+      query: GET_WIDGET,
+      variables: {
+        filter: {
+          singleFilter: {
+            field: 'page',
+            operator: 'EQ',
+            value: pageId,
+          },
+        },
+      },
+    });
     return {
       props: {
         page,
         token: session.idToken,
         items: getAllItems,
         menuItems,
+        widget,
+        medias,
       },
     };
   } catch (error) {

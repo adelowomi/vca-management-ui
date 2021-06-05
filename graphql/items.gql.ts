@@ -14,15 +14,25 @@ const GET_ALL_ITEMS_QUERY = gql`
     ) {
       id
       type
-      mediaUrl
-      slug
+      description
       content
-      draft
       featured
+      slug
+      draft
       category
-      tags
+      mediaUrl
       createdAt
       updatedAt
+      tags
+      media {
+        image {
+          small
+        }
+        video
+        document {
+          url
+        }
+      }
     }
   }
 `;

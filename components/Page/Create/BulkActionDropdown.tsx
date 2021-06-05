@@ -65,7 +65,7 @@ export const BulkActionDropdown = () => {
                         'block px-4 py-2 text-sm border-b border-gray-200'
                       )}
                     >
-                      Account settings
+                      Deactivate
                     </a>
                   )}
                 </Menu.Item>
@@ -78,7 +78,7 @@ export const BulkActionDropdown = () => {
                         'block px-4 py-2 text-sm border-b border-gray-200'
                       )}
                     >
-                      Support
+                      Delete
                     </a>
                   )}
                 </Menu.Item>
@@ -91,7 +91,7 @@ export const BulkActionDropdown = () => {
                         'block px-4 py-2 text-sm border-b border-gray-200'
                       )}
                     >
-                      License
+                      lorem Ipsum
                     </a>
                   )}
                 </Menu.Item>

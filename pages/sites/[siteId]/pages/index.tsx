@@ -2,6 +2,7 @@ import { getSession } from '@auth0/nextjs-auth0';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0/dist/frontend';
 import moment from 'moment';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
@@ -10,10 +11,6 @@ import Layout from '../../../../components/Layout/Layout';
 import { BulkActionDropdown } from '../../../../components/Page/Create/BulkActionDropdown';
 import { PAGES_QUERY } from '../../../../graphql';
 import { createApolloClient } from '../../../../lib/apollo';
-
-interface Iprops {
-  $big: boolean;
-}
 
 const PageActionsWrapper = tw.div`
 flex
@@ -61,12 +58,17 @@ const P = tw.p`
 `;
 
 const Pages = ({ pages }) => {
+  const {
+    query: { siteId },
+  } = useRouter();
   return (
     <Layout>
       <PageActionsWrapper>
         <PageActionsColOne>
           <h1 className="text-4xl font-semibold">Pages</h1>
-          <PageActionsColOneBtn>Add New</PageActionsColOneBtn>
+          <PageActionsColOneBtn className="focus:outline-none">
+            <Link href={`/sites/${siteId}/pages/create`}> Add New</Link>
+          </PageActionsColOneBtn>
         </PageActionsColOne>
         <div className=" flex mt-7">
           <BulkActionDropdown />
@@ -105,7 +107,12 @@ const Pages = ({ pages }) => {
                         scope="col"
                         className="px-6 tracking-wider font-light py-4"
                       >
-                        <input type="checkbox" name="" id="" />
+                        <input
+                          type="checkbox"
+                          name=""
+                          id=""
+                          className="h-5 w-6"
+                        />
                       </th>
                       <th scope="col" className="px-6 tracking-wider">
                         Page Title
@@ -127,7 +134,7 @@ const Pages = ({ pages }) => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
                           <input
                             type="checkbox"
-                            className="px-3"
+                            className="px-3 h-5 w-6 border border-gray-300"
                             name=""
                             id=""
                           />
@@ -151,12 +158,8 @@ const Pages = ({ pages }) => {
                           </Link>
                         </td>
                         <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
-                          <Link href={`/sites/${el.site}/pages/${el.id}`}>
-                            <Link
-                              href={`/sites/${el.site}/pages/${el.id}/edit`}
-                            >
-                              edit
-                            </Link>
+                          <Link href={`/sites/${el.site}/pages/${el.id}/edit`}>
+                            edit
                           </Link>
                         </td>
                       </tr>
@@ -204,6 +207,7 @@ export async function getServerSideProps(ctx) {
       },
     },
   });
+
   return { props: { pages } };
 }
 

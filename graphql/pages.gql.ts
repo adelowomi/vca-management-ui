@@ -23,24 +23,30 @@ const PAGES_QUERY = gql`
 `;
 
 const PAGE_QUERY = gql`
-  query Page($limit: Int, $offset: Int, $filter: FilterInput) {
-    page(filter: $filter, limit: $limit, offset: $offset) {
-      id
-      name
-      tags
-      site
-      menuItem
-      createdAt
-      hero {
-        type
-        caption
-        mediaUrl
-        heading
-        hasAction
-        actionText
-        actionSlug
-        location
+query Page($filter: FilterInput) {
+  page(filter: $filter) {
+    id
+    name
+    tags
+    site
+    menuItem
+    createdAt
+    hero {
+      media{
+        image{
+          small
+          medium
+          large
+        }
       }
+      type
+      caption
+      mediaUrl
+      heading
+      hasAction
+      actionText
+      actionSlug
+      location
     }
   }
 `;

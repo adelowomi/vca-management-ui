@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { SelectMediaModal } from '../../utilsGroup/SelectMediaModal';
 import { HeaderTypeBtn } from './PageButtons';
 import {
   ColumnSection,
@@ -11,12 +12,21 @@ import {
 export interface PageHeaderStyleProps {
   onButtonClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   headerType: string;
+  state: any;
+  setState: any;
+  medias: any;
+  handleSubmit: any;
 }
 
 export function PageHeaderStyle({
   onButtonClick,
   headerType,
+  state,
+  setState,
+  medias,
+  handleSubmit,
 }: PageHeaderStyleProps) {
+  const [open, setOpen] = React.useState(false);
   return (
     <>
       <ColumnSection>
@@ -60,9 +70,20 @@ export function PageHeaderStyle({
           </HeaderTypeBtn>
         </HeaderTypeWrapper>
         <H2 className="mt-6">Media Image</H2>
-        <ImageSelectBox className="mt-5 w-96 flex items-center justify-center cursor-pointer">
+        <ImageSelectBox
+          onClick={() => setOpen(!open)}
+          className="mt-5 w-96 flex items-center justify-center cursor-pointer"
+        >
           <p>+ Select from media gallery</p>
         </ImageSelectBox>
+        <SelectMediaModal
+          open={open}
+          setOpen={setOpen}
+          medias={medias}
+          state={state}
+          setState={setState}
+          handleSubmit={handleSubmit}
+        />
       </ColumnSection>
     </>
   );
