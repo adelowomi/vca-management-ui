@@ -15,6 +15,7 @@ export interface PageHeaderStyleProps {
   state: any;
   setState: any;
   medias: any;
+  handleSubmit?: any;
 }
 
 export function PageHeaderStyle({
