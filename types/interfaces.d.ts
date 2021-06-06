@@ -41,5 +41,5 @@ export interface WidgetStateProps {
 export interface WidgetErrorProps {
   widgetDescription?: string;
   widgetTitle?: string;
-  widgetItems: string[];
+  widgetItems?: string[];
 }

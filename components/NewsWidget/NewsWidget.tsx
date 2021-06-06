@@ -45,7 +45,7 @@ interface CardsProps {
   content: string;
 }
 type newsWidgetProps = {
-  items: CardsProps[];
+  items: any;
   contain: boolean;
   title: string;
   desc: string;

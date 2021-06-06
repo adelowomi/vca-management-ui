@@ -2,6 +2,7 @@ import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Hero } from '../../../../components/Hero/Hero';
 import Layout from '../../../../components/Layout/Layout';
 import { CallToAction } from '../../../../components/Page/Create/CallToAction';
 import { ShadowBtn } from '../../../../components/Page/Create/PageButtons';
@@ -13,12 +14,12 @@ import {
 } from '../../../../components/Page/Create/pageStyledElements';
 import { PageTitle } from '../../../../components/Page/Create/PageTitle';
 import { Textposition } from '../../../../components/Page/Create/TextPosition';
-import { GET_SITE_MENUITEMS } from '../../../../graphql';
+import { GET_ALL_MEDIA, GET_SITE_MENUITEMS } from '../../../../graphql';
 import { validator } from '../../../../helpers/validator';
 import useForm from '../../../../hooks/useForm';
 import { createApolloClient } from '../../../../lib/apollo';
 
-const create = ({ token, menuItems }) => {
+const create = ({ token, menuItems, medias }) => {
   const client = createApolloClient(token);
   const {
     query: { siteId },
@@ -69,6 +70,10 @@ const create = ({ token, menuItems }) => {
         <PageHeaderStyle
           onButtonClick={onButtonClick}
           headerType={state.headerType}
+          medias={medias}
+          state={state}
+          setState={setState}
+          handleSubmit={handleSubmit}
         />
 
         <Textposition
@@ -87,6 +92,17 @@ const create = ({ token, menuItems }) => {
           errors={errors}
           hasAction={state.hasAction}
         />
+        <div className="mt-5 mb-5">
+          <Hero
+            mediaUrl={state.mediaUrl}
+            actionText={state.actionText}
+            heading={state.pageTitle}
+            location={state.location}
+            hasAction={state.hasAction}
+            caption={state.captionText}
+            type={state.headerType}
+          />
+        </div>
         <ColumnSection>
           <div className="-mt-20">
             <ShadowBtn className="py-4 px-10 shadow-sm rounded text-sm font-bold">
@@ -128,7 +144,16 @@ export async function getServerSideProps(ctx) {
       },
     },
   });
-  return { props: { token: session?.idToken, menuItems } };
+  const {
+    data: { medias },
+  } = await client.query({
+    query: GET_ALL_MEDIA,
+    variables: {
+      filter: {},
+    },
+  });
+
+  return { props: { token: session?.idToken, menuItems, medias } };
 }
 
 export default withPageAuthRequired(create);

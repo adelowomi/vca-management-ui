@@ -15,7 +15,6 @@ export interface PageHeaderStyleProps {
   state: any;
   setState: any;
   medias: any;
-  handleSubmit: any;
 }
 
 export function PageHeaderStyle({
@@ -24,7 +23,6 @@ export function PageHeaderStyle({
   state,
   setState,
   medias,
-  handleSubmit,
 }: PageHeaderStyleProps) {
   const [open, setOpen] = React.useState(false);
   return (
@@ -82,7 +80,6 @@ export function PageHeaderStyle({
           medias={medias}
           state={state}
           setState={setState}
-          handleSubmit={handleSubmit}
         />
       </ColumnSection>
     </>

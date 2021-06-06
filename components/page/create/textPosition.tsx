@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { errorProps } from '../../../types/interfaces';
+import { ErrorProps } from '../../../types/interfaces';
 import { HeaderTypeBtn } from './PageButtons';
 import { Input } from './PageInput';
 import { ColumnSection, H2, HeaderPositionWrapper } from './pageStyledElements';
@@ -13,7 +13,7 @@ export interface TextpositionProps {
   headerText: string;
   captionText: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  errors: errorProps;
+  errors: ErrorProps;
 }
 
 export function Textposition({

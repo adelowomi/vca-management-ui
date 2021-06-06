@@ -10,7 +10,6 @@ export const SelectMediaModal = ({
   medias,
   state,
   setState,
-  handleSubmit,
 }): JSX.Element => {
   const cancelButtonRef = useRef();
 
@@ -58,7 +57,6 @@ export const SelectMediaModal = ({
                 medias={medias}
                 state={state}
                 setState={setState}
-                handleSubmit={handleSubmit}
               />
             </div>
           </Transition.Child>

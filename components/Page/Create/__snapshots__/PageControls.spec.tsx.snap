@@ -19,7 +19,11 @@ text-3xl"
         class="PageButtons__Btn-l92eit-1 eAbUXH"
         color="primary"
       >
-        Cancel
+        <a
+          href="/sites/1234/pages"
+        >
+           Cancel
+        </a>
       </button>
       <button
         class="PageButtons__Btn-l92eit-1 eIRvTE"

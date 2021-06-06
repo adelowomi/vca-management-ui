@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 
+import { User } from '../../types/interfaces';
 import { Button } from '..';
 
 const HeaderContaier = styled.div`
