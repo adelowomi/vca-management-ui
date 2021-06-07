@@ -23,30 +23,31 @@ const PAGES_QUERY = gql`
 `;
 
 const PAGE_QUERY = gql`
-query Page($filter: FilterInput) {
-  page(filter: $filter) {
-    id
-    name
-    tags
-    site
-    menuItem
-    createdAt
-    hero {
-      media{
-        image{
-          small
-          medium
-          large
+  query Page($filter: FilterInput) {
+    page(filter: $filter) {
+      id
+      name
+      tags
+      site
+      menuItem
+      createdAt
+      hero {
+        media {
+          image {
+            small
+            medium
+            large
+          }
         }
+        type
+        caption
+        mediaUrl
+        heading
+        hasAction
+        actionText
+        actionSlug
+        location
       }
-      type
-      caption
-      mediaUrl
-      heading
-      hasAction
-      actionText
-      actionSlug
-      location
     }
   }
 `;
