@@ -20,7 +20,6 @@ jobs:
       - name: test and build
         run: |
           npm run test
-          npm run test:e2e:ci
           npm run type-check
           npm run lint
           npm run build
