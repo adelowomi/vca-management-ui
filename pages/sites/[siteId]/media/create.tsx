@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { FormInput } from '../../../../components/FormInput/formInput';
-import FormSelect from '../../../../components/FormSelect/FormSelect';
+import FormSelect from '../../../../components/FormSelect/VcaSelect';
 import Layout from '../../../../components/Layout/Layout';
 import ErrorModal from '../../../../components/Modal/ErrorModal';
 import { CREATE_MEDIA } from '../../../../graphql/media/mutation';
