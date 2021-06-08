@@ -100,17 +100,16 @@ const Input: React.FC<InputProp> = ({
   ...rest
 }) => {
   const disabledClassName = disabled && 'app-disabled';
+  const inputStyle = errorDescription
+    ? 'shadow-sm focus:ring-red-500 focus:border-red-500 focus:border-2 block w-96 h-14 sm:text-sm border border-red-500 rounded-sm pl-4'
+    : 'shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:border-2 block w-96 h-14 sm:text-sm border border-gray-400 rounded-sm pl-4';
   return (
-    <div className="flex flex-col w-full px-0">
-      <label
-        htmlFor={name}
-        className="mb-2 text-sm font-medium app-greyish-brown"
-        id={label}
-      >
+    <div className="flex flex-col px-0">
+      <label htmlFor={name} className="mb-6 text-xl font-medium " id={label}>
         {label}
       </label>
       <input
-        className={mergeClassNames('app-input', disabledClassName, className)}
+        className={mergeClassNames(disabledClassName, className, inputStyle)}
         type={type}
         disabled={disabled}
         placeholder={placeholder}

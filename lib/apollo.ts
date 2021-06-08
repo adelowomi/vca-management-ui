@@ -14,10 +14,18 @@ export type ResolverContext = {
   res?: ServerResponse;
 };
 
-function createApolloClient(authToken: string) {
+export function createApolloClient(authToken: string) {
+  if (authToken === '') {
+    return new ApolloClient({
+      ssrMode: typeof window === 'undefined',
+      uri: process.env.NEXT_PUBLIC_API_URL,
+      cache: new InMemoryCache(),
+    });
+  }
+
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    uri: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+    uri: process.env.NEXT_PUBLIC_API_URL,
     cache: new InMemoryCache(),
     headers: {
       authorization: `Bearer ${authToken}`,

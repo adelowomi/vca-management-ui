@@ -7,7 +7,7 @@ module.exports = {
     config.externals['styletron-server'] = 'styletron-server';
     config.module.rules.push({
       test: /\.svg$/,
-      use: ["@svgr/webpack"]
+      use: ['@svgr/webpack'],
     });
     return config;
   },

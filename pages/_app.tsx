@@ -1,42 +1,37 @@
 import '../styles/global.css';
 
-import { getSession, UserProvider } from '@auth0/nextjs-auth0';
-import { BaseProvider } from 'baseui';
-import App, { AppProps } from 'next/app';
+import { UserProvider } from '@auth0/nextjs-auth0';
+import { BaseProvider, LightTheme } from 'baseui';
+import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
+import { ToastProvider } from 'react-toast-notifications';
 import styled, { ThemeProvider } from 'styled-components';
 import { Provider as StyletronProvider } from 'styletron-react';
 
 import * as locales from '../content/locale';
 import { ApolloProvider, useApollo } from '../lib/apollo';
 import { GlobalStyles, theme } from '../styles';
-import { appThemes } from '../styles/baseui-theme';
 import { styletron } from '../styletron';
 
 const Container = styled.div`
   margin: 0 auto;
   font-family: 'Avenir Next';
+  min-width: 1280px;
 `;
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const { locale, defaultLocale } = useRouter();
   const messages = locales[locale];
-  // if (!pageProps.idToken) {
-
-  // }
-  const apolloClient = useApollo(
-    pageProps.initialApolloState,
-    pageProps.idToken
-  );
+  const apolloClient = useApollo(pageProps.initialApolloState, '');
 
   return (
     <UserProvider>
       <ApolloProvider client={apolloClient}>
         <StyletronProvider value={styletron}>
-          <BaseProvider theme={appThemes}>
+          <BaseProvider theme={LightTheme}>
             <ThemeProvider theme={theme()}>
               <IntlProvider
                 locale={locale}
@@ -48,8 +43,14 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                   <meta name="Description" content="Qaltrak" />
                 </Head>
                 <Container>
-                  <GlobalStyles />
-                  <Component {...pageProps} />
+                  <ToastProvider
+                    autoDismiss={true}
+                    autoDismissTimeout={4000}
+                    transitionDuration={100}
+                  >
+                    <GlobalStyles />
+                    <Component {...pageProps} />
+                  </ToastProvider>
                 </Container>
               </IntlProvider>
             </ThemeProvider>
@@ -58,17 +59,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       </ApolloProvider>
     </UserProvider>
   );
-};
-
-MyApp.getInitialProps = async (appContext) => {
-  const session = await getSession(appContext.ctx.req, appContext.ctx.res);
-  const appProps = await App.getInitialProps(appContext);
-
-  if (!session) {
-    return { pageProps: {} };
-  }
-
-  return { pageProps: { ...appProps.pageProps, ...session } };
 };
 
 export default MyApp;

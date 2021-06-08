@@ -2,17 +2,17 @@
 
 exports[`Input Renders disabled input 1`] = `
 <div
-  class="flex flex-col w-full px-0"
+  class="flex flex-col px-0"
 >
   <label
-    class="mb-2 text-sm font-medium app-greyish-brown"
+    class="mb-6 text-xl font-medium "
     for="Default"
     id="Default"
   >
     Default
   </label>
   <input
-    class="app-input app-disabled"
+    class="app-disabled shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:border-2 block w-96 h-14 sm:text-sm border border-gray-400 rounded-sm pl-4"
     data-testid="input-test"
     disabled=""
     placeholder=""
@@ -24,17 +24,17 @@ exports[`Input Renders disabled input 1`] = `
 
 exports[`Input Renders error 1`] = `
 <div
-  class="flex flex-col w-full px-0"
+  class="flex flex-col px-0"
 >
   <label
-    class="mb-2 text-sm font-medium app-greyish-brown"
+    class="mb-6 text-xl font-medium "
     for="Default"
     id="Default"
   >
     Default
   </label>
   <input
-    class="app-input"
+    class="shadow-sm focus:ring-red-500 focus:border-red-500 focus:border-2 block w-96 h-14 sm:text-sm border border-red-500 rounded-sm pl-4"
     data-testid="input-test"
     placeholder=""
     type="text"
@@ -49,17 +49,17 @@ exports[`Input Renders error 1`] = `
 
 exports[`Input Renders input 1`] = `
 <div
-  class="flex flex-col w-full px-0"
+  class="flex flex-col px-0"
 >
   <label
-    class="mb-2 text-sm font-medium app-greyish-brown"
+    class="mb-6 text-xl font-medium "
     for="Default"
     id="Default"
   >
     Default
   </label>
   <input
-    class="app-input"
+    class="shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:border-2 block w-96 h-14 sm:text-sm border border-gray-400 rounded-sm pl-4"
     data-testid="input-test"
     placeholder=""
     type="text"
@@ -70,17 +70,17 @@ exports[`Input Renders input 1`] = `
 
 exports[`Input Renders input with maxLength 1`] = `
 <div
-  class="flex flex-col w-full px-0"
+  class="flex flex-col px-0"
 >
   <label
-    class="mb-2 text-sm font-medium app-greyish-brown"
+    class="mb-6 text-xl font-medium "
     for="Default"
     id="Default"
   >
     Default
   </label>
   <input
-    class="app-input"
+    class="shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:border-2 block w-96 h-14 sm:text-sm border border-gray-400 rounded-sm pl-4"
     data-testid="input-test"
     maxlength="6"
     placeholder=""
@@ -92,17 +92,17 @@ exports[`Input Renders input with maxLength 1`] = `
 
 exports[`Input Renders input with placeholder 1`] = `
 <div
-  class="flex flex-col w-full px-0"
+  class="flex flex-col px-0"
 >
   <label
-    class="mb-2 text-sm font-medium app-greyish-brown"
+    class="mb-6 text-xl font-medium "
     for="Default"
     id="Default"
   >
     Default
   </label>
   <input
-    class="app-input"
+    class="shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:border-2 block w-96 h-14 sm:text-sm border border-gray-400 rounded-sm pl-4"
     data-testid="input-test"
     placeholder="Placeholder"
     type="text"
@@ -113,17 +113,17 @@ exports[`Input Renders input with placeholder 1`] = `
 
 exports[`Input Renders readonly input 1`] = `
 <div
-  class="flex flex-col w-full px-0"
+  class="flex flex-col px-0"
 >
   <label
-    class="mb-2 text-sm font-medium app-greyish-brown"
+    class="mb-6 text-xl font-medium "
     for="Default"
     id="Default"
   >
     Default
   </label>
   <input
-    class="app-input"
+    class="shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:border-2 block w-96 h-14 sm:text-sm border border-gray-400 rounded-sm pl-4"
     data-testid="input-test"
     placeholder=""
     readonly=""

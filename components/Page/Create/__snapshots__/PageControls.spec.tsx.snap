@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PageHeaderStyle should render PageHeaderStyle snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="justify-between flex
+flex-row"
+  >
+    <h1
+      class="font-bold
+text-3xl"
+    >
+      hello
+    </h1>
+    <div
+      class="flex flex-row justify-start space-x-5"
+    >
+      <button
+        class="PageButtons__Btn-l92eit-1 eAbUXH"
+        color="primary"
+      >
+        <a
+          href="/sites/1234/pages"
+        >
+           Cancel
+        </a>
+      </button>
+      <button
+        class="PageButtons__Btn-l92eit-1 eIRvTE"
+        color="secondary"
+        type="submit"
+      >
+        Save & Publish
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -3,7 +3,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('./slick/slick-theme.css');
+@import url('./slick/slick.css');
 
+input:focus {
+  outline: none;
+}
+button:focus {
+  outline: none;
+}
+
+.slick-slide {
+  padding: 0 0.5rem;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: black !important;
+}
 .app-blue {
   color: #0035c1;
 }
@@ -105,7 +122,7 @@
   z-index: 1;
   min-width: 40px;
   height: 34px;
-  padding: 15px;
+  /* padding: 15px; */
   margin: 0;
   font-size: 0.875rem;
   background: #fff;
