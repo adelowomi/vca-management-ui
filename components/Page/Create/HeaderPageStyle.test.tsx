@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { fireEvent, render, screen } from '../../../test/testUtils';
-import { PageHeaderStyle } from './PageHeaderStyle';
+import { PageHeaderStyle } from './HeaderPageStyle';
 
 const medias = [
   {

@@ -6,9 +6,9 @@ import { Hero } from '../../../../../components/Hero/Hero';
 import Layout from '../../../../../components/Layout/Layout';
 import { CallToAction } from '../../../../../components/Page/Create/CallToAction';
 import { CreateWidget } from '../../../../../components/Page/Create/CreateWidget';
+import { PageHeaderStyle } from '../../../../../components/Page/Create/HeaderPageStyle';
 import { ShadowBtn } from '../../../../../components/Page/Create/PageButtons';
 import { PageControls } from '../../../../../components/Page/Create/PageControls';
-import { PageHeaderStyle } from '../../../../../components/Page/Create/PageHeaderStyle';
 import { PagePosts } from '../../../../../components/Page/Create/PagePosts';
 import {
   ColumnSection,
