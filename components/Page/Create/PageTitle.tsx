@@ -4,7 +4,7 @@ import { RiQuestionFill } from 'react-icons/ri';
 import { ErrorProps } from '../../../types/interfaces';
 import { SelectButton } from './PageButtons/SelectButton';
 import { Input, Label } from './PageInput';
-import { FormGroup, RowSection } from './pageStyledElements';
+import { FormGroup, RowSection } from './PageStyledElements';
 
 export interface PageTitleProps {
   pageTitle: string;

@@ -13,7 +13,7 @@ flex-col"
       1. Hero Type
     </h1>
     <div
-      class="pageStyledElements__HeaderTypeWrapper-whys7q-1 dWXYPp"
+      class="PageStyledElements__HeaderTypeWrapper-sc-22axxi-1 jEqsgn"
     >
       <button
         class="PageButtons__HeaderTypeBtn-l92eit-0 dVrsyA"
@@ -54,7 +54,7 @@ flex-col"
       Media Image
     </h1>
     <div
-      class="pageStyledElements__ImageSelectBox-whys7q-2 chezGx mt-5 w-96 flex items-center justify-center cursor-pointer"
+      class="PageStyledElements__ImageSelectBox-sc-22axxi-2 iJFudf mt-5 w-96 flex items-center justify-center cursor-pointer"
     >
       <p>
         + Select from media gallery

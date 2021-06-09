@@ -13,7 +13,7 @@ import { PagePosts } from '../../../../../components/Page/Create/PagePosts';
 import {
   ColumnSection,
   Container,
-} from '../../../../../components/Page/Create/pageStyledElements';
+} from '../../../../../components/Page/Create/PageStyledElements';
 import { PageTitle } from '../../../../../components/Page/Create/PageTitle';
 import { Textposition } from '../../../../../components/Page/Create/TextPosition';
 import {

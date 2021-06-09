@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { MediaCard } from './MediaCard';
 import { SelectButton } from './PageButtons/SelectButton';
 import { PageSearchInput } from './PageSearchInput';
-import { H1 } from './pageStyledElements';
+import { H1 } from './PageStyledElements';
 
 const Container = styled.div`
   box-sizing: border-box;

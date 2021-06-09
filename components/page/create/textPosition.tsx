@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ErrorProps } from '../../../types/interfaces';
 import { HeaderTypeBtn } from './PageButtons';
 import { Input } from './PageInput';
-import { ColumnSection, H2, HeaderPositionWrapper } from './pageStyledElements';
+import { ColumnSection, H2, HeaderPositionWrapper } from './PageStyledElements';
 
 export interface TextpositionProps {
   locationButtonClick: (

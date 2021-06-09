@@ -7,7 +7,7 @@ import {
   H2,
   HeaderTypeWrapper,
   ImageSelectBox,
-} from './pageStyledElements';
+} from './PageStyledElements';
 
 export interface PageHeaderStyleProps {
   onButtonClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;

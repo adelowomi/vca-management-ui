@@ -2,7 +2,7 @@ import Link from 'next/link';
 import * as React from 'react';
 
 import { Btn } from './PageButtons';
-import { H1, RowSection } from './pageStyledElements';
+import { H1, RowSection } from './PageStyledElements';
 export interface PageControlsProps {
   onSubmit: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   title: string;

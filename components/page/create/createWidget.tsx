@@ -8,7 +8,7 @@ import { NewsWidget } from '../../NewsWidget/NewsWidget';
 import { SelectItemsModal } from '../../utilsGroup/SelectItemsModal';
 import { ShadowBtn } from './PageButtons';
 import { Input } from './PageInput';
-import { ColumnSection, Grid, H2, ImageSelectBox } from './pageStyledElements';
+import { ColumnSection, Grid, H2, ImageSelectBox } from './PageStyledElements';
 
 type WidgetProps = {
   pageId: string | string[];

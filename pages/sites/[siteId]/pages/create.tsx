@@ -11,7 +11,7 @@ import { PageControls } from '../../../../components/Page/Create/PageControls';
 import {
   ColumnSection,
   Container,
-} from '../../../../components/Page/Create/pageStyledElements';
+} from '../../../../components/Page/Create/PageStyledElements';
 import { PageTitle } from '../../../../components/Page/Create/PageTitle';
 import { Textposition } from '../../../../components/Page/Create/TextPosition';
 import { GET_ALL_MEDIA, GET_SITE_MENUITEMS } from '../../../../graphql';
