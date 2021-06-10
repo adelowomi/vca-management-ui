@@ -17,7 +17,7 @@ import {
 import styled from 'styled-components';
 
 import { ExitIcon } from '../AssetsSVG';
-import { PageSearchInput } from '../Page/Create/PageSearchInput';
+import { PageSearchInput } from '../Page/PageSearchInput';
 interface AnchorTagProps {
   current: boolean;
 }

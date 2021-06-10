@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ErrorProps } from '../../../types/interfaces';
+import { ErrorProps } from '../../types/interfaces';
 import { HeaderTypeBtn } from './PageButtons';
 import { Input } from './PageInput';
 import { ColumnSection, H2, HeaderPositionWrapper } from './PageStyledElements';

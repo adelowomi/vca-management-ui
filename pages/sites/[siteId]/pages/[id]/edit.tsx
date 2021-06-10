@@ -4,18 +4,18 @@ import React from 'react';
 
 import { Hero } from '../../../../../components/Hero/Hero';
 import Layout from '../../../../../components/Layout/Layout';
-import { CallToAction } from '../../../../../components/Page/Create/CallToAction';
-import { CreateWidget } from '../../../../../components/Page/Create/CreateWidget';
-import { PageHeaderStyle } from '../../../../../components/Page/Create/HeaderPageStyle';
-import { ShadowBtn } from '../../../../../components/Page/Create/PageButtons';
-import { PageControls } from '../../../../../components/Page/Create/PageControls';
-import { PagePosts } from '../../../../../components/Page/Create/PagePosts';
+import { CallToAction } from '../../../../../components/Page/CallToAction';
+import { CreateWidget } from '../../../../../components/Page/CreateWidget';
+import { PageHeaderStyle } from '../../../../../components/Page/HeaderPageStyle';
+import { ShadowBtn } from '../../../../../components/Page/PageButtons';
+import { PageControls } from '../../../../../components/Page/PageControls';
+import { PagePosts } from '../../../../../components/Page/PagePosts';
 import {
   ColumnSection,
   Container,
-} from '../../../../../components/Page/Create/PageStyledElements';
-import { PageTitle } from '../../../../../components/Page/Create/PageTitle';
-import { Textposition } from '../../../../../components/Page/Create/TextPosition';
+} from '../../../../../components/Page/PageStyledElements';
+import { PageTitle } from '../../../../../components/Page/PageTitle';
+import { Textposition } from '../../../../../components/Page/TextPosition';
 import {
   GET_ALL_ITEMS_QUERY,
   GET_SITE_MENUITEMS,

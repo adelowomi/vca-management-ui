@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ErrorProps } from '../../../types/interfaces';
+import { ErrorProps } from '../../types/interfaces';
 import { ShadowBtn } from './PageButtons';
 import { SelectButton } from './PageButtons/SelectButton';
 import { Input } from './PageInput';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { SelectMediaModal } from '../../utilsGroup/SelectMediaModal';
+import { SelectMediaModal } from '../utilsGroup/SelectMediaModal';
 import { HeaderTypeBtn } from './PageButtons';
 import {
   ColumnSection,

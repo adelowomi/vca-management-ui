@@ -1,11 +1,10 @@
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import React from 'react';
 
-// import { ITEMS } from '../../../assets/data/data';
-import { widgetvalidator } from '../../../helpers/widgetValidator';
-import { widgetUseForm } from '../../../hooks/widgetUseForm';
-import { NewsWidget } from '../../NewsWidget/NewsWidget';
-import { SelectItemsModal } from '../../utilsGroup/SelectItemsModal';
+import { widgetvalidator } from '../../helpers/widgetValidator';
+import { widgetUseForm } from '../../hooks/widgetUseForm';
+import { NewsWidget } from '../NewsWidget/NewsWidget';
+import { SelectItemsModal } from '../utilsGroup/SelectItemsModal';
 import { ShadowBtn } from './PageButtons';
 import { Input } from './PageInput';
 import { ColumnSection, Grid, H2, ImageSelectBox } from './PageStyledElements';

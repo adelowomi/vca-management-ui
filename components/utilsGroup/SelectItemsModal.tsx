@@ -3,7 +3,7 @@ import { Fragment, useRef } from 'react';
 import React from 'react';
 
 import { WidgetStateProps } from '../../types/interfaces';
-import { PostSelectWrapper } from '../Page/Create/PostsSelectWrapper';
+import { PostSelectWrapper } from '../Page/PostsSelectWrapper';
 
 interface SelectItemsModalProps {
   state: WidgetStateProps | any;
