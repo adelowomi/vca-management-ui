@@ -1,7 +1,7 @@
 import React from 'react';
 import { useToasts } from 'react-toast-notifications';
 
-import { ADD_PAGE, EDIT_PAGE } from '../graphql';
+import { ADD_PAGE, EDIT_PAGE } from '../graphql/pages';
 import { stringToBoolean } from '../helpers/stringToBoolean';
 import { ErrorProps } from '../types/interfaces';
 interface StateProps {

@@ -14,7 +14,8 @@ import {
 } from '../../../../components/Page/PageStyledElements';
 import { PageTitle } from '../../../../components/Page/PageTitle';
 import { Textposition } from '../../../../components/Page/TextPosition';
-import { GET_ALL_MEDIA, GET_SITE_MENUITEMS } from '../../../../graphql';
+import { GET_ALL_MEDIA } from '../../../../graphql/media';
+import { GET_SITE_MENUITEMS } from '../../../../graphql/site';
 import { validator } from '../../../../helpers/validator';
 import useForm from '../../../../hooks/useForm';
 import { createApolloClient } from '../../../../lib/apollo';

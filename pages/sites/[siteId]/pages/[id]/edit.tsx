@@ -22,7 +22,7 @@ import {
   GET_WIDGET,
   PAGE_QUERY,
 } from '../../../../../graphql';
-import { GET_ALL_MEDIA } from '../../../../../graphql/media.gql';
+import { GET_ALL_MEDIA } from '../../../../../graphql/media';
 import { validator } from '../../../../../helpers/validator';
 import useForm from '../../../../../hooks/useForm';
 import { createApolloClient } from '../../../../../lib/apollo';
