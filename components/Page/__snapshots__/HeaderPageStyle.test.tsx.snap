@@ -13,10 +13,10 @@ flex-col"
       1. Hero Type
     </h1>
     <div
-      class="PageStyledElements__HeaderTypeWrapper-sc-22axxi-1 jEqsgn"
+      class="PageStyledElements__HeaderTypeWrapper-j2fa6k-1 fQPAZw"
     >
       <button
-        class="PageButtons__HeaderTypeBtn-l92eit-0 dVrsyA"
+        class="PageButtons__HeaderTypeBtn-wof0er-0 bxvMLy"
         data-headertype="headerTypeOne"
         type="button"
         value="headerTypeOne"
@@ -24,7 +24,7 @@ flex-col"
         Header Type 1
       </button>
       <button
-        class="PageButtons__HeaderTypeBtn-l92eit-0 eNgtBH"
+        class="PageButtons__HeaderTypeBtn-wof0er-0 jWZmwZ"
         data-headertype="headerTypeTwo"
         type="button"
         value="headerTypeTwo"
@@ -32,7 +32,7 @@ flex-col"
         Header Type 2
       </button>
       <button
-        class="PageButtons__HeaderTypeBtn-l92eit-0 eNgtBH"
+        class="PageButtons__HeaderTypeBtn-wof0er-0 jWZmwZ"
         data-headertype="headerTypeThree"
         type="button"
         value="headerTypeThree"
@@ -40,7 +40,7 @@ flex-col"
         Header Type 3
       </button>
       <button
-        class="PageButtons__HeaderTypeBtn-l92eit-0 eNgtBH"
+        class="PageButtons__HeaderTypeBtn-wof0er-0 jWZmwZ"
         data-headertype="headerTypeFour"
         type="button"
         value="headerTypeFour"
@@ -54,7 +54,7 @@ flex-col"
       Media Image
     </h1>
     <div
-      class="PageStyledElements__ImageSelectBox-sc-22axxi-2 iJFudf mt-5 w-96 flex items-center justify-center cursor-pointer"
+      class="PageStyledElements__ImageSelectBox-j2fa6k-2 bhmavs mt-5 w-96 flex items-center justify-center cursor-pointer"
     >
       <p>
         + Select from media gallery
