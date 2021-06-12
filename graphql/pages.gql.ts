@@ -56,7 +56,6 @@ const ADD_PAGE = gql`
   mutation CreatePage($createPageInput: CreatePageInput!) {
     createPage(createPageInput: $createPageInput) {
       id
-      id
       name
       tags
       hero {

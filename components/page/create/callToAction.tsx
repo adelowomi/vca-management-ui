@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { ErrorProps } from '../../../types/interfaces';
-import { ShadowBtn } from './PageButtons';
+// import { ShadowBtn } from './PageButtons';
 import { SelectButton } from './PageButtons/SelectButton';
 import { Input } from './PageInput';
 import { ColumnSection, Grid, H2 } from './pageStyledElements';
@@ -75,11 +75,7 @@ export const CallToAction: React.FC<CallToActionProps> = ({
             )}
           </div>
         </Grid>
-        <div className="mt-5">
-          <ShadowBtn className="py-4 px-10 shadow-sm rounded text-sm font-bold">
-            Preview header
-          </ShadowBtn>
-        </div>
+
         {/* <Hero hero={hero} /> */}
       </ColumnSection>
     </>
