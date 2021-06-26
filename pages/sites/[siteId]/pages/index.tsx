@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 
 import Layout from '../../../../components/Layout/Layout';
-import { BulkActionDropdown } from '../../../../components/Page/Create/BulkActionDropdown';
+import { BulkActionDropdown } from '../../../../components/Page/BulkActionDropdown';
 import { PAGES_QUERY } from '../../../../graphql';
 import { createApolloClient } from '../../../../lib/apollo';
 

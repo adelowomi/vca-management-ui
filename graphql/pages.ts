@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client';
+import gql from 'graphql-tag';
 
-const PAGES_QUERY = gql`
+export const PAGES_QUERY = gql`
   query Pages($limit: Int, $offset: Int, $filter: FilterInput) {
     pages(filter: $filter, limit: $limit, offset: $offset) {
       id
@@ -22,7 +22,7 @@ const PAGES_QUERY = gql`
   }
 `;
 
-const PAGE_QUERY = gql`
+export const PAGE_QUERY = gql`
   query Page($filter: FilterInput) {
     page(filter: $filter) {
       id
@@ -52,7 +52,7 @@ const PAGE_QUERY = gql`
   }
 `;
 
-const ADD_PAGE = gql`
+export const ADD_PAGE = gql`
   mutation CreatePage($createPageInput: CreatePageInput!) {
     createPage(createPageInput: $createPageInput) {
       id
@@ -71,7 +71,8 @@ const ADD_PAGE = gql`
     }
   }
 `;
-const EDIT_PAGE = gql`
+
+export const EDIT_PAGE = gql`
   mutation($updatePageInput: UpdatePageInput!, $pageId: String!) {
     updatePage(updatePageInput: $updatePageInput, pageId: $pageId) {
       id
@@ -92,4 +93,3 @@ const EDIT_PAGE = gql`
     }
   }
 `;
-export { ADD_PAGE, EDIT_PAGE, PAGE_QUERY, PAGES_QUERY };

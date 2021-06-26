@@ -1,10 +1,10 @@
 import React from 'react';
 import { useToasts } from 'react-toast-notifications';
 
-import { EDIT_ITEM } from '../../../graphql/items.gql';
-import { SelectItemsModal } from '../../utilsGroup/SelectItemsModal';
+import { EDIT_ITEM } from '../../graphql/items.gql';
+import { SelectItemsModal } from '../utilsGroup/SelectItemsModal';
 import { ShadowBtn } from './PageButtons';
-import { ColumnSection, H2, ImageSelectBox } from './pageStyledElements';
+import { ColumnSection, H2, ImageSelectBox } from './PageStyledElements';
 
 export const PagePosts = ({ items, client, pageId }) => {
   const [open, setOpen] = React.useState(false);

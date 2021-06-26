@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 
 import Layout from '../../components/Layout/Layout';
-import { SITES_QUERY } from '../../graphql';
+import { SITES_QUERY } from '../../graphql/site';
 import { createApolloClient } from '../../lib/apollo';
 
 const Sites = ({ sites, error }) => {

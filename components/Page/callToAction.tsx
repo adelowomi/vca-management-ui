@@ -1,10 +1,9 @@
 import * as React from 'react';
 
-import { ErrorProps } from '../../../types/interfaces';
-// import { ShadowBtn } from './PageButtons';
+import { ErrorProps } from '../../types/interfaces';
 import { SelectButton } from './PageButtons/SelectButton';
 import { Input } from './PageInput';
-import { ColumnSection, Grid, H2 } from './pageStyledElements';
+import { ColumnSection, Grid, H2 } from './PageStyledElements';
 
 export interface CallToActionProps {
   actionText: string;

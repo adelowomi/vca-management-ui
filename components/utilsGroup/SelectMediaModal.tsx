@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useRef } from 'react';
 import React from 'react';
 
-import { SelectMedia } from '../Page/Create/SelectMedia';
+import { SelectMedia } from '../Page/SelectMedia';
 
 export const SelectMediaModal = ({
   open,

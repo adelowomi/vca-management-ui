@@ -4,25 +4,25 @@ import React from 'react';
 
 import { Hero } from '../../../../../components/Hero/Hero';
 import Layout from '../../../../../components/Layout/Layout';
-import { CallToAction } from '../../../../../components/Page/Create/CallToAction';
-import { CreateWidget } from '../../../../../components/Page/Create/CreateWidget';
-import { ShadowBtn } from '../../../../../components/Page/Create/PageButtons';
-import { PageControls } from '../../../../../components/Page/Create/PageControls';
-import { PageHeaderStyle } from '../../../../../components/Page/Create/PageHeaderStyle';
-import { PagePosts } from '../../../../../components/Page/Create/PagePosts';
+import { CallToAction } from '../../../../../components/Page/CallToAction';
+import { CreateWidget } from '../../../../../components/Page/CreateWidget';
+import { PageHeaderStyle } from '../../../../../components/Page/HeaderPageStyle';
+import { ShadowBtn } from '../../../../../components/Page/PageButtons';
+import { PageControls } from '../../../../../components/Page/PageControls';
+import { PagePosts } from '../../../../../components/Page/PagePosts';
 import {
   ColumnSection,
   Container,
-} from '../../../../../components/Page/Create/pageStyledElements';
-import { PageTitle } from '../../../../../components/Page/Create/PageTitle';
-import { Textposition } from '../../../../../components/Page/Create/TextPosition';
+} from '../../../../../components/Page/PageStyledElements';
+import { PageTitle } from '../../../../../components/Page/PageTitle';
+import { Textposition } from '../../../../../components/Page/TextPosition';
 import {
   GET_ALL_ITEMS_QUERY,
   GET_SITE_MENUITEMS,
   GET_WIDGET,
   PAGE_QUERY,
 } from '../../../../../graphql';
-import { GET_ALL_MEDIA } from '../../../../../graphql/media.gql';
+import { GET_ALL_MEDIA } from '../../../../../graphql/media';
 import { validator } from '../../../../../helpers/validator';
 import useForm from '../../../../../hooks/useForm';
 import { createApolloClient } from '../../../../../lib/apollo';

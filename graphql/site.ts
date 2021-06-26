@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import gql from 'graphql-tag';
 
 const SITE_QUERY = gql`
   query Site($id: String!) {

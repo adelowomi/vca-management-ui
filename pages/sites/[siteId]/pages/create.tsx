@@ -4,17 +4,18 @@ import React from 'react';
 
 import { Hero } from '../../../../components/Hero/Hero';
 import Layout from '../../../../components/Layout/Layout';
-import { CallToAction } from '../../../../components/Page/Create/CallToAction';
-import { ShadowBtn } from '../../../../components/Page/Create/PageButtons';
-import { PageControls } from '../../../../components/Page/Create/PageControls';
-import { PageHeaderStyle } from '../../../../components/Page/Create/PageHeaderStyle';
+import { CallToAction } from '../../../../components/Page/CallToAction';
+import { PageHeaderStyle } from '../../../../components/Page/HeaderPageStyle';
+import { ShadowBtn } from '../../../../components/Page/PageButtons';
+import { PageControls } from '../../../../components/Page/PageControls';
 import {
   ColumnSection,
   Container,
-} from '../../../../components/Page/Create/pageStyledElements';
-import { PageTitle } from '../../../../components/Page/Create/PageTitle';
-import { Textposition } from '../../../../components/Page/Create/TextPosition';
-import { GET_ALL_MEDIA, GET_SITE_MENUITEMS } from '../../../../graphql';
+} from '../../../../components/Page/PageStyledElements';
+import { PageTitle } from '../../../../components/Page/PageTitle';
+import { Textposition } from '../../../../components/Page/TextPosition';
+import { GET_ALL_MEDIA } from '../../../../graphql/media';
+import { GET_SITE_MENUITEMS } from '../../../../graphql/site';
 import { validator } from '../../../../helpers/validator';
 import useForm from '../../../../hooks/useForm';
 import { createApolloClient } from '../../../../lib/apollo';

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { SelectButton } from './PageButtons/SelectButton';
 import { PageSearchInput } from './PageSearchInput';
-import { H1 } from './pageStyledElements';
+import { H1 } from './PageStyledElements';
 import { PostItemCard } from './PostItemCard';
 
 const Container = styled.div`

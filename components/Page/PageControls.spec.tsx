@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { fireEvent, render, screen } from '../../../test/testUtils';
+import { fireEvent, render, screen } from '../../test/testUtils';
 import { PageControls } from './PageControls';
 
 describe('PageHeaderStyle', () => {
