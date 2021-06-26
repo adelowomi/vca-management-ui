@@ -6,6 +6,7 @@ interface FormInputProps {
   register: UseFormRegister<FieldValues>;
   error: any;
   required?: boolean;
+  disableLabel?: boolean;
 }
 
 export const FormInput = ({
@@ -14,6 +15,7 @@ export const FormInput = ({
   register,
   error = null,
   required = false,
+  disableLabel = false,
 }: FormInputProps) => {
   const inputStyle =
     error?.type === 'required'
@@ -23,11 +25,13 @@ export const FormInput = ({
     <div>
       <label
         htmlFor={`${name}`}
-        className="block text-xl text-gray-700 font-semibold"
+        className={`lock text-xl text-gray-700 font-semibold ${
+          disableLabel ? 'hidden' : ''
+        }`}
       >
         {label}
       </label>
-      <div className="mt-6">
+      <div className={disableLabel ? '' : 'mt-6'}>
         <input
           {...register(`${name}`, { required })}
           className={inputStyle}

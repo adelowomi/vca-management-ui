@@ -9,6 +9,12 @@ export interface MediaItemCardProps {
   media: any;
 }
 
+export const truncate = (message: string, length: number) => {
+  return message.length > length
+    ? message.substring(0, length) + '...'
+    : message;
+};
+
 export function MediaItemCard({ media }: MediaItemCardProps) {
   switch (media.type) {
     case ContentType.DOCUMENT:

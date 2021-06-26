@@ -1,6 +1,8 @@
+import { truncate } from './MediaItemCard';
+
 export const DocumentCard = ({ media }) => {
   return (
-    <div key={media.id} className="flex flex-col">
+    <div key={media.id} className="flex flex-col w-72">
       <div className="w-full h-44 justify-center items-center bg-blue-100 flex flex-col">
         <svg
           width="100"
@@ -79,7 +81,7 @@ export const DocumentCard = ({ media }) => {
           />
         </svg>
       </div>
-      <div className="px-6 py-4 border border-vca-grey-4">
+      <div className="px-6 py-4 border border-vca-grey-4 h-32">
         <div className="flex flex-row mb-4">
           <div>
             <svg
@@ -102,7 +104,7 @@ export const DocumentCard = ({ media }) => {
             {media.name}
           </div>
         </div>
-        <div className="text-vca-grey-3">{media.description}</div>
+        <div className="text-vca-grey-3">{truncate(media.description, 50)}</div>
       </div>
     </div>
   );

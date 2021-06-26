@@ -26,8 +26,8 @@ export const CREATE_MEDIA = gql`
 `;
 
 export const GET_ALL_MEDIA = gql`
-  query medias($limit: Int, $skip: Int) {
-    medias(limit: $limit, skip: $skip) {
+  query medias($limit: Int, $skip: Int, $filter: FilterInput) {
+    medias(limit: $limit, skip: $skip, filter: $filter) {
       id
       createdAt
       updatedAt

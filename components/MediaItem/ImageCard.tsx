@@ -1,14 +1,26 @@
+import Image from 'next/image';
+
+import { truncate } from './MediaItemCard';
+
 export const ImageCard = ({ media }) => {
+  const myLoader = ({ src }) => {
+    return src;
+  };
+
   return (
-    <div key={media.id} className="flex flex-col">
+    <div key={media.id} className="flex flex-col w-72">
       <div className="">
-        <img
+        <Image
+          loader={myLoader}
           src={media.image.small}
           alt=""
+          height={176}
+          width={302}
+          layout={'responsive'}
           className="h-44 w-full object-cover"
         />
       </div>
-      <div className="px-6 py-4 border border-vca-grey-4">
+      <div className="px-6 py-4 border border-vca-grey-4 h-32">
         <div className="flex flex-row mb-4">
           <div>
             <svg
@@ -31,7 +43,7 @@ export const ImageCard = ({ media }) => {
             {media.name}
           </div>
         </div>
-        <div className="text-vca-grey-3">{media.description}</div>
+        <div className="text-vca-grey-3">{truncate(media.description, 50)}</div>
       </div>
     </div>
   );
