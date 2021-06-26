@@ -2,9 +2,9 @@ import React from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
 import { BaseDatePicker } from '../DatePicker/DatePicker';
-// import { ShadowBtn } from '../Page/Create/PageButtons';
-import { Input } from '../Page/Create/PageInput';
-import { Grid, H2, ImageSelectBox } from '../Page/Create/pageStyledElements';
+// import { ShadowBtn } from '../Page/PageButtons';
+import { Input } from '../Page/PageInput';
+import { Grid, H2, ImageSelectBox } from '../Page/PageStyledElements';
 
 const QuarterInput = ({
   name,

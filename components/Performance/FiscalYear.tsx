@@ -2,14 +2,9 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { BaseDatePicker } from '../DatePicker/DatePicker';
-import { ShadowBtn } from '../Page/Create/PageButtons';
-import { Input } from '../Page/Create/PageInput';
-import {
-  Grid,
-  H1,
-  H2,
-  ImageSelectBox,
-} from '../Page/Create/pageStyledElements';
+import { ShadowBtn } from '../Page/PageButtons';
+import { Input } from '../Page/PageInput';
+import { Grid, H1, H2, ImageSelectBox } from '../Page/PageStyledElements';
 import QuarterInput from './QuarterInput';
 
 interface QuarterProps {

@@ -2,7 +2,7 @@ import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import React from 'react';
 import { useToasts } from 'react-toast-notifications';
 
-import { ADD_PERFORMANCE } from '../graphql';
+import { ADD_PERFORMANCE } from '../graphql/performance.gql';
 import { PerformanceErrorProps } from '../types/interfaces';
 
 export const performanceUseForm = (

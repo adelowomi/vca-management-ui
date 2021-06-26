@@ -4,18 +4,18 @@ import React from 'react';
 
 // import { Hero } from '../../../../components/Hero/Hero';
 import Layout from '../../../../components/Layout/Layout';
-import { CallToAction } from '../../../../components/Page/Create/CallToAction';
-import { ShadowBtn } from '../../../../components/Page/Create/PageButtons';
-import { PageControls } from '../../../../components/Page/Create/PageControls';
-import { PageHeaderStyle } from '../../../../components/Page/Create/PageHeaderStyle';
-import { Input } from '../../../../components/Page/Create/PageInput';
+import { CallToAction } from '../../../../components/Page/CallToAction';
+import { PageHeaderStyle } from '../../../../components/Page/HeaderPageStyle';
+import { ShadowBtn } from '../../../../components/Page/PageButtons';
+import { PageControls } from '../../../../components/Page/PageControls';
+import { Input } from '../../../../components/Page/PageInput';
 import {
   ColumnSection,
   Container,
   H2,
-} from '../../../../components/Page/Create/pageStyledElements';
-import { PageTitle } from '../../../../components/Page/Create/PageTitle';
-import { Textposition } from '../../../../components/Page/Create/TextPosition';
+} from '../../../../components/Page/PageStyledElements';
+import { PageTitle } from '../../../../components/Page/PageTitle';
+import { Textposition } from '../../../../components/Page/TextPosition';
 import { FiscalYear } from '../../../../components/Performance/FiscalYear';
 import { GET_ALL_MEDIA, GET_SITE_MENUITEMS } from '../../../../graphql';
 import { performanceValidator } from '../../../../helpers/performanceValidator';
