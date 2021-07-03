@@ -1,3 +1,4 @@
+import Router from 'next/router';
 import React from 'react';
 import { useToasts } from 'react-toast-notifications';
 
@@ -100,6 +101,7 @@ const useForm = (
       });
 
       addToast('Page is successfully Created', { appearance: 'success' });
+      Router.reload();
     } catch (error) {
       addToast('Page could not be created!', { appearance: 'error' });
     }
@@ -129,6 +131,7 @@ const useForm = (
         },
       });
       addToast('Page is successfully Edited', { appearance: 'success' });
+      Router.reload();
     } catch (error) {
       addToast('Page could not be Edited!', { appearance: 'error' });
     }

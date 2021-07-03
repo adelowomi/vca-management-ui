@@ -8,7 +8,8 @@ import tw from 'tailwind-styled-components';
 
 import Layout from '../../../../components/Layout/Layout';
 import { BulkActionDropdown } from '../../../../components/Page/BulkActionDropdown';
-import { PAGES_QUERY } from '../../../../graphql';
+import { GET_SITE_MENUITEMS } from '../../../../graphql';
+import { GET_PERFORMANCES } from '../../../../graphql/performance.gql';
 import { createApolloClient } from '../../../../lib/apollo';
 
 const PageActionsWrapper = tw.div`
@@ -56,7 +57,7 @@ const P = tw.p`
   text-left
 `;
 
-const Performance = ({ pages }) => {
+const index = ({ performances, menuItems }) => {
   const {
     query: { siteId },
   } = useRouter();
@@ -66,7 +67,7 @@ const Performance = ({ pages }) => {
         <PageActionsColOne>
           <h1 className="text-4xl font-semibold">Performance</h1>
           <PageActionsColOneBtn className="focus:outline-none">
-            <Link href={`/sites/${siteId}/pages/create`}> Add New</Link>
+            <Link href={`/sites/${siteId}/performances/create`}> Add New</Link>
           </PageActionsColOneBtn>
         </PageActionsColOne>
         <div className=" flex mt-7">
@@ -117,7 +118,7 @@ const Performance = ({ pages }) => {
                         Page Title
                       </th>
                       <th scope="col" className="px-6 tracking-wider">
-                        Status
+                        Menu Items
                       </th>
                       <th scope="col" className="px-6 tracking-wider">
                         Last posted on
@@ -128,7 +129,7 @@ const Performance = ({ pages }) => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {pages.map((el: any) => (
+                    {performances.map((el: any) => (
                       <tr className={`text-left  `} key={el.id}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
                           <input
@@ -140,24 +141,30 @@ const Performance = ({ pages }) => {
                         </td>
 
                         <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
-                          <Link href={`/sites/${el.site}/pages/${el.id}`}>
+                          <Link href={`/sites/${siteId}/performance/${el.id}`}>
                             {el.name}
                           </Link>
                         </td>
                         <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
-                          <Link href={`/sites/${el.site}/pages/${el.id}`}>
-                            {'Published'}
+                          <Link href={`/sites/${siteId}/performance/${el.id}`}>
+                            {el.menuItem
+                              ? menuItems.filter(
+                                  (item) => item.id === el.menuItem
+                                )[0].name
+                              : ''}
                           </Link>
                         </td>
                         <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
-                          <Link href={`/sites/${el.site}/pages/${el.id}`}>
+                          <Link href={`/sites/${siteId}/performance/${el.id}`}>
                             <span>
                               <p>{el.createdAt}</p>
                             </span>
                           </Link>
                         </td>
                         <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
-                          <Link href={`/sites/${el.site}/pages/${el.id}/edit`}>
+                          <Link
+                            href={`/sites/${siteId}/performance/${el.id}/edit`}
+                          >
                             edit
                           </Link>
                         </td>
@@ -185,29 +192,46 @@ export async function getServerSideProps(ctx) {
     };
   }
   const client = createApolloClient(session.idToken);
+  let performances: any;
+  let menuItems: any;
+  try {
+    const { data } = await client.query({
+      query: GET_PERFORMANCES,
+      variables: {},
+    });
 
-  const {
-    data: { pages },
-  } = await client.query({
-    query: PAGES_QUERY,
-    variables: {
-      filter: {
-        combinedFilter: {
-          filters: [
-            {
-              singleFilter: {
-                field: 'siteId',
-                operator: 'EQ',
-                value: ctx.query.siteId,
+    performances = data.performances ? data.performances : { error: true };
+  } catch (error) {
+    performances = { error: true };
+  }
+
+  try {
+    const { data } = await client.query({
+      query: GET_SITE_MENUITEMS,
+      variables: {
+        filter: {
+          combinedFilter: {
+            filters: [
+              {
+                singleFilter: {
+                  field: 'siteId',
+                  operator: 'EQ',
+                  value: ctx.query.siteId,
+                },
               },
-            },
-          ],
+            ],
+          },
         },
       },
-    },
-  });
+    });
+    menuItems = data.siteMenuItems.header.menuItems
+      ? data.siteMenuItems.header.menuItems
+      : { error: true };
+  } catch (error) {
+    menuItems = { error: true };
+  }
 
-  return { props: { pages } };
+  return { props: { performances, menuItems } };
 }
 
-export default withPageAuthRequired(Performance);
+export default withPageAuthRequired(index);

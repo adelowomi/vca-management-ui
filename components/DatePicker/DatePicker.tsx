@@ -1,7 +1,17 @@
 import { DatePicker } from 'baseui/datepicker';
 import * as React from 'react';
 
-export const BaseDatePicker = ({ dateValue, setDate, name }) => {
+export const BaseDatePicker = ({
+  dateValue,
+  setDate,
+  name,
+  id,
+}: {
+  dateValue: any;
+  setDate: any;
+  name: string;
+  id?: string;
+}) => {
   // const [value, setValue] = React.useState([
   //   new Date(),
   //   new Date('2021 may, 10'),
@@ -10,7 +20,7 @@ export const BaseDatePicker = ({ dateValue, setDate, name }) => {
     <DatePicker
       value={dateValue ? new Date(dateValue) : new Date()}
       onChange={({ date }) => {
-        setDate(date, name);
+        setDate(date, name, id);
         // return setValue(Array.isArray(date) ? date : [date]);
       }}
       overrides={{

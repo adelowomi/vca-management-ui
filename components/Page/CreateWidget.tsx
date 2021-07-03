@@ -27,13 +27,22 @@ export const CreateWidget: React.FC<WidgetProps> = ({
   items,
   widget,
 }): JSX.Element => {
-  const { handleSubmit, state, errors, setState, handleChange } = widgetUseForm(
-    widgetvalidator,
-    client,
-    pageId,
-    widget
-  );
-  const [open, setOpen] = React.useState(false);
+  const {
+    handleSubmit,
+    state,
+    errors,
+    setState,
+    handleChange,
+    open,
+    setOpen,
+  } = widgetUseForm(widgetvalidator, client, pageId, widget);
+
+  const getItems = (selected: any) => {
+    setState({
+      ...state,
+      widgetItems: [...selected],
+    });
+  };
 
   return (
     <>
@@ -92,20 +101,21 @@ export const CreateWidget: React.FC<WidgetProps> = ({
           </ShadowBtn>
         </div>
         <NewsWidget
+          allItems={items}
           items={state.widgetItems}
           title={state.widgetTitle}
           desc={state.widgetDescription}
           contain={true}
         />
       </ColumnSection>
+      {/* {console.log({ STATE: state.widgetItems })} */}
       <SelectItemsModal
         open={open}
         setOpen={setOpen}
-        setState={setState}
-        state={state}
+        getItems={getItems}
+        state={state.widgetItems}
         handleSubmit={handleSubmit}
         items={items}
-        type="widget"
       />
     </>
   );

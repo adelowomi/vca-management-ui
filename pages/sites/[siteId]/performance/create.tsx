@@ -1,10 +1,9 @@
-import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-// import { Hero } from '../../../../components/Hero/Hero';
 import Layout from '../../../../components/Layout/Layout';
-import { CallToAction } from '../../../../components/Page/CallToAction';
+import { CallToAction } from '../../../../components/Page/callToAction';
 import { PageHeaderStyle } from '../../../../components/Page/HeaderPageStyle';
 import { ShadowBtn } from '../../../../components/Page/PageButtons';
 import { PageControls } from '../../../../components/Page/PageControls';
@@ -17,12 +16,16 @@ import {
 import { PageTitle } from '../../../../components/Page/PageTitle';
 import { Textposition } from '../../../../components/Page/TextPosition';
 import { FiscalYear } from '../../../../components/Performance/FiscalYear';
-import { GET_ALL_MEDIA, GET_SITE_MENUITEMS } from '../../../../graphql';
+import {
+  GET_ALL_ITEMS_QUERY,
+  GET_ALL_MEDIA,
+  GET_SITE_MENUITEMS,
+} from '../../../../graphql';
 import { performanceValidator } from '../../../../helpers/performanceValidator';
 import { performanceUseForm } from '../../../../hooks/performance.hooks';
 import { createApolloClient } from '../../../../lib/apollo';
 
-const create = ({ token, menuItems, medias }) => {
+const create = ({ token, menuItems, items, medias }) => {
   const client = createApolloClient(token);
   const {
     query: { siteId },
@@ -54,7 +57,7 @@ const create = ({ token, menuItems, medias }) => {
     });
   };
 
-  const setDate = (date, name) => {
+  const setDate = (date: any, name: string) => {
     setState({
       ...state,
       [name]: date?.toISOString(),
@@ -87,10 +90,11 @@ const create = ({ token, menuItems, medias }) => {
         <PageHeaderStyle
           onButtonClick={onButtonClick}
           headerType={state.headerType}
-          medias={medias}
+          medias={medias.error ? [] : medias}
           state={state}
           setState={setState}
           handleSubmit={handleSubmit}
+          errors={errors}
         />
 
         <Textposition
@@ -111,7 +115,6 @@ const create = ({ token, menuItems, medias }) => {
         />
         <div className="mt-9">
           <H2>NASDAQ ID</H2>
-          {/* <div style={{ width: '' }}> */}
           <Input
             className="py-4 mt-3 w-96"
             placeholder="Enter ID"
@@ -119,7 +122,6 @@ const create = ({ token, menuItems, medias }) => {
             name="nasdaqId"
             value={state.nasdaqId}
           />
-          {/* </div> */}
 
           {errors && errors.nasdaqId && (
             <span className="text-red-500 mt-1 text-sm font-medium">
@@ -142,19 +144,8 @@ const create = ({ token, menuItems, medias }) => {
           setDate={setDate}
           getQuarters={getQuarters}
           errors={errors}
+          items={items.error ? [] : items}
         />
-
-        {/* <div className="mt-5 mb-5">
-          <Hero
-            mediaUrl={state.mediaUrl}
-            actionText={state.actionText}
-            heading={state.pageTitle}
-            location={state.location}
-            hasAction={state.hasAction}
-            caption={state.captionText}
-            type={state.headerType}
-          />
-        </div> */}
         <ColumnSection className="mt-5 mb-5">
           <div className="mt-5 space-x-3 flex flex-row">
             <ShadowBtn
@@ -177,44 +168,79 @@ const create = ({ token, menuItems, medias }) => {
 };
 
 export async function getServerSideProps(ctx) {
-  const session = getSession(ctx.req, ctx.res);
-
+  const { siteId } = ctx.query;
+  const session: Session = getSession(ctx.req, ctx.res);
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+      },
+    };
+  }
   const client = createApolloClient(session?.idToken);
 
-  const {
-    data: {
-      siteMenuItems: {
-        header: { menuItems },
+  let menuItems: any;
+  let medias: any;
+  let items: any;
+
+  try {
+    const { data } = await client.query({
+      query: GET_ALL_MEDIA,
+      variables: {
+        filter: {},
       },
-    },
-  } = await client.query({
-    query: GET_SITE_MENUITEMS,
-    variables: {
-      filter: {
-        combinedFilter: {
-          filters: [
-            {
-              singleFilter: {
-                field: 'siteId',
-                operator: 'EQ',
-                value: ctx.query.siteId,
+    });
+
+    medias = data.medias ? data.medias : { error: true };
+  } catch (error) {
+    medias = { error: true };
+  }
+
+  try {
+    const { data } = await client.query({
+      query: GET_SITE_MENUITEMS,
+      variables: {
+        filter: {
+          combinedFilter: {
+            filters: [
+              {
+                singleFilter: {
+                  field: 'siteId',
+                  operator: 'EQ',
+                  value: ctx.query.siteId,
+                },
               },
-            },
-          ],
+            ],
+          },
         },
       },
-    },
-  });
-  const {
-    data: { medias },
-  } = await client.query({
-    query: GET_ALL_MEDIA,
-    variables: {
-      filter: {},
-    },
-  });
+    });
+    menuItems = data.siteMenuItems.header.menuItems
+      ? data.siteMenuItems.header.menuItems
+      : { error: true };
+  } catch (error) {
+    menuItems = { error: true };
+  }
+  try {
+    const { data } = await client.query({
+      query: GET_ALL_ITEMS_QUERY,
+      variables: {
+        siteId: siteId,
+      },
+    });
 
-  return { props: { token: session?.idToken, menuItems, medias } };
+    items = data.getAllItems ? data.getAllItems : { error: true };
+  } catch (error) {
+    items = { error: true };
+  }
+  return {
+    props: {
+      token: session?.idToken,
+      menuItems,
+      medias,
+      items,
+    },
+  };
 }
 
 export default withPageAuthRequired(create);

@@ -9,6 +9,52 @@ const ADD_PERFORMANCE = gql`
       start
       stop
       menuItem
+      # quarter {
+      #   id
+      #   name
+      #   description
+      # }
+      hero {
+        type
+        caption
+        mediaUrl
+        heading
+        hasAction
+        actionText
+        actionSlug
+        location
+        media {
+          id
+          image {
+            small
+            medium
+            large
+          }
+        }
+        stock {
+          stockID
+          exchange
+        }
+      }
+    }
+  }
+`;
+
+const EDIT_PERFORMANCE = gql`
+  mutation(
+    $updatePerformanceInput: UpdatePerformanceInput!
+    $performanceId: String!
+  ) {
+    updatePerformance(
+      updatePerformanceInput: $updatePerformanceInput
+      performanceId: $performanceId
+    ) {
+      year
+      name
+      description
+      start
+      stop
+      menuItem
       quarter {
         id
         name
@@ -23,7 +69,13 @@ const ADD_PERFORMANCE = gql`
         actionText
         actionSlug
         location
-        media
+        media {
+          image {
+            small
+            medium
+            large
+          }
+        }
         stock {
           stockID
           exchange
@@ -34,21 +86,93 @@ const ADD_PERFORMANCE = gql`
 `;
 
 const GET_PERFORMANCES = gql`
-  query($filter: FilterInput) {
-    performances(filter: $filter) {
+  query {
+    performances {
+      id
       name
-      description
       year
+      description
       start
       stop
-      quarter {
-        name
-        description
-        start
-        stop
+      menuItem
+      # account
+      createdAt
+      hero {
+        type
+        caption
+        mediaUrl
+        heading
+        hasAction
+        actionText
+        actionSlug
+        location
+        stock {
+          stockID
+        }
+
+        media {
+          image {
+            small
+            medium
+            large
+          }
+        }
       }
     }
   }
 `;
 
-export { ADD_PERFORMANCE, GET_PERFORMANCES };
+const GET_PERFORMANCE = gql`
+  query($filter: FilterInput) {
+    performance(filter: $filter) {
+      id
+      name
+      year
+      description
+      start
+      stop
+      menuItem
+      # account
+      createdAt
+      quarter {
+        id
+        start
+        stop
+        name
+        description
+        items {
+          id
+          mediaUrl
+          description
+          createdAt
+          featured
+        }
+      }
+
+      hero {
+        type
+        caption
+        mediaUrl
+        heading
+        hasAction
+        actionText
+        actionSlug
+        location
+        stock {
+          stockID
+        }
+
+        media {
+          id
+          image {
+            small
+            medium
+            large
+          }
+        }
+      }
+    }
+  }
+`;
+
+export { ADD_PERFORMANCE, EDIT_PERFORMANCE, GET_PERFORMANCE, GET_PERFORMANCES };

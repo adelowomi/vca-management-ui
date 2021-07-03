@@ -27,9 +27,6 @@ export const performanceValidator = (values: any) => {
   if (!values.headerType) {
     errors.headerType = 'headerType is required';
   }
-  if (!values.tags) {
-    errors.tags = 'tags is required';
-  }
   if (!values.location) {
     errors.location = 'location is required';
   }
@@ -46,11 +43,11 @@ export const performanceValidator = (values: any) => {
   if (!values.description) {
     errors.description = 'description is required';
   }
-  if (!values.stopDate) {
-    errors.stopDate = 'stopDate is required';
+  if (!values.stop) {
+    errors.stop = 'stop date is required';
   }
-  if (!values.startDate) {
-    errors.startDate = 'startDate is required';
+  if (!values.start) {
+    errors.start = 'start date is required';
   }
   if (!values.nasdaqId) {
     errors.nasdaqId = 'nasdaqId is required';

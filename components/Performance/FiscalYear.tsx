@@ -5,35 +5,52 @@ import { BaseDatePicker } from '../DatePicker/DatePicker';
 import { ShadowBtn } from '../Page/PageButtons';
 import { Input } from '../Page/PageInput';
 import { Grid, H1, H2, ImageSelectBox } from '../Page/PageStyledElements';
+import { SelectItemsModal } from '../utilsGroup/SelectItemsModal';
 import QuarterInput from './QuarterInput';
 
 interface QuarterProps {
   id: string;
   name: string;
   description: string;
-  startDate: string;
-  stopDate: string;
-  items: QuarterProps[];
+  start: Date;
+  stop: Date;
+  items: string[];
+  mediaUrl?: string;
 }
 
-export const FiscalYear = ({
+interface FiscalYearProps {
+  state: any;
+  handleChange: any;
+  setDate: any;
+  getQuarters: any;
+  errors: any;
+  items?: any;
+}
+export const FiscalYear: React.FC<FiscalYearProps> = ({
   state,
   handleChange,
   setDate,
   getQuarters,
   errors,
+  items,
 }) => {
-  const [quarters, setQuarters] = React.useState<QuarterProps[]>([]);
+  const existingQuarters = state?.quarters;
+
+  const [quarters, setQuarters] = React.useState<QuarterProps[]>([
+    ...existingQuarters,
+  ]);
+
+  const [isSelected, setIsSelected] = React.useState([]);
+  const [open, setOpen] = React.useState(false);
 
   const [input, setInputValues] = React.useState({
     id: uuidv4(),
     name: '',
     description: '',
-    startDate: '',
-    stopDate: '',
+    start: new Date(),
+    stop: new Date(),
     items: [],
   });
-  // console.log('INPUTS', input);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -47,16 +64,16 @@ export const FiscalYear = ({
     e.preventDefault();
     setQuarters([...quarters, { ...input }]);
     setInputValues({
-      id: '',
+      id: uuidv4(),
       name: '',
       description: '',
-      startDate: '',
-      stopDate: '',
+      start: new Date(),
+      stop: new Date(),
       items: [],
     });
   };
 
-  const handleRemoveFields = (id) => {
+  const handleRemoveFields = (id: string) => {
     const values = [...quarters];
     values.splice(
       values.findIndex((value) => value.id === id),
@@ -64,19 +81,75 @@ export const FiscalYear = ({
     );
     setQuarters(values);
   };
-  // console.log('STATE', state);
 
-  const setInputDate = (date, name: string) => {
+  const setInputDate = (date: any, name: string, id = undefined) => {
+    if (id) {
+      const newInputFields = quarters.map((field) => {
+        if (id === field.id) {
+          field[name] = date?.toISOString();
+        }
+        return field;
+      });
+
+      setQuarters(newInputFields);
+    } else {
+      setInputValues({
+        ...input,
+        [name]: date?.toISOString(),
+      });
+    }
+  };
+
+  const handleChangeInput = (
+    id: string,
+    { currentTarget: { name, value } }: React.FormEvent<HTMLInputElement>
+  ) => {
+    const newInputFields = quarters.map((field) => {
+      if (id === field.id) {
+        field[name] = value;
+      }
+      return field;
+    });
+
+    setQuarters(newInputFields);
+  };
+
+  const getItems = (selected: string[]) => {
     setInputValues({
       ...input,
-      [name]: date?.toISOString(),
+      items: [...selected],
     });
   };
+
+  const getQuarterItems = (selected) => {
+    setIsSelected(selected);
+  };
+
+  const handleSubmit = () => {
+    setOpen(false);
+  };
+
+  const handleSetItems = (id) => {
+    const updatedQuarter = quarters.filter((field) => field.id === id)[0];
+    updatedQuarter.items = isSelected;
+    const allQuarters = quarters.filter((field) => field.id !== id);
+    setQuarters([...allQuarters, updatedQuarter]);
+  };
+
   React.useEffect(() => {
     getQuarters(quarters);
   }, [quarters]);
+
   return (
     <div>
+      <SelectItemsModal
+        open={open}
+        setOpen={setOpen}
+        getItems={getItems}
+        state={[...input.items]}
+        items={items}
+        handleSubmit={handleSubmit}
+      />
       <div>
         <H1 className="mt-6">2. Fiscal year</H1>
       </div>
@@ -127,13 +200,13 @@ export const FiscalYear = ({
           <H2 className="mb-5">Start date</H2>
 
           <BaseDatePicker
-            dateValue={state.startDate}
+            dateValue={state.start}
             setDate={setDate}
-            name="startDate"
+            name="start"
           />
-          {errors && errors.startDate && (
+          {errors && errors.start && (
             <span className="text-red-500 mt-1 text-sm font-medium">
-              {errors.startDate}
+              {errors.start}
             </span>
           )}
         </div>
@@ -142,13 +215,13 @@ export const FiscalYear = ({
           <H2 className="mb-5">Stop date</H2>
 
           <BaseDatePicker
-            dateValue={state.stopDate}
+            dateValue={state.stop}
             setDate={setDate}
-            name="stopDate"
+            name="stop"
           />
-          {errors && errors.stopDate && (
+          {errors && errors.stop && (
             <span className="text-red-500 mt-1 text-sm font-medium">
-              {errors.stopDate}
+              {errors.stop}
             </span>
           )}
         </div>
@@ -157,16 +230,22 @@ export const FiscalYear = ({
       {quarters.map((qrt) => {
         return (
           <QuarterInput
-            id={qrt.id}
             key={qrt.id}
+            id={qrt.id}
             name={qrt.name}
             description={qrt.description}
-            startDate={qrt.startDate}
-            stopDate={qrt.stopDate}
+            start={qrt.start}
+            stop={qrt.stop}
             handleRemoveFields={handleRemoveFields}
+            handleChangeInput={handleChangeInput}
+            setDate={setInputDate}
+            state={qrt.items}
+            items={items}
+            getQuarterItems={getQuarterItems}
+            handleSetItems={handleSetItems}
           />
         );
-      })}{' '}
+      })}
       <div className="border border-black py-6 mt-10 -ml-9 mr-12 px-9">
         <H2 className="mt-5 mb-10">Add a new quarter</H2>
         <Grid className="space-x-5 mt-5">
@@ -195,29 +274,38 @@ export const FiscalYear = ({
         <Grid className="space-x-5 mt-5">
           <div className="w- mt- w-96">
             <H2 className="mb-5">Start date</H2>
-            <BaseDatePicker dateValue setDate={setInputDate} name="startDate" />
+            <BaseDatePicker
+              dateValue={input.start}
+              setDate={setInputDate}
+              name="start"
+            />
           </div>
           <div className="w- mt- w-96">
             <H2 className="mb-5">Stop date</H2>
 
-            <BaseDatePicker dateValue setDate={setInputDate} name="stopDate" />
+            <BaseDatePicker
+              dateValue={input.stop}
+              setDate={setInputDate}
+              name="stop"
+            />
           </div>
         </Grid>
         <ImageSelectBox
           className="mt-6 mb-6 w-96 flex items-center justify-center cursor-pointer"
-          //   onClick={() => setOpen(!open)}
+          onClick={() => {
+            setOpen(!open);
+          }}
         >
           <p>+ Select posts</p>
         </ImageSelectBox>
         <ShadowBtn
           bg="primary"
-          className="py-4 px-10 shadow-sm  rounded text-sm font-bold"
+          className="py-4 px-10 mt-5 shadow-sm  rounded text-sm font-bold"
           onClick={handleAddFields}
         >
           Add quarter
         </ShadowBtn>
       </div>
-      {/* </div> */}
     </div>
   );
 };
