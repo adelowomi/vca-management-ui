@@ -49,3 +49,28 @@ export const GET_ALL_MEDIA = gql`
     }
   }
 `;
+
+export const REMOVE_MEDIA = gql`
+  mutation removeMedia($mediaId: String!) {
+    removeMedia(mediaId: $mediaId) {
+      id
+      createdAt
+      updatedAt
+      name
+      description
+      type
+      document {
+        assembly
+        url
+      }
+      video
+      image {
+        assembly
+        small
+        medium
+        large
+        xLarge
+      }
+    }
+  }
+`;

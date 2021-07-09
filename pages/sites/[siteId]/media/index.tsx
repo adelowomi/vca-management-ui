@@ -18,11 +18,12 @@ export function ListMedia({ medias }) {
   } = useForm();
   const router = useRouter();
   const page = parseInt(router.query?.page as string, 10) || 0;
-  const nextPage = `${router.asPath.split('?')[0]}?search=${
-    router.query?.search
+  const currentPageUrl = router.asPath.split('?')[0];
+  const nextPage = `${currentPageUrl}?search=${
+    router.query?.search || ''
   }&page=${page + 1}`;
-  const prevPage = `${router.asPath.split('?')[0]}?search=${
-    router.query?.search
+  const prevPage = `${currentPageUrl}?search=${
+    router.query?.search || ''
   }&page=${page - 1 < 0 ? 0 : page - 1}`;
   const onSubmit = async (data) => {
     router.push({
@@ -32,98 +33,109 @@ export function ListMedia({ medias }) {
       },
     });
   };
+
   return (
     <Layout>
-      <div className="flex flex-col">
-        <div className="flex flex-row mb-8 justify-between ">
-          <div className="flex flex-row">
-            <div className="text-4xl font-bold">Media Gallery</div>
-            <div className="flex flex-col justify-end ml-8 pb-2">
-              <div>{`page ${router.query?.page}`}</div>
+      <div className="bg-vca-grey-7">
+        <div className="max-w-7xl px-4 sm:p-6 md:p-8 bg-vca-grey-7 m-auto">
+          <div className="flex flex-col">
+            <div className="flex flex-row mb-8 justify-between ">
+              <div className="flex flex-row">
+                <div className="text-4xl font-bold">Media Gallery</div>
+                <div className="flex flex-col justify-end ml-8 pb-2">
+                  <div>{`page ${router.query?.page}`}</div>
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="ml-6 bg-vca-blue h-12 text-white font-bold text-sm"
+              >
+                <div className="flex flex-row mx-8">
+                  <Link href={`${currentPageUrl}/create`}>
+                    <a className="mr-2">Add new</a>
+                  </Link>
+                </div>
+              </button>
             </div>
-          </div>
-          <button
-            type="submit"
-            className="ml-6 bg-vca-blue h-12 text-white font-bold text-sm"
-          >
-            <div className="flex flex-row mx-8">
-              <Link href={`${router.asPath}/create`}>
-                <a className="mr-2">Add new</a>
+            <form
+              className="flex flex-row items-center"
+              onSubmit={handleSubmit(onSubmit)}
+            >
+              <div className="mt-2">
+                <FormInput
+                  name="search"
+                  label="Search"
+                  register={register}
+                  error={errors.search}
+                  required={false}
+                  disableLabel={true}
+                />
+              </div>
+              <button
+                type="submit"
+                className="ml-6 bg-vca-blue h-12 text-white font-bold text-sm"
+              >
+                <div className="flex flex-row mx-8">
+                  <div className="mr-2">Search</div>
+                </div>
+              </button>
+            </form>
+            <div className="mt-12 mx-auto grid gap-5 grid-cols-3 2xl:grid-cols-4 lg:max-w-none">
+              {medias.map((media) => (
+                <MediaItemCard
+                  key={media.id}
+                  media={media}
+                  link={`${currentPageUrl}/${
+                    media.id
+                  }/${media.type.toLowerCase()}`}
+                />
+              ))}
+            </div>
+            <div className="mt-9 flex flex-row justify-between">
+              <Link href={`${prevPage}`}>
+                <a className="flex flex-row">
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                      />
+                    </svg>
+                  </div>
+                  <div className="ml-2">Previous</div>
+                </a>
+              </Link>
+              <Link aria-label="Next" href={`${nextPage}`}>
+                <a className="flex flex-row">
+                  <div className="mr-2">Next</div>
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      />
+                    </svg>
+                  </div>
+                </a>
               </Link>
             </div>
-          </button>
-        </div>
-        <form
-          className="flex flex-row items-center"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <div className="mt-2">
-            <FormInput
-              name="search"
-              label="Search"
-              register={register}
-              error={errors.search}
-              required={false}
-              disableLabel={true}
-            />
           </div>
-          <button
-            type="submit"
-            className="ml-6 bg-vca-blue h-12 text-white font-bold text-sm"
-          >
-            <div className="flex flex-row mx-8">
-              <div className="mr-2">Search</div>
-            </div>
-          </button>
-        </form>
-        <div className="mt-12 mx-auto grid gap-5 grid-cols-3 xl:grid-cols-4 lg:max-w-none">
-          {medias.map((media) => (
-            <MediaItemCard key={media.id} media={media} />
-          ))}
-        </div>
-        <div className="mt-9 flex flex-row justify-between">
-          <Link href={`${prevPage}`}>
-            <a className="flex flex-row">
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                  />
-                </svg>
-              </div>
-              <div className="ml-2">Previous</div>
-            </a>
-          </Link>
-          <Link aria-label="Next" href={`${nextPage}`}>
-            <a className="flex flex-row">
-              <div className="mr-2">Next</div>
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                  />
-                </svg>
-              </div>
-            </a>
-          </Link>
         </div>
       </div>
     </Layout>
