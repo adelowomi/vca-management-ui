@@ -3,13 +3,17 @@ import { withPageAuthRequired } from '@auth0/nextjs-auth0/dist/frontend';
 import moment from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 import React from 'react';
+import { RiDeleteBinLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 
 import Layout from '../../../../components/Layout/Layout';
 import { BulkActionDropdown } from '../../../../components/Page/BulkActionDropdown';
-import { PAGES_QUERY } from '../../../../graphql';
+import DeleteModal from '../../../../components/utilsGroup/DeleteModal';
+import { GET_SITE_MENUITEMS, PAGES_QUERY } from '../../../../graphql';
+import { DELETE_PAGE } from '../../../../graphql/pages';
 import { createApolloClient } from '../../../../lib/apollo';
 
 const PageActionsWrapper = tw.div`
@@ -57,12 +61,53 @@ const P = tw.p`
   text-left
 `;
 
-const Pages = ({ pages }) => {
+const Pages = ({ pages, menuItems, token }) => {
   const {
     query: { siteId },
   } = useRouter();
+  const [open, setOpen] = React.useState(false);
+  const [isDeleted, setIsDeleted] = React.useState(false);
+  const [id, setId] = React.useState(null);
+  const client = createApolloClient(token);
+
+  const getId = (id: string) => {
+    setOpen(!open);
+    setId(id);
+  };
+
+  const handleIsdeleted = (check: boolean) => {
+    setIsDeleted(check);
+  };
+
+  React.useEffect(() => {
+    onDelete();
+  }, [isDeleted]);
+
+  const onDelete = async () => {
+    try {
+      if (id) {
+        await client.mutate({
+          mutation: DELETE_PAGE,
+          variables: {
+            pageId: id,
+          },
+        });
+        Router.reload();
+      }
+      return;
+    } catch (error) {
+      return;
+    }
+  };
+
   return (
     <Layout>
+      <DeleteModal
+        open={open}
+        setOpen={setOpen}
+        name="Page"
+        handleIsdeleted={handleIsdeleted}
+      />
       <PageActionsWrapper>
         <PageActionsColOne>
           <h1 className="text-4xl font-semibold">Pages</h1>
@@ -118,7 +163,7 @@ const Pages = ({ pages }) => {
                         Page Title
                       </th>
                       <th scope="col" className="px-6 tracking-wider">
-                        Status
+                        Menu Items
                       </th>
                       <th scope="col" className="px-6 tracking-wider">
                         Last posted on
@@ -147,7 +192,11 @@ const Pages = ({ pages }) => {
                         </td>
                         <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
                           <Link href={`/sites/${el.site}/pages/${el.id}`}>
-                            {'Published'}
+                            {el.menuItem
+                              ? menuItems.filter(
+                                  (item) => item.id === el.menuItem
+                                )[0].name
+                              : ''}
                           </Link>
                         </td>
                         <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
@@ -158,9 +207,16 @@ const Pages = ({ pages }) => {
                           </Link>
                         </td>
                         <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
-                          <Link href={`/sites/${el.site}/pages/${el.id}/edit`}>
-                            edit
-                          </Link>
+                          <span className="flex space-x-5">
+                            <Link href={`/sites/${siteId}/pages/${el.id}/edit`}>
+                              <p>edit</p>
+                            </Link>
+
+                            <RiDeleteBinLine
+                              onClick={() => getId(el.id)}
+                              className="h-6"
+                            />
+                          </span>
                         </td>
                       </tr>
                     ))}
@@ -208,7 +264,32 @@ export async function getServerSideProps(ctx) {
     },
   });
 
-  return { props: { pages } };
+  const {
+    data: {
+      siteMenuItems: {
+        header: { menuItems },
+      },
+    },
+  } = await client.query({
+    query: GET_SITE_MENUITEMS,
+    variables: {
+      filter: {
+        combinedFilter: {
+          filters: [
+            {
+              singleFilter: {
+                field: 'siteId',
+                operator: 'EQ',
+                value: ctx.query.siteId,
+              },
+            },
+          ],
+        },
+      },
+    },
+  });
+
+  return { props: { pages, menuItems, token: session.idToken } };
 }
 
 export default withPageAuthRequired(Pages);

@@ -2,14 +2,20 @@ import { getSession } from '@auth0/nextjs-auth0';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0/dist/frontend';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 import React from 'react';
+import { RiDeleteBinLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 
 import Layout from '../../../../components/Layout/Layout';
 import { BulkActionDropdown } from '../../../../components/Page/BulkActionDropdown';
+import DeleteModal from '../../../../components/utilsGroup/DeleteModal';
 import { GET_SITE_MENUITEMS } from '../../../../graphql';
-import { GET_PERFORMANCES } from '../../../../graphql/performance.gql';
+import {
+  DELETE_PERFORMANCE,
+  GET_PERFORMANCES,
+} from '../../../../graphql/performance.gql';
 import { createApolloClient } from '../../../../lib/apollo';
 
 const PageActionsWrapper = tw.div`
@@ -57,17 +63,58 @@ const P = tw.p`
   text-left
 `;
 
-const index = ({ performances, menuItems }) => {
+const index = ({ performances, menuItems, token }) => {
+  const [open, setOpen] = React.useState(false);
+  const [isDeleted, setIsDeleted] = React.useState(false);
+  const [id, setId] = React.useState(null);
+  const client = createApolloClient(token);
+
   const {
     query: { siteId },
   } = useRouter();
+
+  const getId = (id: string) => {
+    setOpen(!open);
+    setId(id);
+  };
+
+  const handleIsdeleted = (check: boolean) => {
+    setIsDeleted(check);
+  };
+
+  React.useEffect(() => {
+    onDelete();
+  }, [isDeleted]);
+
+  const onDelete = async () => {
+    try {
+      if (id) {
+        await client.mutate({
+          mutation: DELETE_PERFORMANCE,
+          variables: {
+            performanceId: id,
+          },
+        });
+        Router.reload();
+      }
+      return;
+    } catch (error) {
+      return;
+    }
+  };
   return (
     <Layout>
+      <DeleteModal
+        open={open}
+        setOpen={setOpen}
+        name="Performance"
+        handleIsdeleted={handleIsdeleted}
+      />
       <PageActionsWrapper>
         <PageActionsColOne>
           <h1 className="text-4xl font-semibold">Performance</h1>
           <PageActionsColOneBtn className="focus:outline-none">
-            <Link href={`/sites/${siteId}/performances/create`}> Add New</Link>
+            <Link href={`/sites/${siteId}/performance/create`}> Add New</Link>
           </PageActionsColOneBtn>
         </PageActionsColOne>
         <div className=" flex mt-7">
@@ -126,6 +173,7 @@ const index = ({ performances, menuItems }) => {
                       <th scope="col" className="px-6  tracking-wider">
                         Actions
                       </th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
@@ -162,11 +210,18 @@ const index = ({ performances, menuItems }) => {
                           </Link>
                         </td>
                         <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
-                          <Link
-                            href={`/sites/${siteId}/performance/${el.id}/edit`}
-                          >
-                            edit
-                          </Link>
+                          <span className="flex space-x-5">
+                            <Link
+                              href={`/sites/${siteId}/performance/${el.id}/edit`}
+                            >
+                              <p>edit</p>
+                            </Link>
+
+                            <RiDeleteBinLine
+                              onClick={() => getId(el.id)}
+                              className="h-6"
+                            />
+                          </span>
                         </td>
                       </tr>
                     ))}
@@ -231,7 +286,7 @@ export async function getServerSideProps(ctx) {
     menuItems = { error: true };
   }
 
-  return { props: { performances, menuItems } };
+  return { props: { performances, menuItems, token: session.idToken } };
 }
 
 export default withPageAuthRequired(index);

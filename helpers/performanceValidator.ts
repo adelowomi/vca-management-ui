@@ -5,9 +5,9 @@ export const performanceValidator = (values: any) => {
     errors.pageTitle = '"page title" is required';
   }
 
-  if (!values.menuItem) {
-    errors.menuItem = 'menuItem is required';
-  }
+  // if (!values.menuItem) {
+  //   errors.menuItem = 'menuItem is required';
+  // }
 
   if (!values.mediaUrl) {
     errors.mediaUrl = 'mediaUrl is required';

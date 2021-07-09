@@ -136,8 +136,8 @@ const GET_PERFORMANCE = gql`
       createdAt
       quarter {
         id
-        start
-        stop
+        # start
+        # stop
         name
         description
         items {
@@ -175,4 +175,18 @@ const GET_PERFORMANCE = gql`
   }
 `;
 
-export { ADD_PERFORMANCE, EDIT_PERFORMANCE, GET_PERFORMANCE, GET_PERFORMANCES };
+const DELETE_PERFORMANCE = gql`
+  mutation($performanceId: String!) {
+    removePerformance(performanceId: $performanceId) {
+      id
+    }
+  }
+`;
+
+export {
+  ADD_PERFORMANCE,
+  DELETE_PERFORMANCE,
+  EDIT_PERFORMANCE,
+  GET_PERFORMANCE,
+  GET_PERFORMANCES,
+};

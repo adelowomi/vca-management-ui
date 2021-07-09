@@ -85,7 +85,8 @@ const QuarterInput = ({
           <H2 className="mb-5">Start date</H2>
           <BaseDatePicker
             name="start"
-            dateValue={start ? new Date() : new Date()}
+            // dateValue={start ? new Date() : new Date()}
+            dateValue={start}
             setDate={setDate}
             id={id}
           />
@@ -100,7 +101,8 @@ const QuarterInput = ({
           <H2 className="mb-5">Stop date</H2>
           <BaseDatePicker
             name="stop"
-            dateValue={stop ? new Date() : new Date()}
+            // dateValue={start ? new Date() : new Date()}
+            dateValue={stop}
             setDate={setDate}
             id={id}
           />

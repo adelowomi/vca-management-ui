@@ -70,9 +70,11 @@ export const performanceUseForm = (
             description: state.description,
             start: state.start,
             stop: state.stop,
-            menuItem: state.menuItem,
+            menuItem: state.menuItem === '' ? null : state.menuItem,
             quarter: state.quarters.map(({ ...obj }) => {
               delete obj.id;
+              obj.start ? obj : (obj.start = new Date());
+              obj.stop ? obj : (obj.stop = new Date());
               obj.items = getId(obj.items);
               return obj;
             }),
@@ -113,11 +115,13 @@ export const performanceUseForm = (
             description: state.description,
             start: state.start,
             stop: state.stop,
-            menuItem: state.menuItem,
+            menuItem: state.menuItem === '' ? null : state.menuItem,
             quarter: state.quarters.map(({ ...obj }) => {
               delete obj.id;
               delete obj.mediaUrl;
               delete obj.__typename;
+              obj.start ? obj : (obj.start = new Date());
+              obj.stop ? obj : (obj.stop = new Date());
 
               obj.items = getId(obj.items);
               return obj;

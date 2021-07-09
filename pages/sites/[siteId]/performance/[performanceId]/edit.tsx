@@ -2,6 +2,7 @@ import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Hero } from '../../../../../components/Hero/Hero';
 import Layout from '../../../../../components/Layout/Layout';
 import { CallToAction } from '../../../../../components/Page/callToAction';
 import { PageHeaderStyle } from '../../../../../components/Page/HeaderPageStyle';
@@ -142,6 +143,17 @@ const edit = ({ token, menuItems, medias, performance, items }) => {
             Preview header
           </ShadowBtn>
         </div>
+        <div className="mt-5 mb-5">
+          <Hero
+            mediaUrl={state.mediaUrl}
+            actionText={state.actionText}
+            heading={state.headerText}
+            location={state.location}
+            hasAction={state.hasAction}
+            caption={state.captionText}
+            type={state.headerType}
+          />
+        </div>
         <hr className="border-gray-400 border-5 w-full mt-8" />
         <FiscalYear
           state={state}
@@ -215,11 +227,15 @@ export async function getServerSideProps(ctx) {
         },
       },
     });
+    // console.log({ data });
 
     performance = data.performance ? data.performance : { error: true };
   } catch (error) {
+    // console.log({ error });
+
     performance = { error: true };
   }
+  // console.log({ performance });
 
   try {
     const { data } = await client.query({

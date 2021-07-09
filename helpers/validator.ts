@@ -8,9 +8,9 @@ export const validator = (values: any) => {
   if (!values.site) {
     errors.site = 'siteId required';
   }
-  if (!values.menuItem) {
-    errors.menuItem = 'menuItem is required';
-  }
+  // if (!values.menuItem) {
+  //   errors.menuItem = 'menuItem is required';
+  // }
 
   if (!values.mediaUrl) {
     errors.mediaUrl = 'mediaUrl is required';
