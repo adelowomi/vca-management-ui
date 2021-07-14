@@ -1,13 +1,10 @@
-export const validator = (values: any) => {
+export const performanceValidator = (values: any) => {
   const errors: any = {};
 
-  if (!values.pageTitle.trim()) {
+  if (!values.pageTitle) {
     errors.pageTitle = '"page title" is required';
   }
 
-  if (!values.site) {
-    errors.site = 'siteId required';
-  }
   // if (!values.menuItem) {
   //   errors.menuItem = 'menuItem is required';
   // }
@@ -30,14 +27,34 @@ export const validator = (values: any) => {
   if (!values.headerType) {
     errors.headerType = 'headerType is required';
   }
-  if (!values.tags) {
-    errors.tags = 'tags is required';
-  }
   if (!values.location) {
     errors.location = 'location is required';
   }
   if (!values.hasAction) {
     errors.hasAction = 'hasAction is required';
   }
+
+  if (!values.year) {
+    errors.year = 'year is required';
+  }
+  if (!values.name) {
+    errors.name = 'name is required';
+  }
+  if (!values.description) {
+    errors.description = 'description is required';
+  }
+  if (!values.stop) {
+    errors.stop = 'stop date is required';
+  }
+  if (!values.start) {
+    errors.start = 'start date is required';
+  }
+  if (!values.nasdaqId) {
+    errors.nasdaqId = 'nasdaqId is required';
+  }
+
+  // if (values.quarters.length === 0) {
+  //   errors.nasdaqId = 'nasdaqId is required';
+  // }
   return errors;
 };

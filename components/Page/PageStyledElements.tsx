@@ -62,3 +62,19 @@ export const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 2fr;
 `;
+
+export const Container2 = styled.div`
+  box-sizing: border-box;
+  padding: 20px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+export const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;

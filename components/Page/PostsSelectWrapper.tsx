@@ -29,27 +29,16 @@ const options = [
 
 export const PostSelectWrapper = ({
   setOpen,
-  setState,
+  getItems,
   state,
   handleSubmit,
   items,
   type,
 }) => {
-  const arr = state && state.widgetItems ? [...state.widgetItems] : [];
-  const [selected, setSelected] = React.useState(arr);
+  const [selected, setSelected] = React.useState([...state]);
 
   React.useEffect(() => {
-    if (type === 'posts') {
-      setState({
-        ...state,
-        itemId: selected[selected.length - 1],
-      });
-    } else if (type === 'widget') {
-      setState({
-        ...state,
-        widgetItems: [...selected],
-      });
-    }
+    getItems(selected);
   }, [selected]);
 
   const selectedArr = (arr: any) => {
@@ -59,7 +48,7 @@ export const PostSelectWrapper = ({
   return (
     <Container>
       <Row>
-        <H1 className="mb-10">Select Media</H1>
+        <H1 className="mb-10">Select Posts</H1>
         <button
           className="flex space-x-2 justify-center focus:outline-none"
           type="button"
@@ -90,16 +79,15 @@ export const PostSelectWrapper = ({
         </div>
         <div>
           <button
-            style={{ background: '#1890FF' }}
-            className="py-3.5 px-8 text-white rounded-sm font-bold text-sm focus:outline-none"
-            onClick={handleSubmit(setOpen)}
+            className="py-3.5 px-8 text-white rounded-sm font-bold text-sm focus:outline-none bg-vca-blue"
+            onClick={() => handleSubmit()}
           >
-            Add Media
+            Add Posts
           </button>
         </div>
       </Row>
       <div className="grid grid-cols-4 gap-4 mt-8">
-        {items.map((item) => (
+        {items.map((item: any) => (
           <PostItemCard
             key={item.id}
             item={item}

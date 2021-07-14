@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { ErrorProps } from '../../types/interfaces';
 import { SelectMediaModal } from '../utilsGroup/SelectMediaModal';
 import { HeaderTypeBtn } from './PageButtons';
 import {
@@ -16,6 +17,7 @@ export interface PageHeaderStyleProps {
   setState: any;
   medias: any;
   handleSubmit?: any;
+  errors?: ErrorProps;
 }
 
 export function PageHeaderStyle({
@@ -24,6 +26,7 @@ export function PageHeaderStyle({
   state,
   setState,
   medias,
+  errors,
 }: PageHeaderStyleProps) {
   const [open, setOpen] = React.useState(false);
   return (
@@ -75,6 +78,9 @@ export function PageHeaderStyle({
         >
           <p>+ Select from media gallery</p>
         </ImageSelectBox>
+        {errors && errors.mediaUrl && (
+          <span className="text-red-500 mt-1">{errors.mediaUrl}</span>
+        )}
         <SelectMediaModal
           open={open}
           setOpen={setOpen}

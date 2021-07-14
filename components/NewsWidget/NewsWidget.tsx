@@ -6,7 +6,7 @@ import { WidgetCard } from './WidgetCard';
 
 const settings = {
   dots: true,
-  infinite: true,
+  infinite: false,
   speed: 500,
   slidesToShow: 3,
   slidesToScroll: 3,
@@ -17,7 +17,7 @@ const settings = {
       settings: {
         slidesToShow: 2,
         slidesToScroll: 2,
-        infinite: true,
+        infinite: false,
         dots: true,
       },
     },
@@ -49,6 +49,7 @@ type newsWidgetProps = {
   contain: boolean;
   title: string;
   desc: string;
+  allItems: any;
 };
 
 export const NewsWidget: React.FC<newsWidgetProps> = ({
@@ -87,9 +88,9 @@ export const NewsWidget: React.FC<newsWidgetProps> = ({
           </div>
         </div>
         <Slider className="" {...settings} ref={sliderRef}>
-          {items.map((item, index: number) => (
-            <WidgetCard key={index} item={item} />
-          ))}
+          {items.map((item, index: number) => {
+            return <WidgetCard key={index} item={item} />;
+          })}
         </Slider>
       </div>
     </div>

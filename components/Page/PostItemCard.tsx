@@ -14,18 +14,6 @@ const Input = styled.input`
     background: #1890ff;
   }
 `;
-interface CardsProps {
-  item: {
-    id: string;
-    mediaUrl: string;
-    title: string;
-    content: string;
-  };
-  selectedArr: any;
-  selected: any;
-  count: number;
-  exists: boolean;
-}
 export const PostItemCard = ({
   item,
   selectedArr,
@@ -34,9 +22,10 @@ export const PostItemCard = ({
   exists,
 }) => {
   const ref = React.useRef<HTMLInputElement>(null);
-  const handleClick = (id: string | number) => {
+
+  const handleClick = (item: any) => {
     const newArr = [...selected];
-    const finder = newArr.findIndex((el) => el === id);
+    const finder = newArr.findIndex((el) => el.id === item.id);
     if (newArr.length === count) {
       ref.current.checked = null;
 
@@ -51,7 +40,7 @@ export const PostItemCard = ({
     if (finder > -1) {
       newArr.splice(finder, 1);
     } else {
-      newArr.push(id);
+      newArr.push(item);
     }
     selectedArr(newArr);
   };
@@ -73,8 +62,8 @@ export const PostItemCard = ({
           </div>
         </div>
         <div className="px-3 py-4">
-          <h1 className="font-semibold text-lg mb-2">{item.category}</h1>
-          <p className="text-gray-700 text-sm">{item.description}</p>
+          <h1 className="font-semibold text-lg mb-2">{item?.featured}</h1>
+          <p className="text-gray-700 text-sm">{item?.description}</p>
         </div>
       </div>
     </>

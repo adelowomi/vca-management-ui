@@ -27,20 +27,16 @@ const options = [
   { id: 'type', name: 'Media type' },
 ];
 
-export const SelectMedia = ({
-  setOpen,
-  setState,
-  state,
-  // handleSubmit,
-  medias,
-}) => {
+export const SelectMedia = ({ setOpen, setState, state, medias }) => {
   const [selected, setSelected] = React.useState([]);
 
   React.useEffect(() => {
     setState({
       ...state,
       mediaUrl: selected[selected.length - 1]?.image.small,
+      media: selected[selected.length - 1]?.id,
     });
+
     // } else if (media.type === 'VIDEO') {
     //   inputRef.current.checked = !inputRef.current.checked;
     //   setState({ ...state, mediaUrl: media.video });
@@ -86,18 +82,10 @@ export const SelectMedia = ({
             />
           </div>
         </div>
-        <div>
-          {/* <button
-            style={{ background: '#1890FF' }}
-            className="py-3.5 px-8 text-white rounded-sm font-bold text-sm focus:outline-none"
-            onClick={handleSubmit(setOpen)}
-          >
-            Add media
-          </button> */}
-        </div>
+        <div></div>
       </Row>
       <div className="grid grid-cols-4 gap-4 mt-8">
-        {medias.map((media) => (
+        {medias.map((media: any) => (
           <MediaCard
             key={media.id}
             media={media}

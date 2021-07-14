@@ -1,4 +1,4 @@
-export function stringToBoolean(string: string) {
+export function stringToBoolean(string: any) {
   switch (string.toLowerCase().trim()) {
     case 'true':
     case 'yes':

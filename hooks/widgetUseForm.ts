@@ -1,4 +1,5 @@
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import Router from 'next/router';
 import React from 'react';
 import { useToasts } from 'react-toast-notifications';
 
@@ -20,33 +21,31 @@ export const widgetUseForm = (
   pageId: string | string[],
   widget: any
 ) => {
-  const getId = (arr: { id: string }[]) => {
-    return arr.map((el) => el.id);
+  const getId = (arr: any) => {
+    return arr.map((el: any) => (el.id ? el.id : el));
   };
 
   const [state, setState] = React.useState<WidgetStateProps>({
-    widgetDescription: (widget && widget.description) || '',
-    widgetTitle: (widget && widget.title) || '',
-    widgetPageId: pageId,
+    widgetDescription: widget?.description || '',
+    widgetTitle: widget?.title || '',
+    widgetPageId: widget?.page || pageId,
     widgetDisable: false,
     widgetType: 'ITEM',
-    widgetItems: (widget && getId(widget.items)) || [],
+    widgetItems: widget?.items || [],
   });
-  // console.log('WIDGET STATE', state);
 
   const [errors, setErrors] = React.useState<WidgetErrorProps>({});
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+
   const { addToast } = useToasts();
 
-  const handleSubmit = (setOpen: any) => (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     setErrors(validate(state));
     setIsSubmitting(true);
     setOpen(false);
   };
-
   const createWidget = async () => {
     try {
       await client.mutate({
@@ -56,24 +55,18 @@ export const widgetUseForm = (
             description: state.widgetDescription,
             disable: state.widgetDisable,
             title: state.widgetTitle,
-            items: state.widgetItems,
+            items: getId(state.widgetItems),
             page: state.widgetPageId,
             type: state.widgetType,
           },
         },
       });
-      setState({
-        widgetDescription: '',
-        widgetTitle: '',
-        widgetPageId: '',
-        widgetDisable: false,
-        widgetType: '',
-        widgetItems: [],
-      });
       setIsSubmitting(false);
 
       addToast('Widget is successfully created', { appearance: 'success' });
+      Router.reload();
     } catch (error) {
+      setIsSubmitting(false);
       addToast('Widget could not be created!', { appearance: 'error' });
     }
   };
@@ -87,25 +80,20 @@ export const widgetUseForm = (
             description: state.widgetDescription,
             disable: state.widgetDisable,
             title: state.widgetTitle,
-            items: state.widgetItems,
+            items: getId(state.widgetItems),
             page: state.widgetPageId,
             type: state.widgetType,
           },
           widgetId: widget.id,
         },
       });
-      setState({
-        widgetDescription: '',
-        widgetTitle: '',
-        widgetPageId: '',
-        widgetDisable: false,
-        widgetType: '',
-        widgetItems: [],
-      });
       setIsSubmitting(false);
 
       addToast('Widget is successfully Edited', { appearance: 'success' });
+      Router.reload();
     } catch (error) {
+      setIsSubmitting(false);
+
       addToast('Widget could not be Edited!', { appearance: 'error' });
     }
   };
@@ -119,13 +107,13 @@ export const widgetUseForm = (
   };
 
   React.useEffect(() => {
-    if (Object.keys(errors).length === 0 && isSubmitting && !widget) {
+    if (Object.keys(errors).length === 0 && isSubmitting && widget.error) {
       createWidget();
     }
-    if (Object.keys(errors).length === 0 && isSubmitting && widget) {
+    if (Object.keys(errors).length === 0 && isSubmitting && widget.items) {
       updateWidget();
     }
   }, [errors]);
 
-  return { handleChange, state, handleSubmit, errors, setState };
+  return { handleChange, state, handleSubmit, errors, setState, open, setOpen };
 };
