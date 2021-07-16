@@ -1,6 +1,6 @@
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
-export const PAGES_QUERY = gql`
+const PAGES_QUERY = gql`
   query Pages($limit: Int, $offset: Int, $filter: FilterInput) {
     pages(filter: $filter, limit: $limit, offset: $offset) {
       id
@@ -8,6 +8,8 @@ export const PAGES_QUERY = gql`
       tags
       site
       createdAt
+      menuItem
+
       hero {
         type
         caption
@@ -17,12 +19,25 @@ export const PAGES_QUERY = gql`
         actionText
         actionSlug
         location
+        media {
+          image {
+            small
+            medium
+            large
+          }
+        }
       }
     }
   }
 `;
-
-export const PAGE_QUERY = gql`
+const DELETE_PAGE = gql`
+  mutation($pageId: String!) {
+    removePage(pageId: $pageId) {
+      id
+    }
+  }
+`;
+const PAGE_QUERY = gql`
   query Page($filter: FilterInput) {
     page(filter: $filter) {
       id
@@ -52,10 +67,9 @@ export const PAGE_QUERY = gql`
   }
 `;
 
-export const ADD_PAGE = gql`
+const ADD_PAGE = gql`
   mutation CreatePage($createPageInput: CreatePageInput!) {
     createPage(createPageInput: $createPageInput) {
-      id
       id
       name
       tags
@@ -72,8 +86,7 @@ export const ADD_PAGE = gql`
     }
   }
 `;
-
-export const EDIT_PAGE = gql`
+const EDIT_PAGE = gql`
   mutation($updatePageInput: UpdatePageInput!, $pageId: String!) {
     updatePage(updatePageInput: $updatePageInput, pageId: $pageId) {
       id
@@ -94,3 +107,4 @@ export const EDIT_PAGE = gql`
     }
   }
 `;
+export { ADD_PAGE, DELETE_PAGE, EDIT_PAGE, PAGE_QUERY, PAGES_QUERY };

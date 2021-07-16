@@ -1,4 +1,7 @@
 import React from 'react';
+
+import { stringToBoolean } from '../../helpers/stringToBoolean';
+
 export interface HeroProps {
   mediaUrl: string;
   actionText: string;
@@ -83,17 +86,35 @@ export const Hero: React.FC<HeroProps> = ({
             backgroundImage: `linear-gradient(90deg, rgba(0, 0, 0, 0.7) 1.68%, rgba(0, 0, 0, 0) 88.4%), url( ${mediaUrl})`,
           }}
         >
-          <div className="bg-transparent lg:w-2/4 w-full h-full flex items-center justify-center">
-            <div className="w-4/5">
-              <h1 className="text-4xl text-white font-bold font-roboto w-full lg:text-left md:text-center text-center">
+          <div className="bg-transparent lg:w- w-full h-full flex flex-col items- justify- mt-36">
+            <div className="">
+              <h1
+                className={
+                  location == 'LEFT'
+                    ? `text-4xl text-white font-bold font-roboto ml-9 w-full lg:text-left md:text-center text-center`
+                    : location == 'RIGHT'
+                    ? `text-4xl pr-14 text-white font-bold font-roboto w-full lg:text-right md:text-center text-center`
+                    : `text-4xl text-white font-bold font-roboto w-full lg:text-center md:text-center text-center`
+                }
+              >
                 {heading}
               </h1>
-              {hasAction && actionText ? (
-                <button className="w-2/5 flex items-center justify-center border border-blue-500 focus:outline-none bg-blue-500 text-base font-medium text-white bg-primary \ md:text-lg h-12 mt-6  mx-auto lg:mx-0 md:mx-auto">
+            </div>
+            {stringToBoolean(hasAction) && actionText ? (
+              <div
+                className={
+                  location == 'LEFT'
+                    ? `w-full ml-9 flex justify-start`
+                    : location == 'RIGHT'
+                    ? `w-full pr-14 flex justify-end`
+                    : `w-full flex justify-center`
+                }
+              >
+                <button className="w-36  border-none text-base font-medium text-white bg-blue-500 hover:bg-blue-500 md:text-lg h-12 mt-6 font-roboto ">
                   {actionText}
                 </button>
-              ) : null}
-            </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

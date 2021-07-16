@@ -44,10 +44,15 @@ export const Btn = styled.button<IbtnProps>`
     outline: none;
   }
 `;
-export const ShadowBtn = styled.button`
+type ShowBtnProps = {
+  bg?: string;
+};
+export const ShadowBtn = styled.button<ShowBtnProps>`
   background-color: #e8f4ff;
+
+  background: ${({ bg }) => (bg === 'primary' ? '#1890FF' : '#e8f4ff')};
+  color: ${({ bg }) => (bg === 'primary' ? '#fff' : '#1890FF')};
   border-radius: 2px;
-  color: #1890ff;
   display: flex;
   justify-content: center;
   text-align: center;

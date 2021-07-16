@@ -1,3 +1,4 @@
+import Router from 'next/router';
 import React from 'react';
 import { useToasts } from 'react-toast-notifications';
 
@@ -5,14 +6,59 @@ import { EDIT_ITEM } from '../../graphql/items.gql';
 import { SelectItemsModal } from '../utilsGroup/SelectItemsModal';
 import { ShadowBtn } from './PageButtons';
 import { ColumnSection, H2, ImageSelectBox } from './PageStyledElements';
+import PostList from './PostList';
 
-export const PagePosts = ({ items, client, pageId }) => {
+export const PagePosts = ({ items, client, pageId, pageItems }) => {
   const [open, setOpen] = React.useState(false);
   const { addToast } = useToasts();
   const [state, setState] = React.useState({
-    itemId: '',
+    itemId: null,
+    posts: [...pageItems],
   });
-  const handleSubmit = (setOpen: any) => async (
+
+  const filterPosts = (posts: any, id: string) => {
+    return posts.filter((el: any) => el.id !== id);
+  };
+
+  const handleDelete = async (itemId: string) => {
+    try {
+      await client.mutate({
+        mutation: EDIT_ITEM,
+        variables: {
+          updateItemInput: {
+            pageId: null,
+          },
+          itemId: itemId,
+        },
+      });
+      setState({
+        ...state,
+        posts: filterPosts(state.posts, itemId),
+      });
+      addToast('Item is successfully removed from this page.', {
+        appearance: 'success',
+      });
+
+      Router.reload();
+    } catch (error) {
+      addToast('Failed to remove Item from this page.', {
+        appearance: 'error',
+      });
+      setOpen(false);
+      return;
+    }
+  };
+
+  const getItems = (selected: any) => {
+    setState({
+      ...state,
+      itemId: selected[selected.length - 1]?.id
+        ? selected[selected.length - 1]?.id
+        : null,
+    });
+  };
+
+  const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
@@ -21,17 +67,19 @@ export const PagePosts = ({ items, client, pageId }) => {
         mutation: EDIT_ITEM,
         variables: {
           updateItemInput: {
-            pageId,
+            pageId: pageId,
           },
           itemId: state.itemId,
         },
       });
       addToast('Item is successfully added to page', { appearance: 'success' });
       setOpen(false);
+      Router.reload();
+      return;
     } catch (error) {
       addToast('Failed to add item to page', { appearance: 'error' });
-
       setOpen(false);
+      return;
     }
   };
 
@@ -50,11 +98,14 @@ export const PagePosts = ({ items, client, pageId }) => {
             Preview body
           </ShadowBtn>
         </div>
+        <PostList pageItems={state.posts} handleDelete={handleDelete} />
+
+        {/* modal for adding posts to page */}
         <SelectItemsModal
           open={open}
           setOpen={setOpen}
-          setState={setState}
-          state={state}
+          getItems={getItems}
+          state={[]}
           handleSubmit={handleSubmit}
           items={items}
           type="posts"

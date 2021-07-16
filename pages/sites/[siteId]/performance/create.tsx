@@ -2,43 +2,43 @@ import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Hero } from '../../../../../components/Hero/Hero';
-import Layout from '../../../../../components/Layout/Layout';
-import { CallToAction } from '../../../../../components/Page/callToAction';
-import { CreateWidget } from '../../../../../components/Page/CreateWidget';
-import { PageHeaderStyle } from '../../../../../components/Page/HeaderPageStyle';
-import { ShadowBtn } from '../../../../../components/Page/PageButtons';
-import { PageControls } from '../../../../../components/Page/PageControls';
-import { PagePosts } from '../../../../../components/Page/PagePosts';
+import { Hero } from '../../../../components/Hero/Hero';
+import Layout from '../../../../components/Layout/Layout';
+import { CallToAction } from '../../../../components/Page/callToAction';
+import { PageHeaderStyle } from '../../../../components/Page/HeaderPageStyle';
+import { ShadowBtn } from '../../../../components/Page/PageButtons';
+import { PageControls } from '../../../../components/Page/PageControls';
+import { Input } from '../../../../components/Page/PageInput';
 import {
   ColumnSection,
   Container,
-} from '../../../../../components/Page/PageStyledElements';
-import { PageTitle } from '../../../../../components/Page/PageTitle';
-import { Textposition } from '../../../../../components/Page/TextPosition';
+  H2,
+} from '../../../../components/Page/PageStyledElements';
+import { PageTitle } from '../../../../components/Page/PageTitle';
+import { Textposition } from '../../../../components/Page/TextPosition';
+import { FiscalYear } from '../../../../components/Performance/FiscalYear';
 import {
   GET_ALL_ITEMS_QUERY,
   GET_ALL_MEDIA,
   GET_SITE_MENUITEMS,
-  GET_WIDGET,
-  PAGE_QUERY,
-} from '../../../../../graphql';
-import { validator } from '../../../../../helpers/validator';
-import useForm from '../../../../../hooks/useForm';
-import { createApolloClient } from '../../../../../lib/apollo';
+} from '../../../../graphql';
+import { performanceValidator } from '../../../../helpers/performanceValidator';
+import { performanceUseForm } from '../../../../hooks/performance.hooks';
+import { createApolloClient } from '../../../../lib/apollo';
 
-const edit = ({ token, menuItems, page, items, widget, medias, pageItems }) => {
+const create = ({ token, menuItems, items, medias }) => {
   const client = createApolloClient(token);
   const {
-    query: { siteId, id: pageId },
+    query: { siteId },
   } = useRouter();
+
   const {
     handleSubmit,
     state,
     errors,
     setState,
     handleChange,
-  } = useForm(validator, client, { siteId, pageId, page, type: 'edit' });
+  } = performanceUseForm(performanceValidator, client, { type: 'add' });
 
   const onButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -57,12 +57,27 @@ const edit = ({ token, menuItems, page, items, widget, medias, pageItems }) => {
       location: e.currentTarget.dataset.textposition,
     });
   };
+
+  const setDate = (date: any, name: string) => {
+    setState({
+      ...state,
+      [name]: date?.toISOString(),
+    });
+  };
+
+  const getQuarters = (data) => {
+    setState({
+      ...state,
+      quarters: [...data],
+    });
+  };
+
   return (
     <Layout>
       <Container>
         <PageControls
           onSubmit={handleSubmit}
-          title="Edit page"
+          title="Add a new performance page"
           siteId={siteId}
         />
         <PageTitle
@@ -70,13 +85,13 @@ const edit = ({ token, menuItems, page, items, widget, medias, pageItems }) => {
           handleChange={handleChange}
           errors={errors}
           menuItem={state.menuItem}
-          options={menuItems.error ? [] : menuItems}
+          options={menuItems}
         />
         <hr className="border-gray-400 border-5 w-full mt-8" />
         <PageHeaderStyle
           onButtonClick={onButtonClick}
           headerType={state.headerType}
-          medias={medias ? medias : []}
+          medias={medias.error ? [] : medias}
           state={state}
           setState={setState}
           handleSubmit={handleSubmit}
@@ -99,6 +114,30 @@ const edit = ({ token, menuItems, page, items, widget, medias, pageItems }) => {
           errors={errors}
           hasAction={state.hasAction}
         />
+        <div className="mt-9">
+          <H2>NASDAQ ID</H2>
+          <Input
+            className="py-4 mt-3 w-96"
+            placeholder="Enter ID"
+            onChange={handleChange}
+            name="nasdaqId"
+            value={state.nasdaqId}
+          />
+
+          {errors && errors.nasdaqId && (
+            <span className="text-red-500 mt-1 text-sm font-medium">
+              {errors.nasdaqId}
+            </span>
+          )}
+        </div>
+        <div className="mt-5">
+          <ShadowBtn
+            bg="seconary"
+            className="py-4 px-10 shadow-sm rounded text-sm font-bold"
+          >
+            Preview header
+          </ShadowBtn>
+        </div>
         <div className="mt-5 mb-5">
           <Hero
             mediaUrl={state.mediaUrl}
@@ -111,24 +150,26 @@ const edit = ({ token, menuItems, page, items, widget, medias, pageItems }) => {
           />
         </div>
         <hr className="border-gray-400 border-5 w-full mt-8" />
-        <CreateWidget
-          client={client}
-          pageId={pageId}
+        <FiscalYear
+          state={state}
+          handleChange={handleChange}
+          setDate={setDate}
+          getQuarters={getQuarters}
+          errors={errors}
           items={items.error ? [] : items}
-          widget={widget}
         />
-
-        <hr className="border-gray-400 border-5 w-full mt-8" />
-        <PagePosts
-          items={items.error ? [] : items}
-          client={client}
-          pageId={pageId}
-          pageItems={pageItems.error ? [] : pageItems}
-        />
-        <hr className="border-gray-400 border-5 w-full mt-8" />
-        <ColumnSection>
-          <div className="">
-            <ShadowBtn className="py-4 px-10 shadow-sm rounded text-sm font-bold">
+        <ColumnSection className="mt-5 mb-5">
+          <div className="mt-5 space-x-3 flex flex-row">
+            <ShadowBtn
+              bg="primary"
+              className="py-4 px-10 shadow-sm rounded text-sm font-bold"
+            >
+              Add a new quarter
+            </ShadowBtn>
+            <ShadowBtn
+              bg="secondary"
+              className="py-4 px-10 shadow-sm rounded text-sm font-bold"
+            >
               Save as draft
             </ShadowBtn>
           </div>
@@ -139,7 +180,7 @@ const edit = ({ token, menuItems, page, items, widget, medias, pageItems }) => {
 };
 
 export async function getServerSideProps(ctx) {
-  const { siteId, id: pageId } = ctx.query;
+  const { siteId } = ctx.query;
   const session: Session = getSession(ctx.req, ctx.res);
   if (!session) {
     return {
@@ -150,64 +191,9 @@ export async function getServerSideProps(ctx) {
   }
   const client = createApolloClient(session?.idToken);
 
-  let page: any;
   let menuItems: any;
   let medias: any;
-  let widget: any;
   let items: any;
-  let pageItems: any;
-
-  try {
-    const { data } = await client.query({
-      query: PAGE_QUERY,
-      variables: {
-        filter: {
-          singleFilter: {
-            field: '_id',
-            operator: 'EQ',
-            value: pageId,
-          },
-        },
-      },
-    });
-
-    page = data.page ? data.page : { error: true };
-  } catch (error) {
-    page = { error: true };
-  }
-
-  try {
-    const { data } = await client.query({
-      query: GET_ALL_ITEMS_QUERY,
-      variables: {
-        siteId: siteId,
-      },
-    });
-
-    items = data.getAllItems ? data.getAllItems : { error: true };
-  } catch (error) {
-    items = { error: true };
-  }
-
-  try {
-    const { data } = await client.query({
-      query: GET_ALL_ITEMS_QUERY,
-      variables: {
-        siteId: siteId,
-        filter: {
-          singleFilter: {
-            field: 'pageId',
-            operator: 'EQ',
-            value: pageId,
-          },
-        },
-      },
-    });
-
-    pageItems = data.getAllItems ? data.getAllItems : { error: true };
-  } catch (error) {
-    pageItems = { error: true };
-  }
 
   try {
     const { data } = await client.query({
@@ -247,36 +233,26 @@ export async function getServerSideProps(ctx) {
   } catch (error) {
     menuItems = { error: true };
   }
-
   try {
     const { data } = await client.query({
-      query: GET_WIDGET,
+      query: GET_ALL_ITEMS_QUERY,
       variables: {
-        filter: {
-          singleFilter: {
-            field: 'page',
-            operator: 'EQ',
-            value: pageId,
-          },
-        },
+        siteId: siteId,
       },
     });
-    widget = data.widget ? data.widget : data.widget;
-  } catch (error) {
-    widget = { error: true };
-  }
 
+    items = data.getAllItems ? data.getAllItems : { error: true };
+  } catch (error) {
+    items = { error: true };
+  }
   return {
     props: {
-      page,
       token: session?.idToken,
-      items,
       menuItems,
-      widget,
       medias,
-      pageItems,
+      items,
     },
   };
 }
 
-export default withPageAuthRequired(edit);
+export default withPageAuthRequired(create);

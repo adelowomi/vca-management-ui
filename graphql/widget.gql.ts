@@ -27,9 +27,17 @@ const GET_WIDGET = gql`
       description
       items {
         id
-        slug
-        mediaUrl
         featured
+        description
+        content
+        media {
+          image {
+            small
+            medium
+            large
+            xLarge
+          }
+        }
       }
     }
   }

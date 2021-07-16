@@ -16,6 +16,14 @@ button:focus {
 .slick-slide {
   padding: 0 0.5rem;
 }
+.al,
+.ak,
+.aj {
+  border-top-width: 0px !important;
+  border-right-width: 0px !important;
+  border-left-width: 0px !important;
+  border-bottom-width: 0px !important;
+}
 
 .slick-prev:before,
 .slick-next:before {
@@ -126,7 +134,7 @@ button:focus {
   margin: 0;
   font-size: 0.875rem;
   background: #fff;
-  border: 1px #595959 solid;
+  border: 1px #000 solid;
   border-radius: 3px;
 }
 

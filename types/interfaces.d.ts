@@ -30,6 +30,35 @@ export interface ErrorProps {
   location?: string;
 }
 
+export interface QuarterProps {
+  id: string;
+  name: string;
+  description: string;
+  startDate: string;
+  stopDate: string;
+  items: QuarterProps[];
+}
+export interface PerformanceErrorProps {
+  tags?: string;
+  hasAction?: string;
+  pageTitle?: string;
+  menuItem?: string;
+  mediaUrl?: string;
+  headerText?: string;
+  captionText?: string;
+  actionText?: string;
+  ctaLink?: string;
+  headerType?: string;
+  location?: string;
+  year?: string;
+  name?: string;
+  description?: string;
+  startDate?: string;
+  stopDate?: string;
+  quarters?: QuarterProps[];
+  nasdaqId?: string;
+}
+
 export interface WidgetStateProps {
   widgetDescription: string;
   widgetTitle: string;

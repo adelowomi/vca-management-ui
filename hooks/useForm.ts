@@ -1,7 +1,8 @@
+import Router from 'next/router';
 import React from 'react';
 import { useToasts } from 'react-toast-notifications';
 
-import { ADD_PAGE, EDIT_PAGE } from '../graphql/pages';
+import { ADD_PAGE, EDIT_PAGE } from '../graphql';
 import { stringToBoolean } from '../helpers/stringToBoolean';
 import { ErrorProps } from '../types/interfaces';
 interface StateProps {
@@ -17,6 +18,7 @@ interface StateProps {
   tags: string[];
   location: string;
   hasAction: boolean | string;
+  media: string;
 }
 
 const useForm = (
@@ -35,20 +37,19 @@ const useForm = (
   }
 ) => {
   const [state, setState] = React.useState<StateProps>({
-    pageTitle: (page && page.name) || '',
-    site: (page && page.site) || siteId,
-    menuItem: (page && page.menuItem) || '',
-    mediaUrl:
-      (page && page.hero.media.image.medium) ||
-      `https://res.cloudinary.com/harmonic-coder/image/upload/v1616629484/crew-IXHNBGTKJfw-unsplash_m3g2mg.png`,
-    headerText: (page && page.hero.heading) || '',
-    captionText: (page && page.hero.caption) || '',
-    actionText: (page && page.hero.actionText) || '',
-    ctaLink: (page && page.hero.actionSlug) || '',
-    headerType: (page && page.hero.type) || 'headerTypeOne',
-    tags: (page && page.tags) || ['tags'],
-    location: (page && page.hero.location) || 'LEFT',
-    hasAction: (page && page.hero.hasAction.toString()) || 'false',
+    pageTitle: page?.name || '',
+    site: page?.site || siteId,
+    menuItem: page?.menuItem || '',
+    mediaUrl: page?.hero?.media?.image?.medium || '',
+    headerText: page?.hero?.heading || '',
+    captionText: page?.hero?.caption || '',
+    actionText: page?.hero?.actionText || '',
+    ctaLink: page?.hero?.actionSlug || '',
+    headerType: page?.hero?.type || 'headerTypeOne',
+    tags: page?.tags || ['tags'],
+    location: page?.hero?.location || 'LEFT',
+    hasAction: page?.hero?.hasAction?.toString() || 'false',
+    media: page?.hero?.media?.id,
   });
 
   const [errors, setErrors] = React.useState<ErrorProps | {}>({});
@@ -61,6 +62,9 @@ const useForm = (
     setIsSubmitting(true);
   };
 
+  // console.log('STATE', state);
+  // console.log('ERROR', errors);
+
   const createPage = async () => {
     try {
       await client.mutate({
@@ -70,8 +74,9 @@ const useForm = (
             name: state.pageTitle,
             tags: state.tags,
             site: state.site,
-            menuItem: state.menuItem,
+            menuItem: state.menuItem === '' ? null : state.menuItem,
             hero: {
+              media: state.media,
               caption: state.captionText,
               type: state.headerType,
               mediaUrl: state.mediaUrl,
@@ -88,7 +93,7 @@ const useForm = (
         pageTitle: '',
         site: siteId,
         menuItem: '',
-        mediaUrl: `https://res.cloudinary.com/harmonic-coder/image/upload/v1616629484/crew-IXHNBGTKJfw-unsplash_m3g2mg.png`,
+        mediaUrl: '',
         headerText: '',
         captionText: '',
         actionText: '',
@@ -97,9 +102,11 @@ const useForm = (
         tags: ['tags'],
         location: 'LEFT',
         hasAction: 'false',
+        media: '',
       });
 
       addToast('Page is successfully Created', { appearance: 'success' });
+      Router.reload();
     } catch (error) {
       addToast('Page could not be created!', { appearance: 'error' });
     }
@@ -113,8 +120,9 @@ const useForm = (
             name: state.pageTitle,
             tags: state.tags,
             site: state.site,
-            menuItem: state.menuItem,
+            menuItem: state.menuItem === '' ? null : state.menuItem,
             hero: {
+              media: state.media,
               caption: state.captionText,
               type: state.headerType,
               mediaUrl: state.mediaUrl,
@@ -129,6 +137,7 @@ const useForm = (
         },
       });
       addToast('Page is successfully Edited', { appearance: 'success' });
+      Router.reload();
     } catch (error) {
       addToast('Page could not be Edited!', { appearance: 'error' });
     }

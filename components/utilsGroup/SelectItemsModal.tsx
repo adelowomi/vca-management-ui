@@ -1,37 +1,53 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useRef } from 'react';
 import React from 'react';
+import { RiCloseLine } from 'react-icons/ri';
 
 import { WidgetStateProps } from '../../types/interfaces';
-import { PostSelectWrapper } from '../Page/PostsSelectWrapper';
+import { SelectButton } from '../Page/PageButtons/SelectButton';
+import { PageSearchInput } from '../Page/PageSearchInput';
+import { Container2, H1, Row } from '../Page/PageStyledElements';
+import { PostItemCard } from '../Page/PostItemCard';
 
+const options = [
+  { id: 'pageId', name: 'Page ID' },
+  { id: 'type', name: 'Media type' },
+];
+
+interface ItemsProps {
+  id: string;
+  mediaUrl: string;
+  title: string;
+  content: string;
+}
 interface SelectItemsModalProps {
   state: WidgetStateProps | any;
-  // setState: React.Dispatch<
-  //   React.SetStateAction<WidgetStateProps}>
-  // >;
-  setState: React.Dispatch<React.SetStateAction<any>>;
   open: boolean;
+  getItems: (selected: string[]) => void;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  handleSubmit: any;
-  items: {
-    id: string;
-    mediaUrl: string;
-    title: string;
-    content: string;
-  }[];
-  type: string;
+  handleSubmit?: any;
+  items: ItemsProps[];
+  type?: string;
 }
 export const SelectItemsModal: React.FC<SelectItemsModalProps> = ({
   open,
   setOpen,
-  setState,
+  getItems,
   state,
   handleSubmit,
   items,
   type,
 }): JSX.Element => {
   const cancelButtonRef = useRef();
+  const [selected, setSelected] = React.useState([...state]);
+
+  React.useEffect(() => {
+    getItems(selected);
+  }, [selected]);
+
+  const selectedArr = (arr: any) => {
+    setSelected([...arr]);
+  };
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -72,14 +88,65 @@ export const SelectItemsModal: React.FC<SelectItemsModalProps> = ({
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <div className="inline-block align-bottom bg-white w-full text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-7xl sm:w-full">
-              <PostSelectWrapper
-                setOpen={setOpen}
-                setState={setState}
-                state={state}
-                handleSubmit={handleSubmit}
-                items={items}
-                type={type}
-              />
+              <>
+                <Container2>
+                  <Row>
+                    <H1 className="mb-10">Select Posts</H1>
+                    <button
+                      className="flex space-x-2 justify-center focus:outline-none"
+                      type="button"
+                      onClick={() => setOpen(false)}
+                    >
+                      <span className="font-semibold text-base">Close</span>
+                      <RiCloseLine className="h-6 w-5" aria-hidden="true" />
+                    </button>
+                  </Row>
+                  <Row>
+                    <div className="flex flex-row justify-start space-x-4">
+                      <div className="w-">
+                        <PageSearchInput />
+                      </div>
+                      <div className="w-60">
+                        <SelectButton
+                          name="filterBy"
+                          py={2.5}
+                          px={5}
+                          caption="Filter by"
+                          handleChange={() => {
+                            return;
+                          }}
+                          value={''}
+                          options={options}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <button
+                        className="py-3.5 px-8 text-white rounded-sm font-bold text-sm focus:outline-none bg-vca-blue"
+                        onClick={handleSubmit}
+                      >
+                        Add Posts
+                      </button>
+                    </div>
+                  </Row>
+                  <div className="grid grid-cols-4 gap-4 mt-8">
+                    {items.map((item: any) => (
+                      <PostItemCard
+                        key={item.id}
+                        item={item}
+                        selectedArr={selectedArr}
+                        selected={selected}
+                        count={type === 'posts' ? 1 : 8}
+                        exists={
+                          selected.findIndex((el) => el.id === item.id) > -1
+                            ? true
+                            : false
+                        }
+                      />
+                    ))}
+                  </div>
+                </Container2>
+              </>
             </div>
           </Transition.Child>
         </div>

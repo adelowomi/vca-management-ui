@@ -2,13 +2,20 @@ import { getSession } from '@auth0/nextjs-auth0';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0/dist/frontend';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 import React from 'react';
+import { RiDeleteBinLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 
 import Layout from '../../../../components/Layout/Layout';
 import { BulkActionDropdown } from '../../../../components/Page/BulkActionDropdown';
-import { PAGES_QUERY } from '../../../../graphql';
+import DeleteModal from '../../../../components/utilsGroup/DeleteModal';
+import { GET_SITE_MENUITEMS } from '../../../../graphql';
+import {
+  DELETE_PERFORMANCE,
+  GET_PERFORMANCES,
+} from '../../../../graphql/performance.gql';
 import { createApolloClient } from '../../../../lib/apollo';
 
 const PageActionsWrapper = tw.div`
@@ -56,17 +63,58 @@ const P = tw.p`
   text-left
 `;
 
-const Performance = ({ pages }) => {
+const index = ({ performances, menuItems, token }) => {
+  const [open, setOpen] = React.useState(false);
+  const [isDeleted, setIsDeleted] = React.useState(false);
+  const [id, setId] = React.useState(null);
+  const client = createApolloClient(token);
+
   const {
     query: { siteId },
   } = useRouter();
+
+  const getId = (id: string) => {
+    setOpen(!open);
+    setId(id);
+  };
+
+  const handleIsdeleted = (check: boolean) => {
+    setIsDeleted(check);
+  };
+
+  React.useEffect(() => {
+    onDelete();
+  }, [isDeleted]);
+
+  const onDelete = async () => {
+    try {
+      if (id) {
+        await client.mutate({
+          mutation: DELETE_PERFORMANCE,
+          variables: {
+            performanceId: id,
+          },
+        });
+        Router.reload();
+      }
+      return;
+    } catch (error) {
+      return;
+    }
+  };
   return (
     <Layout>
+      <DeleteModal
+        open={open}
+        setOpen={setOpen}
+        name="Performance"
+        handleIsdeleted={handleIsdeleted}
+      />
       <PageActionsWrapper>
         <PageActionsColOne>
           <h1 className="text-4xl font-semibold">Performance</h1>
           <PageActionsColOneBtn className="focus:outline-none">
-            <Link href={`/sites/${siteId}/pages/create`}> Add New</Link>
+            <Link href={`/sites/${siteId}/performance/create`}> Add New</Link>
           </PageActionsColOneBtn>
         </PageActionsColOne>
         <div className=" flex mt-7">
@@ -117,7 +165,7 @@ const Performance = ({ pages }) => {
                         Page Title
                       </th>
                       <th scope="col" className="px-6 tracking-wider">
-                        Status
+                        Menu Items
                       </th>
                       <th scope="col" className="px-6 tracking-wider">
                         Last posted on
@@ -125,10 +173,11 @@ const Performance = ({ pages }) => {
                       <th scope="col" className="px-6  tracking-wider">
                         Actions
                       </th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {pages.map((el: any) => (
+                    {performances.map((el: any) => (
                       <tr className={`text-left  `} key={el.id}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
                           <input
@@ -140,26 +189,39 @@ const Performance = ({ pages }) => {
                         </td>
 
                         <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
-                          <Link href={`/sites/${el.site}/pages/${el.id}`}>
+                          <Link href={`/sites/${siteId}/performance/${el.id}`}>
                             {el.name}
                           </Link>
                         </td>
                         <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
-                          <Link href={`/sites/${el.site}/pages/${el.id}`}>
-                            {'Published'}
+                          <Link href={`/sites/${siteId}/performance/${el.id}`}>
+                            {el.menuItem
+                              ? menuItems.filter(
+                                  (item) => item.id === el.menuItem
+                                )[0].name
+                              : ''}
                           </Link>
                         </td>
                         <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
-                          <Link href={`/sites/${el.site}/pages/${el.id}`}>
+                          <Link href={`/sites/${siteId}/performance/${el.id}`}>
                             <span>
                               <p>{el.createdAt}</p>
                             </span>
                           </Link>
                         </td>
                         <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
-                          <Link href={`/sites/${el.site}/pages/${el.id}/edit`}>
-                            edit
-                          </Link>
+                          <span className="flex space-x-5">
+                            <Link
+                              href={`/sites/${siteId}/performance/${el.id}/edit`}
+                            >
+                              <p>edit</p>
+                            </Link>
+
+                            <RiDeleteBinLine
+                              onClick={() => getId(el.id)}
+                              className="h-6"
+                            />
+                          </span>
                         </td>
                       </tr>
                     ))}
@@ -185,29 +247,46 @@ export async function getServerSideProps(ctx) {
     };
   }
   const client = createApolloClient(session.idToken);
+  let performances: any;
+  let menuItems: any;
+  try {
+    const { data } = await client.query({
+      query: GET_PERFORMANCES,
+      variables: {},
+    });
 
-  const {
-    data: { pages },
-  } = await client.query({
-    query: PAGES_QUERY,
-    variables: {
-      filter: {
-        combinedFilter: {
-          filters: [
-            {
-              singleFilter: {
-                field: 'siteId',
-                operator: 'EQ',
-                value: ctx.query.siteId,
+    performances = data.performances ? data.performances : { error: true };
+  } catch (error) {
+    performances = { error: true };
+  }
+
+  try {
+    const { data } = await client.query({
+      query: GET_SITE_MENUITEMS,
+      variables: {
+        filter: {
+          combinedFilter: {
+            filters: [
+              {
+                singleFilter: {
+                  field: 'siteId',
+                  operator: 'EQ',
+                  value: ctx.query.siteId,
+                },
               },
-            },
-          ],
+            ],
+          },
         },
       },
-    },
-  });
+    });
+    menuItems = data.siteMenuItems.header.menuItems
+      ? data.siteMenuItems.header.menuItems
+      : { error: true };
+  } catch (error) {
+    menuItems = { error: true };
+  }
 
-  return { props: { pages } };
+  return { props: { performances, menuItems, token: session.idToken } };
 }
 
-export default withPageAuthRequired(Performance);
+export default withPageAuthRequired(index);
