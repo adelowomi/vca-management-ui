@@ -16,15 +16,13 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: install
-        run: |
-          npm i -g yarn
-          yarn
+        run: npm i
       - name: test and build
         run: |
-          yarn test
-          yarn type-check
-          yarn lint
-          yarn build
+          npm run test
+          npm run type-check
+          npm run lint
+          npm run build
         env:
           CI: true
           # A long secret value used to encrypt the session cookie

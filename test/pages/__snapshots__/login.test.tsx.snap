@@ -12,7 +12,7 @@ exports[`Login page matches snapshot 1`] = `
         alt="logo"
         height="35"
         loading="lazy"
-        src="/images/logo-colored-on-white.svg"
+        src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
         width="126"
       />
     </div>

@@ -22,7 +22,7 @@ export default class MyDocument extends Document {
 
       const initialProps = await Document.getInitialProps(ctx);
 
-      // @ts-expect-error
+      // @ts-expect-error for styletron
       const stylesheets = styletron.getStylesheets() || [];
       return {
         ...initialProps,

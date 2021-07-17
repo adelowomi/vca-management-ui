@@ -52,7 +52,7 @@ const useForm = (
     media: page?.hero?.media?.id,
   });
 
-  const [errors, setErrors] = React.useState<ErrorProps | {}>({});
+  const [errors, setErrors] = React.useState<ErrorProps | {}>(null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const { addToast } = useToasts();
 
