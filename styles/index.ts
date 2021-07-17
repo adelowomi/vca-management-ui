@@ -4,7 +4,7 @@ import { DefaultTheme, ThemeContext } from 'styled-components';
 
 import themeObject from './theme';
 
-type DefaultThemeObject = Omit<typeof themeObject, 'screens'> & {};
+type DefaultThemeObject = Omit<typeof themeObject, 'screens'> & unknown;
 
 const theme = (): DefaultTheme => {
   const { ...themeValues }: DefaultThemeObject = themeObject;

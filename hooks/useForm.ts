@@ -52,7 +52,8 @@ const useForm = (
     media: page?.hero?.media?.id,
   });
 
-  const [errors, setErrors] = React.useState<ErrorProps | {}>(null);
+  // eslint-disable-next-line
+  const [errors, setErrors] = React.useState<ErrorProps>({});
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const { addToast } = useToasts();
 
@@ -61,9 +62,6 @@ const useForm = (
     setErrors(validate(state));
     setIsSubmitting(true);
   };
-
-  // console.log('STATE', state);
-  // console.log('ERROR', errors);
 
   const createPage = async () => {
     try {
