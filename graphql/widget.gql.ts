@@ -18,7 +18,7 @@ const ADD_WIDGET = gql`
   }
 `;
 const GET_WIDGET = gql`
-  query($filter: FilterInput) {
+  query ($filter: FilterInput) {
     widget(filter: $filter) {
       id
       title
@@ -43,7 +43,7 @@ const GET_WIDGET = gql`
   }
 `;
 const EDIT_WIDGET = gql`
-  mutation($updateWidgetInput: UpdateWidgetInput!, $widgetId: String!) {
+  mutation ($updateWidgetInput: UpdateWidgetInput!, $widgetId: String!) {
     updateWidget(updateWidgetInput: $updateWidgetInput, widgetId: $widgetId) {
       page
       description

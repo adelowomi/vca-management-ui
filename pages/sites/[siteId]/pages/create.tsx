@@ -26,13 +26,11 @@ const create = ({ token, menuItems, medias }) => {
     query: { siteId },
   } = useRouter();
 
-  const {
-    handleSubmit,
-    state,
-    errors,
-    setState,
-    handleChange,
-  } = useForm(validator, client, { siteId, type: 'add' });
+  const { handleSubmit, state, errors, setState, handleChange } = useForm(
+    validator,
+    client,
+    { siteId, type: 'add' }
+  );
 
   const onButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>

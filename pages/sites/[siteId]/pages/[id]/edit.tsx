@@ -32,13 +32,11 @@ const edit = ({ token, menuItems, page, items, widget, medias, pageItems }) => {
   const {
     query: { siteId, id: pageId },
   } = useRouter();
-  const {
-    handleSubmit,
-    state,
-    errors,
-    setState,
-    handleChange,
-  } = useForm(validator, client, { siteId, pageId, page, type: 'edit' });
+  const { handleSubmit, state, errors, setState, handleChange } = useForm(
+    validator,
+    client,
+    { siteId, pageId, page, type: 'edit' }
+  );
 
   const onButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>

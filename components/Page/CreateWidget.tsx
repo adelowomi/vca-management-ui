@@ -27,15 +27,8 @@ export const CreateWidget: React.FC<WidgetProps> = ({
   items,
   widget,
 }): JSX.Element => {
-  const {
-    handleSubmit,
-    state,
-    errors,
-    setState,
-    handleChange,
-    open,
-    setOpen,
-  } = widgetUseForm(widgetvalidator, client, pageId, widget);
+  const { handleSubmit, state, errors, setState, handleChange, open, setOpen } =
+    widgetUseForm(widgetvalidator, client, pageId, widget);
 
   const getItems = (selected: any) => {
     setState({

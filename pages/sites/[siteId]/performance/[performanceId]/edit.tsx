@@ -33,17 +33,12 @@ const edit = ({ token, menuItems, medias, performance, items }) => {
     query: { siteId },
   } = useRouter();
 
-  const {
-    handleSubmit,
-    state,
-    errors,
-    setState,
-    handleChange,
-  } = performanceUseForm(performanceValidator, client, {
-    type: 'edit',
-    performance,
-    performanceId: performance.id,
-  });
+  const { handleSubmit, state, errors, setState, handleChange } =
+    performanceUseForm(performanceValidator, client, {
+      type: 'edit',
+      performance,
+      performanceId: performance.id,
+    });
 
   const onButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>

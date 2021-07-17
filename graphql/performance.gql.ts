@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 const ADD_PERFORMANCE = gql`
-  mutation($createPerformanceInput: CreatePerformanceInput!) {
+  mutation ($createPerformanceInput: CreatePerformanceInput!) {
     createPerformance(createPerformanceInput: $createPerformanceInput) {
       year
       name
@@ -41,7 +41,7 @@ const ADD_PERFORMANCE = gql`
 `;
 
 const EDIT_PERFORMANCE = gql`
-  mutation(
+  mutation (
     $updatePerformanceInput: UpdatePerformanceInput!
     $performanceId: String!
   ) {
@@ -123,7 +123,7 @@ const GET_PERFORMANCES = gql`
 `;
 
 const GET_PERFORMANCE = gql`
-  query($filter: FilterInput) {
+  query ($filter: FilterInput) {
     performance(filter: $filter) {
       id
       name
@@ -176,7 +176,7 @@ const GET_PERFORMANCE = gql`
 `;
 
 const DELETE_PERFORMANCE = gql`
-  mutation($performanceId: String!) {
+  mutation ($performanceId: String!) {
     removePerformance(performanceId: $performanceId) {
       id
     }

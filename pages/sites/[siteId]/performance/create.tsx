@@ -32,13 +32,8 @@ const create = ({ token, menuItems, items, medias }) => {
     query: { siteId },
   } = useRouter();
 
-  const {
-    handleSubmit,
-    state,
-    errors,
-    setState,
-    handleChange,
-  } = performanceUseForm(performanceValidator, client, { type: 'add' });
+  const { handleSubmit, state, errors, setState, handleChange } =
+    performanceUseForm(performanceValidator, client, { type: 'add' });
 
   const onButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>

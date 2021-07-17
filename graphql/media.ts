@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 const GET_ALL_MEDIA = gql`
-  query($limit: Int, $offset: Int, $filter: FilterInput) {
+  query ($limit: Int, $offset: Int, $filter: FilterInput) {
     medias(filter: $filter, limit: $limit, offset: $offset) {
       id
       type

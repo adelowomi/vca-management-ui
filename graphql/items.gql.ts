@@ -28,7 +28,7 @@ const GET_ALL_ITEMS_QUERY = gql`
 `;
 
 const EDIT_ITEM = gql`
-  mutation($updateItemInput: UpdatedItemInput!, $itemId: String!) {
+  mutation ($updateItemInput: UpdatedItemInput!, $itemId: String!) {
     updateItem(updateItemInput: $updateItemInput, itemId: $itemId) {
       id
       mediaUrl
