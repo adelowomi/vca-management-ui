@@ -2,7 +2,16 @@
 
 exports[`List media page matches snapshot 1`] = `
 <DocumentFragment>
-  <div
+  .c0 {
+  color: rgba(75,85,99,0.9);
+  font-weight: 400;
+}
+
+.c0:hover {
+  background: rgba(249,250,251,0.9);
+}
+
+<div
     class=""
   >
     <div
@@ -62,7 +71,7 @@ exports[`List media page matches snapshot 1`] = `
                 class="flex-1 px- bg-white space-y-3"
               >
                 <a
-                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  class="c0 group flex items-center px-5 py-4 text-base font-normal"
                   href="/sites/undefined/dashboard"
                 >
                   <svg
@@ -89,7 +98,7 @@ exports[`List media page matches snapshot 1`] = `
                   Dashboard
                 </a>
                 <a
-                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  class="c0 group flex items-center px-5 py-4 text-base font-normal"
                   href="/sites/undefined/pages"
                 >
                   <svg
@@ -116,7 +125,7 @@ exports[`List media page matches snapshot 1`] = `
                   Pages
                 </a>
                 <a
-                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  class="c0 group flex items-center px-5 py-4 text-base font-normal"
                   href="/sites/undefined/news"
                 >
                   <svg
@@ -143,7 +152,7 @@ exports[`List media page matches snapshot 1`] = `
                   News
                 </a>
                 <a
-                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  class="c0 group flex items-center px-5 py-4 text-base font-normal"
                   href="/sites/undefined/performance"
                 >
                   <svg
@@ -170,7 +179,7 @@ exports[`List media page matches snapshot 1`] = `
                   Performance
                 </a>
                 <a
-                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  class="c0 group flex items-center px-5 py-4 text-base font-normal"
                   href="/sites/undefined/posts"
                 >
                   <svg
@@ -197,7 +206,7 @@ exports[`List media page matches snapshot 1`] = `
                   Posts
                 </a>
                 <a
-                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  class="c0 group flex items-center px-5 py-4 text-base font-normal"
                   href="/sites/undefined/media-gallery"
                 >
                   <svg
@@ -224,7 +233,7 @@ exports[`List media page matches snapshot 1`] = `
                   Media Gallery
                 </a>
                 <a
-                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  class="c0 group flex items-center px-5 py-4 text-base font-normal"
                   href="/sites/undefined/social"
                 >
                   <svg
@@ -251,7 +260,7 @@ exports[`List media page matches snapshot 1`] = `
                   Social
                 </a>
                 <a
-                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  class="c0 group flex items-center px-5 py-4 text-base font-normal"
                   href="/sites/undefined/style"
                 >
                   <svg
@@ -278,7 +287,7 @@ exports[`List media page matches snapshot 1`] = `
                   Style
                 </a>
                 <a
-                  class="Layout__AnchorTag-ayt0x0-0 cQqBKb group flex items-center px-5 py-4 text-base font-normal"
+                  class="c0 group flex items-center px-5 py-4 text-base font-normal"
                   href="/sites/undefined/website-settings"
                 >
                   <svg

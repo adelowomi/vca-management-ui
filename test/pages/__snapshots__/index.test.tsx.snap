@@ -2,11 +2,108 @@
 
 exports[`Home page matches snapshot 1`] = `
 <DocumentFragment>
-  <div
-    class="pages__Container-p34c7u-0 gIMfLh"
+  .c2 {
+  height: 50px;
+  width: 100px;
+  margin: 8px 0px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  -webkit-letter-spacing: 0.71px;
+  -moz-letter-spacing: 0.71px;
+  -ms-letter-spacing: 0.71px;
+  letter-spacing: 0.71px;
+  text-align: start;
+  background: none;
+  color: #0035c1;
+  cursor: pointer;
+}
+
+.c2:disabled {
+  background: lightgray;
+}
+
+.c4 {
+  height: 50px;
+  width: 345px;
+  margin: 8px 0px;
+  border: none;
+  border-radius: 5px;
+  font-size: 17px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  -webkit-letter-spacing: 0.71px;
+  -moz-letter-spacing: 0.71px;
+  -ms-letter-spacing: 0.71px;
+  letter-spacing: 0.71px;
+  text-align: center;
+  background: #0035c1;
+  color: #fff;
+  cursor: pointer;
+}
+
+.c4:disabled {
+  background: lightgray;
+}
+
+.c1 {
+  height: 55px;
+  padding: 0 16px;
+  box-shadow: 0 1px 4px 0 #dfe5e9;
+  background-color: #ffffff;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c3 {
+  padding: 8px;
+  height: unset;
+  text-align: center;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 100vh;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+<div
+    class="c0"
   >
     <div
-      class="Header__HeaderContaier-sc-1c6lzu5-0 juFbtD"
+      class="c1"
     >
       <img
         alt="logo"
@@ -20,7 +117,7 @@ exports[`Home page matches snapshot 1`] = `
       >
         <button
           aria-label="Logout"
-          class="Button-sc-13zys56-0 Header__LogoutButton-sc-1c6lzu5-1 dIxKay eHYymE"
+          class="c2 c3"
           width="100px"
         >
           Logout
@@ -28,7 +125,7 @@ exports[`Home page matches snapshot 1`] = `
       </a>
     </div>
     <button
-      class="Button-sc-13zys56-0 duRoaC"
+      class="c4"
       width="345px"
     >
       Signed in as name

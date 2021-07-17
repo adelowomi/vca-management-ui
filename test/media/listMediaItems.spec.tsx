@@ -1,3 +1,5 @@
+import 'jest-styled-components';
+
 import { MockedProvider } from '@apollo/client/testing';
 import { UserProvider } from '@auth0/nextjs-auth0';
 import { BaseProvider, LightTheme } from 'baseui';
