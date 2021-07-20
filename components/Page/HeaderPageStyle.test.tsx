@@ -1,3 +1,5 @@
+import 'jest-styled-components';
+
 import React from 'react';
 
 import { fireEvent, render, screen } from '../../test/testUtils';

@@ -2,7 +2,107 @@
 
 exports[`PageHeaderStyle should render PageHeaderStyle snapshot 1`] = `
 <DocumentFragment>
-  <div
+  .c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  width: 49.5rem;
+}
+
+.c3 {
+  background: rgba(24,144,255,0.1);
+  border: 1px dashed #1890ff;
+  border-radius: 2px;
+  padding: 19px;
+}
+
+.c3 p {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 19px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  text-align: center;
+  color: #1890ff;
+}
+
+.c1 {
+  border: 2px solid #1890FF;
+  box-sizing: border-box;
+  border-radius: 2px;
+  background: rgba(24,144,255,0.1);
+  padding: 17px 0px;
+  color: #1890FF;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 11.2rem;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.c1:focus {
+  outline: none;
+}
+
+.c2 {
+  border: 1px solid #828282;
+  box-sizing: border-box;
+  border-radius: 2px;
+  background: #fff;
+  padding: 17px 0px;
+  color: #828282;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 11.2rem;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.c2:focus {
+  outline: none;
+}
+
+<div
     class="mt-8
 flex
 flex-col"
@@ -13,10 +113,10 @@ flex-col"
       1. Hero Type
     </h1>
     <div
-      class="PageStyledElements__HeaderTypeWrapper-sc-j2fa6k-1 eSemsN"
+      class="c0"
     >
       <button
-        class="PageButtons__HeaderTypeBtn-sc-wof0er-0 rKLQj"
+        class="c1"
         data-headertype="headerTypeOne"
         type="button"
         value="headerTypeOne"
@@ -24,7 +124,7 @@ flex-col"
         Header Type 1
       </button>
       <button
-        class="PageButtons__HeaderTypeBtn-sc-wof0er-0 gGXhuw"
+        class="c2"
         data-headertype="headerTypeTwo"
         type="button"
         value="headerTypeTwo"
@@ -32,7 +132,7 @@ flex-col"
         Header Type 2
       </button>
       <button
-        class="PageButtons__HeaderTypeBtn-sc-wof0er-0 gGXhuw"
+        class="c2"
         data-headertype="headerTypeThree"
         type="button"
         value="headerTypeThree"
@@ -40,7 +140,7 @@ flex-col"
         Header Type 3
       </button>
       <button
-        class="PageButtons__HeaderTypeBtn-sc-wof0er-0 gGXhuw"
+        class="c2"
         data-headertype="headerTypeFour"
         type="button"
         value="headerTypeFour"
@@ -54,7 +154,7 @@ flex-col"
       Media Image
     </h1>
     <div
-      class="PageStyledElements__ImageSelectBox-sc-j2fa6k-2 imQTNp mt-5 w-96 flex items-center justify-center cursor-pointer"
+      class="c3 mt-5 w-96 flex items-center justify-center cursor-pointer"
     >
       <p>
         + Select from media gallery
