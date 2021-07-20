@@ -13,7 +13,6 @@ test('logout button', () => {
     nickname: 'string',
     name: 'string',
     picture: 'string',
-    // eslint-disable-next-line @typescript-eslint/camelcase
     updated_at: 'string',
     sub: 'string',
   };

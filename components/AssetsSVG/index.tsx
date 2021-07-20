@@ -262,12 +262,6 @@ export const Origin: React.FC = () => (
   </svg>
 );
 
-interface ChevronProps {
-  className?: string;
-  height?: number;
-  width?: number;
-}
-
 export const ChevronUp = (
   <svg
     version="1.1"

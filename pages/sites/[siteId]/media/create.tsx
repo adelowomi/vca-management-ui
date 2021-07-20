@@ -241,7 +241,6 @@ export function getServerSideProps(ctx) {
       key: authKey,
       expires,
     },
-    // eslint-disable-next-line @typescript-eslint/camelcase
     template_id: process.env.TRANSLOADIT_IMAGE_TEMPLATE_ID,
   });
   const imageSignature = createHmac('sha1', authSecret)
@@ -253,7 +252,6 @@ export function getServerSideProps(ctx) {
       key: authKey,
       expires,
     },
-    // eslint-disable-next-line @typescript-eslint/camelcase
     template_id: process.env.TRANSLOADIT_DOCUMENT_TEMPLATE_ID,
   });
   const documentSignature = createHmac('sha1', authSecret)

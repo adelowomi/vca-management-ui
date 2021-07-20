@@ -16,7 +16,7 @@ text-3xl"
       class="flex flex-row justify-start space-x-5"
     >
       <button
-        class="PageButtons__Btn-wof0er-1 lnyjXp"
+        class="PageButtons__Btn-sc-wof0er-1 dGtvvA"
         color="primary"
       >
         <a
@@ -26,7 +26,7 @@ text-3xl"
         </a>
       </button>
       <button
-        class="PageButtons__Btn-wof0er-1 cbRhIC"
+        class="PageButtons__Btn-sc-wof0er-1 jHAOBn"
         color="secondary"
         type="submit"
       >
