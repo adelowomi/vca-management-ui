@@ -1,3 +1,5 @@
+import 'jest-styled-components';
+
 import { MockedProvider } from '@apollo/client/testing';
 import { UserProvider } from '@auth0/nextjs-auth0';
 import { BaseProvider, LightTheme } from 'baseui';
@@ -66,8 +68,7 @@ const medias = [
     document: {
       __typename: 'MediaDocumentFile',
       assembly: '9af2264f38c040c78781f6181f848bf1',
-      url:
-        'https://vca-documents.s3.ca-central-1.amazonaws.com/4f/2242d76376445081bfbddd8f4f8b52/Colors-Qaltrak.pdf',
+      url: 'https://vca-documents.s3.ca-central-1.amazonaws.com/4f/2242d76376445081bfbddd8f4f8b52/Colors-Qaltrak.pdf',
     },
     video: null,
     image: null,

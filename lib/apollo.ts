@@ -50,9 +50,10 @@ export function initializeApollo(initialState: any = null, authToken: string) {
 }
 
 function useApollo(initialState: any, authToken: string) {
-  return useMemo(() => initializeApollo(initialState, authToken), [
-    initialState,
-  ]);
+  return useMemo(
+    () => initializeApollo(initialState, authToken),
+    [initialState]
+  );
 }
 
 export { ApolloProvider, useApollo };

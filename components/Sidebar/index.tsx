@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
 
-import Logo from '../../assets/icons/vcalogo.svg';
-
 interface IsidebarProps {
   showSidebar: () => void;
   sidebar: boolean;
@@ -210,8 +208,11 @@ const Sidebar: React.FC<IsidebarProps> = ({ showSidebar, sidebar }) => {
           <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
               <div className="flex items-center flex-shrink-0 px-4">
-                {/* <img className="h-8 w-auto" src={Logo} alt="Workflow" /> */}
-                <Logo className="h-8 w-auto" />
+                <img
+                  className="h-8 w-auto"
+                  src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+                  alt="Workflow"
+                />
               </div>
               <nav className="mt-5 flex-1 px-2 bg-white space-y-1">
                 {/* Current: "bg-gray-100 text-gray-900", Default: "text-gray-600 hover:bg-gray-50 hover:text-gray-900" */}

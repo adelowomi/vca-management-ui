@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Hero } from '../../../../components/Hero/Hero';
 import Layout from '../../../../components/Layout/Layout';
-import { CallToAction } from '../../../../components/Page/callToAction';
+import { CallToAction } from '../../../../components/Page/CtaComponent';
 import { PageHeaderStyle } from '../../../../components/Page/HeaderPageStyle';
 import { ShadowBtn } from '../../../../components/Page/PageButtons';
 import { PageControls } from '../../../../components/Page/PageControls';
@@ -32,13 +32,8 @@ const create = ({ token, menuItems, items, medias }) => {
     query: { siteId },
   } = useRouter();
 
-  const {
-    handleSubmit,
-    state,
-    errors,
-    setState,
-    handleChange,
-  } = performanceUseForm(performanceValidator, client, { type: 'add' });
+  const { handleSubmit, state, errors, setState, handleChange } =
+    performanceUseForm(performanceValidator, client, { type: 'add' });
 
   const onButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>

@@ -37,7 +37,7 @@ export function Header({ user }: HeaderProps): JSX.Element {
   return (
     <HeaderContaier>
       <Image
-        src="/images/logo-colored-on-white.svg"
+        src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
         alt="logo"
         width={126}
         height={35}

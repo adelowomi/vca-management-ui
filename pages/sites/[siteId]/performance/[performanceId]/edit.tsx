@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Hero } from '../../../../../components/Hero/Hero';
 import Layout from '../../../../../components/Layout/Layout';
-import { CallToAction } from '../../../../../components/Page/callToAction';
+import { CallToAction } from '../../../../../components/Page/CtaComponent';
 import { PageHeaderStyle } from '../../../../../components/Page/HeaderPageStyle';
 import { ShadowBtn } from '../../../../../components/Page/PageButtons';
 import { PageControls } from '../../../../../components/Page/PageControls';
@@ -33,17 +33,12 @@ const edit = ({ token, menuItems, medias, performance, items }) => {
     query: { siteId },
   } = useRouter();
 
-  const {
-    handleSubmit,
-    state,
-    errors,
-    setState,
-    handleChange,
-  } = performanceUseForm(performanceValidator, client, {
-    type: 'edit',
-    performance,
-    performanceId: performance.id,
-  });
+  const { handleSubmit, state, errors, setState, handleChange } =
+    performanceUseForm(performanceValidator, client, {
+      type: 'edit',
+      performance,
+      performanceId: performance.id,
+    });
 
   const onButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
