@@ -50,9 +50,11 @@
     "autoprefixer": "^10.2.6",
     "baseui": "^9.106.3",
     "bulma": "^0.9.2",
+    "get-video-id": "^3.2.0",
     "graphql": "^15.4.0",
+    "lodash-es": "^4.17.21",
     "moment": "^2.29.1",
-    "next": "latest",
+    "next": "^10.0.0",
     "postcss": "^8.3.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -60,6 +62,7 @@
     "react-hook-form": "^7.0.0",
     "react-icons": "^4.2.0",
     "react-intl": "^5.10.9",
+    "react-player": "^2.9.0",
     "react-select": "^3.1.1",
     "react-slick": "^0.28.1",
     "react-spring": "^9.1.1",
@@ -69,7 +72,6 @@
     "styletron-engine-atomic": "^1.4.6",
     "styletron-react": "^5.2.7",
     "tailwindcss": "^2.1.4",
-    "use-media": "^1.4.0",
     "zod": "^1.11.13"
   },
   "devDependencies": {

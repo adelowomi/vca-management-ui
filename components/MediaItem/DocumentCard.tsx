@@ -1,6 +1,10 @@
-export const DocumentCard = ({ media }) => {
+import Link from 'next/link';
+
+import { truncate } from './MediaItemCard';
+
+export const DocumentCard = ({ media, link }) => {
   return (
-    <div key={media.id} className="flex flex-col">
+    <div key={media.id} className="flex flex-col w-72">
       <div className="w-full h-44 justify-center items-center bg-blue-100 flex flex-col">
         <svg
           width="100"
@@ -79,7 +83,7 @@ export const DocumentCard = ({ media }) => {
           />
         </svg>
       </div>
-      <div className="px-6 py-4 border border-vca-grey-4">
+      <div className="px-6 py-4 border bg-white border-vca-grey-4 h-32">
         <div className="flex flex-row mb-4">
           <div>
             <svg
@@ -95,14 +99,16 @@ export const DocumentCard = ({ media }) => {
               />
             </svg>
           </div>
-          <div
-            role="heading"
-            className="text-vca-grey-2 text-base font-bold ml-2"
-          >
-            {media.name}
-          </div>
+          <Link href={link}>
+            <a
+              role="heading"
+              className="text-vca-grey-2 text-base font-bold ml-2"
+            >
+              {media.name}
+            </a>
+          </Link>
         </div>
-        <div className="text-vca-grey-3">{media.description}</div>
+        <div className="text-vca-grey-3">{truncate(media.description, 50)}</div>
       </div>
     </div>
   );

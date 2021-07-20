@@ -28,7 +28,7 @@ const options = [
   { id: 3, name: 'Document', value: ContentType.DOCUMENT, unavailable: false },
 ];
 
-export const CreateMedia = ({ imageParams, imageSignature, token }) => {
+const CreateMedia = ({ imageParams, imageSignature, token }) => {
   const router = useRouter();
   const [uploadError, setUploadError] = useState<boolean>(false);
   const [showVideo, setShowVideo] = useState(false);
@@ -42,8 +42,15 @@ export const CreateMedia = ({ imageParams, imageSignature, token }) => {
     formState: { errors },
   } = useForm();
 
-  const clientSuccessCallback = ({ id }: { id: string; message: any }) => {
-    router.push(`/sites/${router.query.siteId}/media/${id}/view`);
+  const clientSuccessCallback = ({
+    id,
+    type,
+  }: {
+    id: string;
+    message: any;
+    type: string;
+  }) => {
+    router.push(`/sites/${router.query.siteId}/media/${id}/${type}`);
   };
   const uppy = CreateUppyInstance(
     imageParams,
@@ -74,6 +81,7 @@ export const CreateMedia = ({ imageParams, imageSignature, token }) => {
           (values) => {
             clientSuccessCallback({
               id: values.data.createMedia.id,
+              type: values.data.createMedia.type.toLowerCase(),
               message: values,
             });
           },
@@ -113,7 +121,7 @@ export const CreateMedia = ({ imageParams, imageSignature, token }) => {
           </Modal>
         </div>
         <ErrorModal open={uploadError} setOpen={setUploadError} />
-        <div className=" bg-white ">
+        <div className=" bg-white m-10 ">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col">
               <div className="flex flex-row justify-between mt-2">

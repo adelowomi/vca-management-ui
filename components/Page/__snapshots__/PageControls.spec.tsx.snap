@@ -2,7 +2,35 @@
 
 exports[`PageHeaderStyle should render PageHeaderStyle snapshot 1`] = `
 <DocumentFragment>
-  <div
+  .c0 {
+  color: #828282;
+  background: #d7d9da;
+  padding: 15px 25px;
+  border-radius: 2px;
+  box-shadow: rgba(128,128,128,0.1);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.c0:focus {
+  outline: none;
+}
+
+.c1 {
+  color: #fff;
+  background: #1890FF;
+  padding: 15px 25px;
+  border-radius: 2px;
+  box-shadow: rgba(128,128,128,0.1);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.c1:focus {
+  outline: none;
+}
+
+<div
     class="justify-between flex
 flex-row"
   >
@@ -16,7 +44,7 @@ text-3xl"
       class="flex flex-row justify-start space-x-5"
     >
       <button
-        class="PageButtons__Btn-sc-wof0er-1 dGtvvA"
+        class="c0"
         color="primary"
       >
         <a
@@ -26,7 +54,7 @@ text-3xl"
         </a>
       </button>
       <button
-        class="PageButtons__Btn-sc-wof0er-1 jHAOBn"
+        class="c1"
         color="secondary"
         type="submit"
       >

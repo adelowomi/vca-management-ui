@@ -26,6 +26,7 @@ module.exports = {
       'vca-grey-4': '#BDBDBD',
       'vca-grey-5': '#E0E0E0',
       'vca-grey-6': '#F2F2F2',
+      'vca-grey-7': '#F8F8F8',
       'vca-green': '#219653',
       'vca-red': '#EB5757',
       'vca-orage': '#DD970B',

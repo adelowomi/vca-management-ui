@@ -54,7 +54,7 @@ export const CreateUppyInstance = (
   params: string,
   signature: string,
   getValues: UseFormGetValues<FieldValues>,
-  setSuccess: ({ id: string, message: any }) => void,
+  setSuccess: (input: { id: string; message: any; type: string }) => void,
   setError: (error: any) => void,
   client: ApolloClient<NormalizedCacheObject>,
   setValue: UseFormSetValue<FieldValues>
@@ -82,7 +82,11 @@ export const CreateUppyInstance = (
           })
           .then(
             (values) => {
-              setSuccess({ id: values.data.createMedia.id, message: values });
+              setSuccess({
+                id: values.data.createMedia.id,
+                message: values,
+                type: values.data.createMedia.type.toLowerCase(),
+              });
             },
             (error) => {
               console.error(error);
