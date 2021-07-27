@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { Uppy } from '@uppy/core';
 import { useUppy } from '@uppy/react';

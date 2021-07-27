@@ -1,5 +1,8 @@
 module.exports = {
   // Target must be serverless
+  images: {
+    domains: ['tailwindui.com'],
+  },
   target: 'serverless',
 
   webpack: function (config) {
