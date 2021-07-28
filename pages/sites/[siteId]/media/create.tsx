@@ -7,6 +7,7 @@ import { Dashboard } from '@uppy/react';
 import { Modal, ModalBody, ModalHeader } from 'baseui/modal';
 import { StyledSpinnerNext } from 'baseui/spinner';
 import { createHmac } from 'crypto';
+import getVideoId from 'get-video-id';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -27,6 +28,11 @@ const options = [
   { id: 2, name: 'Video', value: ContentType.VIDEO, unavailable: false },
   { id: 3, name: 'Document', value: ContentType.DOCUMENT, unavailable: false },
 ];
+
+const videoValidation = (url: string) => {
+  const { service } = getVideoId(url);
+  return ['youtube', 'vimeo'].includes(service);
+};
 
 const CreateMedia = ({ imageParams, imageSignature, token }) => {
   const router = useRouter();
@@ -65,6 +71,8 @@ const CreateMedia = ({ imageParams, imageSignature, token }) => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     if (showVideo) {
+      // eslint-disable-next-line no-console
+      console.debug(getVideoId(data.video));
       client
         .mutate({
           mutation: CREATE_MEDIA,
@@ -194,6 +202,7 @@ const CreateMedia = ({ imageParams, imageSignature, token }) => {
                     register={register}
                     error={errors.video}
                     required={showVideo}
+                    validate={videoValidation}
                   />
                 </div>
               </div>
@@ -219,6 +228,7 @@ const CreateMedia = ({ imageParams, imageSignature, token }) => {
 
 export default withPageAuthRequired(CreateMedia);
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function getServerSideProps(ctx) {
   const session = getSession(ctx.req, ctx.res);
 
@@ -239,7 +249,6 @@ export function getServerSideProps(ctx) {
       .replace(/\.\d+Z$/, '+00:00');
   };
 
-  // expire 1 hour from now (this must be milliseconds)
   const expires = utcDateString(+new Date() + 1 * 60 * 60 * 1000);
   const authKey = process.env.TRANSLOADIT_KEY;
   const authSecret = process.env.TRANSLOADIT_SECRET;

@@ -7,6 +7,7 @@ interface FormInputProps {
   error: any;
   required?: boolean;
   disableLabel?: boolean;
+  validate?: any;
 }
 
 export const FormInput = ({
@@ -16,7 +17,8 @@ export const FormInput = ({
   error = null,
   required = false,
   disableLabel = false,
-}: FormInputProps) => {
+  validate = {},
+}: FormInputProps): JSX.Element => {
   const inputStyle =
     error?.type === 'required'
       ? 'shadow-sm focus:ring-red-500 focus:border-red-500 focus:border-2 block w-96 h-14 sm:text-sm border border-red-500 rounded-sm pl-4'
@@ -33,7 +35,7 @@ export const FormInput = ({
       </label>
       <div className={disableLabel ? '' : 'mt-6'}>
         <input
-          {...register(`${name}`, { required })}
+          {...register(`${name}`, { required, validate })}
           className={inputStyle}
           placeholder={`${name}`}
           aria-describedby={`${name}`}
