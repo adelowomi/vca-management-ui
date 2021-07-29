@@ -1,15 +1,13 @@
 import { gql } from '@apollo/client';
 
 const PAGES_QUERY = gql`
-  query Pages($limit: Int, $offset: Int, $filter: FilterInput) {
-    pages(filter: $filter, limit: $limit, offset: $offset) {
+  query Pages($limit: Int, $offset: Int, $filter: FilterInput,$accountId: String!) {
+    pages(filter: $filter, limit: $limit, offset: $offset,accountId:$accountId) {
       id
       name
       tags
       site
-      createdAt
       menuItem
-
       hero {
         type
         caption

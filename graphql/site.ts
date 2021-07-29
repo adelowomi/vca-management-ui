@@ -15,10 +15,11 @@ const SITE_QUERY = gql`
 `;
 
 const SITES_QUERY = gql`
-  query Sites {
-    sites {
+  query Sites($accountId: String!) {
+    sites(accountId: $accountId) {
       id
       name
+      createdAt
       header {
         name
         type
@@ -34,8 +35,8 @@ const SITES_QUERY = gql`
 `;
 
 const GET_SITE_MENUITEMS = gql`
-  query SiteMenuItems($limit: Int, $offset: Int, $filter: FilterInput) {
-    siteMenuItems(filter: $filter, limit: $limit, offset: $offset) {
+  query {
+    siteMenuItems {
       id
       name
       header {

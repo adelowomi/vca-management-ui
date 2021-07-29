@@ -1,11 +1,13 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
+import { FiUsers } from 'react-icons/fi';
 import {
   RiArrowDownSLine,
   RiBarChartLine,
   RiFileEditLine,
+  RiFolder4Line,
   RiImageAddLine,
   RiLayoutLine,
   RiMapPinUserLine,
@@ -14,6 +16,7 @@ import {
   RiPaletteLine,
   RiSettings4Line,
 } from 'react-icons/ri';
+import { useLocation } from 'react-use';
 import styled from 'styled-components';
 
 import { ExitIcon } from '../AssetsSVG';
@@ -32,52 +35,81 @@ const AnchorTag = styled.a<AnchorTagProps>`
   }
 `;
 
-const navigation = [
-  { name: 'Dashboard', href: 'dashboard', icon: RiNumbersLine, current: true },
-  { name: 'Pages', href: 'pages', icon: RiLayoutLine, current: false },
-  { name: 'News', href: 'news', icon: RiPagesLine, current: false },
-  {
-    name: 'Performance',
-    href: 'performance',
-    icon: RiBarChartLine,
-    current: false,
-  },
-  { name: 'Posts', href: 'posts', icon: RiFileEditLine, current: false },
-  {
-    name: 'Media Gallery',
-    href: 'media-gallery',
-    icon: RiImageAddLine,
-    current: false,
-  },
-  {
-    name: 'Social',
-    href: 'social',
-    icon: RiMapPinUserLine,
-    current: false,
-  },
-  {
-    name: 'Style',
-    href: 'style',
-    icon: RiPaletteLine,
-    current: false,
-  },
-  {
-    name: 'Website Settings',
-    href: 'website-settings',
-    icon: RiSettings4Line,
-    current: false,
-  },
-];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 export default function Layout({ children }) {
+  const location = useLocation();
+  const [navigation, setNavigation] = useState([]);
+
+  const getNavigation = () => {
+    // eslint-disable-next-line no-constant-condition
+    location.pathname === '/sites' || location.pathname === '/users'
+      ? setNavigation([
+          {
+            name: 'Sites',
+            href: 'sites',
+            icon: RiFolder4Line,
+            current: true,
+          },
+          { name: 'Users', href: 'users', icon: FiUsers, current: false },
+        ])
+      : setNavigation([
+          {
+            name: 'Dashboard',
+            href: 'dashboard',
+            icon: RiNumbersLine,
+            current: true,
+          },
+          { name: 'Pages', href: 'pages', icon: RiLayoutLine, current: false },
+          { name: 'News', href: 'news', icon: RiPagesLine, current: false },
+          {
+            name: 'Performance',
+            href: 'performance',
+            icon: RiBarChartLine,
+            current: false,
+          },
+          {
+            name: 'Posts',
+            href: 'posts',
+            icon: RiFileEditLine,
+            current: false,
+          },
+          {
+            name: 'Media Gallery',
+            href: 'media-gallery',
+            icon: RiImageAddLine,
+            current: false,
+          },
+          {
+            name: 'Social',
+            href: 'social',
+            icon: RiMapPinUserLine,
+            current: false,
+          },
+          {
+            name: 'Style',
+            href: 'style',
+            icon: RiPaletteLine,
+            current: false,
+          },
+          {
+            name: 'Website Settings',
+            href: 'website-settings',
+            icon: RiSettings4Line,
+            current: false,
+          },
+        ]);
+  };
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const {
     asPath,
     query: { siteId },
   } = useRouter();
+
+  useEffect(() => {
+    getNavigation();
+  }, []);
 
   const routes = asPath.split('/');
 
