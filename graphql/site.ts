@@ -15,8 +15,8 @@ const SITE_QUERY = gql`
 `;
 
 const SITES_QUERY = gql`
-  query Sites {
-    sites {
+  query Sites($accountId: String!) {
+    sites(accountId: $accountId) {
       id
       name
       header {
