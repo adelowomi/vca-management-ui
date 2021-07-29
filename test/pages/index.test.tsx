@@ -9,6 +9,7 @@ describe('Home page', () => {
   test('matches snapshot', async () => {
     const { asFragment } = render(
       <Home
+        sites={{}}
         user={{
           nickname: 'nickname',
           name: 'name',
