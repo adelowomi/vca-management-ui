@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 
 import Layout from '../../components/Layout/Layout';
-import { SITES_QUERY } from '../../graphql/site';
+import { GET_PROFILE, SITES_QUERY } from '../../graphql/site';
 import { createApolloClient } from '../../lib/apollo';
 
 const Sites = ({ sites, error }) => {
@@ -39,14 +39,36 @@ export async function getServerSideProps(ctx) {
     };
   }
   const client = createApolloClient(session.idToken);
-
   try {
     const {
+      data: {
+        getProfile: {
+          account: { id: accountId },
+        },
+      },
+    } = await client.query({
+      query: GET_PROFILE,
+    });
+
+    const {
       data: { sites },
-    } = await client.query({ query: SITES_QUERY });
-    return { props: { sites } };
+    } = await client.query({
+      query: SITES_QUERY,
+      variables: {
+        accountId,
+        filter: {
+          singleFilter: {
+            field: 'account',
+            operator: 'EQ',
+            value: accountId,
+          },
+        },
+      },
+    });
+
+    return { props: { email: session.user.email, sites } };
   } catch (error) {
-    return { props: { error: 'Error loading........' } };
+    return { props: { error: 'Error loading' } };
   }
 }
 

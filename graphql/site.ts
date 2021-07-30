@@ -15,10 +15,11 @@ const SITE_QUERY = gql`
 `;
 
 const SITES_QUERY = gql`
-  query Sites {
-    sites {
+  query Sites($accountId: String!) {
+    sites(accountId: $accountId) {
       id
       name
+      createdAt
       header {
         name
         type
@@ -50,5 +51,24 @@ const GET_SITE_MENUITEMS = gql`
     }
   }
 `;
+const GET_PROFILE = gql`
+  query {
+    getProfile {
+      id
+      firstName
+      account {
+        id
+        firstName
+        lastName
+        phone
+        businessName
+        address {
+          state
+        }
+        isActive
+      }
+    }
+  }
+`;
 
-export { GET_SITE_MENUITEMS, SITE_QUERY, SITES_QUERY };
+export { GET_PROFILE,GET_SITE_MENUITEMS, SITE_QUERY, SITES_QUERY };

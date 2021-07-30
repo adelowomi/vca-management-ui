@@ -19,6 +19,7 @@ type WidgetProps = {
     content: string;
   }[];
   widget: any;
+  accountId: string;
 };
 
 export const CreateWidget: React.FC<WidgetProps> = ({
@@ -26,9 +27,17 @@ export const CreateWidget: React.FC<WidgetProps> = ({
   client,
   items,
   widget,
+  accountId,
 }): JSX.Element => {
-  const { handleSubmit, state, errors, setState, handleChange, open, setOpen } =
-    widgetUseForm(widgetvalidator, client, pageId, widget);
+  const {
+    handleSubmit,
+    state,
+    errors,
+    setState,
+    handleChange,
+    open,
+    setOpen,
+  } = widgetUseForm(widgetvalidator, client, pageId, widget, accountId);
 
   const getItems = (selected: any) => {
     setState({

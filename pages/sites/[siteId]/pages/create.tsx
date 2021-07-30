@@ -15,22 +15,24 @@ import {
 import { PageTitle } from '../../../../components/Page/PageTitle';
 import { Textposition } from '../../../../components/Page/TextPosition';
 import { GET_ALL_MEDIA } from '../../../../graphql/media';
-import { GET_SITE_MENUITEMS } from '../../../../graphql/site';
+import { GET_PROFILE, GET_SITE_MENUITEMS } from '../../../../graphql/site';
 import { validator } from '../../../../helpers/validator';
 import useForm from '../../../../hooks/useForm';
 import { createApolloClient } from '../../../../lib/apollo';
 
-const create = ({ token, menuItems, medias }) => {
+const create = ({ token, menuItems, medias, accountId }) => {
   const client = createApolloClient(token);
   const {
     query: { siteId },
   } = useRouter();
 
-  const { handleSubmit, state, errors, setState, handleChange } = useForm(
-    validator,
-    client,
-    { siteId, type: 'add' }
-  );
+  const {
+    handleSubmit,
+    state,
+    errors,
+    setState,
+    handleChange,
+  } = useForm(validator, client, { siteId, type: 'add', accountId });
 
   const onButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -73,6 +75,7 @@ const create = ({ token, menuItems, medias }) => {
           state={state}
           setState={setState}
           handleSubmit={handleSubmit}
+          errors={errors}
         />
 
         <Textposition
@@ -118,6 +121,23 @@ export async function getServerSideProps(ctx) {
   const session = getSession(ctx.req, ctx.res);
 
   const client = createApolloClient(session?.idToken);
+  let accountId;
+  let medias;
+
+  try {
+    const {
+      data: {
+        getProfile: {
+          account: { id: account },
+        },
+      },
+    } = await client.query({
+      query: GET_PROFILE,
+    });
+    accountId = account;
+  } catch (error) {
+    accountId = error;
+  }
 
   const {
     data: {
@@ -143,16 +163,22 @@ export async function getServerSideProps(ctx) {
       },
     },
   });
-  const {
-    data: { medias },
-  } = await client.query({
-    query: GET_ALL_MEDIA,
-    variables: {
-      filter: {},
-    },
-  });
 
-  return { props: { token: session?.idToken, menuItems, medias } };
+  try {
+    const { data } = await client.query({
+      query: GET_ALL_MEDIA,
+      variables: {
+        accountId,
+        filter: {},
+      },
+    });
+
+    medias = data.medias ? data.medias : { error: true };
+  } catch (error) {
+    medias = { error: true };
+  }
+
+  return { props: { token: session?.idToken, menuItems, medias, accountId } };
 }
 
 export default withPageAuthRequired(create);
