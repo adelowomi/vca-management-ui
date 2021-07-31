@@ -1,152 +1,171 @@
+import { getSession } from '@auth0/nextjs-auth0';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useToasts } from 'react-toast-notifications';
 
+import {
+  ComparisonOperatorEnum,
+  LogicalOperatorEnum,
+  Page,
+  SiteView,
+  UpdateSiteInput,
+} from '../../../classes/schema';
+import { Site } from '../../../classes/Site';
+import { User } from '../../../classes/User';
 import { FormInput } from '../../../components/FormInput/formInput';
 import FormSelect from '../../../components/FormSelect/VcaSelect';
 import Layout from '../../../components/Layout/Layout';
+import { AddMenuItem } from '../../../components/MenuItems/AddMenuItem';
+import { MenuItemListItem } from '../../../components/MenuItems/MenuItemListItem';
 import { Btn } from '../../../components/Page/PageButtons';
 import {
   Container,
   FormGroup,
 } from '../../../components/Page/PageStyledElements';
+import { GqlErrorResponse } from '../../../errors/GqlError';
 
-const options = [
-  { id: 1, name: 'Active', value: 'Active', unavailable: false },
-];
+//TODO: Implement flow for updating site without page passed
 
-export const Edit = () => {
+export const Edit = ({
+  site,
+  error,
+  pages,
+  token,
+}: {
+  site: SiteView;
+  error: GqlErrorResponse;
+  token: any;
+  pages: Page[];
+}): JSX.Element => {
   const {
     register,
+    handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<UpdateSiteInput>({
+    defaultValues: {
+      name: site.name,
+      page: site.page,
+      header: {
+        logoUrl: site.header.logoUrl,
+      },
+    },
+  });
+  const { addToast } = useToasts();
+  const router = useRouter();
+  const [newPage, setNewPage] = useState('');
+  const [working, setWorking] = useState(false);
+  const _thisSite = new Site(token);
 
-  const {
-    query: { siteId },
-  } = useRouter();
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
+
+  const submit = async (data) => {
+    setWorking(true);
+    newPage ? (data.page = newPage) : null;
+    data.page == undefined ? (data.page = '') : null;
+    try {
+      const result = await _thisSite.updateSite({
+        siteId: site.id,
+        input: (data as unknown) as UpdateSiteInput,
+      });
+      if (!result.status) {
+        setWorking(false);
+        console.error(error);
+        addToast('An error occurred', { appearance: 'error' });
+        return;
+      }
+      addToast('Site Updated Successfully', { appearance: 'success' });
+      setWorking(false);
+      refreshData();
+      return;
+    } catch (error) {
+      console.error(error);
+      addToast(error.error.message ? error.error.message :'An error occurred', { appearance: 'error' });
+      setWorking(false);
+    }
+  };
 
   return (
-    <Layout>
+    <Layout isPAdmin={true}>
       <Container className="mt-12">
-        <div className="flex flex-row justify-between">
-          <h1 className="font-bold text-3xl">Edit website settings</h1>
-          <div className="flex flex-row justify-start space-x-5">
-            <Btn color="primary" $bg="secondary" $px="sm">
-              <Link href="/sites"> Cancel</Link>
-            </Btn>
-            <Btn color="secondary" $bg="primary" $px="lg">
-              Save Changes
-            </Btn>
+        <form onSubmit={handleSubmit(submit)}>
+          <div className="flex flex-row justify-between">
+            <h1 className="font-bold text-3xl">Edit website settings</h1>
+            <div className="flex flex-row justify-start space-x-5">
+              <Btn color="primary" $bg="secondary" $px="sm">
+                <Link href="/sites"> Cancel</Link>
+              </Btn>
+              <Btn color="secondary" $bg="primary" $px="lg">
+                {working ? 'Saving..' : 'Save Changes'}
+              </Btn>
+            </div>
           </div>
-        </div>
-        <div className="mt-10 mb-5 font-semibold leading-6 text-xl text-vca-grey-1 font-inter">
-          Add the site settings
-        </div>
-        <div className="flex flex-row justify-start space-x-7">
-          <FormGroup className="">
-            <FormInput
-              name="sitename"
-              label=""
-              register={register}
-              error={errors.name}
-              required={true}
-            />
-          </FormGroup>
-          <FormGroup className="">
-            {/* <Label htmlFor="pageTitle" className="mb-6">
+          <div className="mt-10 mb-5 font-semibold leading-6 text-xl text-vca-grey-1 font-inter">
             Add the site settings
-          </Label> */}
-            <FormInput
-              name="logo"
-              label=""
-              register={register}
-              error={errors.name}
-              required={true}
-            />
-          </FormGroup>
-        </div>
+          </div>
+
+          <div className="grid grid-cols-2  w-form-col">
+            <FormGroup className="">
+              <FormInput
+                name="name"
+                label="Site Name"
+                register={register}
+                error={errors.name}
+                required={true}
+              />
+            </FormGroup>
+            <FormGroup className="">
+              <FormInput
+                name="header.logoUrl"
+                label="Logo Url"
+                register={register}
+                error={errors.header}
+                required={true}
+              />
+            </FormGroup>
+            {pages.length < 1 ? (
+              <Btn
+                color="primary"
+                $bg="secondary"
+                $px="sm"
+                className="mt-3 w-96"
+              >
+                <Link href={`/sites/${site.id}/pages/create`}>
+                  Add a page to your site
+                </Link>
+              </Btn>
+            ) : (
+              <FormGroup className="">
+                <FormSelect
+                  defaultOption={{
+                    id: 0,
+                    name: pages.filter((p) => p.id == site.page)[0].name,
+                    value: pages.filter((p) => p.id == site.page)[0].id,
+                    unavailable: false,
+                  }}
+                  onChange={(data) => setNewPage(data.value)}
+                  label="Select page"
+                  options={pages.map((page, index) => {
+                    return {
+                      id: index,
+                      name: page.name,
+                      value: page.id,
+                      unavailable: false,
+                    };
+                  })}
+                  error={errors}
+                  errorText={'select a type'}
+                />
+              </FormGroup>
+            )}
+          </div>
+        </form>
         <hr className="border-gray-400 border-5 w-full mt-8" />
-        <div className="mt-10 mb-5 font-semibold leading-6 text-xl text-vca-grey-1 font-inter">
-          Add MenuItems
-        </div>
-        <div className="grid grid-cols-2  w-form-col">
-          <FormGroup className="">
-            <FormInput
-              name="name"
-              label="name"
-              register={register}
-              error={errors.name}
-              required={true}
-            />
-          </FormGroup>
-          <FormGroup className="">
-            <FormInput
-              name="description"
-              label="Description"
-              register={register}
-              error={errors.logoUrl}
-              required={true}
-            />
-          </FormGroup>
-          <FormSelect
-            defaultOption={{
-              id: 0,
-              name: '',
-              value: null,
-              unavailable: false,
-            }}
-            onChange={(data) => console.error(data)}
-            label="Select type"
-            options={options}
-            error={errors.type}
-            errorText={'select a type'}
-          />
-          <FormSelect
-            defaultOption={{
-              id: 0,
-              name: '',
-              value: null,
-              unavailable: false,
-            }}
-            onChange={(data) => console.error(data)}
-            label="Select type"
-            options={[]}
-            error={errors.type}
-            errorText={'select a type'}
-          />
-        </div>
-        <div className="grid grid-cols-2 mt-3 w-form-col">
-          <div className="flex mt-10" style={{ width: '380px' }}>
-            <input
-              type="checkbox"
-              className="px-3 h-6 w-6 border border-gray-300 mr-3"
-              name=""
-              id=""
-            />
-            <label className="font-semibold leading-6 text-lg text-vca-grey-1 font-inter">
-              This is an external link
-            </label>
-          </div>
-          <div className="flex flex-row justify-start space-x-5">
-            <FormInput
-              name="description"
-              label=""
-              register={register}
-              error={errors.logoUrl}
-              required={true}
-            />
-            <Btn
-              color="secondary"
-              $bg="primary"
-              $px="sm"
-              style={{ width: '92px', height: '56px' }}
-              className="mt-6"
-            >
-              Add
-            </Btn>
-          </div>
-        </div>
+        <AddMenuItem token={token} siteId={site.id} reload={refreshData} />
         <hr className="border-gray-400 border-5 w-full mt-8" />
         <div className="mt-10 mb-5 font-semibold leading-6 text-xl text-vca-grey-1 font-inter">
           Added Items
@@ -183,17 +202,91 @@ export const Edit = () => {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200"></tbody>
+                  <tbody className="divide-y divide-gray-200">
+                    {site.header.menuItems.map((item, index) => {
+                      return (
+                        <MenuItemListItem
+                          key={index}
+                          item={item}
+                          siteId={site.id}
+                          token={token}
+                        />
+                      );
+                    })}
+                  </tbody>
                 </table>
               </div>
             </div>
           </div>
         </div>
-
-        {siteId}
       </Container>
     </Layout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = getSession(ctx.req, ctx.res);
+  const user = new User(session.idToken);
+  const site = new Site(session.idToken);
+  const token = session.idToken;
+
+  if (!session) {
+    ctx.res.writeHead(302, {
+      Location: '/login',
+    });
+    ctx.res.end();
+    return;
+  }
+
+  const profile = await (await user.getProfile()).data;
+
+  try {
+    const data = await (
+      await site.getSite({
+        accountId: profile.account.id,
+        siteId: (ctx.query.siteId as unknown) as string,
+      })
+    ).data;
+    const pages = await (
+      await site.getAllPages({
+        accountId: profile.account.id,
+        filter: {
+          combinedFilter: {
+            logicalOperator: LogicalOperatorEnum.And,
+            filters: [
+              {
+                singleFilter: {
+                  field: 'site',
+                  operator: ComparisonOperatorEnum.Eq,
+                  value: data.id,
+                },
+              },
+            ],
+          },
+        },
+      })
+    ).data;
+    return {
+      props: {
+        site: data,
+        error: null,
+        user: session.user,
+        token,
+        pages,
+      },
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      props: {
+        site: {},
+        error: GqlErrorResponse(error),
+        user: session.user,
+        token,
+        pages: [],
+      },
+    };
+  }
 };
 
 export default Edit;

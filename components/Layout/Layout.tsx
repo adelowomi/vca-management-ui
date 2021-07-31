@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { FiUsers } from 'react-icons/fi';
 import {
   RiArrowDownSLine,
@@ -16,7 +16,6 @@ import {
   RiPaletteLine,
   RiSettings4Line,
 } from 'react-icons/ri';
-import { useLocation } from 'react-use';
 import styled from 'styled-components';
 
 import { ExitIcon } from '../AssetsSVG';
@@ -35,81 +34,76 @@ const AnchorTag = styled.a<AnchorTagProps>`
   }
 `;
 
+const adminNavigation = [
+  {
+    name: 'Sites',
+    href: 'sites',
+    icon: RiFolder4Line,
+    current: true,
+  },
+  { name: 'Users', href: 'users', icon: FiUsers, current: false },
+]
+
+const navigation = [
+  {
+    name: 'Dashboard',
+    href: 'dashboard',
+    icon: RiNumbersLine,
+    current: true,
+  },
+  { name: 'Pages', href: 'pages', icon: RiLayoutLine, current: false },
+  { name: 'News', href: 'news', icon: RiPagesLine, current: false },
+  {
+    name: 'Performance',
+    href: 'performance',
+    icon: RiBarChartLine,
+    current: false,
+  },
+  {
+    name: 'Posts',
+    href: 'posts',
+    icon: RiFileEditLine,
+    current: false,
+  },
+  {
+    name: 'Media Gallery',
+    href: 'media-gallery',
+    icon: RiImageAddLine,
+    current: false,
+  },
+  {
+    name: 'Social',
+    href: 'social',
+    icon: RiMapPinUserLine,
+    current: false,
+  },
+  {
+    name: 'Style',
+    href: 'style',
+    icon: RiPaletteLine,
+    current: false,
+  },
+  {
+    name: 'Website Settings',
+    href: 'website-settings',
+    icon: RiSettings4Line,
+    current: false,
+  },
+];
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
-export default function Layout({ children }) {
-  const location = useLocation();
-  const [navigation, setNavigation] = useState([]);
+export default function Layout({ children,isPAdmin}: {children:any,isPAdmin?:boolean}) {
+ 
 
-  const getNavigation = () => {
-    // eslint-disable-next-line no-constant-condition
-    location.pathname === '/sites' || location.pathname === '/users'
-      ? setNavigation([
-          {
-            name: 'Sites',
-            href: 'sites',
-            icon: RiFolder4Line,
-            current: true,
-          },
-          { name: 'Users', href: 'users', icon: FiUsers, current: false },
-        ])
-      : setNavigation([
-          {
-            name: 'Dashboard',
-            href: 'dashboard',
-            icon: RiNumbersLine,
-            current: true,
-          },
-          { name: 'Pages', href: 'pages', icon: RiLayoutLine, current: false },
-          { name: 'News', href: 'news', icon: RiPagesLine, current: false },
-          {
-            name: 'Performance',
-            href: 'performance',
-            icon: RiBarChartLine,
-            current: false,
-          },
-          {
-            name: 'Posts',
-            href: 'posts',
-            icon: RiFileEditLine,
-            current: false,
-          },
-          {
-            name: 'Media Gallery',
-            href: 'media-gallery',
-            icon: RiImageAddLine,
-            current: false,
-          },
-          {
-            name: 'Social',
-            href: 'social',
-            icon: RiMapPinUserLine,
-            current: false,
-          },
-          {
-            name: 'Style',
-            href: 'style',
-            icon: RiPaletteLine,
-            current: false,
-          },
-          {
-            name: 'Website Settings',
-            href: 'website-settings',
-            icon: RiSettings4Line,
-            current: false,
-          },
-        ]);
-  };
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const {
     asPath,
     query: { siteId },
   } = useRouter();
 
-  useEffect(() => {
-    getNavigation();
-  }, []);
+
 
   const routes = asPath.split('/');
 
@@ -225,7 +219,28 @@ export default function Layout({ children }) {
             </div>
             <div className="mt-10 flex-grow flex flex-col">
               <nav className="flex-1 px- bg-white space-y-3">
-                {navigation.map((item) => (
+                {isPAdmin ?
+                 adminNavigation.map((item) => (
+                  <AnchorTag
+                    current={routes.includes(item.href) ? true : false}
+                    key={item.name}
+                    href={`/${item.href}`}
+                    className={classNames(
+                      'group flex items-center px-5 py-4 text-base font-normal'
+                    )}
+                  >
+                    <item.icon
+                      className={classNames(
+                        routes.includes(item.href)
+                          ? 'text-blue-400 text-base font-extrabold'
+                          : 'text-gray-500 group-hover:text-gray-500',
+                        'mr-3 h-6 w-6'
+                      )}
+                      aria-hidden="true"
+                    />
+                    {item.name}
+                  </AnchorTag>
+                )) :navigation.map((item) => (
                   <AnchorTag
                     current={routes.includes(item.href) ? true : false}
                     key={item.name}
@@ -245,7 +260,7 @@ export default function Layout({ children }) {
                     />
                     {item.name}
                   </AnchorTag>
-                ))}
+                )) }
               </nav>
             </div>
             {/* sidebar footer */}
