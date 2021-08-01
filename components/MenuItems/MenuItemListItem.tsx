@@ -24,39 +24,37 @@ export const MenuItemListItem = ({
   remove?: any;
   newSite?: boolean;
 }): JSX.Element => {
-    const router = useRouter();
+  const router = useRouter();
   const { addToast } = useToasts();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [editModalOpen,setEditModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
   const _thisSite = new Site(token);
 
   const deleteItem = async () => {
-    if(newSite){
-        remove(item,index);
-        return;
+    if (newSite) {
+      remove(item, index);
+      return;
     }
     try {
-        const result = await (await _thisSite.deleteMenuItem({menuId:item.id}));
-        if(!result.status){
-            addToast("An Error Occurred",{ appearance : 'error'});
-            return;
-        }
-        addToast("Deleted Successfully",{ appearance : 'success'});
-        refreshData();
+      const result = await await _thisSite.deleteMenuItem({ menuId: item.id });
+      if (!result.status) {
+        addToast('An Error Occurred', { appearance: 'error' });
+        return;
+      }
+      addToast('Deleted Successfully', { appearance: 'success' });
+      refreshData();
     } catch (error) {
-        console.error(error);
-        addToast('An error occurred',{ appearance : 'error'})
+      console.error(error);
+      addToast('An error occurred', { appearance: 'error' });
     }
   };
 
   const refreshData = () => {
     router.replace(router.asPath);
-    setEditModalOpen(false)
-  }
+    setEditModalOpen(false);
+  };
 
-
-  
   return (
     <>
       <DeleteModal
@@ -70,13 +68,7 @@ export const MenuItemListItem = ({
         closeModal={refreshData}
         item={item}
         token={token}
-        />
-      {/* <DeleteModal
-          open={deleteModalOpen}
-          setOpen={setDeleteModalOpen}
-          name="Page"
-          handleIsdeleted={deleteItem}
-        /> */}
+      />
       <tr className={`text-left  `} key={item.id}>
         <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
           <input
@@ -101,10 +93,13 @@ export const MenuItemListItem = ({
           </Link>
         </td>
         <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
-          <span className="flex space-x-5">  
-          {!newSite ? <p onClick={() => setEditModalOpen(true)}>Edit</p> : "" } 
-              
-            <RiDeleteBinLine className="h-6" onClick={() => setDeleteModalOpen(true)} />
+          <span className="flex space-x-5">
+            {!newSite ? <p onClick={() => setEditModalOpen(true)}>Edit</p> : ''}
+
+            <RiDeleteBinLine
+              className="h-6"
+              onClick={() => setDeleteModalOpen(true)}
+            />
           </span>
         </td>
       </tr>

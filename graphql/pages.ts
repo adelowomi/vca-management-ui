@@ -1,8 +1,18 @@
 import { gql } from '@apollo/client';
 
 const PAGES_QUERY = gql`
-  query Pages($limit: Int, $offset: Int, $filter: FilterInput,$accountId: String!) {
-    pages(filter: $filter, limit: $limit, offset: $offset,accountId:$accountId) {
+  query Pages(
+    $limit: Int
+    $offset: Int
+    $filter: FilterInput
+    $accountId: String!
+  ) {
+    pages(
+      filter: $filter
+      limit: $limit
+      offset: $offset
+      accountId: $accountId
+    ) {
       id
       name
       tags
@@ -29,7 +39,7 @@ const PAGES_QUERY = gql`
   }
 `;
 const DELETE_PAGE = gql`
-  mutation ($pageId: String!) {
+  mutation($pageId: String!) {
     removePage(pageId: $pageId) {
       id
     }
@@ -85,7 +95,7 @@ const ADD_PAGE = gql`
   }
 `;
 const EDIT_PAGE = gql`
-  mutation ($updatePageInput: UpdatePageInput!, $pageId: String!) {
+  mutation($updatePageInput: UpdatePageInput!, $pageId: String!) {
     updatePage(updatePageInput: $updatePageInput, pageId: $pageId) {
       id
       name
