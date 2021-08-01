@@ -4,6 +4,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      width:{
+        'form-col':'830px'
+      },
       sans: ['Inter'],
       extend: {
         screens: {
@@ -16,6 +19,7 @@ module.exports = {
         },
       },
     },
+    
     colors: {
       ...tailwindColors,
       'vca-blue': '#1890FF',
@@ -30,6 +34,9 @@ module.exports = {
       'vca-green': '#219653',
       'vca-red': '#EB5757',
       'vca-orage': '#DD970B',
+    },
+    fontFamily: {
+      inter: 'Inter',
     },
   },
   variants: {

@@ -1,9 +1,13 @@
-import { getSession, Session } from '@auth0/nextjs-auth0';
+import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import styled from 'styled-components';
 
 import { Button, Header } from '../components';
+import { GqlErrorResponse } from '../errors/GqlError';
+import { SITES_QUERY } from '../graphql';
+import { createApolloClient } from '../lib/apollo';
 
 const Container = styled.div`
   display: flex;
@@ -13,8 +17,7 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-export const Home = (props): JSX.Element => {
-  const { user } = props;
+export const Home = ({ user }: { user: any; sites: any }): JSX.Element => {
   const router = useRouter();
 
   if (user) {
@@ -33,18 +36,44 @@ export const Home = (props): JSX.Element => {
   }
   return <Container>Unauthenticated</Container>;
 };
+export default withPageAuthRequired(Home);
 
-export async function getServerSideProps(ctx) {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session: Session = getSession(ctx.req, ctx.res);
 
   if (!session) {
+    ctx.res.writeHead(302, {
+      Location: '/login',
+    });
+    ctx.res.end();
+    return;
+  }
+
+  const token = session.idToken;
+  const client = createApolloClient(token);
+
+  try {
+    const sites = await client.query({
+      query: SITES_QUERY,
+      variables: {
+        accountId: process.env.ACCOUNT_ID,
+      },
+    });
     return {
-      redirect: {
-        destination: '/login',
+      props: {
+        sites: sites.data.sites,
+        error: null,
+        user: session.user,
+      },
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      props: {
+        sites: [],
+        error: GqlErrorResponse(error),
+        user: session.user,
       },
     };
   }
-
-  return { props: { user: session.user } };
-}
-export default Home;
+};
