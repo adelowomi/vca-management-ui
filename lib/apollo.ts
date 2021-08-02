@@ -1,9 +1,11 @@
 import {
   ApolloClient,
   ApolloProvider,
+  from,
   InMemoryCache,
   NormalizedCacheObject,
 } from '@apollo/client';
+import { onError } from '@apollo/client/link/error';
 import { IncomingMessage, ServerResponse } from 'http';
 import { useMemo } from 'react';
 
@@ -14,12 +16,24 @@ export type ResolverContext = {
   res?: ServerResponse;
 };
 
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.error(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    );
+
+  if (networkError) console.error(`[Network error]: ${networkError}`);
+});
+
 export function createApolloClient(authToken: string) {
   if (authToken === '') {
     return new ApolloClient({
       ssrMode: typeof window === 'undefined',
       uri: process.env.NEXT_PUBLIC_API_URL,
       cache: new InMemoryCache(),
+      link: from([errorLink]),
     });
   }
 
@@ -50,10 +64,9 @@ export function initializeApollo(initialState: any = null, authToken: string) {
 }
 
 function useApollo(initialState: any, authToken: string) {
-  return useMemo(
-    () => initializeApollo(initialState, authToken),
-    [initialState]
-  );
+  return useMemo(() => initializeApollo(initialState, authToken), [
+    initialState,
+  ]);
 }
 
 export { ApolloProvider, useApollo };

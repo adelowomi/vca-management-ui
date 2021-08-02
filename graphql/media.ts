@@ -10,7 +10,10 @@ const GET_ALL_MEDIA = gql`
       document {
         url
       }
-      # video
+      video {
+      service
+      url
+    }
       image {
         small
         medium

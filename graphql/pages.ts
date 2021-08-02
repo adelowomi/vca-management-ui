@@ -17,7 +17,6 @@ const PAGES_QUERY = gql`
       name
       tags
       site
-      createdAt
       menuItem
       hero {
         type

@@ -35,7 +35,7 @@ const Btn = styled.button`
   box-shadow: rgba(128, 128, 128, 0.1);
 `;
 
-const PageActionsColOneBtn = tw(Btn)`
+export const PageActionsColOneBtn = tw(Btn)`
 text-white
 text-sm
 py-3

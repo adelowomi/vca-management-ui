@@ -73,7 +73,7 @@ const edit = ({
   };
   return (
     <Layout>
-      <Container>
+      <Container className="mt-12">
         <PageControls
           onSubmit={handleSubmit}
           title="Edit page"
