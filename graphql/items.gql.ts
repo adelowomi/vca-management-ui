@@ -43,4 +43,20 @@ const EDIT_ITEM = gql`
   }
 `;
 
-export { EDIT_ITEM, GET_ALL_ITEMS_QUERY };
+const ADD_ITEM = gql`
+  mutation ($createItemInput: CreateItemInput!) {
+    updateItem(createItemInput: $createItemInput) {
+      id
+      mediaUrl
+      content
+      category
+      slug
+      type
+      featured
+      description
+      tags
+    }
+  }
+`;
+
+export { EDIT_ITEM, GET_ALL_ITEMS_QUERY, ADD_ITEM };

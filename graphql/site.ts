@@ -51,4 +51,25 @@ const GET_SITE_MENUITEMS = gql`
   }
 `;
 
-export { GET_SITE_MENUITEMS, SITE_QUERY, SITES_QUERY };
+const GET_PROFILE = gql`
+  query {
+    getProfile {
+      id
+      firstName
+      account {
+        id
+        firstName
+        lastName
+        phone
+        businessName
+        address {
+          state
+        }
+        isActive
+      }
+    }
+  }
+`;
+
+
+export { GET_SITE_MENUITEMS, SITE_QUERY, SITES_QUERY, GET_PROFILE };
