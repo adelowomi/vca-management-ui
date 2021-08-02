@@ -38,10 +38,10 @@ export const index = ({
     handleSubmit,
     formState: { errors },
   } = useForm<FieldValues>({defaultValues:{
-      facebook: existingSocial.facebook,
-      linkedin: existingSocial.linkedin,
-      twitter: existingSocial.twitter,
-      instagram: existingSocial.instagram,
+      facebook: existingSocial?.facebook ,
+      linkedin: existingSocial?.linkedin,
+      twitter: existingSocial?.twitter,
+      instagram: existingSocial?.instagram,
   }});
   const { addToast } = useToasts();
   const social = new Socials(token);
@@ -191,7 +191,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       error: null,
       token,
       profile,
-      existingSocial:socials.filter(social => social.site == ctx.query.siteId )[0]
+      existingSocial:socials.filter(social => social.site == ctx.query.siteId )[0] ?? null
     },
   };
 };
