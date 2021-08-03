@@ -1,35 +1,18 @@
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import DOMPurify from 'dompurify';
-import { convertToHTML } from 'draft-convert';
-import { EditorState } from 'draft-js';
-import dynamic from 'next/dynamic';
-import React, { useState } from 'react';
 
+import dynamic from 'next/dynamic';
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
   { ssr: false }
 );
-export const DraftEditor = () => {
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
-  const [, setConvertedContent] = useState(null);
-  const handleEditorChange = (state) => {
-    setEditorState(state);
-    convertContentToHTML();
-  };
-  const convertContentToHTML = () => {
-    const currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
-    setConvertedContent(DOMPurify.sanitize(currentContentAsHTML));
-  };
-
+export const DraftEditor = ({ onChange, value }) => {
   return (
     <>
       <Editor
-        editorState={editorState}
-        onEditorStateChange={handleEditorChange}
-        wrapperClassName=" border border-gray-400 h-96 max-h-96 pb-10 overflow-auto"
-        editorClassName="px-3"
+        editorState={value}
+        onEditorStateChange={onChange}
+        wrapperClassName=" border border-gray-400 h-96 max-h-full"
+        editorClassName="px-3 h-full max-h-72 overflow-auto"
         toolbarClassName=""
       />
     </>

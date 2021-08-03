@@ -40,6 +40,7 @@
     "@hookform/resolvers": "^2.0.0",
     "@tailwindcss/aspect-ratio": "^0.2.1",
     "@tailwindcss/forms": "^0.3.2",
+    "@tailwindcss/line-clamp": "^0.2.1",
     "@types/styletron-engine-atomic": "^1.1.0",
     "@types/styletron-react": "^5.0.2",
     "@types/styletron-standard": "^2.0.1",

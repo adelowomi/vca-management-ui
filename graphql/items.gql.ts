@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 const GET_ALL_ITEMS_QUERY = gql`
-  query GetAllItems($filter: FilterInput, $siteId: String!) {
-    getAllItems(filter: $filter, siteId: $siteId) {
+  query GetAllItems($filter: FilterInput) {
+    getAllItems(filter: $filter) {
       id
       type
       description
@@ -14,11 +14,53 @@ const GET_ALL_ITEMS_QUERY = gql`
       createdAt
       updatedAt
       tags
+      account{
+      firstName
+      lastName
+    }
       media {
         image {
           small
         }
-        video
+        video{
+          service
+          url
+        }
+        document {
+          url
+        }
+      }
+    }
+  }
+`;
+
+const GET_ITEM = gql`
+  query GetAllItems($filter: FilterInput) {
+    getAllItems(filter: $filter) {
+      id
+      type
+      description
+      content
+      featured
+      slug
+      draft
+      category
+      mediaUrl
+      createdAt
+      updatedAt
+      tags
+      account{
+      firstName
+      lastName
+    }
+      media {
+        image {
+          small
+        }
+        video{
+          service
+          url
+        }
         document {
           url
         }
@@ -45,7 +87,7 @@ const EDIT_ITEM = gql`
 
 const ADD_ITEM = gql`
   mutation ($createItemInput: CreateItemInput!) {
-    updateItem(createItemInput: $createItemInput) {
+    createItem(createItemInput: $createItemInput) {
       id
       mediaUrl
       content
@@ -59,4 +101,14 @@ const ADD_ITEM = gql`
   }
 `;
 
-export { EDIT_ITEM, GET_ALL_ITEMS_QUERY, ADD_ITEM };
+const DELETE_ITEM = gql`
+mutation($itemId: String!){
+  removeItem(itemId: $itemId){
+    id
+  }
+}
+
+
+`;
+
+export { ADD_ITEM, EDIT_ITEM, GET_ALL_ITEMS_QUERY, DELETE_ITEM, GET_ITEM };

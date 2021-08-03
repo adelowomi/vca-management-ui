@@ -1,14 +1,16 @@
 import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useToasts } from 'react-toast-notifications';
 
 import Layout from '../../../../components/Layout/Layout';
 import { ImageSelectBox } from '../../../../components/Page/PageStyledElements';
 import { DraftEditor } from '../../../../components/utilsGroup/Editor';
+// import { SelectMediaModal } from '../../../../components/utilsGroup/SelectMediaModal';
 import { ADD_ITEM } from '../../../../graphql/items.gql';
 import { GET_PROFILE } from '../../../../graphql/site';
+import { convertToHTML } from '../../../../helpers/convertToHtml';
 import { createApolloClient } from '../../../../lib/apollo';
 
 const GqlErrorResponse = (error: any) => {
@@ -25,8 +27,9 @@ const GqlErrorResponse = (error: any) => {
   };
 };
 
-const CreatePost = ({ user, token }) => {
+const CreatePost = ({ token, accountId: account }) => {
   const client = createApolloClient(token);
+  const [isLoading, setIsLoading] = React.useState(false);
   const { addToast } = useToasts();
   const {
     register,
@@ -35,42 +38,49 @@ const CreatePost = ({ user, token }) => {
     control,
     formState: { errors },
   } = useForm();
+
   const onSubmit = async (data) => {
+    data.content = convertToHTML(data.content);
     try {
+      setIsLoading(true);
       await client.mutate({
         mutation: ADD_ITEM,
         variables: {
-          CreateItemInput: {
+          createItemInput: {
             siteId: '60f59e49ec17e50015be5074',
             type: 'type',
             description: data.description,
             featured: data.postTitle,
             slug: '/slug',
             draft: 'false',
+            content: data.content,
             category: 'general',
-            account: '60f59c39ec17e50015be506e',
-            mediaUrl:
-              'https://vca-documents.s3.ca-central-1.amazonaws.com/c9/85bd9336ea45f08631225a354b80ee/hero.png',
+            account,
             tags: ['finance', 'banking'],
             media: '6101685f280c120015fec9a5',
+            mediaUrl:
+              'https://vca-documents.s3.ca-central-1.amazonaws.com/c9/85bd9336ea45f08631225a354b80ee/hero.png',
           },
         },
       });
+      setIsLoading(false);
       addToast('Post is successfully created', { appearance: 'success' });
       return;
     } catch (error) {
+      setIsLoading(false);
       addToast('Post could not be created!', { appearance: 'error' });
       return;
     }
   };
 
-  React.useEffect(() => {});
+  // React.useEffect(() => {});
   return (
-    <Layout user={user}>
+    <Layout>
+      {/* <SelectMediaModal open={} setOpen={} medias={} state={} setState={} /> */}
       <div className="wrapper">
         <div className="px-24 mt-10">
           <form action="" onSubmit={handleSubmit(onSubmit)}>
-            <section className="flex items-center justify-between w-full">
+            <section className="flex items-center justify-between w-full h-">
               <div className="flex text-gray-600 items-center ml-3">
                 <h1 className="text-3xl text-black font-bold">
                   Add a new post
@@ -84,7 +94,7 @@ const CreatePost = ({ user, token }) => {
                   type="submit"
                   className="text-white bg-vca-blue rounded-sm text-sm py-4 font-bold px-10"
                 >
-                  Publish
+                  {isLoading ? 'Saving...' : 'Publish'}
                 </button>
               </div>
             </section>
@@ -103,7 +113,7 @@ const CreatePost = ({ user, token }) => {
                   />
 
                   {errors?.postTitle && (
-                    <p className="text-red-500">name is required!</p>
+                    <p className="text-red-500">Post Title is required!</p>
                   )}
                 </div>
                 <div>
@@ -117,7 +127,7 @@ const CreatePost = ({ user, token }) => {
                   />
 
                   {errors?.description && (
-                    <p className="text-red-500">name is required!</p>
+                    <p className="text-red-500">description is required!</p>
                   )}
                 </div>
               </div>
@@ -142,11 +152,15 @@ const CreatePost = ({ user, token }) => {
                 <h4 className="text-xl font-medium mb-4">Post content</h4>
                 <Controller
                   name="content"
+                  rules={{ required: true }}
                   control={control}
                   render={({ field: { value, onChange } }) => {
-                    return <DraftEditor />;
+                    return <DraftEditor onChange={onChange} value={value} />;
                   }}
                 />
+                {errors?.content && (
+                  <p className="text-red-500">content is required!</p>
+                )}
               </div>
             </section>
           </form>
