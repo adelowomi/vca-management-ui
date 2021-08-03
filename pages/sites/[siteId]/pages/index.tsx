@@ -11,10 +11,10 @@ import tw from 'tailwind-styled-components';
 
 import Layout from '../../../../components/Layout/Layout';
 import { BulkActionDropdown } from '../../../../components/Page/BulkActionDropdown';
-import { Container } from '../../../../components/Page/PageStyledElements';
 import DeleteModal from '../../../../components/utilsGroup/DeleteModal';
 import { GET_SITE_MENUITEMS, PAGES_QUERY } from '../../../../graphql';
 import { DELETE_PAGE } from '../../../../graphql/pages';
+import { GET_PROFILE } from '../../../../graphql/site';
 import { createApolloClient } from '../../../../lib/apollo';
 
 const PageActionsWrapper = tw.div`
@@ -103,14 +103,14 @@ const Pages = ({ pages, menuItems, token }) => {
 
   return (
     <Layout>
-      <Container>
-        <DeleteModal
-          open={open}
-          setOpen={setOpen}
-          name="Page"
-          handleIsdeleted={handleIsdeleted}
-        />
-        <PageActionsWrapper className="mt-12">
+      <DeleteModal
+        open={open}
+        setOpen={setOpen}
+        name="Page"
+        handleIsdeleted={handleIsdeleted}
+      />
+      <div className="px-10 mt-6">
+        <PageActionsWrapper>
           <PageActionsColOne>
             <h1 className="text-4xl font-semibold">Pages</h1>
             <PageActionsColOneBtn className="focus:outline-none">
@@ -145,108 +145,95 @@ const Pages = ({ pages, menuItems, token }) => {
           </div>
         </PageHeroWrapper>
         <PageTableWrapper>
-          {pages.error ? (
-            <>
-              <div className="mt-24">
-                <h3 className="text-center text-2xl">An error occurred</h3>
-                <p className="text-center">
-                  An error occurred while trying to load pages
-                </p>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="flex flex-col mt-5">
-                <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                  <div className="py-2 align-middle  min-w-full sm:px-6 lg:px-8">
-                    <div className="shadow overflow-hidden border-b border-gray-200">
-                      <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="" style={{ background: '#F2F2F2' }}>
-                          <tr className="text-left text-gray-500 text-sm font-light">
-                            <th
-                              scope="col"
-                              className="px-6 tracking-wider font-light py-4"
-                            >
-                              <input
-                                type="checkbox"
-                                name=""
-                                id=""
-                                className="h-5 w-6"
+          <div className="flex flex-col mt-5">
+            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div className="py-2 align-middle  min-w-full sm:px-6 lg:px-8">
+                <div className="shadow overflow-hidden border-b border-gray-200">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="" style={{ background: '#F2F2F2' }}>
+                      <tr className="text-left text-gray-500 text-sm font-light">
+                        <th
+                          scope="col"
+                          className="px-6 tracking-wider font-light py-4"
+                        >
+                          <input
+                            type="checkbox"
+                            name=""
+                            id=""
+                            className="h-5 w-6"
+                          />
+                        </th>
+                        <th scope="col" className="px-6 tracking-wider">
+                          Page Title
+                        </th>
+                        <th scope="col" className="px-6 tracking-wider">
+                          Menu Items
+                        </th>
+                        <th scope="col" className="px-6 tracking-wider">
+                          Last posted on
+                        </th>
+                        <th scope="col" className="px-6  tracking-wider">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {pages.map((el: any) => (
+                        <tr className={`text-left  `} key={el.id}>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
+                            <input
+                              type="checkbox"
+                              className="px-3 h-5 w-6 border border-gray-300"
+                              name=""
+                              id=""
+                            />
+                          </td>
+
+                          <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
+                            <Link href={`/sites/${el.site}/pages/${el.id}`}>
+                              {el.name}
+                            </Link>
+                          </td>
+                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
+                            <Link href={`/sites/${el.site}/pages/${el.id}`}>
+                              {el.menuItem
+                                ? menuItems.filter(
+                                    (item) => item.id === el.menuItem
+                                  )[0].name
+                                : ''}
+                            </Link>
+                          </td>
+                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
+                            <Link href={`/sites/${el.site}/pages/${el.id}`}>
+                              <span>
+                                <p>{moment(el.createdAt).format('llll')}</p>
+                              </span>
+                            </Link>
+                          </td>
+                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
+                            <span className="flex space-x-5">
+                              <Link
+                                href={`/sites/${siteId}/pages/${el.id}/edit`}
+                              >
+                                <p>edit</p>
+                              </Link>
+
+                              <RiDeleteBinLine
+                                onClick={() => getId(el.id)}
+                                className="h-6"
                               />
-                            </th>
-                            <th scope="col" className="px-6 tracking-wider">
-                              Page Title
-                            </th>
-                            <th scope="col" className="px-6 tracking-wider">
-                              Menu Items
-                            </th>
-                            <th scope="col" className="px-6 tracking-wider">
-                              Last posted on
-                            </th>
-                            <th scope="col" className="px-6  tracking-wider">
-                              Actions
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                          {pages.map((el: any) => (
-                            <tr className={`text-left  `} key={el.id}>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
-                                <input
-                                  type="checkbox"
-                                  className="px-3 h-5 w-6 border border-gray-300"
-                                  name=""
-                                  id=""
-                                />
-                              </td>
-
-                              <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
-                                <Link href={`/sites/${el.site}/pages/${el.id}`}>
-                                  {el.name}
-                                </Link>
-                              </td>
-                              <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
-                                <Link href={`/sites/${el.site}/pages/${el.id}`}>
-                                  {el.menuItem
-                                    ? menuItems.filter(
-                                        (item) => item.id === el.menuItem
-                                      )[0].name
-                                    : ''}
-                                </Link>
-                              </td>
-                              <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
-                                <Link href={`/sites/${el.site}/pages/${el.id}`}>
-                                  <span>
-                                    <p>{moment(el.createdAt).format('llll')}</p>
-                                  </span>
-                                </Link>
-                              </td>
-                              <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
-                                <span className="flex space-x-5">
-                                  <Link
-                                    href={`/sites/${siteId}/pages/${el.id}/edit`}
-                                  >
-                                    <p>edit</p>
-                                  </Link>
-
-                                  <RiDeleteBinLine
-                                    onClick={() => getId(el.id)}
-                                    className="h-6"
-                                  />
-                                </span>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
-            </>
-          )}
+            </div>
+          </div>
         </PageTableWrapper>
-      </Container>
+      </div>
     </Layout>
   );
 };
@@ -262,23 +249,36 @@ export async function getServerSideProps(ctx) {
     };
   }
   const client = createApolloClient(session.idToken);
-  let pages = { error: true };
-  let menuItems = [];
+  let menuItems: any;
+  let pages: any;
+  let accountId: any;
 
-  // console.log(ctx.query.siteId);
+  try {
+    const {
+      data: {
+        getProfile: {
+          account: { id: account },
+        },
+      },
+    } = await client.query({
+      query: GET_PROFILE,
+    });
+    accountId = account;
+  } catch (error) {
+    accountId = { error: true };
+  }
 
   try {
     const { data } = await client.query({
       query: PAGES_QUERY,
       variables: {
-        accountId: '60f59c39ec17e50015be506e',
+        accountId,
         filter: {
           combinedFilter: {
-            logicalOperator: 'AND',
             filters: [
               {
                 singleFilter: {
-                  field: 'site',
+                  field: 'siteId',
                   operator: 'EQ',
                   value: ctx.query.siteId,
                 },
@@ -288,14 +288,18 @@ export async function getServerSideProps(ctx) {
         },
       },
     });
+
     pages = data.pages;
   } catch (error) {
-    console.error(error);
     pages = { error: true };
   }
 
   try {
-    const { data } = await client.query({
+    const {
+      data: {
+        siteMenuItems: { header },
+      },
+    } = await client.query({
       query: GET_SITE_MENUITEMS,
       variables: {
         filter: {
@@ -313,9 +317,9 @@ export async function getServerSideProps(ctx) {
         },
       },
     });
-    menuItems = data.siteMenuItems.header.menuItems;
+    menuItems = header.menuItems;
   } catch (error) {
-    console.error(error);
+    menuItems = { error: true };
   }
 
   return { props: { pages, menuItems, token: session.idToken } };

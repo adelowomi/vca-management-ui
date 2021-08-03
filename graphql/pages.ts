@@ -46,8 +46,8 @@ const DELETE_PAGE = gql`
   }
 `;
 const PAGE_QUERY = gql`
-  query Page($filter: FilterInput) {
-    page(filter: $filter) {
+  query Page($filter: FilterInput, $accountId: String!) {
+    page(filter: $filter, accountId: $accountId) {
       id
       name
       tags

@@ -19,7 +19,8 @@ export const widgetUseForm = (
   validate: any,
   client: ApolloClient<NormalizedCacheObject>,
   pageId: string | string[],
-  widget: any
+  widget: any,
+  accountId: string
 ) => {
   const getId = (arr: any) => {
     return arr.map((el: any) => (el.id ? el.id : el));
@@ -52,6 +53,7 @@ export const widgetUseForm = (
         mutation: ADD_WIDGET,
         variables: {
           createWidgetInput: {
+            account: accountId,
             description: state.widgetDescription,
             disable: state.widgetDisable,
             title: state.widgetTitle,
@@ -77,6 +79,7 @@ export const widgetUseForm = (
         mutation: EDIT_WIDGET,
         variables: {
           updateWidgetInput: {
+            account: accountId,
             description: state.widgetDescription,
             disable: state.widgetDisable,
             title: state.widgetTitle,

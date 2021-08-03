@@ -23,12 +23,12 @@ const Sites = ({
 }: {
   sites: SiteView[];
   error: GqlErrorResponse;
-  token:any;
+  token: any;
 }): JSX.Element => {
   const router = useRouter();
   const { addToast } = useToasts();
-  const [deleteModalOpen,setDeleteModalOpen]  = useState(false);
-  const [siteToDelete,setSiteToDelete] = useState('');
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [siteToDelete, setSiteToDelete] = useState('');
 
   const refreshData = () => {
     router.replace(router.asPath);
@@ -36,7 +36,9 @@ const Sites = ({
 
   const removeSite = async () => {
     try {
-      const result = await await new Site(token).removeSite({siteId:siteToDelete});
+      const result = await await new Site(token).removeSite({
+        siteId: siteToDelete,
+      });
       if (!result.status) {
         addToast('An Error Occurred', { appearance: 'error' });
         return;
@@ -52,9 +54,7 @@ const Sites = ({
   const triggerDelete = (siteId) => {
     setSiteToDelete(siteId);
     setDeleteModalOpen(true);
-  }
-
-  
+  };
 
   return error ? (
     <div>{error}</div>
@@ -62,10 +62,10 @@ const Sites = ({
     <Layout isPAdmin={true}>
       <Container>
         <DeleteModal
-         open={deleteModalOpen}
-         setOpen={setDeleteModalOpen}
-         name="Site"
-         handleIsdeleted={removeSite}
+          open={deleteModalOpen}
+          setOpen={setDeleteModalOpen}
+          name="Site"
+          handleIsdeleted={removeSite}
         />
         <div className="mt-12 flex flex-col">
           <div className="flex flew-row justify-between items-center">
@@ -150,7 +150,10 @@ const Sites = ({
                                 <p>Edit</p>
                               </Link>
 
-                              <RiDeleteBinLine className="h-6"  onClick={() => triggerDelete(site.id)}/>
+                              <RiDeleteBinLine
+                                className="h-6"
+                                onClick={() => triggerDelete(site.id)}
+                              />
                             </span>
                           </td>
                         </tr>

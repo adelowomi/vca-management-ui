@@ -4,8 +4,8 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      width:{
-        'form-col':'830px'
+      width: {
+        'form-col': '830px',
       },
       sans: ['Inter'],
       extend: {
@@ -19,7 +19,7 @@ module.exports = {
         },
       },
     },
-    
+
     colors: {
       ...tailwindColors,
       'vca-blue': '#1890FF',
