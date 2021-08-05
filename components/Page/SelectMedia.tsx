@@ -33,7 +33,7 @@ export const SelectMedia = ({ setOpen, setState, state, medias }) => {
   React.useEffect(() => {
     setState({
       ...state,
-      mediaUrl: selected[selected.length - 1]?.image.small,
+      mediaUrl: selected[selected.length - 1]?.image?.small,
       media: selected[selected.length - 1]?.id,
     });
 

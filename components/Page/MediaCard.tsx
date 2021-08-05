@@ -48,21 +48,25 @@ export const MediaCard = ({ media, selectedArr, selected, count }) => {
       >
         <div className="h-40 w-full">
           {media.type === 'VIDEO' ? (
-            <img
+            <video
               className="w-full h-full object-cover"
-              src={media.image.small}
-              alt="news image"
+              src={media?.video?.url}
             />
-          ) : media.type === 'IMAGE' ? (
+          ) : // <iframe
+          //   width="290"
+          //   height="215"
+          //   // src="https://www.youtube.com/embed/tgbNymZ7vqY"
+          // ></iframe>
+          media.type === 'IMAGE' ? (
             <img
               className="w-full h-full object-cover"
-              src={media.image.small}
+              src={media?.image?.small}
               alt="news image"
             />
           ) : media.type === 'DOCUMENT' ? (
             <img
               className="w-full h-full object-cover"
-              src={media.image.small}
+              src={media?.image?.small}
               alt="news image"
             />
           ) : (

@@ -1,10 +1,11 @@
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+
 import {
   ADD_ITEM,
   DELETE_ITEM,
-  GET_ITEM,
+  // EDIT_ITEM,
   GET_ALL_ITEMS_QUERY,
-  EDIT_ITEM,
+  // GET_ITEM,
 } from '../graphql/items.gql';
 import { createApolloClient } from '../lib/apollo';
 // import { CreateSocialInput, Social, UpdateSocialInput } from './schema';
@@ -17,26 +18,57 @@ export class Post {
     this.client = createApolloClient(token);
   }
 
-  //   public getPost = async ({ accountId }: { accountId: string }) => {
-  //     try {
-  //       const { data } = await this.client.query({
-  //         query: GET_ITEM,
-  //         variables: { socialId: socialId, accountId: accountId },
-  //       });
-  //       return Promise.resolve<GqlResponse<Social>>({
-  //         data: data.social,
-  //         status: true,
-  //         error: null,
-  //       });
-  //     } catch (error) {
-  //       console.error(error);
-  //       return Promise.reject<GqlResponse<Social>>({
-  //         data: null,
-  //         error: error,
-  //         status: false,
-  //       });
-  //     }
-  //   };
+  public getPost = async ({ accountId, siteId, postId }: { accountId: string | string[], postId: string | string[]; siteId: string | string[] }) => {
+    try {
+      const {
+        data: { getAllItems },
+      } = await this.client.query({
+        query: GET_ALL_ITEMS_QUERY,
+        variables: {
+          filter: {
+            combinedFilter: {
+              logicalOperator: 'AND',
+              filters: [
+                {
+                  singleFilter: {
+                    field: 'account',
+                    operator: 'EQ',
+                    value: accountId,
+                  },
+                },
+                {
+                  singleFilter: {
+                    field: 'siteId',
+                    operator: 'EQ',
+                    value: siteId,
+                  },
+                },
+                {
+                  singleFilter: {
+                    field: '_id',
+                    operator: 'EQ',
+                    value: postId,
+                  },
+                },
+              ],
+            },
+          },
+        },
+      });
+      return Promise.resolve({
+        data: getAllItems,
+        status: true,
+        error: null,
+      });
+    } catch (error) {
+      console.error(error);
+      return Promise.reject({
+        data: null,
+        error: error,
+        status: false,
+      });
+    }
+  };
 
   public getPosts = async ({
     accountId,
@@ -47,7 +79,7 @@ export class Post {
   }) => {
     try {
       const {
-        data: { getAllItems: data },
+        data: { getAllItems },
       } = await this.client.query({
         query: GET_ALL_ITEMS_QUERY,
         variables: {
@@ -75,10 +107,11 @@ export class Post {
         },
       });
       return Promise.resolve({
-        data,
+        data: getAllItems,
         status: true,
         error: null,
       });
+
     } catch (error) {
       console.error(error);
       return Promise.reject({

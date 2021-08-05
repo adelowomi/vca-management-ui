@@ -19,6 +19,7 @@ const GET_ALL_ITEMS_QUERY = gql`
       lastName
     }
       media {
+        id
         image {
           small
         }
@@ -111,4 +112,4 @@ mutation($itemId: String!){
 
 `;
 
-export { ADD_ITEM, EDIT_ITEM, GET_ALL_ITEMS_QUERY, DELETE_ITEM, GET_ITEM };
+export { ADD_ITEM, DELETE_ITEM, EDIT_ITEM, GET_ALL_ITEMS_QUERY, GET_ITEM };

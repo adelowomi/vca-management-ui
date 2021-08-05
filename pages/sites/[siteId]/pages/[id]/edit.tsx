@@ -23,11 +23,21 @@ import {
   GET_WIDGET,
   PAGE_QUERY,
 } from '../../../../../graphql';
+import { GET_PROFILE } from '../../../../../graphql/site';
 import { validator } from '../../../../../helpers/validator';
 import useForm from '../../../../../hooks/useForm';
 import { createApolloClient } from '../../../../../lib/apollo';
 
-const edit = ({ token, menuItems, page, items, widget, medias, pageItems }) => {
+const edit = ({
+  token,
+  menuItems,
+  page,
+  items,
+  widget,
+  medias,
+  pageItems,
+  accountId,
+}) => {
   const client = createApolloClient(token);
   const {
     query: { siteId, id: pageId },
@@ -35,7 +45,13 @@ const edit = ({ token, menuItems, page, items, widget, medias, pageItems }) => {
   const { handleSubmit, state, errors, setState, handleChange } = useForm(
     validator,
     client,
-    { siteId, pageId, page, type: 'edit' }
+    {
+      siteId,
+      pageId,
+      page,
+      type: 'edit',
+      accountId,
+    }
   );
 
   const onButtonClick = (
@@ -57,7 +73,7 @@ const edit = ({ token, menuItems, page, items, widget, medias, pageItems }) => {
   };
   return (
     <Layout>
-      <Container>
+      <Container className="mt-12">
         <PageControls
           onSubmit={handleSubmit}
           title="Edit page"
@@ -114,6 +130,7 @@ const edit = ({ token, menuItems, page, items, widget, medias, pageItems }) => {
           pageId={pageId}
           items={items.error ? [] : items}
           widget={widget}
+          accountId={accountId}
         />
 
         <hr className="border-gray-400 border-5 w-full mt-8" />
@@ -122,6 +139,7 @@ const edit = ({ token, menuItems, page, items, widget, medias, pageItems }) => {
           client={client}
           pageId={pageId}
           pageItems={pageItems.error ? [] : pageItems}
+          accountId={accountId}
         />
         <hr className="border-gray-400 border-5 w-full mt-8" />
         <ColumnSection>
@@ -154,11 +172,28 @@ export async function getServerSideProps(ctx) {
   let widget: any;
   let items: any;
   let pageItems: any;
+  let accountId: any;
+
+  try {
+    const {
+      data: {
+        getProfile: {
+          account: { id: account },
+        },
+      },
+    } = await client.query({
+      query: GET_PROFILE,
+    });
+    accountId = account;
+  } catch (error) {
+    accountId = { error: true };
+  }
 
   try {
     const { data } = await client.query({
       query: PAGE_QUERY,
       variables: {
+        accountId,
         filter: {
           singleFilter: {
             field: '_id',
@@ -211,6 +246,7 @@ export async function getServerSideProps(ctx) {
     const { data } = await client.query({
       query: GET_ALL_MEDIA,
       variables: {
+        accountId,
         filter: {},
       },
     });
@@ -219,7 +255,6 @@ export async function getServerSideProps(ctx) {
   } catch (error) {
     medias = { error: true };
   }
-
   try {
     const { data } = await client.query({
       query: GET_SITE_MENUITEMS,
@@ -273,6 +308,7 @@ export async function getServerSideProps(ctx) {
       widget,
       medias,
       pageItems,
+      accountId,
     },
   };
 }

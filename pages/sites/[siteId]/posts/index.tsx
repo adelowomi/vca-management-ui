@@ -2,33 +2,18 @@ import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import moment from 'moment';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
+import { FaRegEdit } from 'react-icons/fa';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import { FaEye, FaRegEdit } from 'react-icons/fa';
-// import { EditIcon } from '../../../../components/AssetsSVG';
+import { useToasts } from 'react-toast-notifications';
+
 import Layout from '../../../../components/Layout/Layout';
-import { GET_ALL_ITEMS_QUERY } from '../../../../graphql';
+import DeleteModal from '../../../../components/utilsGroup/DeleteModal';
+import { GqlErrorResponse } from '../../../../errors/GqlError';
 import { GET_PROFILE } from '../../../../graphql/site';
 import { createApolloClient } from '../../../../lib/apollo';
-import { useRouter } from 'next/router';
-import { DELETE_ITEM } from '../../../../graphql/items.gql';
-import DeleteModal from '../../../../components/utilsGroup/DeleteModal';
-import { useToasts } from 'react-toast-notifications';
 import { Post } from '../../../../services/postService';
-
-const GqlErrorResponse = (error: any) => {
-  return {
-    error: {
-      message: error.message,
-      graphQLErrors: error.graphQLErrors,
-      networkError: {
-        // name: error.networkError.name,
-        // statusCode: error.networkError.statusCode,
-        // result: error.networkError.result,
-      },
-    },
-  };
-};
 
 const posts = ({ error, posts, token }) => {
   const {
@@ -39,7 +24,7 @@ const posts = ({ error, posts, token }) => {
   const [isDeleted, setIsDeleted] = React.useState(false);
   const [id, setId] = React.useState(null);
   const { addToast } = useToasts();
-  const client = createApolloClient(token);
+  const _post = new Post(token);
 
   const pageReload = () => {
     router.replace(router.asPath);
@@ -63,19 +48,13 @@ const posts = ({ error, posts, token }) => {
   const onDelete = async () => {
     try {
       if (id) {
-        await client.mutate({
-          mutation: DELETE_ITEM,
-          variables: {
-            itemId: id,
-          },
-        });
+        await _post.deletePost({ itemId: id });
       }
       addToast('Post deleted successfully', { appearance: 'success' });
-      pageReload();
-      return;
+      return pageReload();
     } catch (error) {
       addToast('An error occurred', { appearance: 'error' });
-      return;
+      return pageReload();
     }
   };
   return error ? (
@@ -98,7 +77,7 @@ const posts = ({ error, posts, token }) => {
               type="submit"
               className="text-white bg-vca-blue rounded-sm text-sm py-3 font-bold px-6"
             >
-              <Link href="/posts/create">Add new</Link>
+              <Link href={`/sites/${siteId}/posts/create`}>Add new</Link>
             </button>
           </div>
         </section>
@@ -165,8 +144,9 @@ const posts = ({ error, posts, token }) => {
                           </td>
                           <td className="px-6 py-4 cursor-pointer whitespace- text-center text-gray-800">
                             <span className="flex space-x-3 text-gray-500">
-                              {/* <span>edit</span> */}
-                              <FaEye className="h-6" />
+                              {/* <Link href={`/sites/${siteId}/posts/${post.id}`}>
+                                <FaEye className="h-6" />
+                              </Link> */}
                               <Link
                                 href={`/sites/${siteId}/posts/${post.id}/edit`}
                               >
@@ -191,7 +171,6 @@ const posts = ({ error, posts, token }) => {
     </Layout>
   );
 };
-
 export default withPageAuthRequired(posts);
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -221,7 +200,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const siteId = ctx.query.siteId as string;
     const postService = new Post(session.idToken);
     const { data: posts } = await postService.getPosts({ accountId, siteId });
-
     return {
       props: {
         accountId,
@@ -236,6 +214,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       props: {
         error: GqlErrorResponse(error),
         user: session.user,
+        posts: [],
       },
     };
   }

@@ -8,7 +8,7 @@ import { ShadowBtn } from './PageButtons';
 import { ColumnSection, H2, ImageSelectBox } from './PageStyledElements';
 import PostList from './PostList';
 
-export const PagePosts = ({ items, client, pageId, pageItems }) => {
+export const PagePosts = ({ items, client, pageId, pageItems, accountId }) => {
   const [open, setOpen] = React.useState(false);
   const { addToast } = useToasts();
   const [state, setState] = React.useState({
@@ -27,6 +27,7 @@ export const PagePosts = ({ items, client, pageId, pageItems }) => {
         variables: {
           updateItemInput: {
             pageId: null,
+            account: accountId,
           },
           itemId: itemId,
         },

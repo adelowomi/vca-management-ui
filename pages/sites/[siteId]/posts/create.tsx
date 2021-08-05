@@ -1,40 +1,38 @@
 import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { GetServerSideProps } from 'next';
+import Link from 'next/link';
+import router, { useRouter } from 'next/router';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useToasts } from 'react-toast-notifications';
 
+import { User } from '../../../../classes/User';
 import Layout from '../../../../components/Layout/Layout';
 import { ImageSelectBox } from '../../../../components/Page/PageStyledElements';
 import { DraftEditor } from '../../../../components/utilsGroup/Editor';
-// import { SelectMediaModal } from '../../../../components/utilsGroup/SelectMediaModal';
+import { SelectMediaModal } from '../../../../components/utilsGroup/SelectMediaModal';
+import { GqlErrorResponse } from '../../../../errors/GqlError';
+import { GET_ALL_MEDIA } from '../../../../graphql';
 import { ADD_ITEM } from '../../../../graphql/items.gql';
-import { GET_PROFILE } from '../../../../graphql/site';
 import { convertToHTML } from '../../../../helpers/convertToHtml';
 import { createApolloClient } from '../../../../lib/apollo';
 
-const GqlErrorResponse = (error: any) => {
-  return {
-    error: {
-      message: error.message,
-      graphQLErrors: error.graphQLErrors,
-      networkError: {
-        name: error.networkError.name,
-        statusCode: error.networkError.statusCode,
-        result: error.networkError.result,
-      },
-    },
-  };
-};
-
-const CreatePost = ({ token, accountId: account }) => {
+const create = ({ token, accountId: account, medias }) => {
+  const {
+    query: { siteId },
+  } = useRouter();
+  const [open, setOpen] = React.useState(false);
   const client = createApolloClient(token);
   const [isLoading, setIsLoading] = React.useState(false);
   const { addToast } = useToasts();
+  const [state, setState] = React.useState({
+    mediaUrl: '',
+    media: '',
+  });
   const {
     register,
     handleSubmit,
-    // setValue,
+    setValue,
     control,
     formState: { errors },
   } = useForm();
@@ -43,6 +41,7 @@ const CreatePost = ({ token, accountId: account }) => {
     data.content = convertToHTML(data.content);
     try {
       setIsLoading(true);
+
       await client.mutate({
         mutation: ADD_ITEM,
         variables: {
@@ -57,15 +56,14 @@ const CreatePost = ({ token, accountId: account }) => {
             category: 'general',
             account,
             tags: ['finance', 'banking'],
-            media: '6101685f280c120015fec9a5',
-            mediaUrl:
-              'https://vca-documents.s3.ca-central-1.amazonaws.com/c9/85bd9336ea45f08631225a354b80ee/hero.png',
+            media: data.media,
+            mediaUrl: state.mediaUrl,
           },
         },
       });
       setIsLoading(false);
       addToast('Post is successfully created', { appearance: 'success' });
-      return;
+      return router.push(`/sites/${siteId}/posts`);
     } catch (error) {
       setIsLoading(false);
       addToast('Post could not be created!', { appearance: 'error' });
@@ -73,22 +71,39 @@ const CreatePost = ({ token, accountId: account }) => {
     }
   };
 
-  // React.useEffect(() => {});
+  React.useEffect(() => {
+    register('media', {
+      required: true,
+    });
+    if (state.media) {
+      setValue('media', state.media);
+    }
+  }, [register, state.media]);
+
   return (
     <Layout>
-      {/* <SelectMediaModal open={} setOpen={} medias={} state={} setState={} /> */}
+      <SelectMediaModal
+        open={open}
+        setOpen={setOpen}
+        medias={medias}
+        state={state}
+        setState={setState}
+      />
       <div className="wrapper">
         <div className="px-24 mt-10">
           <form action="" onSubmit={handleSubmit(onSubmit)}>
             <section className="flex items-center justify-between w-full h-">
-              <div className="flex text-gray-600 items-center ml-3">
+              <div className="flex text-gray-600 items-center">
                 <h1 className="text-3xl text-black font-bold">
                   Add a new post
                 </h1>
               </div>
               <div className="flex space-x-3">
-                <button className="text-gray-500 bg-gray-100 rounded-sm text-sm py-4 font-bold px-10 ">
-                  Cancel
+                <button
+                  type="button"
+                  className="text-gray-500 bg-gray-100 rounded-sm text-sm py-4 font-bold px-10 "
+                >
+                  <Link href={`/sites/${siteId}/posts`}>Cancel</Link>
                 </button>
                 <button
                   type="submit"
@@ -98,7 +113,6 @@ const CreatePost = ({ token, accountId: account }) => {
                 </button>
               </div>
             </section>
-
             <section className="mt-10">
               <div className="grid grid-cols-3 gap-4 items-center">
                 <div>
@@ -136,14 +150,17 @@ const CreatePost = ({ token, accountId: account }) => {
               <div className="grid grid-cols-3 gap-4 items-center">
                 <div>
                   <h4 className="text-xl font-medium mb-6">Add Media</h4>
-                  <ImageSelectBox className="text-center h-14">
+                  <ImageSelectBox
+                    className="text-center h-14 cursor-pointer"
+                    onClick={() => setOpen(!open)}
+                  >
                     <p className="text-center ml-6">
                       + Select from media gallery
                     </p>
                   </ImageSelectBox>
-                  {/* {errors?.name && (
-                    <p className="text-red-500">name is required!</p>
-                  )} */}
+                  {errors?.media && (
+                    <p className="text-red-500">media is required!</p>
+                  )}
                 </div>
               </div>
             </section>
@@ -169,39 +186,39 @@ const CreatePost = ({ token, accountId: account }) => {
     </Layout>
   );
 };
-
-export default withPageAuthRequired(CreatePost);
+export default withPageAuthRequired(create);
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session: Session = getSession(ctx.req, ctx.res);
-
+  const client = createApolloClient(session?.idToken);
+  const user = new User(session.idToken);
   if (!session) {
     ctx.res.writeHead(302, {
       Location: '/login',
     });
     ctx.res.end();
-    return;
+    // return;
   }
 
-  const client = createApolloClient(session.idToken);
+  const profile = (await user.getProfile()).data;
 
   try {
     const {
-      data: {
-        getProfile: {
-          account: { id: accountId },
-        },
-      },
+      data: { medias },
     } = await client.query({
-      query: GET_PROFILE,
+      query: GET_ALL_MEDIA,
+      variables: {
+        accountId: profile.account.id,
+        filter: {},
+      },
     });
-
     return {
       props: {
-        accountId,
+        accountId: profile.account.id,
         token: session.idToken,
         error: null,
         user: session.user,
+        medias,
       },
     };
   } catch (error) {
@@ -209,6 +226,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       props: {
         error: GqlErrorResponse(error),
         user: session.user,
+        medias: [],
       },
     };
   }
