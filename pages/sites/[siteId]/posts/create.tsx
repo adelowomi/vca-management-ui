@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useToasts } from 'react-toast-notifications';
 
 import { User } from '../../../../classes/User';
+import { ErrorPage } from '../../../../components/Errors/ErrorPage';
 import Layout from '../../../../components/Layout/Layout';
 import { ImageSelectBox } from '../../../../components/Page/PageStyledElements';
 import { DraftEditor } from '../../../../components/utilsGroup/Editor';
@@ -17,7 +18,7 @@ import { ADD_ITEM } from '../../../../graphql/items.gql';
 import { convertToHTML } from '../../../../helpers/convertToHtml';
 import { createApolloClient } from '../../../../lib/apollo';
 
-const create = ({ token, accountId: account, medias }) => {
+const create = ({ token, accountId: account, medias, error }) => {
   const {
     query: { siteId },
   } = useRouter();
@@ -79,7 +80,9 @@ const create = ({ token, accountId: account, medias }) => {
       setValue('media', state.media);
     }
   }, [register, state.media]);
-
+  if (error) {
+    return <ErrorPage statusCode={400} />;
+  }
   return (
     <Layout>
       <SelectMediaModal
@@ -114,7 +117,7 @@ const create = ({ token, accountId: account, medias }) => {
               </div>
             </section>
             <section className="mt-10">
-              <div className="grid grid-cols-3 gap-4 items-center">
+              <div className="grid grid-cols-3 gap-4 items-center content-center">
                 <div>
                   <h4 className="text-xl font-medium mb-6">Post title</h4>
 
@@ -122,12 +125,16 @@ const create = ({ token, accountId: account, medias }) => {
                     type="text"
                     name="postTitle"
                     {...register('postTitle', { required: true })}
-                    className="border border-gray-400 text-base flex text-left px-4 h-14 w-full  focus:outline-none"
+                    className={`border ${
+                      errors.postTitle ? 'border-red-500' : 'border-gray-400'
+                    } text-base flex text-left px-4 h-14 w-full  focus:outline-none`}
                     placeholder="ex: Post title"
                   />
 
                   {errors?.postTitle && (
-                    <p className="text-red-500">Post Title is required!</p>
+                    <p className="text-red-500 text-sm mt-2">
+                      Post Title is required!
+                    </p>
                   )}
                 </div>
                 <div>
@@ -136,12 +143,16 @@ const create = ({ token, accountId: account, medias }) => {
                     type="text"
                     name="description"
                     {...register('description', { required: true })}
-                    className="border border-gray-400 text-base flex text-left px-4 h-14 w-full  focus:outline-none"
+                    className={`border ${
+                      errors.description ? 'border-red-500' : 'border-gray-400'
+                    } text-base flex text-left px-4 h-14 w-full  focus:outline-none`}
                     placeholder="ex: Description"
                   />
 
                   {errors?.description && (
-                    <p className="text-red-500">description is required!</p>
+                    <p className="text-red-500 text-sm mt-2">
+                      description is required!
+                    </p>
                   )}
                 </div>
               </div>
@@ -151,7 +162,7 @@ const create = ({ token, accountId: account, medias }) => {
                 <div>
                   <h4 className="text-xl font-medium mb-6">Add Media</h4>
                   <ImageSelectBox
-                    className="text-center h-14 cursor-pointer"
+                    className="text-center h-14 cursor-pointer "
                     onClick={() => setOpen(!open)}
                   >
                     <p className="text-center ml-6">
@@ -159,7 +170,9 @@ const create = ({ token, accountId: account, medias }) => {
                     </p>
                   </ImageSelectBox>
                   {errors?.media && (
-                    <p className="text-red-500">media is required!</p>
+                    <p className="text-red-500 text-sm mt-2">
+                      media is required!
+                    </p>
                   )}
                 </div>
               </div>
@@ -172,11 +185,19 @@ const create = ({ token, accountId: account, medias }) => {
                   rules={{ required: true }}
                   control={control}
                   render={({ field: { value, onChange } }) => {
-                    return <DraftEditor onChange={onChange} value={value} />;
+                    return (
+                      <DraftEditor
+                        onChange={onChange}
+                        value={value}
+                        error={errors.content}
+                      />
+                    );
                   }}
                 />
                 {errors?.content && (
-                  <p className="text-red-500">content is required!</p>
+                  <p className="text-red-500 text-sm mt-2">
+                    content is required!
+                  </p>
                 )}
               </div>
             </section>

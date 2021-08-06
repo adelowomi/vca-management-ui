@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useToasts } from 'react-toast-notifications';
 
 import { User } from '../../../../../classes/User';
+import { ErrorPage } from '../../../../../components/Errors/ErrorPage';
 import Layout from '../../../../../components/Layout/Layout';
 import { ImageSelectBox } from '../../../../../components/Page/PageStyledElements';
 import { DraftEditor } from '../../../../../components/utilsGroup/Editor';
@@ -18,7 +19,7 @@ import { convertToHTML } from '../../../../../helpers/convertToHtml';
 import { createApolloClient } from '../../../../../lib/apollo';
 import { Post } from '../../../../../services/postService';
 
-const edit = ({ token, post, medias }) => {
+const edit = ({ token, post, medias, error }) => {
   const {
     query: { siteId, postId },
   } = useRouter();
@@ -33,7 +34,6 @@ const edit = ({ token, post, medias }) => {
   const {
     register,
     handleSubmit,
-    // setValue,
     control,
     formState: { errors },
   } = useForm({
@@ -42,6 +42,7 @@ const edit = ({ token, post, medias }) => {
       description: post[0]?.description,
       media: post[0]?.media.id,
       content: '',
+      // (post[0].content),
     },
   });
 
@@ -68,7 +69,9 @@ const edit = ({ token, post, medias }) => {
       return;
     }
   };
-
+  if (error) {
+    return <ErrorPage statusCode={500} />;
+  }
   return (
     <Layout>
       <SelectMediaModal
@@ -109,7 +112,9 @@ const edit = ({ token, post, medias }) => {
                   <input
                     type="text"
                     {...register('featured', { required: true })}
-                    className="border border-gray-400 text-base flex text-left px-4 h-14 w-full  focus:outline-none"
+                    className={`border ${
+                      errors.featured ? 'border-red-500' : 'border-gray-400'
+                    } text-base flex text-left px-4 h-14 w-full  focus:outline-none`}
                     placeholder="ex: Post title"
                   />
 
@@ -123,7 +128,9 @@ const edit = ({ token, post, medias }) => {
                     type="text"
                     name="description"
                     {...register('description', { required: true })}
-                    className="border border-gray-400 text-base flex text-left px-4 h-14 w-full  focus:outline-none"
+                    className={`border ${
+                      errors.description ? 'border-red-500' : 'border-gray-400'
+                    } text-base flex text-left px-4 h-14 w-full  focus:outline-none`}
                     placeholder="ex: Description"
                   />
 
@@ -159,7 +166,13 @@ const edit = ({ token, post, medias }) => {
                   rules={{ required: true }}
                   control={control}
                   render={({ field: { value, onChange } }) => {
-                    return <DraftEditor onChange={onChange} value={value} />;
+                    return (
+                      <DraftEditor
+                        onChange={onChange}
+                        value={value}
+                        error={errors.content}
+                      />
+                    );
                   }}
                 />
                 {errors?.content && (

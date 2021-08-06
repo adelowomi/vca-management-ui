@@ -15,7 +15,15 @@ import { GET_PROFILE } from '../../../../graphql/site';
 import { createApolloClient } from '../../../../lib/apollo';
 import { Post } from '../../../../services/postService';
 
-const posts = ({ error, posts, token }) => {
+const posts = ({
+  error,
+  posts,
+  token,
+}: {
+  error: any;
+  posts: any;
+  token: any;
+}) => {
   const {
     query: { siteId },
   } = useRouter();
@@ -205,7 +213,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         accountId,
         token: session.idToken,
         error: null,
-        user: session.user,
         posts,
       },
     };
