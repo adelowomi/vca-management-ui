@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import router, { useRouter } from 'next/router';
 import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useToasts } from 'react-toast-notifications';
 
 import { User } from '../../../../classes/User';
@@ -15,7 +15,6 @@ import { SelectMediaModal } from '../../../../components/utilsGroup/SelectMediaM
 import { GqlErrorResponse } from '../../../../errors/GqlError';
 import { GET_ALL_MEDIA } from '../../../../graphql';
 import { ADD_ITEM } from '../../../../graphql/items.gql';
-import { convertToHTML } from '../../../../helpers/convertToHtml';
 import { createApolloClient } from '../../../../lib/apollo';
 
 const create = ({ token, accountId: account, medias, error }) => {
@@ -34,12 +33,10 @@ const create = ({ token, accountId: account, medias, error }) => {
     register,
     handleSubmit,
     setValue,
-    control,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    data.content = convertToHTML(data.content);
+  const onSubmit = async (data: any) => {
     try {
       setIsLoading(true);
 
@@ -47,7 +44,7 @@ const create = ({ token, accountId: account, medias, error }) => {
         mutation: ADD_ITEM,
         variables: {
           createItemInput: {
-            siteId: '60f59e49ec17e50015be5074',
+            siteId: siteId,
             type: 'type',
             description: data.description,
             featured: data.postTitle,
@@ -76,10 +73,16 @@ const create = ({ token, accountId: account, medias, error }) => {
     register('media', {
       required: true,
     });
+    register('content', {
+      required: true,
+    });
     if (state.media) {
       setValue('media', state.media);
     }
   }, [register, state.media]);
+  const getContent = (content) => {
+    setValue('content', content);
+  };
   if (error) {
     return <ErrorPage statusCode={400} />;
   }
@@ -180,20 +183,8 @@ const create = ({ token, accountId: account, medias, error }) => {
             <section className="mt-6 grid grid-cols-3 h-full gap-4 items-center pb-10">
               <div className="col-span-2 h-full">
                 <h4 className="text-xl font-medium mb-4">Post content</h4>
-                <Controller
-                  name="content"
-                  rules={{ required: true }}
-                  control={control}
-                  render={({ field: { value, onChange } }) => {
-                    return (
-                      <DraftEditor
-                        onChange={onChange}
-                        value={value}
-                        error={errors.content}
-                      />
-                    );
-                  }}
-                />
+                <DraftEditor getContent={getContent} error={errors.content} />
+
                 {errors?.content && (
                   <p className="text-red-500 text-sm mt-2">
                     content is required!
