@@ -9,7 +9,7 @@ export const WidgetCard = ({ item }) => {
           <div className="h-44 w-full">
             <img
               className="w-full h-full object-cover rounded-t"
-              src={item.media.image ? item.media.image.medium : ''}
+              src={item.media.image ? item.media.image.small : ''}
               alt="news image"
             />
           </div>

@@ -68,7 +68,9 @@ export const CREATE_PROFILE_QUERY = gql`
 export const SOFT_DELETE_USER = gql`
   mutation softDeleteProfile($userId: String!) {
     softDeleteProfile(userId: $userId) {
-      id
+      firstName
+      lastName
+      accountType
     }
   }
 `;

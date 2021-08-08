@@ -3,6 +3,7 @@ import tw from 'tailwind-styled-components';
 
 export const Container = tw.div`
 px-20
+mt-6
 `;
 
 export const RowSection = tw.div`

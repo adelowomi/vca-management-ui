@@ -47,8 +47,8 @@ export const AddEditHero = ({
 }): JSX.Element => {
   const watching = watch();
   const [mediaModalOpen, setMediaModalOpen] = useState(false);
-  const [textPosition, setTextPosition] = useState(existingHero.location);
-  const [hasAction, setHasAction] = useState(existingHero.hasAction);
+  const [textPosition, setTextPosition] = useState(existingHero?.location);
+  const [hasAction, setHasAction] = useState(existingHero?.hasAction);
   const [selectedMedia, setSelectedMedia] = useState<Media>(
     existingHero?.media
   );
@@ -235,17 +235,17 @@ export const AddEditHero = ({
           hero={{
             heading:
               (watching?.hero && watching?.hero.heading) ??
-              existingHero.heading,
+              existingHero?.heading,
             hasAction:
               (watching?.hero && watching.hero?.actionText ? true : false) ??
-              existingHero.hasAction,
+              existingHero?.hasAction,
             location:
               (textPosition && (textPosition as HeroLocationType)) ??
-              existingHero.location,
+              existingHero?.location,
             media: selectedMedia && selectedMedia,
             actionText:
               (watching?.hero && watching.hero?.actionText) ??
-              existingHero.actionText,
+              existingHero?.actionText,
             mediaUrl: '',
             type: '',
             caption: watching?.hero && watching?.hero.caption,

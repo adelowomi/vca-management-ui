@@ -14,6 +14,46 @@ const GET_ALL_ITEMS_QUERY = gql`
       createdAt
       updatedAt
       tags
+      account{
+      firstName
+      lastName
+    }
+      media {
+        id
+        image {
+          small
+        }
+        video{
+          service
+          url
+        }
+        document {
+          url
+        }
+      }
+    }
+  }
+`;
+
+const GET_ITEM = gql`
+  query GetAllItems($filter: FilterInput) {
+    getAllItems(filter: $filter) {
+      id
+      type
+      description
+      content
+      featured
+      slug
+      draft
+      category
+      mediaUrl
+      createdAt
+      updatedAt
+      tags
+      account{
+      firstName
+      lastName
+    }
       media {
         image {
           small
@@ -45,4 +85,30 @@ const EDIT_ITEM = gql`
   }
 `;
 
-export { EDIT_ITEM, GET_ALL_ITEMS_QUERY };
+const ADD_ITEM = gql`
+  mutation ($createItemInput: CreateItemInput!) {
+    createItem(createItemInput: $createItemInput) {
+      id
+      mediaUrl
+      content
+      category
+      slug
+      type
+      featured
+      description
+      tags
+    }
+  }
+`;
+
+const DELETE_ITEM = gql`
+mutation($itemId: String!){
+  removeItem(itemId: $itemId){
+    id
+  }
+}
+
+
+`;
+
+export { ADD_ITEM, DELETE_ITEM, EDIT_ITEM, GET_ALL_ITEMS_QUERY, GET_ITEM };

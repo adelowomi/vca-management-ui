@@ -1,38 +1,36 @@
 import React from 'react';
+import Moment from 'react-moment';
+
+export const getStringDate = (date = new Date()) => {
+  return <Moment format="Do MMM YYYY">{date}</Moment>;
+};
 
 // import { Pagination } from '../../Pagination/Pagination';
 
-const PostList = ({ pageItems }: {pageItems:any }): JSX.Element => {
+const PostList = ({ pageItems }: { pageItems: any }): JSX.Element => {
   return (
     <div className="mt-7">
       <div className="grid grid-cols-4 gap-2">
-        {pageItems.map((item) => {
+        {pageItems.map((news, index) => {
           return (
-            <div
-              className="group w-11/12 overflow-hidden border border-gray-100 hover:shadow-lg bg-white shadow-md h-96"
-              key={item.id}
-            >
-              <div className="h-48 w-full">
-                <img
-                  className="w-full h-full object-cover"
-                  src={item?.media.image.small}
-                  alt="news image"
-                />
-                {/* <div
-                  className="icon flex flex-row justify-end mr-5 -mt-40 cursor-pointer"
-                  onClick={() => handleDelete(item.id)}
-                >
-                  <RiDeleteBin7Fill className="h-6 w-6 text-white focus:text-red-400" />
-                </div> */}
-              </div>
-              <div className="px-3 py-4">
-                <h1 className="font-semibold text-lg mb-2">{item.featured}</h1>
-                <p className="text-gray-700 text-sm">{item.description}</p>
-                <div className="mt-4">
-                  <p className="text-xs italic text-gray-500">
-                    Created on 14 April 2021
-                  </p>
+            <div className="flex xl:w-card-xl lg:w-card-lg 2xl:w-card-2xl md:w-card-md rounded" key={index}>
+              <div className="group w-full overflow-hidden hover:shadow-lg bg-white shadow-md">
+                <div className="h-44 w-full">
+                  <img
+                    className="w-full h-full object-cover rounded-tr rounded-tl"
+                    src={news.media.image.small}
+                    alt="news image"
+                  />
                 </div>
+                <div className="px-3 py-4" style={{ height: '250px' }}>
+                  <div className="font-semibold text-lg mb-2">
+                    <a href={`/item/${news.id}`}>{news.featured}</a>
+                  </div>
+                  <p className="text-gray-700 text-sm">{news.description}</p>
+                </div>
+                <button className="w-full bg-white text-gray-800 font-normal py-3 px-4 flex justify-left items-center text-xs italic rounded">
+                  Created on: {getStringDate(news.createdAt)}
+                </button>
               </div>
             </div>
           );

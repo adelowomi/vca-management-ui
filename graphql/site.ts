@@ -64,6 +64,25 @@ const GET_SITE_MENUITEMS = gql`
     }
   }
 `;
+const GET_PROFILE = gql`
+  query {
+    getProfile {
+      id
+      firstName
+      account {
+        id
+        firstName
+        lastName
+        phone
+        businessName
+        address {
+          state
+        }
+        isActive
+      }
+    }
+  }
+`;
 
 export const UPDATE_SITE_MENUITEM = gql`
   mutation updateSiteMenuItem(
@@ -126,4 +145,7 @@ export const REMOVE_SITE = gql`
   }
 `;
 
-export { GET_SITE_MENUITEMS, SITE_QUERY, SITES_QUERY };
+
+
+
+export { GET_PROFILE, GET_SITE_MENUITEMS, SITE_QUERY, SITES_QUERY };

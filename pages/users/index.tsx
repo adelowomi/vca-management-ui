@@ -95,7 +95,7 @@ export const index = ({ profiles,token }: { profiles: Profile[],token:any }): JS
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {profiles.map((profile, index) => (
+                    {profiles.filter(p => p.isActive).map((profile, index) => (
                       <tr className={`text-left`} key={index}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
                           <input
@@ -129,7 +129,7 @@ export const index = ({ profiles,token }: { profiles: Profile[],token:any }): JS
                             </Link>
                             <RiDeleteBinLine
                               className="h-6"
-                              onClick={() => triggerDelete(profile.id)}
+                              onClick={() => triggerDelete(profile.userId)}
                             />
                           </span>
                         </td>

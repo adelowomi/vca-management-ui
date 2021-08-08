@@ -29,11 +29,13 @@ const useForm = (
     pageId,
     page,
     type,
+    accountId,
   }: {
     siteId?: string[] | string;
     pageId?: string[] | string;
     page?: any;
     type: string;
+    accountId: string;
   }
 ) => {
   const [state, setState] = React.useState<StateProps>({
@@ -72,6 +74,7 @@ const useForm = (
             name: state.pageTitle,
             tags: state.tags,
             site: state.site,
+            account: accountId,
             menuItem: state.menuItem === '' ? null : state.menuItem,
             hero: {
               media: state.media,

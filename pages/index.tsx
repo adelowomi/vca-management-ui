@@ -17,16 +17,8 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-export const Home = ({
-  user,
-  sites,
-}: {
-  user: any;
-  sites: any;
-}): JSX.Element => {
+export const Home = ({ user }: { user: any; sites: any }): JSX.Element => {
   const router = useRouter();
-  // eslint-disable-next-line no-console
-  console.log(sites);
 
   if (user) {
     return (

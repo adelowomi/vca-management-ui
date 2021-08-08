@@ -67,7 +67,6 @@ const edit = ({
         actionText: page.hero.actionText,
         hasAction: page.hero.hasAction,
         caption: page.hero.caption,
-        media: page.hero.media,
         heading: page.hero.heading,
       },
     },
@@ -401,6 +400,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       existingWidget: existingWidget ?? [],
       profile,
       pageItems,
+      accountId: profile.account.id,
     },
   };
 };
