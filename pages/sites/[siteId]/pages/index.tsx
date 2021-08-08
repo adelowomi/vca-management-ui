@@ -15,6 +15,8 @@ import { GET_SITE_MENUITEMS, PAGES_QUERY } from '../../../../graphql';
 import { DELETE_PAGE } from '../../../../graphql/pages';
 import { GET_PROFILE } from '../../../../graphql/site';
 import { createApolloClient } from '../../../../lib/apollo';
+import { User } from '../../../../classes/User';
+import { Site } from '../../../../classes/Site';
 
 const PageActionsWrapper = tw.div`
 flex
@@ -116,7 +118,6 @@ const Pages = ({ pages, menuItems, token }) => {
               <Link href={`/sites/${siteId}/pages/create`}> Add New</Link>
             </PageActionsColOneBtn>
           </PageActionsColOne>
-
         </PageActionsWrapper>
         <PageHeroWrapper className="flex flex-row justify-between mt-6 py-20 w0-full items-center">
           <div className="second_col w-full">
@@ -237,6 +238,17 @@ const Pages = ({ pages, menuItems, token }) => {
 
 export async function getServerSideProps(ctx) {
   const session = getSession(ctx.req, ctx.res);
+  const user = new User(session.idToken);
+  const site = new Site(session.idToken);
+
+  const profile = await (await user.getProfile()).data;
+
+  const data = await (
+    await site.getSite({
+      accountId: profile.account.id,
+      siteId: (ctx.query.siteId as unknown) as string,
+    })
+  ).data;
 
   if (!session) {
     return {
@@ -271,16 +283,10 @@ export async function getServerSideProps(ctx) {
       variables: {
         accountId,
         filter: {
-          combinedFilter: {
-            filters: [
-              {
-                singleFilter: {
-                  field: 'siteId',
-                  operator: 'EQ',
-                  value: ctx.query.siteId,
-                },
-              },
-            ],
+          singleFilter: {
+            field: 'site',
+            operator: 'EQ',
+            value: ctx.query.siteId,
           },
         },
       },
@@ -314,7 +320,7 @@ export async function getServerSideProps(ctx) {
         },
       },
     });
-    menuItems = header.menuItems;
+    menuItems = data.header.menuItems;
   } catch (error) {
     menuItems = { error: true };
   }
