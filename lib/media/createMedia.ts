@@ -16,11 +16,12 @@ export enum ContentType {
   DOCUMENT = 'DOCUMENT',
   VIDEO = 'VIDEO',
 }
-export const CreateUploadinput = (result, uploadFormValues) => {
+export const CreateUploadinput = (result, uploadFormValues, account) => {
   let media = {};
   switch (uploadFormValues.type) {
     case ContentType.IMAGE:
       media = {
+        account,
         name: uploadFormValues.name,
         description: uploadFormValues.description,
         type: uploadFormValues.type,
@@ -35,6 +36,7 @@ export const CreateUploadinput = (result, uploadFormValues) => {
       break;
     case ContentType.DOCUMENT:
       media = {
+        account,
         name: uploadFormValues.name,
         description: uploadFormValues.description,
         type: uploadFormValues.type,
@@ -58,7 +60,8 @@ export const CreateUppyInstance = (
   setSuccess: (input: { id: string; message: any; type: string }) => void,
   setError: (error: any) => void,
   client: ApolloClient<NormalizedCacheObject>,
-  setValue: UseFormSetValue<FieldValues>
+  setValue: UseFormSetValue<FieldValues>,
+  account: string
 ) => {
   return useUppy(() => {
     return new Uppy({
@@ -73,7 +76,11 @@ export const CreateUppyInstance = (
       })
       .on('complete', (result) => {
         const uploadFormValues = getValues();
-        const uploadedInput = CreateUploadinput(result, uploadFormValues);
+        const uploadedInput = CreateUploadinput(
+          result,
+          uploadFormValues,
+          account
+        );
         client
           .mutate({
             mutation: CREATE_MEDIA,

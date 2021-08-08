@@ -7,7 +7,9 @@ import { useForm } from 'react-hook-form';
 import { FormInput } from '../../../../components/FormInput/formInput';
 import Layout from '../../../../components/Layout/Layout';
 import { MediaItemCard } from '../../../../components/MediaItem/MediaItemCard';
+import { GqlErrorResponse } from '../../../../errors/GqlError';
 import { GET_ALL_MEDIA } from '../../../../graphql/media/mutation';
+import { PROFILE_QUERY } from '../../../../graphql/profile';
 import { createApolloClient } from '../../../../lib/apollo';
 
 export function ListMedia({ medias }) {
@@ -199,6 +201,10 @@ export async function getServerSideProps(ctx) {
   }
 
   try {
+    const profile = await client.query({
+      query: PROFILE_QUERY,
+    });
+    variables['accountId'] = profile.data.getProfile.account.id;
     const mediaItems = await client.query({
       query: GET_ALL_MEDIA,
       variables,
@@ -206,9 +212,16 @@ export async function getServerSideProps(ctx) {
     return {
       props: {
         medias: mediaItems.data.medias,
+        error: null,
       },
     };
   } catch (error) {
     console.error(error);
+    return {
+      props: {
+        medias: [],
+        error: GqlErrorResponse(error),
+      },
+    };
   }
 }

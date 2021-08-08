@@ -13,7 +13,11 @@ export const CREATE_MEDIA = gql`
         assembly
         url
       }
-      video
+      video {
+        service
+        url
+        videoId
+      }
       image {
         assembly
         small
@@ -43,7 +47,11 @@ export const GET_ALL_MEDIA = gql`
         assembly
         url
       }
-      video
+      video {
+        service
+        url
+        videoId
+      }
       image {
         assembly
         small
@@ -68,7 +76,11 @@ export const REMOVE_MEDIA = gql`
         assembly
         url
       }
-      video
+      video {
+        service
+        url
+        videoId
+      }
       image {
         assembly
         small

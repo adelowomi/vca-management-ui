@@ -16,7 +16,9 @@ import { FormInput } from '../../../../components/FormInput/formInput';
 import FormSelect from '../../../../components/FormSelect/VcaSelect';
 import Layout from '../../../../components/Layout/Layout';
 import ErrorModal from '../../../../components/Modal/ErrorModal';
+import { GqlErrorResponse } from '../../../../errors/GqlError';
 import { CREATE_MEDIA } from '../../../../graphql/media/mutation';
+import { PROFILE_QUERY } from '../../../../graphql/profile';
 import { createApolloClient } from '../../../../lib/apollo';
 import {
   ContentType,
@@ -29,12 +31,15 @@ const options = [
   { id: 3, name: 'Document', value: ContentType.DOCUMENT, unavailable: false },
 ];
 
-const videoValidation = (url: string) => {
+const videoValidation = (url: string, required: boolean) => {
   const { service } = getVideoId(url);
-  return ['youtube', 'vimeo'].includes(service);
+  if (required) {
+    return ['youtube', 'vimeo'].includes(service);
+  }
+  return true;
 };
 
-const CreateMedia = ({ imageParams, imageSignature, token }) => {
+const CreateMedia = ({ imageParams, imageSignature, token, accountId }) => {
   const router = useRouter();
   const [uploadError, setUploadError] = useState<boolean>(false);
   const [showVideo, setShowVideo] = useState(false);
@@ -65,23 +70,29 @@ const CreateMedia = ({ imageParams, imageSignature, token }) => {
     clientSuccessCallback,
     setUploadError,
     client,
-    setValue
+    setValue,
+    accountId
   );
 
   const onSubmit = async (data) => {
     setIsLoading(true);
     if (showVideo) {
-      // eslint-disable-next-line no-console
-      console.debug(getVideoId(data.video));
+      const { service, id } = getVideoId(data.video);
+
       client
         .mutate({
           mutation: CREATE_MEDIA,
           variables: {
             createMediaInput: {
+              account: accountId,
               name: data.name,
               description: data.description,
               type: data.type,
-              video: data.video,
+              video: {
+                url: data.video,
+                service: `${service.toUpperCase()}`,
+                videoId: id,
+              },
             },
           },
         })
@@ -202,7 +213,7 @@ const CreateMedia = ({ imageParams, imageSignature, token }) => {
                     register={register}
                     error={errors.video}
                     required={showVideo}
-                    validate={videoValidation}
+                    validate={(url) => videoValidation(url, showVideo)}
                   />
                 </div>
               </div>
@@ -229,7 +240,7 @@ const CreateMedia = ({ imageParams, imageSignature, token }) => {
 export default withPageAuthRequired(CreateMedia);
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function getServerSideProps(ctx) {
+export async function getServerSideProps(ctx) {
   const session = getSession(ctx.req, ctx.res);
 
   if (!session) {
@@ -240,6 +251,7 @@ export function getServerSideProps(ctx) {
     };
   }
   const token = session.idToken;
+  const client = createApolloClient(token);
 
   const utcDateString = (ms) => {
     return new Date(ms)
@@ -275,14 +287,33 @@ export function getServerSideProps(ctx) {
     .update(Buffer.from(documentParams, 'utf-8'))
     .digest('hex');
 
-  return {
-    props: {
-      expires,
-      imageSignature,
-      imageParams,
-      documentSignature,
-      documentParams,
-      token,
-    },
-  };
+  try {
+    const profile = await client.query({
+      query: PROFILE_QUERY,
+    });
+
+    return {
+      props: {
+        accountId: profile.data.getProfile.account.id,
+        expires,
+        imageSignature,
+        imageParams,
+        documentSignature,
+        documentParams,
+        token,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        expires,
+        imageSignature,
+        imageParams,
+        documentSignature,
+        documentParams,
+        token,
+        error: GqlErrorResponse(error),
+      },
+    };
+  }
 }

@@ -57,8 +57,8 @@ export const UPDATE_USER_PROFILE = gql`
 `;
 
 export const CREATE_PROFILE_QUERY = gql`
-  mutation createProfile($profile:CreateProfileInput!){
-    createProfile(profile:$profile){
+  mutation createProfile($profile: CreateProfileInput!) {
+    createProfile(profile: $profile) {
       id
       firstName
     }
