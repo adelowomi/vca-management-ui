@@ -37,7 +37,7 @@ export const FormInput = ({
         <input
           {...register(`${name}`, { required, validate })}
           className={inputStyle}
-          placeholder={`${name}`}
+          placeholder={`${label}`}
           aria-describedby={`${name}`}
         />
       </div>

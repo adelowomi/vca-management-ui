@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 const GET_ALL_ITEMS_QUERY = gql`
-  query GetAllItems($filter: FilterInput, $siteId: String!) {
-    getAllItems(filter: $filter, siteId: $siteId) {
+  query GetAllItems($filter: FilterInput,$accountId: String!) {
+    getAllItems(filter: $filter,accountId: $accountId) {
       id
       type
       description
@@ -18,7 +18,9 @@ const GET_ALL_ITEMS_QUERY = gql`
         image {
           small
         }
-        video
+        video{
+          url
+        }
         document {
           url
         }

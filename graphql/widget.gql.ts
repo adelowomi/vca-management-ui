@@ -18,8 +18,8 @@ const ADD_WIDGET = gql`
   }
 `;
 const GET_WIDGET = gql`
-  query ($filter: FilterInput) {
-    widget(filter: $filter) {
+  query ($filter: FilterInput,$accountId: String!) {
+    widget(filter: $filter,accountId: $accountId) {
       id
       title
       type

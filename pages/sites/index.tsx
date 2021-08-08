@@ -149,7 +149,6 @@ const Sites = ({
                               <Link href={`/sites/${site.id}/edit`}>
                                 <p>Edit</p>
                               </Link>
-
                               <RiDeleteBinLine className="h-6"  onClick={() => triggerDelete(site.id)}/>
                             </span>
                           </td>

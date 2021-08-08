@@ -1,8 +1,11 @@
+
+
 import { GqlErrorResponse } from '../errors/GqlError';
 import {
   CREATE_PROFILE_QUERY,
   PROFILE_QUERY,
   PROFILES_QUERY,
+  SOFT_DELETE_USER,
   UPDATE_USER_PROFILE,
   USER_PROFILE_QUERY,
 } from '../graphql/profile';
@@ -140,6 +143,41 @@ export class User {
       }
       return Promise.resolve<GqlResponse<Profile>>({
         data: data.createProfile,
+        error: null,
+        status: true,
+      });
+    } catch (error) {
+      console.error(error);
+      return Promise.reject<GqlResponse<Profile>>({
+        data: null,
+        error: error,
+        status: false,
+      });
+    }
+  };
+
+  public softDelete = async ({
+    userId,
+  }: {
+    userId: string;
+  }): Promise<GqlResponse<Profile>> => {
+    try {
+      const { data } = await client.mutate({
+        mutation: SOFT_DELETE_USER,
+        variables: {
+          userId: userId,
+        },
+      });
+      if (!data.softDeleteProfile) {
+        console.error(data);
+        return Promise.reject<GqlResponse<Profile>>({
+          data: null,
+          error: data,
+          status: false,
+        });
+      }
+      return Promise.resolve<GqlResponse<Profile>>({
+        data: data.softDeleteProfile,
         error: null,
         status: true,
       });

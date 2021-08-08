@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { stringToBoolean } from '../../helpers/stringToBoolean';
+import { Hero } from '../../classes/schema';
 
 export interface HeroProps {
   mediaUrl: string;
@@ -12,109 +12,61 @@ export interface HeroProps {
   type?: string;
 }
 
-export const Hero: React.FC<HeroProps> = ({
-  mediaUrl,
-  actionText,
-  heading,
-  location,
-  hasAction,
-  // caption,
-  // type,
-}) => {
+export const HeroPreview = ({ hero }: { hero: Hero }): JSX.Element => {
   return (
     <>
-      <div className="bg-gray-50 font-sans w-full hidden">
-        <main className="lg:relative">
-          <div className="flex w-full items-center h-hero">
-            <div
-              className={
-                location == 'LEFT'
-                  ? 'w-full text-left'
-                  : location == 'RIGHT'
-                  ? 'w-full text-center order-last'
-                  : 'hidden'
-              }
-            >
-              <div className={location == 'LEFT' ? 'w-full pl-28' : 'w-full'}>
-                <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl">
-                  <span className="block text-primary xl:inline capitalize">
-                    {actionText
-                      ? actionText
-                      : actionText
-                      ? actionText
-                      : 'Online business'}
-                  </span>
-                </h1>
-                <p className="mt-3 max-w-md mx-auto text-lg text-gray-500 sm:text-xl md:mt-5 md:max-w-3xl">
-                  {heading}
-                </p>
-                <div
-                  className={
-                    location == 'LEFT'
-                      ? 'mt-10 sm:flex sm:justify-center lg:justify-start'
-                      : location == 'RIGHT'
-                      ? 'mt-10 sm:flex sm:justify-center lg:justify-center'
-                      : 'hidden'
-                  }
-                >
-                  <div className="rounded-md shadow">
-                    <a
-                      href="#"
-                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
-                    >
-                      Get started
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className={'w-full h-64 sm:h-72 md:h-96 lg:h-full'}>
-              <img
-                className="inset-0 w-full h-full object-cover"
-                src={mediaUrl}
-                alt="hero image"
-              />
-            </div>
-          </div>
-        </main>
-      </div>
-
-      <div className="pb-24 mt-12">
+      <div className="pb-24 mt-12 rounded">
         <div
-          className="bg-center bg-white h-hero w-full container h-96 flex lg:justify-start md:justify-center justify-center"
+          className="bg-cover bg-white h-hero lg:w-hero-lg container mx-auto flex lg:justify-start md:justify-center justify-center rounded"
           style={{
-            backgroundImage: `linear-gradient(90deg, rgba(0, 0, 0, 0.7) 1.68%, rgba(0, 0, 0, 0) 88.4%), url( ${mediaUrl})`,
+            backgroundImage: hero.location == 'LEFT' ? `linear-gradient(90deg, rgba(0, 0, 0, 0.7) 1.68%, rgba(0, 0, 0, 0) 88.4%), url( ${
+              hero.media && hero.media.image.large
+            })`: hero.location == 'RIGHT' ? `linear-gradient(260deg, rgba(0, 0, 0, 0.7) 1.68%, rgba(0, 0, 0, 0) 88.4%), url( ${
+              hero.media && hero.media.image.large
+            })` : `linear-gradient(90deg, rgba(0, 0, 0, 0.7) 1.68%, rgba(0, 0, 0, 0) 88.4%), url( ${
+              hero.media && hero.media.image.large
+            })`,
+            height:"490px"
           }}
         >
-          <div className="bg-transparent lg:w- w-full h-full flex flex-col items- justify- mt-36">
-            <div className="">
-              <h1
-                className={
-                  location == 'LEFT'
-                    ? `text-4xl text-white font-bold font-roboto ml-9 w-full lg:text-left md:text-center text-center`
-                    : location == 'RIGHT'
-                    ? `text-4xl pr-14 text-white font-bold font-roboto w-full lg:text-right md:text-center text-center`
-                    : `text-4xl text-white font-bold font-roboto w-full lg:text-center md:text-center text-center`
-                }
-              >
-                {heading}
-              </h1>
-            </div>
-            {stringToBoolean(hasAction) && actionText ? (
-              <div
-                className={
-                  location == 'LEFT'
-                    ? `w-full ml-9 flex justify-start`
-                    : location == 'RIGHT'
-                    ? `w-full pr-14 flex justify-end`
-                    : `w-full flex justify-center`
-                }
-              >
-                <button className="w-36  border-none text-base font-medium text-white bg-blue-500 hover:bg-blue-500 md:text-lg h-12 mt-6 font-roboto ">
-                  {actionText}
-                </button>
+          <div className="bg-transparent  w-full h-full flex items-center justify-center">
+            <div className="w-4/5 flex justify-end flex-col">
+              <div className={
+                    hero.location == 'LEFT'
+                      ? `w-full flex justify-start`
+                      : hero.location == 'RIGHT'
+                      ? `w-full flex justify-end`
+                      : `w-full flex justify-center`
+                  }
+                >
+                <h1
+                  className={
+                    hero.location == 'LEFT'
+                      ? `text-4xl text-white font-bold font-roboto w-1/2 lg:text-left md:text-center text-center`
+                      : hero.location == 'RIGHT'
+                      ? `text-4xl text-white font-bold font-roboto w-1/2 lg:text-right md:text-center text-center`
+                      : `text-4xl text-white font-bold font-roboto w-1/2 lg:text-center md:text-center text-center`
+                  }
+                >
+                  {hero.heading}
+                </h1>
               </div>
-            ) : null}
+              {hero.hasAction ? (
+                <div
+                  className={
+                    hero.location == 'LEFT'
+                      ? `w-full flex justify-start`
+                      : hero.location == 'RIGHT'
+                      ? `w-full flex justify-end`
+                      : `w-full flex justify-center`
+                  }
+                >
+                  <button className="w-36   border-none text-base font-medium text-white hover:bg-indigo-700 md:text-lg h-12 mt-6 font-roboto bg-vca-blue ">
+                    {hero.actionText}
+                  </button>
+                </div>
+              ) : null}
+            </div>
           </div>
         </div>
       </div>

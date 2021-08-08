@@ -28,3 +28,16 @@ export const Button = styled.button`
     background: lightgray;
   }
 `;
+
+export const PrimaryButton = styled.button`
+  color: ${(props) =>
+    props.theme.colors ? props.theme.colors.button.primary.font : 'red'};
+  background: ${(props) =>
+    props.theme.colors ? props.theme.colors.button.primary.background : 'red'};
+  &:hover {
+    background-color: ${(props) =>
+      props.theme.colors ? props.theme.colors.button.primary.hoverBG : 'red'};
+    color: ${(props) =>
+      props.theme.colors ? props.theme.colors.button.primary.hoverFont : 'red'};
+  }
+`;

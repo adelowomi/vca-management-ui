@@ -554,7 +554,7 @@ exports[`List media page matches snapshot 1`] = `
                             aria-describedby="search"
                             class="shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:border-2 block w-96 h-14 sm:text-sm border border-gray-400 rounded-sm pl-4"
                             name="search"
-                            placeholder="search"
+                            placeholder="Search"
                           />
                         </div>
                         <p

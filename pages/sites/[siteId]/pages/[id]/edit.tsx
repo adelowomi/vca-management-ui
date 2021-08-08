@@ -1,131 +1,231 @@
 import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { GetServerSideProps } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useToasts } from 'react-toast-notifications';
 
-import { Hero } from '../../../../../components/Hero/Hero';
+import { Items } from '../../../../../classes/Items';
+import { MediaClass } from '../../../../../classes/media';
+import { Pages } from '../../../../../classes/Page';
+import {
+  ComparisonOperatorEnum,
+  LogicalOperatorEnum,
+  UpdateMenuitemInput,
+  UpdatePageInput,
+} from '../../../../../classes/schema';
+import { Site } from '../../../../../classes/Site';
+import { User } from '../../../../../classes/User';
+import { FormInput } from '../../../../../components/FormInput/formInput';
+import FormSelect from '../../../../../components/FormSelect/VcaSelect';
 import Layout from '../../../../../components/Layout/Layout';
-import { CreateWidget } from '../../../../../components/Page/CreateWidget';
-import { CallToAction } from '../../../../../components/Page/CtaComponent';
-import { PageHeaderStyle } from '../../../../../components/Page/HeaderPageStyle';
-import { ShadowBtn } from '../../../../../components/Page/PageButtons';
-import { PageControls } from '../../../../../components/Page/PageControls';
-import { PagePosts } from '../../../../../components/Page/PagePosts';
+import AddEditHero from '../../../../../components/Page/Add&EditHerro';
+import { Btn, ShadowBtn } from '../../../../../components/Page/PageButtons';
+import { PageItems } from '../../../../../components/Page/PageItems';
 import {
   ColumnSection,
   Container,
+  FormGroup,
+  H1,
+  RowSection,
 } from '../../../../../components/Page/PageStyledElements';
-import { PageTitle } from '../../../../../components/Page/PageTitle';
-import { Textposition } from '../../../../../components/Page/TextPosition';
-import {
-  GET_ALL_ITEMS_QUERY,
-  GET_ALL_MEDIA,
-  GET_SITE_MENUITEMS,
-  GET_WIDGET,
-  PAGE_QUERY,
-} from '../../../../../graphql';
-import { validator } from '../../../../../helpers/validator';
-import useForm from '../../../../../hooks/useForm';
-import { createApolloClient } from '../../../../../lib/apollo';
+import { CreateWidget } from '../../../../../components/Widget/CreateWidget';
 
-const edit = ({ token, menuItems, page, items, widget, medias, pageItems }) => {
-  const client = createApolloClient(token);
+const edit = ({
+  token,
+  profile,
+  page,
+  menuItems,
+  medias,
+  items,
+  existingWidget,
+  pageItems,
+}) => {
+  const router = useRouter();
+  const [working, setWorking] = useState(false);
+  const _thisPage = new Pages(token);
+  const _thisSite = new Site(token);
+  const [selectedMenu, setSelectedMenu] = useState(page.menuItem);
+  const [hero, setHeroDetails] = useState(undefined);
+  const { addToast } = useToasts();
+  const setOtherDetails = (data: any) => {
+    setHeroDetails({ ...hero, ...data });
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<UpdatePageInput>({
+    defaultValues: {
+      name: page.name,
+      menuItem: page.menuItem,
+      hero: {
+        actionSlug: page.hero.actionSlug,
+        actionText: page.hero.actionText,
+        hasAction: page.hero.hasAction,
+        caption: page.hero.caption,
+        media: page.hero.media,
+        heading: page.hero.heading,
+      },
+    },
+  });
   const {
     query: { siteId, id: pageId },
   } = useRouter();
-  const {
-    handleSubmit,
-    state,
-    errors,
-    setState,
-    handleChange,
-  } = useForm(validator, client, { siteId, pageId, page, type: 'edit' });
 
-  const onButtonClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    setState({
-      ...state,
-      headerType: e.currentTarget.dataset.headertype,
-    });
+  const refreshData = () => {
+    console.error('refreshed');
+    router.replace(router.asPath);
   };
 
-  const locationButtonClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    setState({
-      ...state,
-      location: e.currentTarget.dataset.textposition,
-    });
+  const onSubmit = async (data: any) => {
+    hero && hero.location ? (data.hero.location = hero.location) : null;
+    hero && hero.hasAction ? (data.hero.hasAction = hero.hasAction) : null;
+    data.menuItem = selectedMenu;
+    await updatePage(data);
   };
+
+  const updateMenuItem = async () => {
+    const data = { type: 'PAGE' };
+    try {
+      const result = await await _thisSite.updateMenuItem({
+        input: (data as unknown) as UpdateMenuitemInput,
+        menuId: selectedMenu,
+      });
+      if (!result.status) {
+        addToast('An Error Occurred', { appearance: 'error' });
+        return;
+      }
+      return;
+    } catch (error) {
+      console.error(error);
+      addToast(
+        error.error.message ? error.error.message : 'An error occurred',
+        { appearance: 'error' }
+      );
+    }
+  };
+
+  const updatePage = async (data: any) => {
+    setWorking(true);
+    try {
+      const result = await _thisPage.updatePage({
+        input: (data as unknown) as UpdatePageInput,
+        pageId: (pageId as unknown) as string,
+      });
+      if (!result.status) {
+        console.error(result);
+        addToast(
+          data.error.message ? data.error.message : 'An error occurred',
+          { appearance: 'error' }
+        );
+        setWorking(false);
+        return;
+      }
+      addToast('Your Page has been updated successfully', {
+        appearance: 'success',
+      });
+      await updateMenuItem();
+      setWorking(false);
+      router.push(`/sites/${siteId}/pages`);
+      return;
+    } catch (error) {
+      console.error(error);
+      addToast(
+        error.error.message ? error.error.message : 'An error occurred',
+        { appearance: 'error' }
+      );
+      setWorking(false);
+    }
+    console.error(data);
+  };
+
   return (
     <Layout>
       <Container className="mt-12">
-        <PageControls
-          onSubmit={handleSubmit}
-          title="Edit page"
-          siteId={siteId}
-        />
-        <PageTitle
-          pageTitle={state.pageTitle}
-          handleChange={handleChange}
-          errors={errors}
-          menuItem={state.menuItem}
-          options={menuItems.error ? [] : menuItems}
-        />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <RowSection className="justify-between">
+            <H1>Edit Page</H1>
+            <div className="flex flex-row justify-start space-x-5">
+              <Btn color="primary" $bg="secondary" $px="sm">
+                <Link href={`/sites/${siteId}/pages`}> Cancel</Link>
+              </Btn>
+
+              <Btn color="secondary" $bg="primary" $px="lg" type="submit">
+                {working ? 'Saving' : 'Save & Publish'}
+              </Btn>
+            </div>
+          </RowSection>
+          <RowSection className="space-x-7 mt-10">
+            <FormGroup className="">
+              <FormInput
+                name="name"
+                label="Page Title"
+                register={register}
+                error={errors.name}
+                required={true}
+              />
+            </FormGroup>
+            <FormSelect
+              defaultOption={{
+                id: 0,
+                name: menuItems.filter((item) => item.id == selectedMenu)[0]
+                  .name,
+                value: menuItems.filter((item) => item.id == selectedMenu)[0]
+                  .id,
+                unavailable: false,
+              }}
+              onChange={(data) => setSelectedMenu(data.value)}
+              label="Add menu to page"
+              options={menuItems.map(
+                (item, index) => {
+                  return {
+                    value: (item.id as unknown) as string,
+                    name: (item.name as unknown) as string,
+                    id: index,
+                    unavailable: false,
+                  };
+                },
+                ...[
+                  {
+                    id: 0,
+                    name: 'None',
+                    value: null,
+                    unavailable: false,
+                  },
+                ]
+              )}
+              error={errors.menuItem}
+              errorText={'Add page to menu'}
+            />
+          </RowSection>
+        </form>
         <hr className="border-gray-400 border-5 w-full mt-8" />
-        <PageHeaderStyle
-          onButtonClick={onButtonClick}
-          headerType={state.headerType}
-          medias={medias ? medias : []}
-          state={state}
-          setState={setState}
-          handleSubmit={handleSubmit}
+        <AddEditHero
+          setHero={setOtherDetails}
+          register={register}
+          watch={watch}
           errors={errors}
+          medias={medias}
+          existingHero={page.hero}
         />
-
-        <Textposition
-          headerText={state.headerText}
-          handleChange={handleChange}
-          locationButtonClick={locationButtonClick}
-          textPosition={state.location}
-          captionText={state.captionText}
-          errors={errors}
-        />
-
-        <CallToAction
-          actionText={state.actionText}
-          handleChange={handleChange}
-          ctaLink={state.ctaLink}
-          errors={errors}
-          hasAction={state.hasAction}
-        />
-        <div className="mt-5 mb-5">
-          <Hero
-            mediaUrl={state.mediaUrl}
-            actionText={state.actionText}
-            heading={state.headerText}
-            location={state.location}
-            hasAction={state.hasAction}
-            caption={state.captionText}
-            type={state.headerType}
-          />
-        </div>
         <hr className="border-gray-400 border-5 w-full mt-8" />
         <CreateWidget
-          client={client}
-          pageId={pageId}
-          items={items.error ? [] : items}
-          widget={widget}
-        />
-
-        <hr className="border-gray-400 border-5 w-full mt-8" />
-        <PagePosts
-          items={items.error ? [] : items}
-          client={client}
-          pageId={pageId}
-          pageItems={pageItems.error ? [] : pageItems}
+          items={items}
+          existingWidget={existingWidget ?? []}
+          token={token}
+          profile={profile}
         />
         <hr className="border-gray-400 border-5 w-full mt-8" />
+        <PageItems
+          items={items}
+          existingItems={pageItems}
+          refresh={refreshData}
+          token={token}
+        />
         <ColumnSection>
           <div className="">
             <ShadowBtn className="py-4 px-10 shadow-sm rounded text-sm font-bold">
@@ -138,145 +238,171 @@ const edit = ({ token, menuItems, page, items, widget, medias, pageItems }) => {
   );
 };
 
-export async function getServerSideProps(ctx) {
-  const { siteId, id: pageId } = ctx.query;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { id: pageId } = ctx.query;
   const session: Session = getSession(ctx.req, ctx.res);
+  const site = new Site(session.idToken);
+  const user = new User(session.idToken);
+  const item = new Items(session.idToken);
+  const media = new MediaClass(session.idToken);
+  let medias;
+  const _thisPage = new Pages(session.idToken);
   if (!session) {
-    return {
-      redirect: {
-        destination: '/login',
-      },
-    };
+    ctx.res.writeHead(302, {
+      Location: '/login',
+    });
+    ctx.res.end();
+    return;
   }
-  const client = createApolloClient(session?.idToken);
 
   let page: any;
-  let menuItems: any;
-  let medias: any;
-  let widget: any;
-  let items: any;
-  let pageItems: any;
+  let error;
+  let existingWidget;
+
+  const profile = await (await user.getProfile()).data;
+
+  const currentSite = await (
+    await site.getSite({
+      siteId: (ctx.query.siteId as unknown) as string,
+      accountId: profile.account.id,
+    })
+  ).data;
 
   try {
-    const { data } = await client.query({
-      query: PAGE_QUERY,
-      variables: {
+    medias =
+      (await (await media.getMedias({ accountId: profile.account.id })).data) ??
+      [];
+  } catch (error) {
+    console.error(error);
+  }
+
+  try {
+    page = await (
+      await _thisPage.getPage({
+        accountId: profile.account.id,
         filter: {
           singleFilter: {
+            operator: ComparisonOperatorEnum.Eq,
             field: '_id',
-            operator: 'EQ',
             value: pageId,
           },
         },
-      },
-    });
+      })
+    ).data;
+  } catch (err) {
+    console.error(err);
+    console.error(err.error.message);
 
-    page = data.page ? data.page : { error: true };
-  } catch (error) {
-    page = { error: true };
+    error = err;
   }
 
-  try {
-    const { data } = await client.query({
-      query: GET_ALL_ITEMS_QUERY,
-      variables: {
-        siteId: siteId,
-      },
-    });
-
-    items = data.getAllItems ? data.getAllItems : { error: true };
-  } catch (error) {
-    items = { error: true };
-  }
-
-  try {
-    const { data } = await client.query({
-      query: GET_ALL_ITEMS_QUERY,
-      variables: {
-        siteId: siteId,
-        filter: {
-          singleFilter: {
-            field: 'pageId',
-            operator: 'EQ',
-            value: pageId,
-          },
+  const items = await (
+    await item.getAllItems({
+      accountId: profile.account.id,
+      filter: {
+        combinedFilter: {
+          logicalOperator: LogicalOperatorEnum.And,
+          filters: [
+            {
+              singleFilter: {
+                field: 'account',
+                operator: ComparisonOperatorEnum.Eq,
+                value: profile.account.id,
+              },
+            },
+            {
+              singleFilter: {
+                field: 'siteId',
+                operator: ComparisonOperatorEnum.Eq,
+                value: ctx.query.siteId,
+              },
+            },
+          ],
         },
       },
-    });
+    })
+  ).data;
 
-    pageItems = data.getAllItems ? data.getAllItems : { error: true };
-  } catch (error) {
-    pageItems = { error: true };
-  }
-
-  try {
-    const { data } = await client.query({
-      query: GET_ALL_MEDIA,
-      variables: {
-        filter: {},
+  const pageItems = await (
+    await item.getAllItems({
+      accountId: profile.account.id,
+      filter: {
+        combinedFilter: {
+          logicalOperator: LogicalOperatorEnum.And,
+          filters: [
+            {
+              singleFilter: {
+                field: 'account',
+                operator: ComparisonOperatorEnum.Eq,
+                value: profile.account.id,
+              },
+            },
+            {
+              singleFilter: {
+                field: 'siteId',
+                operator: ComparisonOperatorEnum.Eq,
+                value: ctx.query.siteId,
+              },
+            },
+            {
+              singleFilter: {
+                field: 'pageId',
+                operator: ComparisonOperatorEnum.Eq,
+                value: pageId,
+              },
+            },
+          ],
+        },
       },
-    });
-
-    medias = data.medias ? data.medias : { error: true };
-  } catch (error) {
-    medias = { error: true };
-  }
+    })
+  ).data;
 
   try {
-    const { data } = await client.query({
-      query: GET_SITE_MENUITEMS,
-      variables: {
+    existingWidget = (
+      await _thisPage.getWidget({
+        accountId: profile.account.id,
         filter: {
           combinedFilter: {
+            logicalOperator: LogicalOperatorEnum.And,
             filters: [
               {
                 singleFilter: {
-                  field: 'siteId',
-                  operator: 'EQ',
-                  value: ctx.query.siteId,
+                  field: 'account',
+                  operator: ComparisonOperatorEnum.Eq,
+                  value: profile.account.id,
+                },
+              },
+              {
+                singleFilter: {
+                  field: 'page',
+                  operator: ComparisonOperatorEnum.Eq,
+                  value: pageId,
                 },
               },
             ],
           },
         },
-      },
-    });
-    menuItems = data.siteMenuItems.header.menuItems
-      ? data.siteMenuItems.header.menuItems
-      : { error: true };
+      })
+    ).data;
+    console.error(existingWidget);
   } catch (error) {
-    menuItems = { error: true };
-  }
-
-  try {
-    const { data } = await client.query({
-      query: GET_WIDGET,
-      variables: {
-        filter: {
-          singleFilter: {
-            field: 'page',
-            operator: 'EQ',
-            value: pageId,
-          },
-        },
-      },
-    });
-    widget = data.widget ? data.widget : data.widget;
-  } catch (error) {
-    widget = { error: true };
+    console.error(error);
+    existingWidget = [];
   }
 
   return {
     props: {
       page,
       token: session?.idToken,
+      menuItems: currentSite.header.menuItems,
+      error: error ?? null,
+      medias: medias.medias,
       items,
-      menuItems,
-      widget,
-      medias,
+      existingWidget: existingWidget ?? [],
+      profile,
       pageItems,
     },
   };
-}
+};
 
 export default withPageAuthRequired(edit);

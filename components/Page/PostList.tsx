@@ -1,16 +1,15 @@
 import React from 'react';
-import { RiDeleteBin7Fill } from 'react-icons/ri';
 
 // import { Pagination } from '../../Pagination/Pagination';
 
-const PostList = ({ pageItems, handleDelete }) => {
+const PostList = ({ pageItems }: {pageItems:any }): JSX.Element => {
   return (
     <div className="mt-7">
-      <div className="grid grid-cols-3 gap-8">
+      <div className="grid grid-cols-4 gap-2">
         {pageItems.map((item) => {
           return (
             <div
-              className="group w-full overflow-hidden border border-gray-100 hover:shadow-lg bg-white shadow-md h-96"
+              className="group w-11/12 overflow-hidden border border-gray-100 hover:shadow-lg bg-white shadow-md h-96"
               key={item.id}
             >
               <div className="h-48 w-full">
@@ -19,15 +18,15 @@ const PostList = ({ pageItems, handleDelete }) => {
                   src={item?.media.image.small}
                   alt="news image"
                 />
-                <div
+                {/* <div
                   className="icon flex flex-row justify-end mr-5 -mt-40 cursor-pointer"
                   onClick={() => handleDelete(item.id)}
                 >
                   <RiDeleteBin7Fill className="h-6 w-6 text-white focus:text-red-400" />
-                </div>
+                </div> */}
               </div>
               <div className="px-3 py-4">
-                <h1 className="font-semibold text-lg mb-2">{item.content}</h1>
+                <h1 className="font-semibold text-lg mb-2">{item.featured}</h1>
                 <p className="text-gray-700 text-sm">{item.description}</p>
                 <div className="mt-4">
                   <p className="text-xs italic text-gray-500">
