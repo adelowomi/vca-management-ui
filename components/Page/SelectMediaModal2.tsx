@@ -34,12 +34,17 @@ export const SelectMediaModal2 = ({
   medias,
   open,
   setMedia,
+  selected
 }: {
   close: any;
   medias: Media[];
   open: boolean,
-  setMedia:any
+  setMedia:any, 
+  selected
 }): JSX.Element => {
+
+console.error(selected);
+console.error({medias});
 
 
   const cancelButtonRef = useRef();
@@ -115,7 +120,7 @@ export const SelectMediaModal2 = ({
                 </Row>
                 <div className="grid grid-cols-4 gap-4 mt-8">
                   {medias.map((media: any, index: number) => (
-                    <MediaCard2 key={index} media={media} setMedia={setMedia}/>
+                    <MediaCard2 key={index} media={media} setMedia={setMedia} selected={selected}/>
                   ))}
                 </div>
               </Container>

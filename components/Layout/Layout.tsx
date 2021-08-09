@@ -67,7 +67,7 @@ const navigation = [
   },
   {
     name: 'Media Gallery',
-    href: 'media-gallery',
+    href: 'media',
     icon: RiImageAddLine,
     current: false,
   },

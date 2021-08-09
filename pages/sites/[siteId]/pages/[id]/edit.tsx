@@ -109,6 +109,7 @@ const edit = ({
   };
 
   const updatePage = async (data: any) => {
+    hero && hero.media ? data.hero.media = hero.media : null;
     setWorking(true);
     try {
       const result = await _thisPage.updatePage({

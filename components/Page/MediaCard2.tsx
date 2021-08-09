@@ -6,9 +6,11 @@ import { Media } from '../../classes/schema';
 export default function MediaCard2({
   media,
   setMedia,
+  selected
 }: {
   media: Media;
   setMedia: any;
+  selected: any;
 }): JSX.Element {
   return (
     <>
@@ -43,6 +45,7 @@ export default function MediaCard2({
               type="checkbox"
               className="px-3 h-6 w-6 border border-gray-300 mr-3"
               onChange={() => setMedia(media.id)}
+              checked={media.image && media.image.small == selected.image.small ? true : false} 
             />
           </div>
         </div>
