@@ -143,9 +143,7 @@ const posts = ({
                           </td>
 
                           <td className="px-6 py-4 text-gray-500">
-                            <p className="line-clamp-1 w-40">
-                            {post.featured}
-                            </p>
+                            <p className="line-clamp-1 w-40">{post.featured}</p>
                           </td>
                           <td className="px-6 py-4 cursor-pointer whitespace-  text-gray-500">
                             {post.account.firstName}
@@ -212,8 +210,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     } = await client.query({
       query: GET_PROFILE,
     });
-
-    console.error({ accountId });
 
     const posts = await (
       await item.getAllItems({
