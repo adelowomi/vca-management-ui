@@ -9,6 +9,7 @@ export interface GqlErrorResponse {
     };
   };
 }
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const GqlErrorResponse = (error: any): GqlErrorResponse => {
   return {
     error: {
