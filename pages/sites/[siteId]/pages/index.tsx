@@ -1,6 +1,7 @@
 import { getSession } from '@auth0/nextjs-auth0';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0/dist/frontend';
 import moment from 'moment';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
@@ -9,14 +10,15 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 
+import { Site } from '../../../../classes/Site';
+import { User } from '../../../../classes/User';
 import Layout from '../../../../components/Layout/Layout';
 import DeleteModal from '../../../../components/utilsGroup/DeleteModal';
-import { GET_SITE_MENUITEMS, PAGES_QUERY } from '../../../../graphql';
+import { GqlErrorResponse } from '../../../../errors/GqlError';
+import { PAGES_QUERY } from '../../../../graphql';
 import { DELETE_PAGE } from '../../../../graphql/pages';
 import { GET_PROFILE } from '../../../../graphql/site';
 import { createApolloClient } from '../../../../lib/apollo';
-import { User } from '../../../../classes/User';
-import { Site } from '../../../../classes/Site';
 
 const PageActionsWrapper = tw.div`
 flex
@@ -236,33 +238,36 @@ const Pages = ({ pages, menuItems, token }) => {
   );
 };
 
-export async function getServerSideProps(ctx) {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = getSession(ctx.req, ctx.res);
   const user = new User(session.idToken);
   const site = new Site(session.idToken);
 
-  const profile = await (await user.getProfile()).data;
-
-  const data = await (
-    await site.getSite({
-      accountId: profile.account.id,
-      siteId: (ctx.query.siteId as unknown) as string,
-    })
-  ).data;
-
   if (!session) {
+    ctx.res.writeHead(302, {
+      Location: '/login',
+    });
+    ctx.res.end();
     return {
-      redirect: {
-        destination: '/login',
+      props: {
+        pages: [],
+        menuItems: [],
+        token: null,
+        error: null,
       },
     };
   }
-  const client = createApolloClient(session.idToken);
-  let menuItems: any;
-  let pages: any;
-  let accountId: any;
 
+  const client = createApolloClient(session.idToken);
   try {
+    const profile = await (await user.getProfile()).data;
+    const currentSite = await (
+      await site.getSite({
+        accountId: profile.account.id,
+        siteId: (ctx.query.siteId as unknown) as string,
+      })
+    ).data;
+
     const {
       data: {
         getProfile: {
@@ -272,16 +277,11 @@ export async function getServerSideProps(ctx) {
     } = await client.query({
       query: GET_PROFILE,
     });
-    accountId = account;
-  } catch (error) {
-    accountId = { error: true };
-  }
 
-  try {
     const { data } = await client.query({
       query: PAGES_QUERY,
       variables: {
-        accountId,
+        accountId: account,
         filter: {
           singleFilter: {
             field: 'site',
@@ -292,40 +292,25 @@ export async function getServerSideProps(ctx) {
       },
     });
 
-    pages = data.pages;
-  } catch (error) {
-    pages = { error: true };
-  }
-
-  try {
-    const {
-      data: {
-        siteMenuItems: { header },
+    return {
+      props: {
+        pages: data.pages,
+        menuItems: currentSite.header.menuItems,
+        token: session.idToken,
+        error: null,
       },
-    } = await client.query({
-      query: GET_SITE_MENUITEMS,
-      variables: {
-        filter: {
-          combinedFilter: {
-            filters: [
-              {
-                singleFilter: {
-                  field: 'siteId',
-                  operator: 'EQ',
-                  value: ctx.query.siteId,
-                },
-              },
-            ],
-          },
-        },
-      },
-    });
-    menuItems = data.header.menuItems;
+    };
   } catch (error) {
-    menuItems = { error: true };
+    console.error(error);
+    return {
+      props: {
+        pages: [],
+        menuItems: [],
+        token: null,
+        error: GqlErrorResponse(error),
+      },
+    };
   }
-
-  return { props: { pages, menuItems, token: session.idToken } };
-}
+};
 
 export default withPageAuthRequired(Pages);
