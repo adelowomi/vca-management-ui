@@ -2,7 +2,7 @@ import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Hero } from '../../../../../components/Hero/Hero';
+import { HeroPreview } from '../../../../../components/Hero/Hero';
 import Layout from '../../../../../components/Layout/Layout';
 import { CallToAction } from '../../../../../components/Page/CtaComponent';
 import { PageHeaderStyle } from '../../../../../components/Page/HeaderPageStyle';
@@ -33,12 +33,17 @@ const edit = ({ token, menuItems, medias, performance, items }) => {
     query: { siteId },
   } = useRouter();
 
-  const { handleSubmit, state, errors, setState, handleChange } =
-    performanceUseForm(performanceValidator, client, {
-      type: 'edit',
-      performance,
-      performanceId: performance.id,
-    });
+  const {
+    handleSubmit,
+    state,
+    errors,
+    setState,
+    handleChange,
+  } = performanceUseForm(performanceValidator, client, {
+    type: 'edit',
+    performance,
+    performanceId: performance.id,
+  });
 
   const onButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -139,14 +144,17 @@ const edit = ({ token, menuItems, medias, performance, items }) => {
           </ShadowBtn>
         </div>
         <div className="mt-5 mb-5">
-          <Hero
-            mediaUrl={state.mediaUrl}
-            actionText={state.actionText}
-            heading={state.headerText}
-            location={state.location}
-            hasAction={state.hasAction}
-            caption={state.captionText}
-            type={state.headerType}
+          <HeroPreview
+            hero={{
+              actionSlug:'',
+              mediaUrl:state.mediaUrl,
+              actionText : state.actionText,
+              heading: state.headerText,
+              location: state.location,
+              hasAction: state.hasAction,
+              caption: state.captionText,
+              type: state.headerType,
+            }}
           />
         </div>
         <hr className="border-gray-400 border-5 w-full mt-8" />

@@ -1,112 +1,186 @@
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, {  useState } from 'react';
+import {  useForm,  } from 'react-hook-form';
+import { useToasts } from 'react-toast-notifications';
 
-import { Hero } from '../../../../components/Hero/Hero';
+import { MediaClass } from '../../../../classes/media';
+import { Pages } from '../../../../classes/Page';
+import { UpdateMenuitemInput } from '../../../../classes/schema';
+import { Site } from '../../../../classes/Site';
+import { User } from '../../../../classes/User';
+import { FormInput } from '../../../../components/FormInput/formInput';
+import FormSelect from '../../../../components/FormSelect/VcaSelect';
 import Layout from '../../../../components/Layout/Layout';
-import { CallToAction } from '../../../../components/Page/CtaComponent';
-import { PageHeaderStyle } from '../../../../components/Page/HeaderPageStyle';
-import { ShadowBtn } from '../../../../components/Page/PageButtons';
-import { PageControls } from '../../../../components/Page/PageControls';
+import { AddEditHero } from '../../../../components/Page/Add&EditHerro';
+import { Btn, ShadowBtn } from '../../../../components/Page/PageButtons';
 import {
   ColumnSection,
   Container,
+  FormGroup,
+  H1,
+  RowSection,
 } from '../../../../components/Page/PageStyledElements';
-import { PageTitle } from '../../../../components/Page/PageTitle';
-import { Textposition } from '../../../../components/Page/TextPosition';
-import { GET_ALL_MEDIA } from '../../../../graphql/media';
-import { GET_PROFILE, GET_SITE_MENUITEMS } from '../../../../graphql/site';
-import { validator } from '../../../../helpers/validator';
-import useForm from '../../../../hooks/useForm';
-import { createApolloClient } from '../../../../lib/apollo';
 
-const create = ({ token, menuItems, medias, accountId }) => {
-  const client = createApolloClient(token);
+const create = ({
+  token,
+  menuItems,
+  medias,
+  profile
+}: {
+  token: string;
+  menuItems: any[];
+  medias: any[];
+  errorss: any;
+  profile: any
+}) => {
+  const router = useRouter();
   const {
     query: { siteId },
   } = useRouter();
+  const _thisSite = new Site(token);
+  const _thisPage = new Pages(token);
+  const [selectedMenu, setSelectedMenu] = useState('');
+  const [hero, setHeroDetails] = useState(undefined);
+  const { addToast } = useToasts();
+  const [working, setWorking] = useState(false);
 
   const {
+    register,
     handleSubmit,
-    state,
-    errors,
-    setState,
-    handleChange,
-  } = useForm(validator, client, { siteId, type: 'add', accountId });
+    formState: { errors },
+    watch,
+  } = useForm();
 
-  const onButtonClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    setState({
-      ...state,
-      headerType: e.currentTarget.dataset.headertype,
-    });
+  const setOtherDetails = (data:any) =>{
+    setHeroDetails({...hero,...data});
+  }
+
+  const watching = watch();
+
+  const onSubmit = async (data: any) => {
+    // console.error({hero});
+    data.site = siteId;
+    data.tags = ["lifestyle"];
+    data.account = profile.account.id
+    data.hero = watching.hero;
+    data.hero.media = hero.media;
+    data.hero.location = hero.location;
+    data.hero.mediaUrl = "/";
+    data.hero.type = "Page";
+    data.hero.hasAction = data.hero.actionText ? true : false;
+    data.menuItem = selectedMenu;
+    console.error({ data });
+    await createPage(data);
+    return;
   };
 
-  const locationButtonClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    setState({
-      ...state,
-      location: e.currentTarget.dataset.textposition,
-    });
+  const updateMenuItem = async () => {
+    const data = { type: 'PAGE' };
+    try {
+      const result = await await _thisSite.updateMenuItem({
+        input: (data as unknown) as UpdateMenuitemInput,
+        menuId: selectedMenu,
+      });
+      if (!result.status) {
+        addToast('An Error Occurred', { appearance: 'error' });
+        return;
+      }
+      return;
+    } catch (error) {
+      console.error(error);
+      addToast(
+        error.error.message ? error.error.message : 'An error occurred',
+        { appearance: 'error' }
+      );
+    }
   };
+
+  const createPage = async (data:any) => {
+    setWorking(true);
+    try {
+      const result = await _thisPage.createPage({
+        input: data,
+      });
+      if (!result.status) {
+        console.error(result);
+        addToast(data.error.message ? data.error.message : "An error occurred", { appearance: 'error' });
+        setWorking(false);
+        return;
+      }
+      addToast('Your Page has been created', { appearance: 'success' });
+      setWorking(false);
+      await updateMenuItem();
+      router.push(`/sites/${siteId}/pages`)
+      return;
+    } catch (error) {
+      console.error(error);
+      addToast(error.error.message ? error.error.message :'An error occurred', { appearance: 'error' });
+      setWorking(false);
+    }
+    console.error(data);
+  }
 
   return (
     <Layout>
-      <Container>
-        <PageControls
-          onSubmit={handleSubmit}
-          title="Add a new page"
-          siteId={siteId}
-        />
-        <PageTitle
-          pageTitle={state.pageTitle}
-          handleChange={handleChange}
-          errors={errors}
-          menuItem={state.menuItem}
-          options={menuItems}
-        />
+      <Container className="mt-12">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <RowSection className="justify-between">
+            <H1>Add New Page</H1>
+            <div className="flex flex-row justify-start space-x-5">
+              <Btn color="primary" $bg="secondary" $px="sm">
+                <Link href={`/sites/${siteId}/pages`}> Cancel</Link>
+              </Btn>
+
+              <Btn color="secondary" $bg="primary" $px="lg" type="submit">
+                {working ? "Saving" : "Save & Publish"}
+                
+              </Btn>
+            </div>
+          </RowSection>
+          <RowSection className="space-x-7 mt-10">
+            <FormGroup className="">
+              <FormInput
+                name="name"
+                label="Page Title"
+                register={register}
+                error={errors.name}
+                required={true}
+              />
+            </FormGroup>
+            <FormSelect
+              defaultOption={{
+                id: 0,
+                name: 'Select menu',
+                value: null,
+                unavailable: false,
+              }}
+              onChange={(data) => setSelectedMenu(data.value)}
+              label="Add menu to page"
+              options={menuItems.map((item, index) => {
+                return {
+                  value: (item.id as unknown) as string,
+                  name: (item.name as unknown) as string,
+                  id: index,
+                  unavailable: false,
+                };
+              })}
+              error={errors.type}
+              errorText={'Add page to menu'}
+            />
+          </RowSection>
+        </form>
         <hr className="border-gray-400 border-5 w-full mt-8" />
-        <PageHeaderStyle
-          onButtonClick={onButtonClick}
-          headerType={state.headerType}
+        <AddEditHero
+          setHero={setOtherDetails}
+          register={register}
+          watch={watch}
+          errors={errors}
           medias={medias}
-          state={state}
-          setState={setState}
-          handleSubmit={handleSubmit}
-          errors={errors}
         />
-
-        <Textposition
-          headerText={state.headerText}
-          handleChange={handleChange}
-          locationButtonClick={locationButtonClick}
-          textPosition={state.location}
-          captionText={state.captionText}
-          errors={errors}
-        />
-
-        <CallToAction
-          actionText={state.actionText}
-          handleChange={handleChange}
-          ctaLink={state.ctaLink}
-          errors={errors}
-          hasAction={state.hasAction}
-        />
-        <div className="mt-5 mb-5">
-          <Hero
-            mediaUrl={state.mediaUrl}
-            actionText={state.actionText}
-            heading={state.pageTitle}
-            location={state.location}
-            hasAction={state.hasAction}
-            caption={state.captionText}
-            type={state.headerType}
-          />
-        </div>
         <ColumnSection>
-          <div className="-mt-20">
+          <div className="mt-5">
             <ShadowBtn className="py-4 px-10 shadow-sm rounded text-sm font-bold">
               Save as draft
             </ShadowBtn>
@@ -120,65 +194,40 @@ const create = ({ token, menuItems, medias, accountId }) => {
 export async function getServerSideProps(ctx) {
   const session = getSession(ctx.req, ctx.res);
 
-  const client = createApolloClient(session?.idToken);
-  let accountId;
+  const user = new User(session.idToken);
+  const site = new Site(session.idToken);
+  const media = new MediaClass(session.idToken);
+  let errorss = false;
   let medias;
 
-  try {
-    const {
-      data: {
-        getProfile: {
-          account: { id: account },
-        },
-      },
-    } = await client.query({
-      query: GET_PROFILE,
-    });
-    accountId = account;
-  } catch (error) {
-    accountId = error;
-  }
+  const profile = await (await user.getProfile()).data;
 
-  const {
-    data: {
-      siteMenuItems: {
-        header: { menuItems },
-      },
-    },
-  } = await client.query({
-    query: GET_SITE_MENUITEMS,
-    variables: {
-      filter: {
-        combinedFilter: {
-          filters: [
-            {
-              singleFilter: {
-                field: 'siteId',
-                operator: 'EQ',
-                value: ctx.query.siteId,
-              },
-            },
-          ],
-        },
-      },
-    },
-  });
+  const currentSite = await (
+    await site.getSite({
+      siteId: (ctx.query.siteId as unknown) as string,
+      accountId: profile.account.id,
+    })
+  ).data;
 
   try {
-    const { data } = await client.query({
-      query: GET_ALL_MEDIA,
-      variables: {
-        accountId,
-        filter: {},
-      },
-    });
-
-    medias = data.medias ? data.medias : { error: true };
+    medias =
+      (await (await media.getMedias({ accountId: profile.account.id })).data) ??
+      [];
   } catch (error) {
-    medias = { error: true };
+    console.error(JSON.stringify(error));
+    (errorss = true), (medias = []);
   }
 
-  return { props: { token: session?.idToken, menuItems, medias, accountId } };
+  return {
+    props: {
+      token: session?.idToken,
+      menuItems: currentSite.header.menuItems,
+      medias : medias.medias,
+      errorss,
+      site: currentSite,
+      profile
+    },
+  };
 }
 
 export default withPageAuthRequired(create);

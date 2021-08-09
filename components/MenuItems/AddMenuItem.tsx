@@ -52,6 +52,7 @@ export const AddMenuItem = ({
   const [type, setType] = useState('');
   const [newState, setNewState] = useState(true);
   const [working,setWorking] = useState(false);
+  const [useExternalLink,setUseExternalLink] = useState(false);
 
 
   const onSubmit = async (data) => {
@@ -151,19 +152,24 @@ export const AddMenuItem = ({
               className="px-3 h-6 w-6 border border-gray-300 mr-3"
               name=""
               id=""
+              checked={useExternalLink}
+              onChange={() => setUseExternalLink(!useExternalLink)}
             />
             <label className="font-semibold leading-6 text-lg text-vca-grey-1 font-inter">
               This is an external link
             </label>
           </div>
           <div className="flex flex-row justify-start space-x-5">
+            {useExternalLink ? 
             <FormInput
               name="slug"
-              label=""
+              label="url"
               register={register}
               error={errors.slug}
               required={true}
+              
             />
+            : null}
             <Btn
               color="secondary"
               $bg="primary"

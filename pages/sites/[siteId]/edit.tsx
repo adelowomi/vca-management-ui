@@ -66,7 +66,7 @@ export const Edit = ({
   const submit = async (data) => {
     setWorking(true);
     newPage ? (data.page = newPage) : null;
-    data.page == undefined ? (data.page = '') : null;
+    data.page == undefined ? (data.page = null) : null;
     try {
       const result = await _thisSite.updateSite({
         siteId: site.id,
@@ -143,8 +143,8 @@ export const Edit = ({
                 <FormSelect
                   defaultOption={{
                     id: 0,
-                    name: pages.filter((p) => p.id == site.page)[0].name,
-                    value: pages.filter((p) => p.id == site.page)[0].id,
+                    name: site.page ?  pages.filter((p) => p.id == site.page)[0].name : "Select a page",
+                    value: site.page ? pages.filter((p) => p.id == site.page)[0].id : "0",
                     unavailable: false,
                   }}
                   onChange={(data) => setNewPage(data.value)}

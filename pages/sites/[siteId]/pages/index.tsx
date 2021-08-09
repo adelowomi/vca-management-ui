@@ -1,6 +1,7 @@
 import { getSession } from '@auth0/nextjs-auth0';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0/dist/frontend';
 import moment from 'moment';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
@@ -9,10 +10,11 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 
+import { Site } from '../../../../classes/Site';
+import { User } from '../../../../classes/User';
 import Layout from '../../../../components/Layout/Layout';
-import { BulkActionDropdown } from '../../../../components/Page/BulkActionDropdown';
 import DeleteModal from '../../../../components/utilsGroup/DeleteModal';
-import { GET_SITE_MENUITEMS, PAGES_QUERY } from '../../../../graphql';
+import { PAGES_QUERY } from '../../../../graphql';
 import { DELETE_PAGE } from '../../../../graphql/pages';
 import { GET_PROFILE } from '../../../../graphql/site';
 import { createApolloClient } from '../../../../lib/apollo';
@@ -117,9 +119,6 @@ const Pages = ({ pages, menuItems, token }) => {
               <Link href={`/sites/${siteId}/pages/create`}> Add New</Link>
             </PageActionsColOneBtn>
           </PageActionsColOne>
-          <div className=" flex mt-7">
-            <BulkActionDropdown />
-          </div>
         </PageActionsWrapper>
         <PageHeroWrapper className="flex flex-row justify-between mt-6 py-20 w0-full items-center">
           <div className="second_col w-full">
@@ -190,7 +189,7 @@ const Pages = ({ pages, menuItems, token }) => {
                           </td>
 
                           <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
-                            <Link href={`/sites/${el.site}/pages/${el.id}`}>
+                            <Link href={`/sites/${siteId}/pages/${el.id}/edit`}>
                               {el.name}
                             </Link>
                           </td>
@@ -238,15 +237,26 @@ const Pages = ({ pages, menuItems, token }) => {
   );
 };
 
-export async function getServerSideProps(ctx) {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = getSession(ctx.req, ctx.res);
+  const user = new User(session.idToken);
+  const site = new Site(session.idToken);
+
+  const profile = await (await user.getProfile()).data;
+
+  const data = await (
+    await site.getSite({
+      accountId: profile.account.id,
+      siteId: (ctx.query.siteId as unknown) as string,
+    })
+  ).data;
 
   if (!session) {
-    return {
-      redirect: {
-        destination: '/login',
-      },
-    };
+    ctx.res.writeHead(302, {
+      Location: '/login',
+    });
+    ctx.res.end();
+    return;
   }
   const client = createApolloClient(session.idToken);
   let menuItems: any;
@@ -274,16 +284,10 @@ export async function getServerSideProps(ctx) {
       variables: {
         accountId,
         filter: {
-          combinedFilter: {
-            filters: [
-              {
-                singleFilter: {
-                  field: 'siteId',
-                  operator: 'EQ',
-                  value: ctx.query.siteId,
-                },
-              },
-            ],
+          singleFilter: {
+            field: 'site',
+            operator: 'EQ',
+            value: ctx.query.siteId,
           },
         },
       },
@@ -295,34 +299,12 @@ export async function getServerSideProps(ctx) {
   }
 
   try {
-    const {
-      data: {
-        siteMenuItems: { header },
-      },
-    } = await client.query({
-      query: GET_SITE_MENUITEMS,
-      variables: {
-        filter: {
-          combinedFilter: {
-            filters: [
-              {
-                singleFilter: {
-                  field: 'siteId',
-                  operator: 'EQ',
-                  value: ctx.query.siteId,
-                },
-              },
-            ],
-          },
-        },
-      },
-    });
-    menuItems = header.menuItems;
+    menuItems = data.header.menuItems;
   } catch (error) {
     menuItems = { error: true };
   }
 
   return { props: { pages, menuItems, token: session.idToken } };
-}
+};
 
 export default withPageAuthRequired(Pages);
