@@ -15,9 +15,9 @@ export const GqlErrorResponse = (error: any): GqlErrorResponse => {
       message: error.message,
       graphQLErrors: error.graphQLErrors,
       networkError: {
-        name: error.networkError.name,
-        statusCode: error.networkError.statusCode,
-        result: error.networkError.result,
+        name: error.networkError?.name,
+        statusCode: error.networkError?.statusCode,
+        result: error.networkError?.result,
       },
     },
   };

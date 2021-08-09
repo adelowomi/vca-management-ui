@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const GET_MEDIA = gql`
-  query medias($filter: FilterInput) {
-    medias(limit: 1, filter: $filter) {
+  query medias($filter: FilterInput, $accountId: String!) {
+    medias(limit: 1, filter: $filter, accountId: $accountId) {
       id
       createdAt
       updatedAt
@@ -13,7 +13,11 @@ export const GET_MEDIA = gql`
         assembly
         url
       }
-      video
+      video {
+        service
+        url
+        videoId
+      }
       image {
         assembly
         small

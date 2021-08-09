@@ -6,8 +6,10 @@ import { useState } from 'react';
 
 import { DeleteModal } from '../../../../../components/DeleteModal/DeleteModal';
 import Layout from '../../../../../components/Layout/Layout';
+import { GqlErrorResponse } from '../../../../../errors/GqlError';
 import { REMOVE_MEDIA } from '../../../../../graphql/media/mutation';
 import { GET_MEDIA } from '../../../../../graphql/media/query';
+import { PROFILE_QUERY } from '../../../../../graphql/profile';
 import { createApolloClient } from '../../../../../lib/apollo';
 
 export default function ImageView({ media, token }) {
@@ -132,9 +134,13 @@ export async function getServerSideProps(ctx) {
   const token = session.idToken;
   const client = createApolloClient(token);
   try {
+    const profile = await client.query({
+      query: PROFILE_QUERY,
+    });
     const mediaItem = await client.query({
       query: GET_MEDIA,
       variables: {
+        accountId: profile.data.getProfile.account.id,
         filter: { singleFilter: { field: '_id', operator: 'EQ', value: id } },
       },
     });
@@ -150,7 +156,8 @@ export async function getServerSideProps(ctx) {
     return {
       props: {
         token: null,
-        media: { data: null, error },
+        error: GqlErrorResponse(error),
+        media: { data: null },
       },
     };
   }

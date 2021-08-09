@@ -7,8 +7,10 @@ import ReactPlayer from 'react-player/lazy';
 
 import { DeleteModal } from '../../../../../components/DeleteModal/DeleteModal';
 import Layout from '../../../../../components/Layout/Layout';
+import { GqlErrorResponse } from '../../../../../errors/GqlError';
 import { REMOVE_MEDIA } from '../../../../../graphql/media/mutation';
 import { GET_MEDIA } from '../../../../../graphql/media/query';
+import { PROFILE_QUERY } from '../../../../../graphql/profile';
 import { createApolloClient } from '../../../../../lib/apollo';
 
 export default function VideoView({ media, token }) {
@@ -70,7 +72,7 @@ export default function VideoView({ media, token }) {
         </div>
         <div className="flex flex-col">
           <div>
-            <ReactPlayer url={media.data.video} />
+            <ReactPlayer url={media.data.video.url} />
           </div>
           <div>
             <div className="font-semibold text-lg mb-4 mt-4 text-vca-grey-1">
@@ -104,9 +106,13 @@ export async function getServerSideProps(ctx) {
   const token = session.idToken;
   const client = createApolloClient(token);
   try {
+    const profile = await client.query({
+      query: PROFILE_QUERY,
+    });
     const mediaItem = await client.query({
       query: GET_MEDIA,
       variables: {
+        accountId: profile.data.getProfile.account.id,
         filter: { singleFilter: { field: '_id', operator: 'EQ', value: id } },
       },
     });
@@ -118,11 +124,11 @@ export async function getServerSideProps(ctx) {
       },
     };
   } catch (error) {
-    console.error(error);
+    console.error(GqlErrorResponse(error));
     return {
       props: {
         token: null,
-        media: { data: null, error },
+        media: { data: null, error: GqlErrorResponse(error) },
       },
     };
   }
