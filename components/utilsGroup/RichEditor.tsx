@@ -32,6 +32,8 @@ export const RichEditor = ({ content }) => {
     <div className="App">
       <header className="App-header">Rich Text Editor Example</header>
       <Editor
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
         editorState={editorState}
         onEditorStateChange={handleEditorChange}
         wrapperClassName="wrapper-class"

@@ -3,12 +3,11 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useToasts } from 'react-toast-notifications';
 
 import Layout from '../../../../../components/Layout/Layout';
 import { ImageSelectBox } from '../../../../../components/Page/PageStyledElements';
-import { DraftEditor } from '../../../../../components/utilsGroup/Editor';
 import { GqlErrorResponse } from '../../../../../errors/GqlError';
 // import { SelectMediaModal } from '../../../../components/utilsGroup/SelectMediaModal';
 import { ADD_ITEM } from '../../../../../graphql/items.gql';
@@ -27,7 +26,6 @@ const index = ({ token, accountId: account }) => {
     register,
     handleSubmit,
     // setValue,
-    control,
     formState: { errors },
   } = useForm();
 
@@ -142,14 +140,14 @@ const index = ({ token, accountId: account }) => {
             <section className="mt-6 grid grid-cols-3 h-full gap-4 items-center pb-10">
               <div className="col-span-2 h-full">
                 <h4 className="text-xl font-medium mb-4">Post content</h4>
-                <Controller
+                {/* <Controller
                   name="content"
                   rules={{ required: true }}
                   control={control}
                   render={({ field: { value, onChange } }) => {
                     return <DraftEditor onChange={onChange} value={value} />;
                   }}
-                />
+                /> */}
                 {errors?.content && (
                   <p className="text-red-500">content is required!</p>
                 )}

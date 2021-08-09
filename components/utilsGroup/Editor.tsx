@@ -16,7 +16,7 @@ export const DraftEditor = ({
   getContent: any;
   error?: any;
   defaultValue?: any;
-}) => {
+}): JSX.Element => {
   const [editorState, setEditorState] = React.useState(
     EditorState.createWithContent(
       ContentState.createFromBlockArray(convertFromHTML(defaultValue || ''))
@@ -38,6 +38,8 @@ export const DraftEditor = ({
   return (
     <>
       <Editor
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
         editorState={editorState}
         onEditorStateChange={handleEditorChange}
         wrapperClassName={`border ${
