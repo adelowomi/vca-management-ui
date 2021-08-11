@@ -55,7 +55,7 @@ export const ItemsModal2 = ({
       addToast('Removed Successfully', { appearance: 'success' });
       return;
     }
-    if (widgetItems.length == 8 && token) {
+    if (widgetItems.length == 8 && !token) {
       addToast('You can only add 8 items to a widget', { appearance: 'error' });
       return;
     }
