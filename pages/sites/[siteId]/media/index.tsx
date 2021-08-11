@@ -45,7 +45,7 @@ export function ListMedia({ medias }) {
               <div className="flex flex-row">
                 <div className="text-4xl font-bold">Media Gallery</div>
                 <div className="flex flex-col justify-end ml-8 pb-2">
-                  <div>{`page ${router.query?.page}`}</div>
+                  {/* <div>{`page ${router.query?.page}`}</div> */}
                 </div>
               </div>
               <button

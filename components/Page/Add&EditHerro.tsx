@@ -66,6 +66,8 @@ export const AddEditHero = ({
         medias={medias}
         open={mediaModalOpen}
         setMedia={setMedia}
+        selected={selectedMedia}
+
       />
       <ColumnSection>
         <H2 className="mt-6">Media Image</H2>

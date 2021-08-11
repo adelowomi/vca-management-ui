@@ -55,7 +55,7 @@ export const ItemsModal2 = ({
       addToast('Removed Successfully', { appearance: 'success' });
       return;
     }
-    if (widgetItems.length == 8 && token) {
+    if (widgetItems.length == 8 && !token) {
       addToast('You can only add 8 items to a widget', { appearance: 'error' });
       return;
     }
@@ -73,7 +73,6 @@ export const ItemsModal2 = ({
       const result = await _thisItem.addToPage({ itemId: id, pageId: pageId as string });
       console.error(result);
       router.replace(router.asPath);
-      router.reload();
       refresh();
     } catch (error) {
       console.error(error);
@@ -88,7 +87,6 @@ export const ItemsModal2 = ({
       const result = await _thisItem.removeFromPage({ itemId: id });
       console.error(result);
       router.replace(router.asPath);
-      refresh();
     } catch (error) {
       console.error(error);
       const currentItems = widgetItems;
@@ -103,6 +101,7 @@ export const ItemsModal2 = ({
       return items.filter((i) => i.id == item)[0];
     });
     setNewItems(selectedItems);
+    token ? router.reload() : null;
     close(false);
   };
 
