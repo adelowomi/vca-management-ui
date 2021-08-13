@@ -100,13 +100,6 @@ export const SelectMediaModal = ({
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <div className="inline-block align-bottom bg-white w-full text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-7xl sm:w-full">
-              {/* <SelectMedia
-                setOpen={setOpen}
-                medias={medias}
-                state={state}
-                setState={setState}
-              /> */}
-
               <>
                 <Container>
                   <Row>
@@ -149,6 +142,11 @@ export const SelectMediaModal = ({
                         selectedArr={selectedArr}
                         selected={selected}
                         count={1}
+                        exists={
+                          selected.findIndex((el) => el.id === media.id) > -1
+                            ? true
+                            : false
+                        }
                       />
                     ))}
                   </div>

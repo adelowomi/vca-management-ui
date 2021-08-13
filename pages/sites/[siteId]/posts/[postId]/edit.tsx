@@ -36,7 +36,7 @@ const edit = ({ token, post, medias, error }) => {
   const { addToast } = useToasts();
   const [state, setState] = React.useState({
     mediaUrl: '',
-    media: '',
+    media: post[0].media.id,
   });
   const {
     register,
