@@ -46,7 +46,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       Location: '/login',
     });
     ctx.res.end();
-    return;
+    return { props: {} };
   }
 
   const token = session.idToken;
