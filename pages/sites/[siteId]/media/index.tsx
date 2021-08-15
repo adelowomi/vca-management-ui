@@ -204,6 +204,7 @@ export async function getServerSideProps(ctx) {
     const profile = await client.query({
       query: PROFILE_QUERY,
     });
+    console.error(JSON.stringify(profile, null, 2));
     variables['accountId'] = profile.data.getProfile.account.id;
     const mediaItems = await client.query({
       query: GET_ALL_MEDIA,
