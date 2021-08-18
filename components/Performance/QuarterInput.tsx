@@ -106,7 +106,6 @@ const QuarterInput = ({
             setDate={setDate}
             id={id}
           />
-
           {/* {errors && errors.actionText && (
               <span className="text-red-500 mt-1 text-sm font-medium">
                 {errors.actionText}

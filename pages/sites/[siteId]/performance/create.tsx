@@ -2,7 +2,13 @@ import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { HeroPreview } from '../../../../components/Hero/Hero';
+import { Items } from '../../../../classes/Items';
+import { MediaClass } from '../../../../classes/media';
+import {
+  ComparisonOperatorEnum,
+  LogicalOperatorEnum,
+} from '../../../../classes/schema';
+import { User } from '../../../../classes/User';
 import Layout from '../../../../components/Layout/Layout';
 import { CallToAction } from '../../../../components/Page/CtaComponent';
 import { PageHeaderStyle } from '../../../../components/Page/HeaderPageStyle';
@@ -17,23 +23,19 @@ import {
 import { PageTitle } from '../../../../components/Page/PageTitle';
 import { Textposition } from '../../../../components/Page/TextPosition';
 import { FiscalYear } from '../../../../components/Performance/FiscalYear';
-import {
-  GET_ALL_ITEMS_QUERY,
-  GET_ALL_MEDIA,
-  GET_SITE_MENUITEMS,
-} from '../../../../graphql';
+import { GET_SITE_MENUITEMS } from '../../../../graphql';
 import { performanceValidator } from '../../../../helpers/performanceValidator';
 import { performanceUseForm } from '../../../../hooks/performance.hooks';
 import { createApolloClient } from '../../../../lib/apollo';
 
-const create = ({ token, menuItems, items, medias }) => {
+const create = ({ token, menuItems, items, medias, accountId: account }) => {
   const client = createApolloClient(token);
   const {
     query: { siteId },
   } = useRouter();
 
   const { handleSubmit, state, errors, setState, handleChange } =
-    performanceUseForm(performanceValidator, client, { type: 'add' });
+    performanceUseForm(performanceValidator, client, { type: 'add', account });
 
   const onButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -125,28 +127,7 @@ const create = ({ token, menuItems, items, medias }) => {
             </span>
           )}
         </div>
-        <div className="mt-5">
-          <ShadowBtn
-            bg="seconary"
-            className="py-4 px-10 shadow-sm rounded text-sm font-bold"
-          >
-            Preview header
-          </ShadowBtn>
-        </div>
-        <div className="mt-5 mb-5">
-          <HeroPreview
-            hero={{
-              actionSlug:'',
-              mediaUrl:state.mediaUrl,
-              actionText : state.actionText,
-              heading: state.headerText,
-              location: state.location,
-              hasAction: state.hasAction,
-              caption: state.captionText,
-              type: state.headerType,
-            }}
-          />
-        </div>
+
         <hr className="border-gray-400 border-5 w-full mt-8" />
         <FiscalYear
           state={state}
@@ -178,8 +159,10 @@ const create = ({ token, menuItems, items, medias }) => {
 };
 
 export async function getServerSideProps(ctx) {
-  const { siteId } = ctx.query;
+  // const { siteId } = ctx.query;
   const session: Session = getSession(ctx.req, ctx.res);
+  const user = new User(session.idToken);
+  const item = new Items(session.idToken);
   if (!session) {
     return {
       redirect: {
@@ -188,20 +171,17 @@ export async function getServerSideProps(ctx) {
     };
   }
   const client = createApolloClient(session?.idToken);
+  const profile = (await user.getProfile()).data;
+  const media = new MediaClass(session.idToken);
 
   let menuItems: any;
   let medias: any;
   let items: any;
 
   try {
-    const { data } = await client.query({
-      query: GET_ALL_MEDIA,
-      variables: {
-        filter: {},
-      },
-    });
-
-    medias = data.medias ? data.medias : { error: true };
+    const data = (await media.getMedias({ accountId: profile.account.id }))
+      .data as any;
+    medias = data.medias;
   } catch (error) {
     medias = { error: true };
   }
@@ -232,14 +212,34 @@ export async function getServerSideProps(ctx) {
     menuItems = { error: true };
   }
   try {
-    const { data } = await client.query({
-      query: GET_ALL_ITEMS_QUERY,
-      variables: {
-        siteId: siteId,
-      },
-    });
+    const values = (
+      await item.getAllItems({
+        accountId: profile.account.id,
+        filter: {
+          combinedFilter: {
+            logicalOperator: LogicalOperatorEnum.And,
+            filters: [
+              {
+                singleFilter: {
+                  field: 'account',
+                  operator: ComparisonOperatorEnum.Eq,
+                  value: profile.account.id,
+                },
+              },
+              {
+                singleFilter: {
+                  field: 'siteId',
+                  operator: ComparisonOperatorEnum.Eq,
+                  value: ctx.query.siteId,
+                },
+              },
+            ],
+          },
+        },
+      })
+    ).data as any;
 
-    items = data.getAllItems ? data.getAllItems : { error: true };
+    items = values ? values : { error: true };
   } catch (error) {
     items = { error: true };
   }
@@ -249,6 +249,7 @@ export async function getServerSideProps(ctx) {
       menuItems,
       medias,
       items,
+      accountId: profile.account.id,
     },
   };
 }

@@ -39,13 +39,14 @@ export const SelectItemsModal: React.FC<SelectItemsModalProps> = ({
   type,
 }): JSX.Element => {
   const cancelButtonRef = useRef();
-  const [selected, setSelected] = React.useState([...state]);
+  const [selected, setSelected] = React.useState([]);
 
   React.useEffect(() => {
-    getItems(selected);
-  }, [selected]);
+    setSelected([...state]);
+  }, [state]);
 
   const selectedArr = (arr: any) => {
+    getItems([...arr]);
     setSelected([...arr]);
   };
 
