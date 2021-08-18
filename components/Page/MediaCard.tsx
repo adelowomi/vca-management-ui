@@ -16,7 +16,7 @@ const Input = styled.input`
   }
 `;
 
-export const MediaCard = ({ media, selectedArr, selected, count }) => {
+export const MediaCard = ({ media, selectedArr, selected, count, exists }) => {
   const ref = React.useRef<HTMLInputElement>(null);
   const handleClick = (id: string | number) => {
     const newArr = [...selected];
@@ -74,7 +74,7 @@ export const MediaCard = ({ media, selectedArr, selected, count }) => {
           )}
 
           <div className="relative -top-36 left-2 ">
-            <Input type="checkbox" ref={ref} />
+            <Input type="checkbox" ref={ref} defaultChecked={exists} />
           </div>
         </div>
         <div className="px-3 py-4">

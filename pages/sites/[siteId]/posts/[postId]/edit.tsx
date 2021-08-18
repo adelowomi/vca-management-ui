@@ -14,9 +14,12 @@ import {
 import { User } from '../../../../../classes/User';
 import { ErrorPage } from '../../../../../components/Errors/ErrorPage';
 import Layout from '../../../../../components/Layout/Layout';
+import { ShadowBtn } from '../../../../../components/Page/PageButtons';
 import { ImageSelectBox } from '../../../../../components/Page/PageStyledElements';
+import { getStringDate } from '../../../../../components/Page/PostList';
 import { DraftEditor } from '../../../../../components/utilsGroup/Editor';
 import { SelectMediaModal } from '../../../../../components/utilsGroup/SelectMediaModal';
+import { TagSelector } from '../../../../../components/utilsGroup/TagSelector';
 import { GqlErrorResponse } from '../../../../../errors/GqlError';
 import { GET_ALL_MEDIA } from '../../../../../graphql';
 import { EDIT_ITEM } from '../../../../../graphql/items.gql';
@@ -29,10 +32,11 @@ const edit = ({ token, post, medias, error }) => {
   const [open, setOpen] = React.useState(false);
   const client = createApolloClient(token);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [preview, setPreview] = React.useState(false);
   const { addToast } = useToasts();
   const [state, setState] = React.useState({
     mediaUrl: '',
-    media: '',
+    media: post[0].media.id,
   });
   const {
     register,
@@ -43,12 +47,14 @@ const edit = ({ token, post, medias, error }) => {
     defaultValues: {
       featured: post[0]?.featured,
       description: post[0]?.description,
-      media: post[0]?.media.id,
+      media: post[0].media.id,
       content: post[0].content,
+      tags: post[0].tags,
     },
   });
 
   const onSubmit = async (data) => {
+    data.tags = data.tags ? data.tags : post[0].tags;
     try {
       setIsLoading(true);
       await client.mutate({
@@ -70,8 +76,12 @@ const edit = ({ token, post, medias, error }) => {
     }
   };
 
-  const getContent = (content) => {
+  const getContent = (content: any) => {
     setValue('content', content);
+  };
+
+  const getTags = (tags: any) => {
+    setValue('tags', tags ? tags?.map((el) => el.value) : []);
   };
 
   React.useEffect(() => {
@@ -80,6 +90,9 @@ const edit = ({ token, post, medias, error }) => {
     });
     register('media', {
       required: true,
+    });
+    register('tags', {
+      required: false,
     });
   });
   if (error) {
@@ -169,6 +182,13 @@ const edit = ({ token, post, medias, error }) => {
                     <p className="text-red-500">media is required!</p>
                   )}
                 </div>
+                <div>
+                  <h4 className="text-xl font-medium mb-6">Add Tags</h4>
+                  <TagSelector getTags={getTags} defaultValue={post[0].tags} />
+                  {errors?.tags && (
+                    <p className="text-red-500">tags is required!</p>
+                  )}
+                </div>
               </div>
             </section>
             <section className="mt-6 grid grid-cols-3 h-full gap-4 items-center pb-10">
@@ -182,6 +202,61 @@ const edit = ({ token, post, medias, error }) => {
                   <p className="text-red-500">content is required!</p>
                 )}
               </div>
+            </section>
+            <hr className="border-gray-400 border-5 w-full mt-8" />
+            <section className="preview-section mb-10">
+              <div className="mt-5 space-x-3 flex flex-row btn-wrapper">
+                <ShadowBtn
+                  bg="primary"
+                  type="button"
+                  className="py-4 px-10 shadow-sm rounded text-sm font-bold cursor-pointer"
+                  onClick={() => setPreview(!preview)}
+                >
+                  Show preview
+                </ShadowBtn>
+                {/* <ShadowBtn
+                  type="button"
+                  bg="secondary"
+                  className="py-4 px-10 shadow-sm rounded text-sm font-bold cursor-pointer"
+                >
+                  Delete draft
+                </ShadowBtn> */}
+              </div>
+              <>
+                {preview ? (
+                  <div className="mt-7">
+                    <div className="grid grid-cols-4 gap-2">
+                      <div className="flex xl:w-card-xl lg:w-card- 2xl:w-card-2xl md:w-card-md rounded">
+                        <div className="group w-full overflow-hidden hover:shadow-lg bg-white shadow-md">
+                          <div className="h-44 w-full">
+                            <img
+                              className="w-full h-full object-cover rounded-tr rounded-tl"
+                              src={post[0].media.image.small}
+                              alt="news image"
+                            />
+                          </div>
+                          <div
+                            className="px-3 py-4"
+                            style={{ height: '200px' }}
+                          >
+                            <div className="font-semibold text-lg mb-2">
+                              <a href={`#`}>{post[0].featured}</a>
+                            </div>
+                            <p className="text-gray-700 text-sm">
+                              {post[0].description}
+                            </p>
+                          </div>
+                          <button className="w-full bg-white text-gray-800 font-normal py-3 px-4 flex justify-left items-center text-xs italic rounded">
+                            Created on: {getStringDate(post[0].createdAt)}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  ''
+                )}
+              </>
             </section>
           </form>
         </div>
@@ -247,7 +322,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
     return {
       props: {
-        post: posts.filter(post => post.id == postId) ?? [],
+        post: posts.filter((post) => post.id == postId) ?? [],
         token: session.idToken,
         error: null,
         user: session.user,

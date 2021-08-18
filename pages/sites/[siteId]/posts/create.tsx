@@ -12,6 +12,7 @@ import Layout from '../../../../components/Layout/Layout';
 import { ImageSelectBox } from '../../../../components/Page/PageStyledElements';
 import { DraftEditor } from '../../../../components/utilsGroup/Editor';
 import { SelectMediaModal } from '../../../../components/utilsGroup/SelectMediaModal';
+import { TagSelector } from '../../../../components/utilsGroup/TagSelector';
 import { GqlErrorResponse } from '../../../../errors/GqlError';
 import { GET_ALL_MEDIA } from '../../../../graphql';
 import { ADD_ITEM } from '../../../../graphql/items.gql';
@@ -53,7 +54,7 @@ const create = ({ token, accountId: account, medias, error }) => {
             content: data.content,
             category: 'general',
             account,
-            tags: ['finance', 'banking'],
+            tags: data.tags ? data.tags : [],
             media: data.media,
             mediaUrl: state.mediaUrl,
           },
@@ -68,11 +69,15 @@ const create = ({ token, accountId: account, medias, error }) => {
       return;
     }
   };
+  const getTags = (tags: any) => {
+    setValue('tags', tags ? tags.map((el) => el.value) : []);
+  };
 
   React.useEffect(() => {
     register('media', {
       required: true,
     });
+    register('tags');
     register('content', {
       required: true,
     });
@@ -177,6 +182,10 @@ const create = ({ token, accountId: account, medias, error }) => {
                       media is required!
                     </p>
                   )}
+                </div>
+                <div>
+                  <h4 className="text-xl font-medium mb-6">Add Tags</h4>
+                  <TagSelector getTags={getTags} />
                 </div>
               </div>
             </section>
