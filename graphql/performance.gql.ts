@@ -86,8 +86,8 @@ const EDIT_PERFORMANCE = gql`
 `;
 
 const GET_PERFORMANCES = gql`
-  query {
-    performances {
+  query($accountId: String!) {
+    performances(accountId: $accountId) {
       id
       name
       year
@@ -123,8 +123,8 @@ const GET_PERFORMANCES = gql`
 `;
 
 const GET_PERFORMANCE = gql`
-  query ($filter: FilterInput) {
-    performance(filter: $filter) {
+  query ($filter: FilterInput, $accountId: String!) {
+    performance(filter: $filter, accountId: $accountId) {
       id
       name
       year
@@ -136,8 +136,8 @@ const GET_PERFORMANCE = gql`
       createdAt
       quarter {
         id
-        # start
-        # stop
+        start
+        stop
         name
         description
         items {

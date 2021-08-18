@@ -19,26 +19,32 @@ export const HeroPreview = ({ hero }: { hero: Hero }): JSX.Element => {
         <div
           className="bg-cover bg-white h-hero lg:w-hero-lg container mx-auto flex lg:justify-start md:justify-center justify-center rounded"
           style={{
-            backgroundImage: hero.location == 'LEFT' ? `linear-gradient(90deg, rgba(0, 0, 0, 0.7) 1.68%, rgba(0, 0, 0, 0) 88.4%), url( ${
-              hero.media && hero.media.image.large
-            })`: hero.location == 'RIGHT' ? `linear-gradient(260deg, rgba(0, 0, 0, 0.7) 1.68%, rgba(0, 0, 0, 0) 88.4%), url( ${
-              hero.media && hero.media.image.large
-            })` : `linear-gradient(90deg, rgba(0, 0, 0, 0.7) 1.68%, rgba(0, 0, 0, 0) 88.4%), url( ${
-              hero.media && hero.media.image.large
-            })`,
-            height:"490px"
+            backgroundImage:
+              hero.location == 'LEFT'
+                ? `linear-gradient(90deg, rgba(0, 0, 0, 0.7) 1.68%, rgba(0, 0, 0, 0) 88.4%), url( ${
+                    hero.media && hero.media.image.large
+                  })`
+                : hero.location == 'RIGHT'
+                ? `linear-gradient(260deg, rgba(0, 0, 0, 0.7) 1.68%, rgba(0, 0, 0, 0) 88.4%), url( ${
+                    hero.media && hero.media.image.large
+                  })`
+                : `linear-gradient(90deg, rgba(0, 0, 0, 0.7) 1.68%, rgba(0, 0, 0, 0) 88.4%), url( ${
+                    hero.media && hero.media.image.large
+                  })`,
+            height: '490px',
           }}
         >
           <div className="bg-transparent  w-full h-full flex items-center justify-center">
             <div className="w-4/5 flex justify-end flex-col">
-              <div className={
-                    hero.location == 'LEFT'
-                      ? `w-full flex justify-start`
-                      : hero.location == 'RIGHT'
-                      ? `w-full flex justify-end`
-                      : `w-full flex justify-center`
-                  }
-                >
+              <div
+                className={
+                  hero.location == 'LEFT'
+                    ? `w-full flex justify-start`
+                    : hero.location == 'RIGHT'
+                    ? `w-full flex justify-end`
+                    : `w-full flex justify-center`
+                }
+              >
                 <h1
                   className={
                     hero.location == 'LEFT'

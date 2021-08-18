@@ -14,7 +14,8 @@ export const performanceUseForm = (
     performance,
     type,
     performanceId,
-  }: { performance?: any; type: string; performanceId?: string }
+    account
+  }: { performance?: any; type: string; performanceId?: string, account: string }
 ) => {
   const [state, setState] = React.useState({
     pageTitle: performance?.name || '',
@@ -47,6 +48,7 @@ export const performanceUseForm = (
     setIsSubmitting(true);
   };
 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setState({
@@ -65,6 +67,7 @@ export const performanceUseForm = (
         mutation: ADD_PERFORMANCE,
         variables: {
           createPerformanceInput: {
+            account,
             year: state.year,
             name: state.name,
             description: state.description,
@@ -110,6 +113,7 @@ export const performanceUseForm = (
         mutation: EDIT_PERFORMANCE,
         variables: {
           updatePerformanceInput: {
+            account,
             year: state.year,
             name: state.name,
             description: state.description,

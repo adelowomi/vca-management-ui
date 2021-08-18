@@ -16,9 +16,14 @@ export const BaseDatePicker = ({
   //   new Date(),
   //   new Date('2021 may, 10'),
   // ]);
+
+  const d = new Date(dateValue);
+  const isDate =
+    d instanceof Date && !isNaN(d as any) ? new Date(dateValue) : new Date();
+
   return (
     <DatePicker
-      value={dateValue ? new Date(dateValue) : new Date()}
+      value={isDate}
       onChange={({ date }) => {
         setDate(date, name, id);
         // return setValue(Array.isArray(date) ? date : [date]);
