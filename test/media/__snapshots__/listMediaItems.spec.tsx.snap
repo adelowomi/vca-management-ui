@@ -261,7 +261,7 @@ exports[`List media page matches snapshot 1`] = `
                 </a>
                 <a
                   class="c0 group flex items-center px-5 py-4 text-base font-normal"
-                  href="/sites/undefined/style"
+                  href="/sites/undefined/styles"
                 >
                   <svg
                     aria-hidden="true"
@@ -284,7 +284,7 @@ exports[`List media page matches snapshot 1`] = `
                       />
                     </g>
                   </svg>
-                  Style
+                  Styles
                 </a>
                 <a
                   class="c0 group flex items-center px-5 py-4 text-base font-normal"

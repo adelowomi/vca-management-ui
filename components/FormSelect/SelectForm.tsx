@@ -9,13 +9,17 @@ interface Item {
   value?: string;
   unavailable?: boolean;
 }
-
+// enum types = {
+//   font
+// }
 interface FormSelectProps {
   error?: any;
   onChange(item: Item): void;
   errorText?: string;
   options: any;
   defaultOption?: any;
+  name?: any;
+  type: string;
 }
 
 const FormSelect: React.FunctionComponent<FormSelectProps> = ({
@@ -24,9 +28,11 @@ const FormSelect: React.FunctionComponent<FormSelectProps> = ({
   errorText,
   options,
   defaultOption,
+  name,
+  type,
 }) => {
   const inputStyle =
-    'text-left text-base text-gray-700 font-semibold  h-14 shadow-sm block  sm:text-sm border border-gray-400 rounded-sm w-full py-3 mt-2';
+    'text-left text-base text-gray-700 font-semibold  h-14 shadow-sm block  sm:text-sm border border-gray-500 rounded-sm w-full py mt px-2';
   const [selectedPerson, setSelectedPerson] = useState(defaultOption);
 
   return (
@@ -38,14 +44,23 @@ const FormSelect: React.FunctionComponent<FormSelectProps> = ({
           onChange(data);
         }}
       >
-        <div className="relative mt-1">
+        <div className="relative">
           <Listbox.Button className={inputStyle}>
-            <div className="flex flex-row items-center my justify-between px-3">
-              <div className="text-base">{selectedPerson.name}</div>
-              <div className="flex flex-row items-center  space-x-2">
-                <div className="bg-gray-300 h-6" style={{ width: 2 }} />
-                <div className="ml- mr- mt-1">{ChevronDown}</div>
+            <div className="flex flex-row items-center justify-between">
+              <div>
+                <span className="text-xs text-gray-500 font-normal">
+                  {name}
+                </span>
+                <div className="text-base">{selectedPerson.name}</div>
               </div>
+              {type === 'font' ? (
+                <div className="flex flex-row items-center  space-x-2 ">
+                  <div className="bg-gray-400  h-6" style={{ width: 2 }} />
+                  <div className="ml- mr- mt-1">{ChevronDown}</div>
+                </div>
+              ) : (
+                <div className=" bg-vca-blue w-10 h-10 rounded-sm"></div>
+              )}
             </div>
           </Listbox.Button>
           <Listbox.Options className="absolute w-full pt-2 border-vca-blue border-t-2 z-50 bg-white overflow-auto shadow-lg">

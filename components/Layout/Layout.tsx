@@ -42,7 +42,7 @@ const adminNavigation = [
     current: true,
   },
   { name: 'Users', href: 'users', icon: FiUsers, current: false },
-]
+];
 
 const navigation = [
   {
@@ -78,8 +78,8 @@ const navigation = [
     current: false,
   },
   {
-    name: 'Style',
-    href: 'style',
+    name: 'Styles',
+    href: 'styles',
     icon: RiPaletteLine,
     current: false,
   },
@@ -94,16 +94,18 @@ const navigation = [
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
-export default function Layout({ children,isPAdmin}: {children:any,isPAdmin?:boolean}) {
- 
-
+export default function Layout({
+  children,
+  isPAdmin,
+}: {
+  children: any;
+  isPAdmin?: boolean;
+}) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const {
     asPath,
     query: { siteId },
   } = useRouter();
-
-
 
   const routes = asPath.split('/');
 
@@ -219,48 +221,49 @@ export default function Layout({ children,isPAdmin}: {children:any,isPAdmin?:boo
             </div>
             <div className="mt-10 flex-grow flex flex-col">
               <nav className="flex-1 px- bg-white space-y-3">
-                {isPAdmin ?
-                 adminNavigation.map((item) => (
-                  <AnchorTag
-                    current={routes.includes(item.href) ? true : false}
-                    key={item.name}
-                    href={`/${item.href}`}
-                    className={classNames(
-                      'group flex items-center px-5 py-4 text-base font-normal'
-                    )}
-                  >
-                    <item.icon
-                      className={classNames(
-                        routes.includes(item.href)
-                          ? 'text-blue-400 text-base font-extrabold'
-                          : 'text-gray-500 group-hover:text-gray-500',
-                        'mr-3 h-6 w-6'
-                      )}
-                      aria-hidden="true"
-                    />
-                    {item.name}
-                  </AnchorTag>
-                )) :navigation.map((item) => (
-                  <AnchorTag
-                    current={routes.includes(item.href) ? true : false}
-                    key={item.name}
-                    href={`/sites/${siteId}/${item.href}`}
-                    className={classNames(
-                      'group flex items-center px-5 py-4 text-base font-normal'
-                    )}
-                  >
-                    <item.icon
-                      className={classNames(
-                        routes.includes(item.href)
-                          ? 'text-blue-400 text-base font-extrabold'
-                          : 'text-gray-500 group-hover:text-gray-500',
-                        'mr-3 h-6 w-6'
-                      )}
-                      aria-hidden="true"
-                    />
-                    {item.name}
-                  </AnchorTag>
-                )) }
+                {isPAdmin
+                  ? adminNavigation.map((item) => (
+                      <AnchorTag
+                        current={routes.includes(item.href) ? true : false}
+                        key={item.name}
+                        href={`/${item.href}`}
+                        className={classNames(
+                          'group flex items-center px-5 py-4 text-base font-normal'
+                        )}
+                      >
+                        <item.icon
+                          className={classNames(
+                            routes.includes(item.href)
+                              ? 'text-blue-400 text-base font-extrabold'
+                              : 'text-gray-500 group-hover:text-gray-500',
+                            'mr-3 h-6 w-6'
+                          )}
+                          aria-hidden="true"
+                        />
+                        {item.name}
+                      </AnchorTag>
+                    ))
+                  : navigation.map((item) => (
+                      <AnchorTag
+                        current={routes.includes(item.href) ? true : false}
+                        key={item.name}
+                        href={`/sites/${siteId}/${item.href}`}
+                        className={classNames(
+                          'group flex items-center px-5 py-4 text-base font-normal'
+                        )}
+                      >
+                        <item.icon
+                          className={classNames(
+                            routes.includes(item.href)
+                              ? 'text-blue-400 text-base font-extrabold'
+                              : 'text-gray-500 group-hover:text-gray-500',
+                            'mr-3 h-6 w-6'
+                          )}
+                          aria-hidden="true"
+                        />
+                        {item.name}
+                      </AnchorTag>
+                    ))}
               </nav>
             </div>
             {/* sidebar footer */}

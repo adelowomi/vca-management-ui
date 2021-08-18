@@ -324,3 +324,52 @@ export const DashboardIcon = (
     />
   </svg>
 );
+
+export const BorderRounded: React.FC = () => (
+  <svg
+    width="16"
+    height="32"
+    viewBox="0 0 16 32"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M15.9565 0H15.6149C6.99103 0 0 6.99104 0 15.6149C0 24.2388 6.99104 31.2298 15.6149 31.2298H15.9565V28.7749H15.6149C8.34686 28.7749 2.45493 22.883 2.45493 15.6149C2.45493 8.34685 8.34685 2.45493 15.6149 2.45493H15.9565V0Z"
+      fill="#828282"
+    />
+  </svg>
+);
+export const BorderMd: React.FC = () => (
+  <svg
+    width="16"
+    height="32"
+    viewBox="0 0 16 32"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M15.9563 0H6.13732C2.74777 0 0 2.74778 0 6.13732V25.0925C0 28.4821 2.74778 31.2298 6.13732 31.2298H15.9563V28.7749H6.13732C4.10359 28.7749 2.45493 27.1262 2.45493 25.0925V6.13732C2.45493 4.10359 4.10359 2.45493 6.13732 2.45493H15.9563V0Z"
+      fill="#1890FF"
+    />
+  </svg>
+);
+export const BorderNone: React.FC = () => (
+  <svg
+    width="16"
+    height="32"
+    viewBox="0 0 16 32"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M15.9625 0H2.45567H0V2.45567V28.7836V31.2393H2.45567H15.9625V28.7836H2.45567V2.45567H15.9625V0Z"
+      fill="#828282"
+    />
+  </svg>
+);
