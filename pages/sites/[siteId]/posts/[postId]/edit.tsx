@@ -34,14 +34,17 @@ const edit = ({ token, post, medias, error }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [preview, setPreview] = React.useState(false);
   const { addToast } = useToasts();
+
   const [state, setState] = React.useState({
-    mediaUrl: '',
-    media: post[0].media.id,
+    mediaUrl: post[0]?.mediaUrl,
+    media: post[0]?.media.id,
   });
+
   const {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -94,7 +97,11 @@ const edit = ({ token, post, medias, error }) => {
     register('tags', {
       required: false,
     });
-  });
+    setState({
+      ...state,
+    });
+  }, []);
+
   if (error) {
     return <ErrorPage statusCode={500} />;
   }
@@ -214,13 +221,6 @@ const edit = ({ token, post, medias, error }) => {
                 >
                   Show preview
                 </ShadowBtn>
-                {/* <ShadowBtn
-                  type="button"
-                  bg="secondary"
-                  className="py-4 px-10 shadow-sm rounded text-sm font-bold cursor-pointer"
-                >
-                  Delete draft
-                </ShadowBtn> */}
               </div>
               <>
                 {preview ? (
@@ -229,25 +229,29 @@ const edit = ({ token, post, medias, error }) => {
                       <div className="flex xl:w-card-xl lg:w-card- 2xl:w-card-2xl md:w-card-md rounded">
                         <div className="group w-full overflow-hidden hover:shadow-lg bg-white shadow-md">
                           <div className="h-44 w-full">
-                            <img
-                              className="w-full h-full object-cover rounded-tr rounded-tl"
-                              src={post[0].media.image.small}
-                              alt="news image"
-                            />
+                            {state?.mediaUrl ? (
+                              <img
+                                className="w-full h-full object-cover rounded-tr rounded-tl"
+                                src={state?.mediaUrl}
+                                alt="news image"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gray-400 object-cover rounded-tr rounded-tl"></div>
+                            )}
                           </div>
                           <div
                             className="px-3 py-4"
                             style={{ height: '200px' }}
                           >
                             <div className="font-semibold text-lg mb-2">
-                              <a href={`#`}>{post[0].featured}</a>
+                              <a href={`#`}>{watch('featured')}</a>
                             </div>
                             <p className="text-gray-700 text-sm">
-                              {post[0].description}
+                              {watch('description')}
                             </p>
                           </div>
                           <button className="w-full bg-white text-gray-800 font-normal py-3 px-4 flex justify-left items-center text-xs italic rounded">
-                            Created on: {getStringDate(post[0].createdAt)}
+                            Created on: {getStringDate(new Date())}
                           </button>
                         </div>
                       </div>
