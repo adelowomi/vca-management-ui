@@ -8,11 +8,11 @@ export const ItemCard = ({item,selected,onSelect}:{item:any,selected:boolean,onS
         className="group w-full overflow-hidden border border-gray-400 hover:shadow-lg bg-white shadow-md"
       >
         <div className="h-40 w-full">
-          <img
+          {item.media.type == "IMAGE" ? <img
             className="w-full h-full object-cover"
             src={item.media.image.small}
             alt="news image"
-          />
+          />: ""  }
           <div className="relative -top-36 left-2 ">
             <input type="checkbox" defaultChecked={selected} checked={selected} className="px-3 h-6 w-6 border border-gray-300 mr-3" onClick={() => onSelect(item.id)}/>
           </div>

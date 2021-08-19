@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 const GET_ALL_ITEMS_QUERY = gql`
-  query GetAllItems($filter: FilterInput,$accountId: String!) {
-    getAllItems(filter: $filter,accountId: $accountId) {
+  query GetAllItems($filter: FilterInput, $accountId: String!) {
+    getAllItems(filter: $filter, accountId: $accountId) {
       id
       type
       description
@@ -14,17 +14,19 @@ const GET_ALL_ITEMS_QUERY = gql`
       createdAt
       updatedAt
       tags
-      account{
-      firstName
-      lastName
-    }
+      account {
+        firstName
+        lastName
+      }
       media {
+        type
         id
         image {
           small
         }
-        video{
+        video {
           service
+          videoId
           url
         }
         document {
@@ -50,15 +52,15 @@ const GET_ITEM = gql`
       createdAt
       updatedAt
       tags
-      account{
-      firstName
-      lastName
-    }
+      account {
+        firstName
+        lastName
+      }
       media {
         image {
           small
         }
-        video{
+        video {
           url
         }
         document {
@@ -102,13 +104,11 @@ const ADD_ITEM = gql`
 `;
 
 const DELETE_ITEM = gql`
-mutation($itemId: String!){
-  removeItem(itemId: $itemId){
-    id
+  mutation ($itemId: String!) {
+    removeItem(itemId: $itemId) {
+      id
+    }
   }
-}
-
-
 `;
 
 export { ADD_ITEM, DELETE_ITEM, EDIT_ITEM, GET_ALL_ITEMS_QUERY, GET_ITEM };

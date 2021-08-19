@@ -13,14 +13,21 @@ const PostList = ({ pageItems }: { pageItems: any }): JSX.Element => {
       <div className="grid grid-cols-4 gap-2">
         {pageItems.map((news, index) => {
           return (
-            <div className="flex xl:w-card-xl lg:w-card-lg 2xl:w-card-2xl md:w-card-md rounded" key={index}>
+            <div
+              className="flex xl:w-card-xl lg:w-card-lg 2xl:w-card-2xl md:w-card-md rounded"
+              key={index}
+            >
               <div className="group w-full overflow-hidden hover:shadow-lg bg-white shadow-md">
                 <div className="h-44 w-full">
-                  <img
-                    className="w-full h-full object-cover rounded-tr rounded-tl"
-                    src={news.media.image.small}
-                    alt="news image"
-                  />
+                  {news.media.type == 'IMAGE' ? (
+                    <img
+                      className="w-full h-full object-cover rounded-tr rounded-tl"
+                      src={news.media.image.small}
+                      alt="news image"
+                    />
+                  ) : (
+                    ''
+                  )}
                 </div>
                 <div className="px-3 py-4" style={{ height: '250px' }}>
                   <div className="font-semibold text-lg mb-2">
