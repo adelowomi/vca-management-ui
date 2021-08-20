@@ -1,7 +1,11 @@
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -59,9 +63,8 @@ export type Profile = {
 export enum AccountType {
   Padmin = 'PADMIN',
   Vadmin = 'VADMIN',
-  User = 'USER'
+  User = 'USER',
 }
-
 
 export type Account = {
   __typename?: 'Account';
@@ -122,7 +125,7 @@ export type MediaVideo = {
 
 export enum VideoType {
   Youtube = 'YOUTUBE',
-  Vimeo = 'VIMEO'
+  Vimeo = 'VIMEO',
 }
 
 export type Media = {
@@ -146,7 +149,7 @@ export type Media = {
 export enum MediaType {
   Image = 'IMAGE',
   Video = 'VIDEO',
-  Document = 'DOCUMENT'
+  Document = 'DOCUMENT',
 }
 
 export type Menuitem = {
@@ -162,7 +165,7 @@ export type Menuitem = {
 export enum MenuItemType {
   Page = 'PAGE',
   Performance = 'PERFORMANCE',
-  News = 'NEWS'
+  News = 'NEWS',
 }
 
 export type Header = {
@@ -207,7 +210,7 @@ export enum HeroLocationType {
   Right = 'RIGHT',
   Top = 'TOP',
   Bottom = 'BOTTOM',
-  Center = 'CENTER'
+  Center = 'CENTER',
 }
 
 export type Page = {
@@ -260,7 +263,7 @@ export type Stock = {
 };
 
 export enum PerformanceHeroStockType {
-  Nasdaq = 'NASDAQ'
+  Nasdaq = 'NASDAQ',
 }
 
 export type PerformanceHero = {
@@ -282,7 +285,7 @@ export enum PerformanceHeroLocationType {
   Right = 'RIGHT',
   Top = 'TOP',
   Bottom = 'BOTTOM',
-  Center = 'CENTER'
+  Center = 'CENTER',
 }
 
 export type Quarter = {
@@ -352,7 +355,7 @@ export type Widget = {
 };
 
 export enum ItemType {
-  Item = 'ITEM'
+  Item = 'ITEM',
 }
 
 export type Query = {
@@ -380,7 +383,6 @@ export type Query = {
   social: Social;
 };
 
-
 export type QueryProfilesArgs = {
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -391,11 +393,9 @@ export type QueryProfilesArgs = {
   accountId: Scalars['String'];
 };
 
-
 export type QueryProfileArgs = {
   userId: Scalars['String'];
 };
-
 
 export type QueryAccountsArgs = {
   limit?: Maybe<Scalars['Int']>;
@@ -406,7 +406,6 @@ export type QueryAccountsArgs = {
   filter?: Maybe<FilterInput>;
 };
 
-
 export type QueryAccountArgs = {
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -415,7 +414,6 @@ export type QueryAccountArgs = {
   take?: Maybe<Scalars['Int']>;
   filter?: Maybe<FilterInput>;
 };
-
 
 export type QuerySitesArgs = {
   limit?: Maybe<Scalars['Int']>;
@@ -427,12 +425,10 @@ export type QuerySitesArgs = {
   accountId: Scalars['String'];
 };
 
-
 export type QuerySiteArgs = {
   id: Scalars['String'];
   accountId: Scalars['String'];
 };
-
 
 export type QuerySiteMenuItemsArgs = {
   limit?: Maybe<Scalars['Int']>;
@@ -442,7 +438,6 @@ export type QuerySiteMenuItemsArgs = {
   take?: Maybe<Scalars['Int']>;
   filter?: Maybe<FilterInput>;
 };
-
 
 export type QueryPagesArgs = {
   limit?: Maybe<Scalars['Int']>;
@@ -454,7 +449,6 @@ export type QueryPagesArgs = {
   accountId: Scalars['String'];
 };
 
-
 export type QueryPageArgs = {
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -465,7 +459,6 @@ export type QueryPageArgs = {
   accountId: Scalars['String'];
 };
 
-
 export type QueryGetAllItemsArgs = {
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -474,7 +467,6 @@ export type QueryGetAllItemsArgs = {
   take?: Maybe<Scalars['Int']>;
   filter?: Maybe<FilterInput>;
 };
-
 
 export type QueryGetItemArgs = {
   limit?: Maybe<Scalars['Int']>;
@@ -485,7 +477,6 @@ export type QueryGetItemArgs = {
   filter?: Maybe<FilterInput>;
 };
 
-
 export type QueryWidgetsArgs = {
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -495,7 +486,6 @@ export type QueryWidgetsArgs = {
   filter?: Maybe<FilterInput>;
 };
 
-
 export type QueryWidgetArgs = {
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -504,7 +494,6 @@ export type QueryWidgetArgs = {
   take?: Maybe<Scalars['Int']>;
   filter?: Maybe<FilterInput>;
 };
-
 
 export type QueryMediasArgs = {
   limit?: Maybe<Scalars['Int']>;
@@ -516,7 +505,6 @@ export type QueryMediasArgs = {
   accountId: Scalars['String'];
 };
 
-
 export type QueryMediaArgs = {
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -527,7 +515,6 @@ export type QueryMediaArgs = {
   accountId: Scalars['String'];
 };
 
-
 export type QueryPerformancesArgs = {
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -536,7 +523,6 @@ export type QueryPerformancesArgs = {
   take?: Maybe<Scalars['Int']>;
   filter?: Maybe<FilterInput>;
 };
-
 
 export type QueryPerformanceArgs = {
   limit?: Maybe<Scalars['Int']>;
@@ -547,7 +533,6 @@ export type QueryPerformanceArgs = {
   filter?: Maybe<FilterInput>;
 };
 
-
 export type QuerySocialsArgs = {
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -557,7 +542,6 @@ export type QuerySocialsArgs = {
   filter?: Maybe<FilterInput>;
   accountId: Scalars['String'];
 };
-
 
 export type QuerySocialArgs = {
   accountId: Scalars['String'];
@@ -571,7 +555,7 @@ export type SortInput = {
 
 export enum SortOrderEnum {
   Asc = 'ASC',
-  Desc = 'DESC'
+  Desc = 'DESC',
 }
 
 export type FilterInput = {
@@ -587,7 +571,7 @@ export type CombinedFilterInput = {
 export enum LogicalOperatorEnum {
   And = 'AND',
   Nor = 'NOR',
-  Or = 'OR'
+  Or = 'OR',
 }
 
 export type SingleFilterInput = {
@@ -607,9 +591,8 @@ export enum ComparisonOperatorEnum {
   Lte = 'LTE',
   Ne = 'NE',
   Nin = 'NIN',
-  Regex = 'REGEX'
+  Regex = 'REGEX',
 }
-
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -652,199 +635,162 @@ export type Mutation = {
   removeSocial: Social;
 };
 
-
 export type MutationLoginArgs = {
   login: LoginInput;
 };
-
 
 export type MutationCreateProfileArgs = {
   profile: CreateProfileInput;
 };
 
-
 export type MutationCreatePlatformAdminProfileArgs = {
   profile: CreateProfileInput;
 };
-
 
 export type MutationUpdateProfileArgs = {
   profileData: UpdateProfileInput;
   userId: Scalars['String'];
 };
 
-
 export type MutationSoftDeleteProfileArgs = {
   userId: Scalars['String'];
 };
 
-
 export type MutationCreateAccountArgs = {
   createAccountInput: CreateAccountInput;
 };
-
 
 export type MutationUpdateAccountArgs = {
   updateAccountInput: UpdateAccountInput;
   accountId: Scalars['String'];
 };
 
-
 export type MutationRemoveAccountArgs = {
   accountId: Scalars['String'];
 };
 
-
 export type MutationCreateSiteArgs = {
   createSiteInput: CreateSiteInput;
 };
-
 
 export type MutationUpdateSiteArgs = {
   updateSiteInput: UpdateSiteInput;
   id: Scalars['String'];
 };
 
-
 export type MutationRemoveSiteArgs = {
   id: Scalars['String'];
 };
 
-
 export type MutationRemoveSiteSoftArgs = {
   id: Scalars['String'];
 };
-
 
 export type MutationAddMenuItemToSiteArgs = {
   menuItem: CreateMenuitemInput;
   siteId: Scalars['String'];
 };
 
-
 export type MutationUpdateSiteMenuItemArgs = {
   updateMenuitemInput: UpdateMenuitemInput;
   menuId: Scalars['String'];
 };
 
-
 export type MutationDeleteSiteMenuItemArgs = {
   menuId: Scalars['String'];
 };
 
-
 export type MutationCreatePageArgs = {
   createPageInput: CreatePageInput;
 };
-
 
 export type MutationUpdatePageArgs = {
   updatePageInput: UpdatePageInput;
   pageId: Scalars['String'];
 };
 
-
 export type MutationRemovePageArgs = {
   pageId: Scalars['String'];
 };
 
-
 export type MutationCreateItemArgs = {
   createItemInput: CreateItemInput;
 };
-
 
 export type MutationUpdateItemArgs = {
   updateItemInput: UpdatedItemInput;
   itemId: Scalars['String'];
 };
 
-
 export type MutationRemoveItemArgs = {
   itemId: Scalars['String'];
 };
-
 
 export type MutationRemoveItemSoftArgs = {
   itemId: Scalars['String'];
 };
 
-
 export type MutationCreateWidgetArgs = {
   createWidgetInput: CreateWidgetInput;
 };
-
 
 export type MutationUpdateWidgetArgs = {
   updateWidgetInput: UpdateWidgetInput;
   widgetId: Scalars['String'];
 };
 
-
 export type MutationRemoveWidgetArgs = {
   widgetId: Scalars['String'];
 };
 
-
 export type MutationCreateMediaArgs = {
   createMediaInput: CreateMediaInput;
 };
-
 
 export type MutationUpdateMediaArgs = {
   updateMediaInput: UpdateMediaInput;
   mediaId: Scalars['String'];
 };
 
-
 export type MutationRemoveMediaArgs = {
   mediaId: Scalars['String'];
 };
 
-
 export type MutationCreatePerformanceArgs = {
   createPerformanceInput: CreatePerformanceInput;
 };
-
 
 export type MutationUpdatePerformanceArgs = {
   updatePerformanceInput: UpdatePerformanceInput;
   performanceId: Scalars['String'];
 };
 
-
 export type MutationRemovePerformanceArgs = {
   performanceId: Scalars['String'];
 };
-
 
 export type MutationCreatePerformanceQuarterArgs = {
   createPerformanceQuarterInput: CreatePerformanceQuarterInput;
   performanceId: Scalars['String'];
 };
 
-
 export type MutationUpdatePerformanceQuarterArgs = {
   updatePerformanceQuarterInput: UpdatePerformanceQuarterInput;
   quarterId: Scalars['String'];
 };
 
-
 export type MutationDeletePerformanceQuarterArgs = {
   quarterId: Scalars['String'];
 };
-
 
 export type MutationCreateSocialArgs = {
   createSocialInput: CreateSocialInput;
 };
 
-
 export type MutationUpdateSocialArgs = {
   updateSocialInput: UpdateSocialInput;
   socialId: Scalars['String'];
 };
-
 
 export type MutationRemoveSocialArgs = {
   socialId: Scalars['String'];
@@ -1165,4 +1111,135 @@ export type UpdateSocialInput = {
   instagram?: Maybe<Scalars['String']>;
   linkedin?: Maybe<Scalars['String']>;
   twitter?: Maybe<Scalars['String']>;
+};
+
+export type StyleBodyInput = {
+  bodyFont?: Maybe<Scalars['String']>;
+  fontColor?: Maybe<Scalars['String']>;
+  backgroundColor?: Maybe<Scalars['String']>;
+  accentColor?: Maybe<Scalars['String']>;
+};
+
+export type StyleNavigationInput = {
+  fontColor?: Maybe<Scalars['String']>;
+  backgroundColor?: Maybe<Scalars['String']>;
+  accentColor?: Maybe<Scalars['String']>;
+};
+
+export type StyleFooterInput = {
+  fontColor?: Maybe<Scalars['String']>;
+  backgroundColor?: Maybe<Scalars['String']>;
+  accentColor?: Maybe<Scalars['String']>;
+};
+
+export type StyleButtonInput = {
+  font?: Maybe<Scalars['String']>;
+  buttonBorderStyle?: Maybe<Scalars['String']>;
+  previewButton?: Maybe<Scalars['String']>;
+};
+
+export type StylePrimaryButtonInput = {
+  fontColor?: Maybe<Scalars['String']>;
+  hoverFontColor?: Maybe<Scalars['String']>;
+  backgroundColor?: Maybe<Scalars['String']>;
+  hoverBackgroundColor?: Maybe<Scalars['String']>;
+};
+
+export type StyleSecondaryButtonInput = {
+  fontColor?: Maybe<Scalars['String']>;
+  hoverFontColor?: Maybe<Scalars['String']>;
+  backgroundColor?: Maybe<Scalars['String']>;
+  hoverBackgroundColor?: Maybe<Scalars['String']>;
+};
+
+export type CreateStyleInput = {
+  body?: Maybe<StyleBodyInput>;
+  navigation?: Maybe<StyleNavigationInput>;
+  footer?: Maybe<StyleFooterInput>;
+  button?: Maybe<StyleButtonInput>;
+  primaryButton?: Maybe<StylePrimaryButtonInput>;
+  secondaryButton?: Maybe<StyleSecondaryButtonInput>;
+  site?: Maybe<Scalars['String']>;
+  account?: Maybe<Scalars['String']>;
+};
+
+export type UpdateStyleInput = {
+  body?: Maybe<StyleBodyInput>;
+  navigation?: Maybe<StyleNavigationInput>;
+  footer?: Maybe<StyleFooterInput>;
+  button?: Maybe<StyleButtonInput>;
+  primaryButton?: Maybe<StylePrimaryButtonInput>;
+  secondaryButton?: Maybe<StyleSecondaryButtonInput>;
+  site?: Maybe<Scalars['String']>;
+  account?: Maybe<Scalars['String']>;
+};
+
+export type Body = {
+  __typename?: 'Body';
+  id: Scalars['String'];
+  bodyFont: Scalars['String'];
+  fontColor: Scalars['String'];
+  backgroundColor: Scalars['String'];
+  accentColor: Scalars['String'];
+};
+
+export type Navigation = {
+  __typename?: 'Navigation';
+  id: Scalars['String'];
+  fontColor: Scalars['String'];
+  backgroundColor: Scalars['String'];
+  accentColor: Scalars['String'];
+};
+
+export type Footer = {
+  __typename?: 'Footer';
+  id: Scalars['String'];
+  fontColor: Scalars['String'];
+  backgroundColor: Scalars['String'];
+  accentColor: Scalars['String'];
+};
+
+export type Button = {
+  __typename?: 'Button';
+  id: Scalars['String'];
+  font: Scalars['String'];
+  buttonBorderStyle: Scalars['String'];
+  previewButton: Scalars['String'];
+};
+
+export type PrimaryButton = {
+  __typename?: 'PrimaryButton';
+  id: Scalars['String'];
+  fontColor: Scalars['String'];
+  hoverFontColor: Scalars['String'];
+  backgroundColor: Scalars['String'];
+  hoverBackgroundColor: Scalars['String'];
+};
+
+export type SecondaryButton = {
+  __typename?: 'SecondaryButton';
+  id: Scalars['String'];
+  fontColor: Scalars['String'];
+  hoverFontColor: Scalars['String'];
+  backgroundColor: Scalars['String'];
+  hoverBackgroundColor: Scalars['String'];
+};
+
+export type Styles = {
+  __typename?: 'Style';
+  id: Scalars['String'];
+  body: Body;
+  navigation: Navigation;
+  footer: Footer;
+  button: Button;
+  primaryButton: PrimaryButton;
+  secondaryButton: SecondaryButton;
+  site: Scalars['String'];
+  isActive: Scalars['Boolean'];
+  createdBy: Profile;
+  updatedBy: Profile;
+  deletedBy: Profile;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  deletedAt: Scalars['DateTime'];
 };
