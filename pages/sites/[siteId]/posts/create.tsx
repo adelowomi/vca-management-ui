@@ -30,7 +30,7 @@ const create = ({ token, accountId: account, medias, error }) => {
   const { addToast } = useToasts();
   const [preview, setPreview] = React.useState(false);
   const [state, setState] = React.useState({
-    mediaUrl: '',
+    mediaUrl: 'random string',
     media: '',
   });
   const {
@@ -60,7 +60,7 @@ const create = ({ token, accountId: account, medias, error }) => {
             account,
             tags: data.tags ? data.tags : [],
             media: data.media,
-            mediaUrl: state.mediaUrl,
+            mediaUrl: "buhbhbibibii",
           },
         },
       });

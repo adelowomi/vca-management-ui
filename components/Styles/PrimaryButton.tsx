@@ -1,29 +1,20 @@
-import React from 'react';
+import ColorPicker from './ColorPicker';
 
-import SelectForm from '../FormSelect/SelectForm';
+export const PrimaryButtonStyles = ({onChange,style}: {onChange: any,style: any}): JSX.Element=> {
 
-const options = [
-  {
-    id: 'ugygygygygygyg',
-    name: '#fff546',
-    value: 'yes',
-    unavailable: false,
-  },
-  {
-    id: 'ugygygygygygyi',
-    name: '#0000',
-    value: 'false',
-    unavailable: false,
-  },
-];
+  const setFontColor = (color) => {
+    onChange({ ...style, fontColor: color });
+  };
+  const setBackgroundColor = (color) => {
+    onChange({ ...style, backgroundColor: color });
+  };
+  const setHoverBackgroundColor = (color) => {
+    onChange({ ...style, hoverBackgroundColor: color });
+  };
+  const setHoverFontColor = (color) => {
+    onChange({ ...style, hoverFontColor: color });
+  };
 
-const defaultColor = {
-  id: 'ugygygygygygye',
-  name: '#213987',
-  value: '',
-  unavailable: true,
-};
-export const PrimaryButtonStyles = ({ onChange }) => {
   return (
     <section className="mt-10">
       <h4 className="text-lg font-semibold mb">Primary button</h4>
@@ -31,48 +22,27 @@ export const PrimaryButtonStyles = ({ onChange }) => {
 
       <div className="grid grid-cols-10 gap-6 items-center content-center mt-6">
         <div className="col-span-4">
-          <h4 className="text-xl font-semibold mb-4">Body font</h4>
-          <SelectForm
-            options={options}
-            defaultOption={defaultColor}
-            onChange={onChange}
-            name="select color"
-            type="color"
-          />
+          <h4 className="text-xl font-semibold mb-4">Background Color</h4>
+          <ColorPicker color={style?.backgroundColor} setColor={setBackgroundColor} />
         </div>
 
         <div className="col-span-4">
           <h4 className="text-xl font-semibold mb-4">Font color</h4>
-          <SelectForm
-            options={options}
-            defaultOption={defaultColor}
-            onChange={onChange}
-            name="select color"
-            type="color"
-          />
+          <ColorPicker color={style?.fontColor} setColor={setFontColor} />
         </div>
       </div>
       <div className="grid grid-cols-10 gap-6 items-center content-center mt-6">
         <div className="col-span-4">
           <h4 className="text-xl font-semibold mb-4">Hover background color</h4>
-          <SelectForm
-            options={options}
-            defaultOption={defaultColor}
-            onChange={onChange}
-            name="select font"
-            type="color"
+          <ColorPicker
+            color={style?.hoverBackgroundColor}
+            setColor={setHoverBackgroundColor}
           />
         </div>
 
         <div className="col-span-4">
           <h4 className="text-xl font-semibold mb-4">Hover font color</h4>
-          <SelectForm
-            options={options}
-            defaultOption={defaultColor}
-            onChange={onChange}
-            name="select color"
-            type="color"
-          />
+          <ColorPicker color={style?.hoverFontColor} setColor={setHoverFontColor} />
         </div>
       </div>
     </section>
