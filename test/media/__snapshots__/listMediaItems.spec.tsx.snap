@@ -616,7 +616,7 @@ exports[`List media page matches snapshot 1`] = `
                         </svg>
                       </div>
                       <div
-                        class="px-6 py-4 border bg-white border-vca-grey-4 h-32"
+                        class="px-6 py-4 border bg-white border-vca-grey-4 h-40"
                       >
                         <div
                           class="flex flex-row mb-4"
@@ -668,7 +668,7 @@ exports[`List media page matches snapshot 1`] = `
                         />
                       </div>
                       <div
-                        class="px-6 py-4 border bg-white border-vca-grey-4 h-32"
+                        class="px-6 py-4 border bg-white border-vca-grey-4 h-40"
                       >
                         <div
                           class="flex flex-row mb-4"
@@ -788,7 +788,7 @@ exports[`List media page matches snapshot 1`] = `
                         </svg>
                       </div>
                       <div
-                        class="px-6 py-4 border bg-white border-vca-grey-4 h-32"
+                        class="px-6 py-4 border bg-white border-vca-grey-4 h-40"
                       >
                         <div
                           class="flex flex-row mb-4"
