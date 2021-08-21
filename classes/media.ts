@@ -19,6 +19,7 @@ export class MediaClass {
         query: GET_MEDIA_BY_ACCOUNT,
         variables: {
           accountId: accountId,
+          limit: 100,
         },
       });
       return Promise.resolve<GqlResponse<Media[]>>({

@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 const GET_ALL_MEDIA = gql`
-  query($filter: FilterInput, $accountId: String!) {
-    medias(filter: $filter, accountId: $accountId) {
+  query ($filter: FilterInput, $accountId: String!, $limit: Int) {
+    medias(filter: $filter, accountId: $accountId, limit: $limit) {
       id
       type
       name
@@ -11,9 +11,9 @@ const GET_ALL_MEDIA = gql`
         url
       }
       video {
-      service
-      url
-    }
+        service
+        url
+      }
       image {
         small
         medium

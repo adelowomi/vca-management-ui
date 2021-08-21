@@ -321,6 +321,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       variables: {
         accountId: profile.account.id,
         filter: {},
+        limit: 100,
       },
     });
 

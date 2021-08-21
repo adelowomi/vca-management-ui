@@ -21,7 +21,7 @@ export const ImageCard = ({ media, link }) => {
           className="h-44 w-full object-cover"
         />
       </div>
-      <div className="px-6 py-4 border bg-white border-vca-grey-4 h-32">
+      <div className="px-6 py-4 border bg-white border-vca-grey-4 h-40">
         <div className="flex flex-row mb-4">
           <div>
             <svg

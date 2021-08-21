@@ -34,18 +34,16 @@ export const SelectMediaModal2 = ({
   medias,
   open,
   setMedia,
-  selected
+  selected,
 }: {
   close: any;
   medias: Media[];
-  open: boolean,
-  setMedia:any, 
-  selected
+  open: boolean;
+  setMedia: any;
+  selected;
 }): JSX.Element => {
-
-console.error(selected);
-console.error({medias});
-
+  console.error(selected);
+  console.error({ medias });
 
   const cancelButtonRef = useRef();
   return (
@@ -104,23 +102,18 @@ console.error({medias});
                     <div className="w-">
                       <PageSearchInput />
                     </div>
-                    <div className="w-60">
-                      {/* <SelectButton
-                        name="filterBy"
-                        py={2.5}
-                        px={5}
-                        caption="Filter by"
-                        
-                        value={''}
-                        options={options}
-                      /> */}
-                    </div>
+                    <div className="w-60"></div>
                   </div>
                   <div></div>
                 </Row>
                 <div className="grid grid-cols-4 gap-4 mt-8">
                   {medias.map((media: any, index: number) => (
-                    <MediaCard2 key={index} media={media} setMedia={setMedia} selected={selected}/>
+                    <MediaCard2
+                      key={index}
+                      media={media}
+                      setMedia={setMedia}
+                      selected={selected}
+                    />
                   ))}
                 </div>
               </Container>
