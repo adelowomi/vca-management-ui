@@ -123,7 +123,7 @@ export default function MediaCard2({
               className="px-3 h-6 w-6 border border-gray-300 mr-3"
               onChange={() => setMedia(media.id)}
               checked={
-                media.image && media.image.small == selected.image.small
+                media.image && media.image.small == selected?.image.small
                   ? true
                   : false
               }
