@@ -1175,7 +1175,6 @@ export type UpdateStyleInput = {
 };
 
 export type Body = {
-  __typename?: 'Body';
   id: Scalars['String'];
   bodyFont: Scalars['String'];
   fontColor: Scalars['String'];
@@ -1184,7 +1183,6 @@ export type Body = {
 };
 
 export type Navigation = {
-  __typename?: 'Navigation';
   id: Scalars['String'];
   fontColor: Scalars['String'];
   backgroundColor: Scalars['String'];
@@ -1192,7 +1190,6 @@ export type Navigation = {
 };
 
 export type Footer = {
-  __typename?: 'Footer';
   id: Scalars['String'];
   fontColor: Scalars['String'];
   backgroundColor: Scalars['String'];
@@ -1200,7 +1197,6 @@ export type Footer = {
 };
 
 export type Button = {
-  __typename?: 'Button';
   id: Scalars['String'];
   font: Scalars['String'];
   buttonBorderStyle: Scalars['String'];
@@ -1208,7 +1204,6 @@ export type Button = {
 };
 
 export type PrimaryButton = {
-  __typename?: 'PrimaryButton';
   id: Scalars['String'];
   fontColor: Scalars['String'];
   hoverFontColor: Scalars['String'];
@@ -1217,7 +1212,6 @@ export type PrimaryButton = {
 };
 
 export type SecondaryButton = {
-  __typename?: 'SecondaryButton';
   id: Scalars['String'];
   fontColor: Scalars['String'];
   hoverFontColor: Scalars['String'];
@@ -1226,7 +1220,6 @@ export type SecondaryButton = {
 };
 
 export type Styles = {
-  __typename?: 'Style';
   id: Scalars['String'];
   body: Body;
   navigation: Navigation;

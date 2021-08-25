@@ -1,6 +1,7 @@
 import { Listbox } from '@headlessui/react';
 import React, { useState } from 'react';
-import { TwitterPicker } from 'react-color';
+import { ChromePicker } from 'react-color';
+import rgb2Hex from "rgb2hex";
 
 export default function ColorPicker({
   color,
@@ -34,7 +35,7 @@ export default function ColorPicker({
         </Listbox.Button>
         {pickerOpen ? (
           <div className="absolute z-10">
-            <TwitterPicker onChange={(color) => setColor(color.hex)} />
+            <ChromePicker color={color} onChange={(c) => {setColor(rgb2Hex(`rgba(${c.rgb.r},${c.rgb.g},${c.rgb.b},${c.rgb.a})`).hex)}} />
           </div>
         ) : null}
       </div>

@@ -39,6 +39,9 @@ export const BodyStyles = ({
   const setAccentColor = (color) => {
     onChange({ ...style, accentColor: color });
   };
+  const setFont = (font) => {
+    onChange({ ...style, bodyFont: font.name });
+  };
   return (
     <section className="mt-10">
       <h4 className="text-lg font-semibold mb">Body</h4>
@@ -50,7 +53,7 @@ export const BodyStyles = ({
           <SelectForm
             options={options2}
             defaultOption={defaultOption}
-            onChange={onChange}
+            onChange={setFont}
             name="select font"
             type="font"
           />

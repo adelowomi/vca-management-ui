@@ -168,9 +168,6 @@ const Sites = ({
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = getSession(ctx.req, ctx.res);
-  const user = new User(session.idToken);
-  const site = new Site(session.idToken);
-
   if (!session) {
     ctx.res.writeHead(302, {
       Location: '/login',
@@ -178,6 +175,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     ctx.res.end();
     return;
   }
+  const user = new User(session.idToken);
+  const site = new Site(session.idToken);
+
 
   const profile = await (await user.getProfile()).data;
 
