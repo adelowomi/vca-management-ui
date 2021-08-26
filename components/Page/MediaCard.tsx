@@ -1,5 +1,6 @@
 import React from 'react';
 import { RiFileList3Line, RiImageFill, RiVideoAddLine } from 'react-icons/ri';
+import ReactPlayer from 'react-player';
 import styled from 'styled-components';
 
 const Input = styled.input`
@@ -48,9 +49,12 @@ export const MediaCard = ({ media, selectedArr, selected, count, exists }) => {
       >
         <div className="h-40 w-full">
           {media.type === 'VIDEO' ? (
-            <video
-              className="w-full h-full object-cover"
-              src={media?.video?.url}
+            <ReactPlayer
+              url={media?.video.url}
+              className="h-full w-full"
+              height={'100%'}
+              width={'100%'}
+              controls={false}
             />
           ) : // <iframe
           //   width="290"

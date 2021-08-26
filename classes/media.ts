@@ -11,18 +11,39 @@ export class MediaClass {
 
   public getMedias = async ({
     accountId,
+    limit = 20,
+    offset = 0,
+    filter= {}
   }: {
     accountId: string;
+    limit?: number;
+    offset?: number;
+    filter?: Record<string, unknown>; 
   }): Promise<GqlResponse<Media[]>> => {
+    let variables;
+    !filter ? variables = {
+      accountId: accountId,
+      limit: limit,
+      offset: offset, 
+    } :variables = {
+      accountId: accountId,
+      limit: limit,
+      offset: offset,
+      filter: filter,
+    }
+    console.error({variables});
+    console.error({filter});
+    
+    
     try {
       const { data } = await client.query({
         query: GET_MEDIA_BY_ACCOUNT,
-        variables: {
-          accountId: accountId,
-        },
+        variables: variables,
       });
+      console.error({data});
+      
       return Promise.resolve<GqlResponse<Media[]>>({
-        data: data,
+        data: data.medias,
         error: null,
         status: true,
       });

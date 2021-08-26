@@ -179,52 +179,61 @@ const Pages = ({ pages, menuItems, token }) => {
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {pages.map((el: any) => (
-                        <tr className={`text-left  `} key={el.id}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
-                            <input
-                              type="checkbox"
-                              className="px-3 h-5 w-6 border border-gray-300"
-                              name=""
-                              id=""
-                            />
-                          </td>
+                        <Link
+                          href={`/sites/${siteId}/pages/${el.id}/edit`}
+                          key={el.id}
+                        >
+                          <tr
+                            className={`text-left cursor-pointer hover:bg-vca-blue hover:bg-opacity-10`}
+                            key={el.id}
+                          >
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
+                              <input
+                                type="checkbox"
+                                className="px-3 h-5 w-6 border border-gray-300"
+                                name=""
+                                id=""
+                              />
+                            </td>
 
-                          <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
-                            <Link href={`/sites/${siteId}/pages/${el.id}/edit`}>
-                              {el.name}
-                            </Link>
-                          </td>
-                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
-                            <Link href={`/sites/${el.site}/pages/${el.id}`}>
-                              {el.menuItem
-                                ? menuItems.filter(
-                                    (item) => item.id === el.menuItem
-                                  )[0].name
-                                : ''}
-                            </Link>
-                          </td>
-                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
-                            <Link href={`/sites/${el.site}/pages/${el.id}`}>
-                              <span>
-                                <p>{moment(el.createdAt).format('llll')}</p>
-                              </span>
-                            </Link>
-                          </td>
-                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
-                            <span className="flex space-x-5">
+                            <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
                               <Link
                                 href={`/sites/${siteId}/pages/${el.id}/edit`}
                               >
-                                <p>edit</p>
+                                {el.name}
                               </Link>
-
-                              <RiDeleteBinLine
-                                onClick={() => getId(el.id)}
-                                className="h-6"
-                              />
-                            </span>
-                          </td>
-                        </tr>
+                            </td>
+                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
+                              <Link href={`/sites/${el.site}/pages/${el.id}`}>
+                                {el.menuItem
+                                  ? menuItems.filter(
+                                      (item) => item.id === el.menuItem
+                                    )[0].name
+                                  : ''}
+                              </Link>
+                            </td>
+                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
+                              <Link href={`/sites/${el.site}/pages/${el.id}`}>
+                                <span>
+                                  <p>{moment(el.createdAt).format('llll')}</p>
+                                </span>
+                              </Link>
+                            </td>
+                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
+                              <span className="flex space-x-5">
+                                <Link
+                                  href={`/sites/${siteId}/pages/${el.id}/edit`}
+                                >
+                                  <p>Edit</p>
+                                </Link>
+                                <RiDeleteBinLine
+                                  onClick={() => getId(el.id)}
+                                  className="h-6"
+                                />
+                              </span>
+                            </td>
+                          </tr>
+                        </Link>
                       ))}
                     </tbody>
                   </table>
@@ -257,14 +266,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const user = new User(session.idToken);
   const site = new Site(session.idToken);
 
-
   const client = createApolloClient(session.idToken);
   try {
     const profile = await (await user.getProfile()).data;
     const currentSite = await (
       await site.getSite({
         accountId: profile.account.id,
-        siteId: (ctx.query.siteId as unknown) as string,
+        siteId: ctx.query.siteId as unknown as string,
       })
     ).data;
 

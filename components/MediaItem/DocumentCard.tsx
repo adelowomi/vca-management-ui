@@ -83,7 +83,7 @@ export const DocumentCard = ({ media, link }) => {
           />
         </svg>
       </div>
-      <div className="px-6 py-4 border bg-white border-vca-grey-4 h-32">
+      <div className="px-6 py-4 border bg-white border-vca-grey-4 h-40">
         <div className="flex flex-row mb-4">
           <div>
             <svg

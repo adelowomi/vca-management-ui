@@ -9,7 +9,9 @@ import { useToasts } from 'react-toast-notifications';
 import { User } from '../../../../classes/User';
 import { ErrorPage } from '../../../../components/Errors/ErrorPage';
 import Layout from '../../../../components/Layout/Layout';
+import { ShadowBtn } from '../../../../components/Page/PageButtons';
 import { ImageSelectBox } from '../../../../components/Page/PageStyledElements';
+import { getStringDate } from '../../../../components/Page/PostList';
 import { DraftEditor } from '../../../../components/utilsGroup/Editor';
 import { SelectMediaModal } from '../../../../components/utilsGroup/SelectMediaModal';
 import { TagSelector } from '../../../../components/utilsGroup/TagSelector';
@@ -26,6 +28,7 @@ const create = ({ token, accountId: account, medias, error }) => {
   const client = createApolloClient(token);
   const [isLoading, setIsLoading] = React.useState(false);
   const { addToast } = useToasts();
+  const [preview, setPreview] = React.useState(false);
   const [state, setState] = React.useState({
     mediaUrl: 'random string',
     media: '',
@@ -34,6 +37,7 @@ const create = ({ token, accountId: account, medias, error }) => {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -91,6 +95,7 @@ const create = ({ token, accountId: account, medias, error }) => {
   if (error) {
     return <ErrorPage statusCode={400} />;
   }
+
   return (
     <Layout>
       <SelectMediaModal
@@ -202,6 +207,50 @@ const create = ({ token, accountId: account, medias, error }) => {
               </div>
             </section>
           </form>
+          <>
+            <ShadowBtn
+              bg="primary"
+              type="button"
+              className="py-4 px-10 shadow-sm rounded text-sm font-bold cursor-pointer"
+              onClick={() => setPreview(!preview)}
+            >
+              Show preview
+            </ShadowBtn>
+            {preview ? (
+              <div className="mt-7">
+                <div className="grid grid-cols-4 gap-2">
+                  <div className="flex xl:w-card-xl lg:w-card- 2xl:w-card-2xl md:w-card-md rounded">
+                    <div className="group w-full overflow-hidden hover:shadow-lg bg-white shadow-md">
+                      <div className="h-44 w-full">
+                        {state?.mediaUrl ? (
+                          <img
+                            className="w-full h-full object-cover rounded-tr rounded-tl"
+                            src={state?.mediaUrl}
+                            alt="news image"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gray-400 object-cover rounded-tr rounded-tl"></div>
+                        )}
+                      </div>
+                      <div className="px-3 py-4" style={{ height: '200px' }}>
+                        <div className="font-semibold text-lg mb-2">
+                          <a href={`#`}>{watch('postTitle')}</a>
+                        </div>
+                        <p className="text-gray-700 text-sm">
+                          {watch('description')}
+                        </p>
+                      </div>
+                      <button className="w-full bg-white text-gray-800 font-normal py-3 px-4 flex justify-left items-center text-xs italic rounded">
+                        Created on: {getStringDate(new Date())}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              ''
+            )}
+          </>
         </div>
       </div>
     </Layout>

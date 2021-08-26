@@ -1,11 +1,13 @@
 import { Dialog, Transition } from '@headlessui/react';
-import React, { Fragment, useRef } from 'react';
+import { SearchIcon } from '@heroicons/react/outline';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { RiCloseLine } from 'react-icons/ri';
 import styled from 'styled-components';
 
+import { MediaClass } from '../../classes/media';
 import { Media } from '../../classes/schema';
+import LoadingCard from '../utilsGroup/LoadingCard';
 import MediaCard2 from './MediaCard2';
-import { PageSearchInput } from './PageSearchInput';
 import { H1 } from './PageStyledElements';
 
 const Container = styled.div`
@@ -31,21 +33,101 @@ const Row = styled.div`
 
 export const SelectMediaModal2 = ({
   close,
-  medias,
   open,
   setMedia,
-  selected
+  selected,
+  token,
+  profile,
+  type,
 }: {
   close: any;
-  medias: Media[];
-  open: boolean,
-  setMedia:any, 
-  selected
+  open: boolean;
+  setMedia: any;
+  selected;
+  token: string;
+  profile: any;
+  type?: string;
 }): JSX.Element => {
+  const [medias, setMedias] = useState<Media[]>();
+  const [loading, setLoading] = useState(true);
+  const [limit] = useState<number>(20);
+  const [search, setSearch] = useState<string>();
 
-console.error(selected);
-console.error({medias});
+  const [page, setPage] = useState(1);
 
+  const media = new MediaClass(token);
+
+  const loadMedia = async (page?: number,filter?: Record<string, unknown>) => {
+    setLoading(true);
+    try {
+      console.error('here');
+      const data = await await media.getMedias({
+        accountId: profile.account.id,
+        limit: limit,
+        offset: limit * page,
+        filter: filter ? filter : {} 
+      });
+      console.error(data);
+      setLoading(false);
+      setMedias(data.data);
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
+      setMedias([]);
+    }
+  };
+
+  const nextPage = async () => {
+    if (limit > medias.length) {
+      return;
+    }
+    await loadMedia(page);
+    setPage(page + 1);
+    return;
+  };
+
+  const previousPage = async () => {
+    if (page == 1) {
+      return;
+    }
+    setPage(page - 1);
+    await loadMedia(page - 1 <= 1 ? 0 : page - 1);
+    return;
+  };
+
+  const searchMedia = async () => {
+    const filter = {
+      combinedFilter: {
+        logicalOperator: 'OR',
+        filters: [
+          {
+            singleFilter: {
+              field: 'name',
+              operator: 'REGEX',
+              value: search ? search : '',
+              options: 'i',
+            },
+          },
+          {
+            singleFilter: {
+              field: 'description',
+              operator: 'REGEX',
+              value: search ? search : '',
+              options: 'i',
+            },
+          },
+        ],
+      },
+    };
+    await loadMedia(0,filter);
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      await loadMedia();
+    };
+    getData();
+  }, []);
 
   const cancelButtonRef = useRef();
   return (
@@ -86,7 +168,7 @@ console.error({medias});
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div className="inline-block align-bottom bg-white w-full text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-7xl sm:w-full">
+            <div className="inline-block align-bottom bg-white w-full text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-7xl sm:w-full rounded">
               <Container>
                 <Row>
                   <H1 className="mb-10">Select Media</H1>
@@ -102,26 +184,123 @@ console.error({medias});
                 <Row>
                   <div className="flex flex-row justify-start space-x-4">
                     <div className="w-">
-                      <PageSearchInput />
+                      <div
+                        className="flex border-grey-light border bg-gray-50 py-1 w-96"
+                        style={{ backgroundColor: '#F2F2F2' }}
+                      >
+                        <button className="focus:outline-none">
+                          <span className="w-auto flex justify-end items-center text-grey p-2 outline-none">
+                            <SearchIcon
+                              className="h-5 w-6 text-gray-500 font-light"
+                              aria-hidden="true"
+                            />
+                          </span>
+                        </button>
+                        <input
+                          className="w-full rounded mr-4 bg-gray-200 outline-none"
+                          type="text"
+                          placeholder="Search"
+                          style={{ backgroundColor: '#F2F2F2' }}
+                          onChange={(e) => setSearch(e.target.value)}
+                        />
+                      </div>
                     </div>
-                    <div className="w-60">
-                      {/* <SelectButton
-                        name="filterBy"
-                        py={2.5}
-                        px={5}
-                        caption="Filter by"
-                        
-                        value={''}
-                        options={options}
-                      /> */}
-                    </div>
+                    <button
+                      type="submit"
+                      className="ml-6 bg-vca-blue h-12 text-white font-bold text-sm"
+                      onClick={async() => await searchMedia()}
+                    >
+                      <div className="flex flex-row mx-8">
+                        <div className="mr-2">Search</div>
+                      </div>
+                    </button>
+                    <div className="w-60"></div>
                   </div>
                   <div></div>
                 </Row>
-                <div className="grid grid-cols-4 gap-4 mt-8">
-                  {medias.map((media: any, index: number) => (
-                    <MediaCard2 key={index} media={media} setMedia={setMedia} selected={selected}/>
-                  ))}
+                <div className="grid grid-cols-4 gap-4 mt-8 mb-4">
+                  {loading ? (
+                    <>
+                      <LoadingCard />
+                      <LoadingCard />
+                      <LoadingCard />
+                      <LoadingCard />
+                    </>
+                  ) : medias ? (
+                    type ? (
+                      medias
+                        .filter((m) => m.type == type)
+                        .map((media: any, index: number) => (
+                          <MediaCard2
+                            key={index}
+                            media={media}
+                            setMedia={setMedia}
+                            selected={selected}
+                          />
+                        ))
+                    ) : (
+                      medias.map((media: any, index: number) => (
+                        <MediaCard2
+                          key={index}
+                          media={media}
+                          setMedia={setMedia}
+                          selected={selected}
+                        />
+                      ))
+                    )
+                  ) : null}
+                </div>
+                <hr />
+                <div className="mt-9 flex flex-row justify-between mb-4">
+                  <a className="flex flex-row">
+                    <div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                        />
+                      </svg>
+                    </div>
+                    <div
+                      className="ml-2 cursor-pointer"
+                      onClick={async () => await previousPage()}
+                    >
+                      Previous
+                    </div>
+                  </a>
+
+                  <span className="flex flex-row">
+                    <div
+                      className="mr-2 cursor-pointer"
+                      onClick={async () => await nextPage()}
+                    >
+                      Next
+                    </div>
+                    <div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        />
+                      </svg>
+                    </div>
+                  </span>
                 </div>
               </Container>
             </div>

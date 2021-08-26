@@ -10,9 +10,7 @@ import {
   RiFolder4Line,
   RiImageAddLine,
   RiLayoutLine,
-  RiMapPinUserLine,
   RiNumbersLine,
-  RiPagesLine,
   RiPaletteLine,
   RiSettings4Line,
 } from 'react-icons/ri';
@@ -52,7 +50,7 @@ const navigation = [
     current: true,
   },
   { name: 'Pages', href: 'pages', icon: RiLayoutLine, current: false },
-  { name: 'News', href: 'news', icon: RiPagesLine, current: false },
+  // { name: 'News', href: 'news', icon: RiPagesLine, current: false },
   {
     name: 'Performance',
     href: 'performance',
@@ -71,12 +69,12 @@ const navigation = [
     icon: RiImageAddLine,
     current: false,
   },
-  {
-    name: 'Social',
-    href: 'social',
-    icon: RiMapPinUserLine,
-    current: false,
-  },
+  // {
+  //   name: 'Social',
+  //   href: 'social',
+  //   icon: RiMapPinUserLine,
+  //   current: false,
+  // },
   {
     name: 'Styles',
     href: 'styles',

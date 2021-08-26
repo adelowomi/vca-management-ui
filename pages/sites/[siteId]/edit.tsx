@@ -51,6 +51,12 @@ export const Edit = ({
       header: {
         logoUrl: site.header.logoUrl,
       },
+      social:{
+        facebook: site.social?.facebook,
+        instagram: site.social?.instagram,
+        twitter: site.social?.twitter,
+        linkedin: site.social?.linkedin
+      }
     },
   });
   const { addToast } = useToasts();
@@ -162,6 +168,50 @@ export const Edit = ({
                 />
               </FormGroup>
             )}
+          </div>
+          <hr className="border-gray-400 border-5 w-full mt-8" />
+          <div className="mt-10 mb-5 font-semibold leading-6 text-xl text-vca-grey-1 font-inter">
+            Add site social handles
+          </div>
+          <div className="grid grid-cols-2  w-form-col">
+            <FormGroup className="">
+              <FormInput
+                name="social.facebook"
+                label="Facebook"
+                register={register}
+                error={errors.social?.facebook}
+                required={true}
+              />
+            </FormGroup>
+            <FormGroup className="">
+              <FormInput
+                name="social.twitter"
+                label="Twitter"
+                register={register}
+                error={errors.social?.twitter}
+                required={true}
+              />
+            </FormGroup>
+          </div>
+          <div className="grid grid-cols-2  w-form-col">
+            <FormGroup className="">
+              <FormInput
+                name="social.instagram"
+                label="Instagram"
+                register={register}
+                error={errors.social?.instagram}
+                required={true}
+              />
+            </FormGroup>
+            <FormGroup className="">
+              <FormInput
+                name="social.linkedin"
+                label="Linkedin"
+                register={register}
+                error={errors.social?.linkedin}
+                required={true}
+              />
+            </FormGroup>
           </div>
         </form>
         <hr className="border-gray-400 border-5 w-full mt-8" />
