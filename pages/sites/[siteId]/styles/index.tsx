@@ -35,24 +35,48 @@ const createStyles = ({
   siteId: string;
   account: string;
 }): JSX.Element => {
-  
   const [loading, setLoading] = useState(false);
   const { addToast } = useToasts();
-  const [bodyStyle, setBodyStyle] = useState<StyleBodyInput>(
-    existingStyle.body
-  );
+  const [bodyStyle, setBodyStyle] = useState<StyleBodyInput>({
+    bodyFont: existingStyle.body?.bodyFont,
+    fontColor: existingStyle.body?.fontColor,
+    backgroundColor: existingStyle.body?.backgroundColor,
+    accentColor: existingStyle.body?.accentColor,
+  });
   const [navigationStyle, setNavigationStyle] = useState<StyleNavigationInput>(
-    existingStyle.navigation
+    {
+      fontColor:existingStyle.navigation?.fontColor,
+      accentColor: existingStyle.navigation?.accentColor,
+      backgroundColor: existingStyle.navigation?.backgroundColor,
+    }
   );
   const [buttonStyle, setButtonStyle] = useState<StyleButtonInput>(
-    existingStyle.button
+    {
+      font:existingStyle.button.font,
+      buttonBorderStyle: existingStyle.button?.buttonBorderStyle,
+      previewButton: existingStyle.button?.previewButton,
+    }
   );
   const [primaryButtonStyle, setPrimaryButtonStyle] =
-    useState<StylePrimaryButtonInput>(existingStyle.primaryButton);
+    useState<StylePrimaryButtonInput>({
+      backgroundColor:existingStyle.primaryButton?.backgroundColor,
+      fontColor: existingStyle.primaryButton?.fontColor,
+      hoverBackgroundColor:existingStyle.primaryButton?.hoverBackgroundColor,
+     hoverFontColor: existingStyle.primaryButton?.hoverFontColor,
+    });
   const [secondaryButton, setSecondaryButtonStyles] =
-    useState<StyleSecondaryButtonInput>(existingStyle.secondaryButton);
+    useState<StyleSecondaryButtonInput>({
+      backgroundColor:existingStyle.secondaryButton?.backgroundColor,
+      fontColor:existingStyle.secondaryButton?.fontColor,
+      hoverBackgroundColor: existingStyle.secondaryButton?.hoverBackgroundColor,
+      hoverFontColor: existingStyle.secondaryButton?.hoverFontColor,
+    });
   const [footerStyles, setFooterStyles] = useState<StyleFooterInput>(
-    existingStyle.footer
+    {
+      accentColor:existingStyle.footer?.accentColor,
+      backgroundColor: existingStyle.footer?.backgroundColor,
+      fontColor: existingStyle.footer?.fontColor,
+    }
   );
 
   const _thisStyle = new Style(token);
@@ -68,7 +92,10 @@ const createStyles = ({
       account: account,
       site: siteId,
     };
-
+    console.error({data});
+    console.error({existingStyle});
+    
+    
     if (existingStyle) {
       await updateStyle(data as UpdateStyleInput);
       return;
@@ -102,14 +129,15 @@ const createStyles = ({
   };
 
   const updateStyle = async (input: UpdateStyleInput) => {
-    
     input.button.previewButton = 'preview';
     setLoading(true);
     try {
       const result = await _thisStyle.updateStyle({
         input: input as unknown as UpdateStyleInput,
-        id:existingStyle.id
+        id: existingStyle.id,
       });
+      console.error({result});
+      
       if (!result.status) {
         addToast('An error occurred', { appearance: 'error' });
         setLoading(false);
@@ -190,7 +218,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       accountId: profile.account.id,
       siteId: ctx.query.siteId as unknown as string,
     });
-    
   } catch (error) {
     console.error(error);
     existingStyle = {};

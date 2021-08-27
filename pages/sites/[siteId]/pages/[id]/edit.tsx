@@ -221,10 +221,10 @@ const edit = ({
         />
         <hr className="border-gray-400 border-5 w-full mt-8" />
         <PageItems
-          items={items}
           existingItems={pageItems}
           refresh={refreshData}
           token={token}
+          profile={profile}
         />
         <ColumnSection>
           <div className="">
@@ -323,6 +323,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     })
   ).data;
 
+  console.error({items});
+  
   const pageItems = await (
     await item.getAllItems({
       accountId: profile.account.id,

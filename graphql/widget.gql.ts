@@ -31,6 +31,11 @@ const GET_WIDGET = gql`
         description
         content
         media {
+          type
+          video{
+            url
+            videoId
+          }
           image {
             small
             medium

@@ -56,6 +56,7 @@ const PAGE_QUERY = gql`
       createdAt
       hero {
         media {
+          id
           image {
             small
             medium

@@ -12,9 +12,13 @@ export class Items {
   public getAllItems = async ({
     accountId,
     filter,
+    limit = 12,
+    offset = 0,
   }: {
     filter;
     accountId: string;
+    limit?: number;
+    offset?: number;
   }): Promise<GqlResponse<Item[]>> => {
     try {
       const { data } = await client.query({
@@ -22,6 +26,8 @@ export class Items {
         variables: {
           accountId: accountId,
           filter: filter,
+          limit: limit,
+          offset: offset,
         },
       });
       if (!data.getAllItems) {

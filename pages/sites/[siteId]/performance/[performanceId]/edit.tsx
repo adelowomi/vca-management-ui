@@ -188,8 +188,8 @@ export async function getServerSideProps(ctx) {
 
   try {
     const data = (await media.getMedias({ accountId: profile.account.id }))
-      .data as any;
-    medias = data.medias;
+      .data;
+    medias = data;
   } catch (error) {
     medias = { error: true };
   }

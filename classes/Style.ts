@@ -59,7 +59,7 @@ export class Style {
         },
       });
 
-      if (!data.createStyle) {
+      if (!data.updateStyle) {
         return Promise.reject<GqlResponse<Styles>>({
           error: data,
           data: null,
@@ -67,7 +67,7 @@ export class Style {
         });
       }
       return Promise.resolve<GqlResponse<Styles>>({
-        data: data.createStyle,
+        data: data.updateStyle,
         status: true,
         error: null,
       });

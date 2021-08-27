@@ -30,10 +30,7 @@ export class MediaClass {
       limit: limit,
       offset: offset,
       filter: filter,
-    }
-    console.error({variables});
-    console.error({filter});
-    
+    }  
     
     try {
       const { data } = await client.query({

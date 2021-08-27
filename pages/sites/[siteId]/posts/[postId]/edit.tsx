@@ -4,12 +4,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import ReactPlayer from 'react-player';
 import { useToasts } from 'react-toast-notifications';
 
 import { Items } from '../../../../../classes/Items';
 import {
   ComparisonOperatorEnum,
   LogicalOperatorEnum,
+  Media,
 } from '../../../../../classes/schema';
 import { User } from '../../../../../classes/User';
 import { ErrorPage } from '../../../../../components/Errors/ErrorPage';
@@ -17,15 +19,15 @@ import Layout from '../../../../../components/Layout/Layout';
 import { ShadowBtn } from '../../../../../components/Page/PageButtons';
 import { ImageSelectBox } from '../../../../../components/Page/PageStyledElements';
 import { getStringDate } from '../../../../../components/Page/PostList';
+import SelectMediaModal2 from '../../../../../components/Page/SelectMediaModal2';
 import { DraftEditor } from '../../../../../components/utilsGroup/Editor';
-import { SelectMediaModal } from '../../../../../components/utilsGroup/SelectMediaModal';
 import { TagSelector } from '../../../../../components/utilsGroup/TagSelector';
 import { GqlErrorResponse } from '../../../../../errors/GqlError';
 import { GET_ALL_MEDIA } from '../../../../../graphql';
 import { EDIT_ITEM } from '../../../../../graphql/items.gql';
 import { createApolloClient } from '../../../../../lib/apollo';
 
-const edit = ({ token, post, medias, error }) => {
+const edit = ({ token, post, error, profile }) => {
   const {
     query: { siteId, postId },
   } = useRouter();
@@ -35,10 +37,7 @@ const edit = ({ token, post, medias, error }) => {
   const [preview, setPreview] = React.useState(false);
   const { addToast } = useToasts();
 
-  const [state, setState] = React.useState({
-    mediaUrl: post[0]?.mediaUrl,
-    media: post[0]?.media.id,
-  });
+  const [media, setMedia] = React.useState<Media>(post?.media);
 
   const {
     register,
@@ -48,16 +47,17 @@ const edit = ({ token, post, medias, error }) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      featured: post[0]?.featured,
-      description: post[0]?.description,
-      media: post[0].media.id,
-      content: post[0].content,
-      tags: post[0].tags,
+      featured: post?.featured,
+      description: post?.description,
+      media: post.media.id,
+      content: post.content,
+      tags: post.tags,
     },
   });
 
   const onSubmit = async (data) => {
-    data.tags = data.tags ? data.tags : post[0].tags;
+    data.tags = data.tags ? data.tags : post.tags;
+    data.media = media.id;
     try {
       setIsLoading(true);
       await client.mutate({
@@ -97,8 +97,8 @@ const edit = ({ token, post, medias, error }) => {
     register('tags', {
       required: false,
     });
-    setState({
-      ...state,
+    setMedia({
+      ...media,
     });
   }, []);
 
@@ -107,12 +107,13 @@ const edit = ({ token, post, medias, error }) => {
   }
   return (
     <Layout>
-      <SelectMediaModal
+      <SelectMediaModal2
         open={open}
-        setOpen={setOpen}
-        medias={medias}
-        state={state}
-        setState={setState}
+        close={setOpen}
+        profile={profile}
+        selected={media}
+        setMedia={setMedia}
+        token={token}
       />
       <div className="wrapper">
         <div className="px-24 mt-10">
@@ -191,7 +192,7 @@ const edit = ({ token, post, medias, error }) => {
                 </div>
                 <div>
                   <h4 className="text-xl font-medium mb-6">Add Tags</h4>
-                  <TagSelector getTags={getTags} defaultValue={post[0].tags} />
+                  <TagSelector getTags={getTags} defaultValue={post.tags} />
                   {errors?.tags && (
                     <p className="text-red-500">tags is required!</p>
                   )}
@@ -202,7 +203,7 @@ const edit = ({ token, post, medias, error }) => {
               <div className="col-span-2 h-full">
                 <h4 className="text-xl font-medium mb-4">Post content</h4>
                 <DraftEditor
-                  defaultValue={post[0].content}
+                  defaultValue={post.content}
                   getContent={getContent}
                 />
                 {errors?.content && (
@@ -219,7 +220,7 @@ const edit = ({ token, post, medias, error }) => {
                   className="py-4 px-10 shadow-sm rounded text-sm font-bold cursor-pointer"
                   onClick={() => setPreview(!preview)}
                 >
-                  Show preview
+                  {preview ? 'Hide preview' : 'Show preview'}
                 </ShadowBtn>
               </div>
               <>
@@ -229,14 +230,19 @@ const edit = ({ token, post, medias, error }) => {
                       <div className="flex xl:w-card-xl lg:w-card- 2xl:w-card-2xl md:w-card-md rounded">
                         <div className="group w-full overflow-hidden hover:shadow-lg bg-white shadow-md">
                           <div className="h-44 w-full">
-                            {state?.mediaUrl ? (
+                            {media.type == 'IMAGE' ? (
                               <img
-                                className="w-full h-full object-cover rounded-tr rounded-tl"
-                                src={state?.mediaUrl}
+                                className="w-full h-full object-cover"
+                                src={media.image.small}
                                 alt="news image"
                               />
                             ) : (
-                              <div className="w-full h-full bg-gray-400 object-cover rounded-tr rounded-tl"></div>
+                              <ReactPlayer
+                                url={media.video.url}
+                                className="h-full w-full"
+                                height={'100%'}
+                                width={'100%'}
+                              />
                             )}
                           </div>
                           <div
@@ -296,9 +302,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             filters: [
               {
                 singleFilter: {
-                  field: 'account',
+                  field: '_id',
                   operator: ComparisonOperatorEnum.Eq,
-                  value: profile.account.id,
+                  value: postId,
                 },
               },
               {
@@ -313,7 +319,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       })
     ).data;
-
+      
     const {
       data: { medias },
     } = await client.query({
@@ -327,11 +333,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
     return {
       props: {
-        post: posts.filter((post) => post.id == postId) ?? [],
+        post: posts[0],
         token: session.idToken,
         error: null,
         user: session.user,
         medias: medias ?? [],
+        profile,
       },
     };
   } catch (error) {
@@ -341,6 +348,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         user: session.user,
         post: [],
         medias: [],
+        profile,
       },
     };
   }

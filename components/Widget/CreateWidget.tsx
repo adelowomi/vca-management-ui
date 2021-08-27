@@ -138,9 +138,9 @@ export const CreateWidget = ({
       <ItemsModal2
         open={open}
         close={setOpen}
-        items={items}
         existingItems={existingWidget.items}
         setNewItems={setWidgetItems}
+        profile={profile}
       />
       <ColumnSection>
         <H2 className="mb-5">2. Widget section</H2>

@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 const GET_ALL_ITEMS_QUERY = gql`
-  query GetAllItems($filter: FilterInput, $accountId: String!) {
-    getAllItems(filter: $filter, accountId: $accountId) {
+  query GetAllItems($filter: FilterInput, $accountId: String!,$limit: Int,$offset:Int) {
+    getAllItems(filter: $filter, accountId: $accountId,limit:$limit,offset:$offset) {
       id
       type
       description

@@ -4,23 +4,25 @@ import Link from 'next/link';
 import router, { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import ReactPlayer from 'react-player';
 import { useToasts } from 'react-toast-notifications';
 
+import { Media } from '../../../../classes/schema';
 import { User } from '../../../../classes/User';
 import { ErrorPage } from '../../../../components/Errors/ErrorPage';
 import Layout from '../../../../components/Layout/Layout';
 import { ShadowBtn } from '../../../../components/Page/PageButtons';
 import { ImageSelectBox } from '../../../../components/Page/PageStyledElements';
 import { getStringDate } from '../../../../components/Page/PostList';
+import SelectMediaModal2 from '../../../../components/Page/SelectMediaModal2';
 import { DraftEditor } from '../../../../components/utilsGroup/Editor';
-import { SelectMediaModal } from '../../../../components/utilsGroup/SelectMediaModal';
 import { TagSelector } from '../../../../components/utilsGroup/TagSelector';
 import { GqlErrorResponse } from '../../../../errors/GqlError';
 import { GET_ALL_MEDIA } from '../../../../graphql';
 import { ADD_ITEM } from '../../../../graphql/items.gql';
 import { createApolloClient } from '../../../../lib/apollo';
 
-const create = ({ token, accountId: account, medias, error }) => {
+const create = ({ token, accountId: account, error, profile }) => {
   const {
     query: { siteId },
   } = useRouter();
@@ -29,10 +31,7 @@ const create = ({ token, accountId: account, medias, error }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const { addToast } = useToasts();
   const [preview, setPreview] = React.useState(false);
-  const [state, setState] = React.useState({
-    mediaUrl: 'random string',
-    media: '',
-  });
+  const [media, setMedia] = React.useState<Media>();
   const {
     register,
     handleSubmit,
@@ -60,7 +59,7 @@ const create = ({ token, accountId: account, medias, error }) => {
             account,
             tags: data.tags ? data.tags : [],
             media: data.media,
-            mediaUrl: "buhbhbibibii",
+            mediaUrl: 'buhbhbibibii',
           },
         },
       });
@@ -85,10 +84,10 @@ const create = ({ token, accountId: account, medias, error }) => {
     register('content', {
       required: true,
     });
-    if (state.media) {
-      setValue('media', state.media);
+    if (media) {
+      setValue('media', media.id);
     }
-  }, [register, state.media]);
+  }, [register, media]);
   const getContent = (content) => {
     setValue('content', content);
   };
@@ -98,13 +97,21 @@ const create = ({ token, accountId: account, medias, error }) => {
 
   return (
     <Layout>
-      <SelectMediaModal
+      <SelectMediaModal2
+        open={open}
+        close={setOpen}
+        profile={profile}
+        selected={media}
+        setMedia={setMedia}
+        token={token}
+      />
+      {/* <SelectMediaModal
         open={open}
         setOpen={setOpen}
         medias={medias}
-        state={state}
-        setState={setState}
-      />
+        state={media}
+        setState={setMedia}
+      /> */}
       <div className="wrapper">
         <div className="px-24 mt-10">
           <form action="" onSubmit={handleSubmit(onSubmit)}>
@@ -214,7 +221,7 @@ const create = ({ token, accountId: account, medias, error }) => {
               className="py-4 px-10 shadow-sm rounded text-sm font-bold cursor-pointer"
               onClick={() => setPreview(!preview)}
             >
-              Show preview
+              {preview ? 'Hide preview' : 'Show preview'}
             </ShadowBtn>
             {preview ? (
               <div className="mt-7">
@@ -222,14 +229,19 @@ const create = ({ token, accountId: account, medias, error }) => {
                   <div className="flex xl:w-card-xl lg:w-card- 2xl:w-card-2xl md:w-card-md rounded">
                     <div className="group w-full overflow-hidden hover:shadow-lg bg-white shadow-md">
                       <div className="h-44 w-full">
-                        {state?.mediaUrl ? (
+                        {media.type == 'IMAGE' ? (
                           <img
-                            className="w-full h-full object-cover rounded-tr rounded-tl"
-                            src={state?.mediaUrl}
+                            className="w-full h-full object-cover"
+                            src={media.image.small}
                             alt="news image"
                           />
                         ) : (
-                          <div className="w-full h-full bg-gray-400 object-cover rounded-tr rounded-tl"></div>
+                          <ReactPlayer
+                            url={media.video.url}
+                            className="h-full w-full"
+                            height={'100%'}
+                            width={'100%'}
+                          />
                         )}
                       </div>
                       <div className="px-3 py-4" style={{ height: '200px' }}>
@@ -289,6 +301,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         error: null,
         user: session.user,
         medias,
+        profile,
       },
     };
   } catch (error) {
@@ -297,6 +310,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         error: GqlErrorResponse(error),
         user: session.user,
         medias: [],
+        profile,
       },
     };
   }

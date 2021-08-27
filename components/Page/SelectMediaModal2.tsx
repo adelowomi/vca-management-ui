@@ -60,15 +60,16 @@ export const SelectMediaModal2 = ({
   const loadMedia = async (page?: number,filter?: Record<string, unknown>) => {
     setLoading(true);
     try {
-      console.error('here');
       const data = await await media.getMedias({
         accountId: profile.account.id,
         limit: limit,
         offset: limit * page,
         filter: filter ? filter : {} 
       });
-      console.error(data);
       setLoading(false);
+      if(data.data.length <= 0){
+        return;
+      }
       setMedias(data.data);
     } catch (error) {
       setLoading(false);
