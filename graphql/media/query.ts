@@ -30,8 +30,18 @@ export const GET_MEDIA = gql`
 `;
 
 export const GET_MEDIA_BY_ACCOUNT = gql`
-  query medias($accountId: String!, $limit: Int) {
-    medias(accountId: $accountId, limit: $limit) {
+  query medias(
+    $accountId: String!
+    $limit: Int
+    $offset: Int
+    $filter: FilterInput
+  ) {
+    medias(
+      accountId: $accountId
+      limit: $limit
+      offset: $offset
+      filter: $filter
+    ) {
       id
       createdAt
       updatedAt

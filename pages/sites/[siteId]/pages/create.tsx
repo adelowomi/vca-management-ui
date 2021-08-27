@@ -5,7 +5,6 @@ import React, {  useState } from 'react';
 import {  useForm,  } from 'react-hook-form';
 import { useToasts } from 'react-toast-notifications';
 
-import { MediaClass } from '../../../../classes/media';
 import { Pages } from '../../../../classes/Page';
 import { UpdateMenuitemInput } from '../../../../classes/schema';
 import { Site } from '../../../../classes/Site';
@@ -26,7 +25,6 @@ import {
 const create = ({
   token,
   menuItems,
-  medias,
   profile
 }: {
   token: string;
@@ -177,7 +175,8 @@ const create = ({
           register={register}
           watch={watch}
           errors={errors}
-          medias={medias}
+          token={token}
+          profile={profile}
         />
         <ColumnSection>
           <div className="mt-5">
@@ -196,9 +195,7 @@ export async function getServerSideProps(ctx) {
 
   const user = new User(session.idToken);
   const site = new Site(session.idToken);
-  const media = new MediaClass(session.idToken);
-  let errorss = false;
-  let medias;
+
 
   const profile = await (await user.getProfile()).data;
 
@@ -209,21 +206,12 @@ export async function getServerSideProps(ctx) {
     })
   ).data;
 
-  try {
-    medias =
-      (await (await media.getMedias({ accountId: profile.account.id })).data) ??
-      [];
-  } catch (error) {
-    console.error(JSON.stringify(error));
-    (errorss = true), (medias = []);
-  }
+
 
   return {
     props: {
       token: session?.idToken,
       menuItems: currentSite.header.menuItems,
-      medias : medias.medias,
-      errorss,
       site: currentSite,
       profile
     },

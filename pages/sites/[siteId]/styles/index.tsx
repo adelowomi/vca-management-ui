@@ -11,11 +11,9 @@ import {
   StyleFooterInput,
   StyleNavigationInput,
   StylePrimaryButtonInput,
-  Styles,
   StyleSecondaryButtonInput,
   UpdateStyleInput,
 } from '../../../../classes/schema';
-import { Site } from '../../../../classes/Site';
 import { Style } from '../../../../classes/Style';
 import { User } from '../../../../classes/User';
 import Layout from '../../../../components/Layout/Layout';
@@ -32,33 +30,56 @@ const createStyles = ({
   siteId,
   account,
 }: {
-  existingStyle: Styles;
+  existingStyle: any;
   token: string;
   siteId: string;
   account: string;
 }): JSX.Element => {
   const [loading, setLoading] = useState(false);
   const { addToast } = useToasts();
-  const [bodyStyle, setBodyStyle] = useState<StyleBodyInput>(
-    existingStyle.body
-  );
+  const [bodyStyle, setBodyStyle] = useState<StyleBodyInput>({
+    bodyFont: existingStyle.body?.bodyFont,
+    fontColor: existingStyle.body?.fontColor,
+    backgroundColor: existingStyle.body?.backgroundColor,
+    accentColor: existingStyle.body?.accentColor,
+  });
   const [navigationStyle, setNavigationStyle] = useState<StyleNavigationInput>(
-    existingStyle.navigation
+    {
+      fontColor:existingStyle.navigation?.fontColor,
+      accentColor: existingStyle.navigation?.accentColor,
+      backgroundColor: existingStyle.navigation?.backgroundColor,
+    }
   );
   const [buttonStyle, setButtonStyle] = useState<StyleButtonInput>(
-    existingStyle.button
+    {
+      font:existingStyle.button.font,
+      buttonBorderStyle: existingStyle.button?.buttonBorderStyle,
+      previewButton: existingStyle.button?.previewButton,
+    }
   );
   const [primaryButtonStyle, setPrimaryButtonStyle] =
-    useState<StylePrimaryButtonInput>(existingStyle.primaryButton);
+    useState<StylePrimaryButtonInput>({
+      backgroundColor:existingStyle.primaryButton?.backgroundColor,
+      fontColor: existingStyle.primaryButton?.fontColor,
+      hoverBackgroundColor:existingStyle.primaryButton?.hoverBackgroundColor,
+     hoverFontColor: existingStyle.primaryButton?.hoverFontColor,
+    });
   const [secondaryButton, setSecondaryButtonStyles] =
-    useState<StyleSecondaryButtonInput>(existingStyle.secondaryButton);
+    useState<StyleSecondaryButtonInput>({
+      backgroundColor:existingStyle.secondaryButton?.backgroundColor,
+      fontColor:existingStyle.secondaryButton?.fontColor,
+      hoverBackgroundColor: existingStyle.secondaryButton?.hoverBackgroundColor,
+      hoverFontColor: existingStyle.secondaryButton?.hoverFontColor,
+    });
   const [footerStyles, setFooterStyles] = useState<StyleFooterInput>(
-    existingStyle.footer
+    {
+      accentColor:existingStyle.footer?.accentColor,
+      backgroundColor: existingStyle.footer?.backgroundColor,
+      fontColor: existingStyle.footer?.fontColor,
+    }
   );
 
   const _thisStyle = new Style(token);
-
-
 
   const onSubmit = async () => {
     const data: CreateStyleInput = {
@@ -68,38 +89,68 @@ const createStyles = ({
       primaryButton: primaryButtonStyle,
       secondaryButton: secondaryButton,
       footer: footerStyles,
-      account: siteId,
-      site: account,
+      account: account,
+      site: siteId,
     };
+    console.error({data});
+    console.error({existingStyle});
+    
+    
     if (existingStyle) {
       await updateStyle(data as UpdateStyleInput);
       return;
     }
-
     await createStyle(data as CreateStyleInput);
+    return;
   };
 
   const createStyle = async (input: CreateStyleInput) => {
+    input.button.previewButton = 'preview';
     setLoading(true);
     try {
-      const result = await _thisStyle.createSite({input:input as unknown as CreateStyleInput});
+      const result = await _thisStyle.createStyle({
+        input: input as unknown as CreateStyleInput,
+      });
+      if (!result.status) {
+        addToast('An error occurred', { appearance: 'error' });
+        setLoading(false);
+      }
+      addToast('Style created successfully', { appearance: 'success' });
+      setLoading(false);
       console.error(result);
-      
     } catch (error) {
       console.error(error);
-      addToast(error.error.message ? error.error.message :'An error occurred', { appearance: 'error' });
+      addToast(
+        error.error.message ? error.error.message : 'An error occurred',
+        { appearance: 'error' }
+      );
       setLoading(false);
     }
   };
 
-  const updateStyle = async(input: UpdateStyleInput) => {
+  const updateStyle = async (input: UpdateStyleInput) => {
+    input.button.previewButton = 'preview';
     setLoading(true);
     try {
-      const result = await _thisStyle.createSite({input:input as unknown as CreateStyleInput});
+      const result = await _thisStyle.updateStyle({
+        input: input as unknown as UpdateStyleInput,
+        id: existingStyle.id,
+      });
+      console.error({result});
+      
+      if (!result.status) {
+        addToast('An error occurred', { appearance: 'error' });
+        setLoading(false);
+      }
+      addToast('Style updated successfully', { appearance: 'success' });
+      setLoading(false);
       console.error(result);
     } catch (error) {
       console.error(error);
-      addToast(error.error.message ? error.error.message :'An error occurred', { appearance: 'error' });
+      addToast(
+        error.error.message ? error.error.message : 'An error occurred',
+        { appearance: 'error' }
+      );
       setLoading(false);
     }
   };
@@ -157,24 +208,30 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return;
   }
   const user = new User(session.idToken);
-  const site = new Site(session.idToken);
+  const style = new Style(session.idToken);
   const token = session.idToken;
   const profile = await (await user.getProfile()).data;
-  const data = await (
-    await site.getSite({
+
+  let existingStyle;
+  try {
+    existingStyle = await style.getStyle({
       accountId: profile.account.id,
-      siteId: (ctx.query.siteId as unknown) as string,
-    })
-  ).data;
+      siteId: ctx.query.siteId as unknown as string,
+    });
+  } catch (error) {
+    console.error(error);
+    existingStyle = {};
+  }
+
   return {
     props: {
-      siteId: data.id,
+      siteId: ctx.query.siteId as unknown as string,
       error: null,
-      user: session.user,
+      account: profile.account.id,
       token,
-      existingStyle:{}
+      existingStyle: existingStyle.data,
     },
   };
-}
+};
 
 export default createStyles;

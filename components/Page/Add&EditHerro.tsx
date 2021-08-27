@@ -34,16 +34,18 @@ export const AddEditHero = ({
   setHero,
   register,
   errors,
-  medias,
   watch,
   existingHero,
+  token,
+  profile
 }: {
   setHero: any;
   register: any;
   watch: any;
   errors: any;
-  medias: any[];
   existingHero?: any;
+  token:any;
+  profile: any;
 }): JSX.Element => {
   const watching = watch();
   const [mediaModalOpen, setMediaModalOpen] = useState(false);
@@ -54,20 +56,23 @@ export const AddEditHero = ({
   );
   const [showPreview, setShowPreview] = useState(true);
 
-  const setMedia = (id: string) => {
-    setHero({ media: id });
-    setSelectedMedia(medias.filter((m) => m.id === id)[0]);
+  const setMedia = (media:any) => {
+    setHero({ media: media.id });
+    setSelectedMedia(media);
+    console.error(media);
+    
   };
 
   return (
     <>
       <SelectMediaModal2
         close={setMediaModalOpen}
-        medias={medias}
         open={mediaModalOpen}
         setMedia={setMedia}
         selected={selectedMedia}
-
+        token={token}
+        profile={profile}
+        type={"IMAGE"}
       />
       <ColumnSection>
         <H2 className="mt-6">Media Image</H2>

@@ -4,7 +4,6 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { FaRegEdit } from 'react-icons/fa';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { useToasts } from 'react-toast-notifications';
 
@@ -163,7 +162,7 @@ const posts = ({
                               <Link
                                 href={`/sites/${siteId}/posts/${post.id}/edit`}
                               >
-                                <FaRegEdit className="h-6" />
+                                Edit
                               </Link>
                               <RiDeleteBinLine
                                 className="h-6"

@@ -37,7 +37,6 @@ const edit = ({
   profile,
   page,
   menuItems,
-  medias,
   items,
   existingWidget,
   pageItems,
@@ -209,8 +208,9 @@ const edit = ({
           register={register}
           watch={watch}
           errors={errors}
-          medias={medias}
           existingHero={page.hero}
+          token={token}
+          profile={profile}
         />
         <hr className="border-gray-400 border-5 w-full mt-8" />
         <CreateWidget
@@ -221,10 +221,10 @@ const edit = ({
         />
         <hr className="border-gray-400 border-5 w-full mt-8" />
         <PageItems
-          items={items}
           existingItems={pageItems}
           refresh={refreshData}
           token={token}
+          profile={profile}
         />
         <ColumnSection>
           <div className="">
@@ -323,6 +323,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     })
   ).data;
 
+  console.error({items});
+  
   const pageItems = await (
     await item.getAllItems({
       accountId: profile.account.id,
@@ -396,7 +398,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       token: session?.idToken,
       menuItems: currentSite.header.menuItems,
       error: error ?? null,
-      medias: medias.medias,
+      medias: medias,
       items,
       existingWidget: existingWidget ?? [],
       profile,

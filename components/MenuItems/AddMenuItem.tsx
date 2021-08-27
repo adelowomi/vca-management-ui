@@ -163,7 +163,7 @@ export const AddMenuItem = ({
             {useExternalLink ? 
             <FormInput
               name="slug"
-              label="url"
+              label=""
               register={register}
               error={errors.slug}
               required={true}

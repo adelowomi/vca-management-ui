@@ -190,6 +190,7 @@ export type SiteView = {
   page?: Maybe<Scalars['String']>;
   account: Account;
   isActive: Scalars['Boolean'];
+  social?: Social;
 };
 
 export type Hero = {
@@ -319,21 +320,10 @@ export type Performance = {
 };
 
 export type Social = {
-  __typename?: 'Social';
-  id: Scalars['String'];
-  createdBy: Profile;
-  updatedBy?: Maybe<Profile>;
-  deletedBy?: Maybe<Profile>;
-  createdAt: Scalars['DateTime'];
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  deletedAt?: Maybe<Scalars['DateTime']>;
   facebook: Scalars['String'];
   instagram: Scalars['String'];
   linkedin: Scalars['String'];
   twitter: Scalars['String'];
-  site: Scalars['String'];
-  account: Account;
-  isActive: Scalars['Boolean'];
 };
 
 export type Widget = {
@@ -868,6 +858,7 @@ export type CreateSiteInput = {
   header: CreateHeaderInput;
   page?: Maybe<Scalars['String']>;
   account: Scalars['String'];
+  social?: Social;
 };
 
 export type CreateHeaderInput = {
@@ -889,6 +880,7 @@ export type UpdateSiteInput = {
   name?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['String']>;
   header?: Maybe<UpdateHeaderInput>;
+  social?: Social;
 };
 
 export type UpdateHeaderInput = {
@@ -1175,7 +1167,6 @@ export type UpdateStyleInput = {
 };
 
 export type Body = {
-  __typename?: 'Body';
   id: Scalars['String'];
   bodyFont: Scalars['String'];
   fontColor: Scalars['String'];
@@ -1184,7 +1175,6 @@ export type Body = {
 };
 
 export type Navigation = {
-  __typename?: 'Navigation';
   id: Scalars['String'];
   fontColor: Scalars['String'];
   backgroundColor: Scalars['String'];
@@ -1192,7 +1182,6 @@ export type Navigation = {
 };
 
 export type Footer = {
-  __typename?: 'Footer';
   id: Scalars['String'];
   fontColor: Scalars['String'];
   backgroundColor: Scalars['String'];
@@ -1200,7 +1189,6 @@ export type Footer = {
 };
 
 export type Button = {
-  __typename?: 'Button';
   id: Scalars['String'];
   font: Scalars['String'];
   buttonBorderStyle: Scalars['String'];
@@ -1208,7 +1196,6 @@ export type Button = {
 };
 
 export type PrimaryButton = {
-  __typename?: 'PrimaryButton';
   id: Scalars['String'];
   fontColor: Scalars['String'];
   hoverFontColor: Scalars['String'];
@@ -1217,7 +1204,6 @@ export type PrimaryButton = {
 };
 
 export type SecondaryButton = {
-  __typename?: 'SecondaryButton';
   id: Scalars['String'];
   fontColor: Scalars['String'];
   hoverFontColor: Scalars['String'];
@@ -1226,7 +1212,6 @@ export type SecondaryButton = {
 };
 
 export type Styles = {
-  __typename?: 'Style';
   id: Scalars['String'];
   body: Body;
   navigation: Navigation;

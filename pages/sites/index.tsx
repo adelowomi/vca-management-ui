@@ -119,40 +119,47 @@ const Sites = ({
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {sites.map((site: any) => (
-                        <tr className={`text-left  `} key={site.id}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
-                            <input
-                              type="checkbox"
-                              className="px-3 h-5 w-6 border border-gray-300"
-                              name=""
-                              id=""
-                            />
-                          </td>
+                        <Link href={`/sites/${site.id}/pages`} key={site.id}>
+                          <tr
+                            className={`text-left  hover:bg-vca-blue hover:bg-opacity-10 cursor-pointer`}
+                          >
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
+                              <input
+                                type="checkbox"
+                                className="px-3 h-5 w-6 border border-gray-300"
+                                name=""
+                                id=""
+                              />
+                            </td>
 
-                          <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
-                            <Link href={`/sites/${site.id}/pages`}>
-                              {site.name}
-                            </Link>
-                          </td>
-                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
-                            <Link href={`/sites/${site.id}/pages`}>{''}</Link>
-                          </td>
-                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
-                            <Link href={`/sites/${site.id}/pages`}>
-                              <span>
-                                <p>{moment(site.createdAt).format('llll')}</p>
-                              </span>
-                            </Link>
-                          </td>
-                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
-                            <span className="flex space-x-5">
-                              <Link href={`/sites/${site.id}/edit`}>
-                                <p>Edit</p>
+                            <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
+                              <Link href={`/sites/${site.id}/pages`}>
+                                {site.name}
                               </Link>
-                              <RiDeleteBinLine className="h-6"  onClick={() => triggerDelete(site.id)}/>
-                            </span>
-                          </td>
-                        </tr>
+                            </td>
+                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
+                              <Link href={`/sites/${site.id}/pages`}>{''}</Link>
+                            </td>
+                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
+                              <Link href={`/sites/${site.id}/pages`}>
+                                <span>
+                                  <p>{moment(site.createdAt).format('llll')}</p>
+                                </span>
+                              </Link>
+                            </td>
+                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
+                              <span className="flex space-x-5">
+                                <Link href={`/sites/${site.id}/edit`}>
+                                  <p>Edit</p>
+                                </Link>
+                                <RiDeleteBinLine
+                                  className="h-6"
+                                  onClick={() => triggerDelete(site.id)}
+                                />
+                              </span>
+                            </td>
+                          </tr>
+                        </Link>
                       ))}
                     </tbody>
                   </table>
@@ -168,9 +175,6 @@ const Sites = ({
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = getSession(ctx.req, ctx.res);
-  const user = new User(session.idToken);
-  const site = new Site(session.idToken);
-
   if (!session) {
     ctx.res.writeHead(302, {
       Location: '/login',
@@ -178,6 +182,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     ctx.res.end();
     return;
   }
+  const user = new User(session.idToken);
+  const site = new Site(session.idToken);
 
   const profile = await (await user.getProfile()).data;
 

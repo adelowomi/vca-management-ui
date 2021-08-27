@@ -7,6 +7,12 @@ const SITE_QUERY = gql`
       name
       createdAt
       page
+      social{
+        instagram
+        facebook
+        twitter
+        linkedin
+      }
       header {
         name
         type

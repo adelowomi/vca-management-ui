@@ -6,16 +6,17 @@ import { ColumnSection, H2, ImageSelectBox } from './PageStyledElements';
 import PostList from './PostList';
 
 export const PageItems = ({
-  items,
   existingItems,
   refresh,
   token,
+  profile,
 }: {
-  items: any[];
   existingItems: any[];
   refresh: any;
   token?: any;
+  profile: any;
 }): JSX.Element => {
+  
   const [open, setOpen] = useState(false);
   const [pageItems, setPageItems] = useState(existingItems ?? []);
   const [showPreview, setShowPreview] = useState(true);
@@ -25,11 +26,11 @@ export const PageItems = ({
       <ItemsModal2
         open={open}
         close={setOpen}
-        items={items}
         existingItems={existingItems}
         setNewItems={setPageItems}
         refresh={refresh}
         token={token}
+        profile={profile}
       />
       <ColumnSection>
         <H2 className="mt-4">3. Post section</H2>
