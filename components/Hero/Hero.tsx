@@ -13,6 +13,8 @@ export interface HeroProps {
 }
 
 export const HeroPreview = ({ hero }: { hero: Hero }): JSX.Element => {
+  console.error(hero.media);
+  
   return (
     <>
       <div className="pb-24 mt-12 rounded">
@@ -22,14 +24,14 @@ export const HeroPreview = ({ hero }: { hero: Hero }): JSX.Element => {
             backgroundImage:
               hero.location == 'LEFT'
                 ? `linear-gradient(90deg, rgba(0, 0, 0, 0.7) 1.68%, rgba(0, 0, 0, 0) 88.4%), url( ${
-                    hero.media && hero.media.image.large
+                    hero.media && hero.media.image?.large
                   })`
                 : hero.location == 'RIGHT'
                 ? `linear-gradient(260deg, rgba(0, 0, 0, 0.7) 1.68%, rgba(0, 0, 0, 0) 88.4%), url( ${
-                    hero.media && hero.media.image.large
+                    hero.media && hero.media.image?.large
                   })`
                 : `linear-gradient(90deg, rgba(0, 0, 0, 0.7) 1.68%, rgba(0, 0, 0, 0) 88.4%), url( ${
-                    hero.media && hero.media.image.large
+                    hero.media && hero.media.image?.large
                   })`,
             height: '490px',
           }}

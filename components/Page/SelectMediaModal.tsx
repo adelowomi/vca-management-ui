@@ -75,7 +75,6 @@ export const SelectMediaModal = ({
         return;
       }
       setMedias(data.data);
-      setMedia([])
     } catch (error) {
       setLoading(false);
       console.error(error);

@@ -47,6 +47,7 @@ export const AddEditHero = ({
   token:any;
   profile: any;
 }): JSX.Element => {
+  
   const watching = watch();
   const [mediaModalOpen, setMediaModalOpen] = useState(false);
   const [textPosition, setTextPosition] = useState(existingHero?.location);
@@ -57,10 +58,10 @@ export const AddEditHero = ({
   const [showPreview, setShowPreview] = useState(true);
 
   const setMedia = (media:any) => {
+    
     setHero({ media: media.id });
     setSelectedMedia(media);
     console.error(media);
-    
   };
 
   return (

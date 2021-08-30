@@ -90,7 +90,7 @@ const edit = ({
     const data = { type: 'PAGE' };
     try {
       const result = await await _thisSite.updateMenuItem({
-        input: (data as unknown) as UpdateMenuitemInput,
+        input: data as unknown as UpdateMenuitemInput,
         menuId: selectedMenu,
       });
       if (!result.status) {
@@ -108,12 +108,12 @@ const edit = ({
   };
 
   const updatePage = async (data: any) => {
-    hero && hero.media ? data.hero.media = hero.media : null;
+    hero && hero.media ? (data.hero.media = hero.media) : null;
     setWorking(true);
     try {
       const result = await _thisPage.updatePage({
-        input: (data as unknown) as UpdatePageInput,
-        pageId: (pageId as unknown) as string,
+        input: data as unknown as UpdatePageInput,
+        pageId: pageId as unknown as string,
       });
       if (!result.status) {
         console.error(result);
@@ -149,10 +149,12 @@ const edit = ({
           <RowSection className="justify-between">
             <H1>Edit Page</H1>
             <div className="flex flex-row justify-start space-x-5">
-              <Btn color="primary" $bg="secondary" $px="sm">
-                <Link href={`/sites/${siteId}/pages`}> Cancel</Link>
-              </Btn>
-
+              <Link href={`/sites/${siteId}/pages`}>
+                <Btn color="primary" $bg="secondary" $px="sm">
+                  {' '}
+                  Cancel
+                </Btn>
+              </Link>
               <Btn color="secondary" $bg="primary" $px="lg" type="submit">
                 {working ? 'Saving' : 'Save & Publish'}
               </Btn>
@@ -182,8 +184,8 @@ const edit = ({
               options={menuItems.map(
                 (item, index) => {
                   return {
-                    value: (item.id as unknown) as string,
-                    name: (item.name as unknown) as string,
+                    value: item.id as unknown as string,
+                    name: item.name as unknown as string,
                     id: index,
                     unavailable: false,
                   };
@@ -263,7 +265,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const currentSite = await (
     await site.getSite({
-      siteId: (ctx.query.siteId as unknown) as string,
+      siteId: ctx.query.siteId as unknown as string,
       accountId: profile.account.id,
     })
   ).data;
@@ -296,6 +298,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     error = err;
   }
 
+  console.error({ page });
+
   const items = await (
     await item.getAllItems({
       accountId: profile.account.id,
@@ -323,8 +327,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     })
   ).data;
 
-  console.error({items});
-  
   const pageItems = await (
     await item.getAllItems({
       accountId: profile.account.id,
