@@ -197,27 +197,19 @@ const Pages = ({ pages, menuItems, token }) => {
                             </td>
 
                             <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
-                              <Link
-                                href={`/sites/${siteId}/pages/${el.id}/edit`}
-                              >
-                                {el.name}
-                              </Link>
+                              {el.name}
                             </td>
                             <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
-                              <Link href={`/sites/${el.site}/pages/${el.id}`}>
-                                {el.menuItem
-                                  ? menuItems.filter(
-                                      (item) => item.id === el.menuItem
-                                    )[0].name
-                                  : ''}
-                              </Link>
+                              {el.menuItem
+                                ? menuItems.filter(
+                                    (item) => item.id === el.menuItem
+                                  )[0].name
+                                : ''}
                             </td>
                             <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
-                              <Link href={`/sites/${el.site}/pages/${el.id}`}>
-                                <span>
-                                  <p>{moment(el.createdAt).format('llll')}</p>
-                                </span>
-                              </Link>
+                              <span>
+                                <p>{moment(el.createdAt).format('llll')}</p>
+                              </span>
                             </td>
                             <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
                               <span className="flex space-x-5">

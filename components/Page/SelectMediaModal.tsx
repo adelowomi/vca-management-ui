@@ -196,7 +196,7 @@ export const SelectMediaModal = ({
                   </div>
                 </div>
               ) : (
-                <Container>P
+                <Container>
                   <Row>
                     <H1 className="mb-10">Select Media</H1>
                     <button
