@@ -8,15 +8,13 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 
+import { PerformanceClass } from '../../../../classes/Performance';
+import { ComparisonOperatorEnum } from '../../../../classes/schema';
 import { User } from '../../../../classes/User';
 import Layout from '../../../../components/Layout/Layout';
-import { BulkActionDropdown } from '../../../../components/Page/BulkActionDropdown';
 import DeleteModal from '../../../../components/utilsGroup/DeleteModal';
 import { GET_SITE_MENUITEMS } from '../../../../graphql';
-import {
-  DELETE_PERFORMANCE,
-  GET_PERFORMANCES,
-} from '../../../../graphql/performance.gql';
+import { DELETE_PERFORMANCE } from '../../../../graphql/performance.gql';
 import { createApolloClient } from '../../../../lib/apollo';
 
 const PageActionsWrapper = tw.div`
@@ -115,13 +113,13 @@ const index = ({ performances, menuItems, token }) => {
         <PageActionsWrapper>
           <PageActionsColOne>
             <h1 className="text-4xl font-semibold">Performance</h1>
-            <PageActionsColOneBtn className="focus:outline-none">
-              <Link href={`/sites/${siteId}/performance/create`}> Add New</Link>
-            </PageActionsColOneBtn>
+            <Link href={`/sites/${siteId}/performance/create`}>
+              <PageActionsColOneBtn className="focus:outline-none">
+                  {' '}
+                  Add New
+              </PageActionsColOneBtn>
+            </Link>
           </PageActionsColOne>
-          <div className=" flex mt-7">
-            <BulkActionDropdown />
-          </div>
         </PageActionsWrapper>
         <PageHeroWrapper className="flex flex-row justify-between mt-6 py-20 w0-full items-center">
           <div className="second_col w-full">
@@ -181,59 +179,67 @@ const index = ({ performances, menuItems, token }) => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {performances.map((el: any) => (
-                        <tr className={`text-left  `} key={el.id}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
-                            <input
-                              type="checkbox"
-                              className="px-3 h-5 w-6 border border-gray-300"
-                              name=""
-                              id=""
-                            />
-                          </td>
-
-                          <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
-                            <Link
-                              href={`/sites/${siteId}/performance/${el.id}`}
-                            >
-                              {el.name}
-                            </Link>
-                          </td>
-                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
-                            <Link
-                              href={`/sites/${siteId}/performance/${el.id}`}
-                            >
-                              {el.menuItem
-                                ? menuItems.filter(
-                                    (item) => item.id === el.menuItem
-                                  )[0].name
-                                : ''}
-                            </Link>
-                          </td>
-                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
-                            <Link
-                              href={`/sites/${siteId}/performance/${el.id}`}
-                            >
-                              <span>
-                                <p>{el.createdAt}</p>
-                              </span>
-                            </Link>
-                          </td>
-                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
-                            <span className="flex space-x-5">
-                              <Link
-                                href={`/sites/${siteId}/performance/${el.id}/edit`}
-                              >
-                                <p>edit</p>
-                              </Link>
-
-                              <RiDeleteBinLine
-                                onClick={() => getId(el.id)}
-                                className="h-6"
+                      {performances.map((performance: any) => (
+                        <Link
+                          href={`/sites/${siteId}/performance/${performance.id}/edit`}
+                          key={performance.id}
+                        >
+                          <tr
+                            className={`text-left hover:bg-vca-blue hover:bg-opacity-10 cursor-pointer `}
+                            key={performance.id}
+                          >
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
+                              <input
+                                type="checkbox"
+                                className="px-3 h-5 w-6 border border-gray-300"
+                                name=""
+                                id=""
                               />
-                            </span>
-                          </td>
-                        </tr>
+                            </td>
+
+                            <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
+                              <Link
+                                href={`/sites/${siteId}/performance/${performance.id}/edit`}
+                              >
+                                {performance.name}
+                              </Link>
+                            </td>
+                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
+                              <Link
+                                href={`/sites/${siteId}/performance/${performance.id}/edit`}
+                              >
+                                {performance.menuItem
+                                  ? menuItems.filter(
+                                      (item) => item.id === performance.menuItem
+                                    )[0].name
+                                  : ''}
+                              </Link>
+                            </td>
+                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
+                              <Link
+                                href={`/sites/${siteId}/performance/${performance.id}`}
+                              >
+                                <span>
+                                  <p>{performance.createdAt}</p>
+                                </span>
+                              </Link>
+                            </td>
+                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
+                              <span className="flex space-x-5">
+                                <Link
+                                  href={`/sites/${siteId}/performance/${performance.id}/edit`}
+                                >
+                                  <p>Edit</p>
+                                </Link>
+
+                                <RiDeleteBinLine
+                                  onClick={() => getId(performance.id)}
+                                  className="h-6"
+                                />
+                              </span>
+                            </td>
+                          </tr>
+                        </Link>
                       ))}
                     </tbody>
                   </table>
@@ -249,8 +255,6 @@ const index = ({ performances, menuItems, token }) => {
 
 export async function getServerSideProps(ctx) {
   const session = getSession(ctx.req, ctx.res);
-  const user = new User(session.idToken);
-
   if (!session) {
     return {
       redirect: {
@@ -258,20 +262,28 @@ export async function getServerSideProps(ctx) {
       },
     };
   }
+
+  const user = new User(session.idToken);
+  const _thisPerformance = new PerformanceClass(session.idToken);
+
   const client = createApolloClient(session.idToken);
   let performances: any;
   let menuItems: any;
   try {
     const profile = (await user.getProfile()).data;
-    const { data } = await client.query({
-      query: GET_PERFORMANCES,
-      variables: {
-        accountId: profile.account.id,
+    const { data } = await _thisPerformance.getAllBySite({
+      accountId: profile.account.id,
+      filter: {
+        singleFilter: {
+          value: ctx.query.siteId,
+          operator: ComparisonOperatorEnum.Eq,
+          field: 'site',
+        },
       },
     });
 
-    performances = data.performances ? data.performances : { error: true };
-    console.error({ performances: data.performances });
+    performances = data ? data : { error: true };
+    console.error({ performances: data });
   } catch (error) {
     performances = { error: true };
   }
@@ -295,6 +307,7 @@ export async function getServerSideProps(ctx) {
         },
       },
     });
+
     menuItems = data.siteMenuItems.header.menuItems
       ? data.siteMenuItems.header.menuItems
       : { error: true };

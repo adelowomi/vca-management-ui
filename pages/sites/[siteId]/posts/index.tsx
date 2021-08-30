@@ -131,7 +131,8 @@ const posts = ({
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {posts.map((post: any) => (
-                        <tr className={`text-left  `} key={post.id}>
+                        <Link href={`/sites/${siteId}/posts/${post.id}/edit`}  key={post.id}>
+                        <tr className={`text-left hover:bg-vca-blue hover:bg-opacity-10 cursor-pointer `} key={post.id}>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
                             <input
                               type="checkbox"
@@ -171,6 +172,7 @@ const posts = ({
                             </span>
                           </td>
                         </tr>
+                        </Link>
                       ))}
                     </tbody>
                   </table>

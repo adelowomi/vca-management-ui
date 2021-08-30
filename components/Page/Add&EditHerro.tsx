@@ -13,7 +13,7 @@ import {
   HeaderPositionWrapper,
   ImageSelectBox,
 } from './PageStyledElements';
-import SelectMediaModal2 from './SelectMediaModal2';
+import SelectMediaModal from './SelectMediaModal';
 
 const options = [
   {
@@ -65,7 +65,7 @@ export const AddEditHero = ({
 
   return (
     <>
-      <SelectMediaModal2
+      <SelectMediaModal
         close={setMediaModalOpen}
         open={mediaModalOpen}
         setMedia={setMedia}

@@ -11,7 +11,7 @@ import {
 import { Widgets } from '../../classes/Widget';
 import { FormInput } from '../FormInput/formInput';
 import { NewsWidget } from '../NewsWidget/NewsWidget';
-import { ItemsModal2 } from '../Page/ItemsModal2';
+import { ItemsModal } from '../Page/ItemsModal';
 import { ShadowBtn } from '../Page/PageButtons';
 import {
   ColumnSection,
@@ -135,7 +135,7 @@ export const CreateWidget = ({
 
   return (
     <>
-      <ItemsModal2
+      <ItemsModal
         open={open}
         close={setOpen}
         existingItems={existingWidget.items}

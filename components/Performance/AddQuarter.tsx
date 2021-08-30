@@ -2,13 +2,17 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { BaseDatePicker } from '../DatePicker/DatePicker';
+import { ItemsModal } from '../Page/ItemsModal';
 import { ShadowBtn } from '../Page/PageButtons';
 import { Input } from '../Page/PageInput';
 import { Grid, H2, ImageSelectBox } from '../Page/PageStyledElements';
-import ItemCard from '../utilsGroup/ItemCard';
-import { SelectItemsModal } from '../utilsGroup/SelectItemsModal';
+import SingleItem from '../Page/SingleItem';
 
-export const AddQuarter = ({ handleAddFields, items }) => {
+export const AddQuarter = ({
+  handleAddFields,
+  profile,
+  token,
+}): JSX.Element => {
   const [open, setOpen] = React.useState(false);
   const [quarterData, setQuarterData] = React.useState({
     id: uuidv4(),
@@ -52,19 +56,18 @@ export const AddQuarter = ({ handleAddFields, items }) => {
       [name]: date?.toISOString(),
     });
   };
-  const handleSubmit = () => {
-    setOpen(false);
-  };
+
 
   return (
     <div className="border border-black py-6 mt-10 -ml-9 mr-12 px-9">
-      <SelectItemsModal
+      <ItemsModal
         open={open}
-        setOpen={setOpen}
-        getItems={setItems}
-        state={quarterData.items}
-        items={items}
-        handleSubmit={handleSubmit}
+        close={setOpen}
+        existingItems={quarterData.items}
+        setNewItems={setItems}
+        profile={profile}
+        token={token}
+        type={'Quarter'}
       />
       <H2 className="mt-5 mb-10">Add a new quarter</H2>
       <Grid className="space-x-5 mt-5">
@@ -117,19 +120,12 @@ export const AddQuarter = ({ handleAddFields, items }) => {
       >
         <p>+ Select posts</p>
       </ImageSelectBox>
-      <div className="grid grid-cols-3 gap-4">
-        {quarterData.items.map((el: any) => {
-          return (
-            <ItemCard
-              key={el.id || el}
-              id={el.id}
-              media={el.mediaUrl}
-              featured={el.featured}
-              description={el.description}
-              createdAt={el.createdAt}
-            />
-          );
-        })}
+      <div className="mt-7">
+        <div className="grid grid-cols-4 gap-2">
+          {quarterData.items.map((item, index) => {
+            return <SingleItem item={item} key={index} />;
+          })}
+        </div>
       </div>
       <ShadowBtn
         bg="primary"

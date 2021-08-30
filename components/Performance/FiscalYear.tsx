@@ -23,6 +23,8 @@ interface FiscalYearProps {
   getQuarters: any;
   errors: any;
   items?: any;
+  token: string;
+  profile: any;
 }
 export const FiscalYear: React.FC<FiscalYearProps> = ({
   state,
@@ -30,15 +32,14 @@ export const FiscalYear: React.FC<FiscalYearProps> = ({
   setDate,
   getQuarters,
   errors,
-  items,
+  profile,
+  token,
 }) => {
   const existingQuarters = state?.quarters;
 
   const [quarters, setQuarters] = React.useState<QuarterProps[]>([
     ...existingQuarters,
   ]);
-
-  const [isSelected, setIsSelected] = React.useState([]);
 
   const handleAddFields = (input) => {
     setQuarters([...quarters, { ...input }]);
@@ -81,13 +82,9 @@ export const FiscalYear: React.FC<FiscalYearProps> = ({
     setQuarters(newInputFields);
   };
 
-  const getQuarterItems = (selected) => {
-    setIsSelected(selected);
-  };
-
-  const handleSetItems = (id) => {
+  const handleSetItems = (id, selected) => {
     const updatedQuarter = quarters.filter((field) => field.id === id)[0];
-    updatedQuarter.items = isSelected;
+    updatedQuarter.items = selected;
     const allQuarters = quarters.filter((field) => field.id !== id);
     setQuarters([...allQuarters, updatedQuarter]);
   };
@@ -188,13 +185,17 @@ export const FiscalYear: React.FC<FiscalYearProps> = ({
             handleChangeInput={handleChangeInput}
             setDate={setInputDate}
             state={qrt.items}
-            items={items}
-            getQuarterItems={getQuarterItems}
             handleSetItems={handleSetItems}
+            token={token}
+            profile={profile}
           />
         );
       })}
-      <AddQuarter handleAddFields={handleAddFields} items={items} />
+      <AddQuarter
+        handleAddFields={handleAddFields}
+        profile={profile}
+        token={token}
+      />
     </div>
   );
 };

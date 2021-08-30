@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { ItemsModal2 } from './ItemsModal2';
+import { ItemsModal } from './ItemsModal';
 import { ShadowBtn } from './PageButtons';
 import { ColumnSection, H2, ImageSelectBox } from './PageStyledElements';
 import PostList from './PostList';
@@ -23,7 +23,7 @@ export const PageItems = ({
 
   return (
     <>
-      <ItemsModal2
+      <ItemsModal
         open={open}
         close={setOpen}
         existingItems={existingItems}
