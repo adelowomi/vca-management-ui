@@ -19,7 +19,7 @@ import Layout from '../../../../../components/Layout/Layout';
 import { ShadowBtn } from '../../../../../components/Page/PageButtons';
 import { ImageSelectBox } from '../../../../../components/Page/PageStyledElements';
 import { getStringDate } from '../../../../../components/Page/PostList';
-import SelectMediaModal2 from '../../../../../components/Page/SelectMediaModal2';
+import SelectMediaModal from '../../../../../components/Page/SelectMediaModal';
 import { DraftEditor } from '../../../../../components/utilsGroup/Editor';
 import { TagSelector } from '../../../../../components/utilsGroup/TagSelector';
 import { GqlErrorResponse } from '../../../../../errors/GqlError';
@@ -107,7 +107,7 @@ const edit = ({ token, post, error, profile }) => {
   }
   return (
     <Layout>
-      <SelectMediaModal2
+      <SelectMediaModal
         open={open}
         close={setOpen}
         profile={profile}

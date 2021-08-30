@@ -8,6 +8,7 @@ import {
   ComparisonOperatorEnum,
   LogicalOperatorEnum,
 } from '../../../../classes/schema';
+import { Site } from '../../../../classes/Site';
 import { User } from '../../../../classes/User';
 import Layout from '../../../../components/Layout/Layout';
 import { CallToAction } from '../../../../components/Page/CtaComponent';
@@ -23,16 +24,23 @@ import {
 import { PageTitle } from '../../../../components/Page/PageTitle';
 import { Textposition } from '../../../../components/Page/TextPosition';
 import { FiscalYear } from '../../../../components/Performance/FiscalYear';
-import { GET_SITE_MENUITEMS } from '../../../../graphql';
 import { performanceValidator } from '../../../../helpers/performanceValidator';
 import { performanceUseForm } from '../../../../hooks/performance.hooks';
 import { createApolloClient } from '../../../../lib/apollo';
 
-const create = ({ token, menuItems, items, medias, accountId: account }) => {
+const create = ({
+  token,
+  menuItems,
+  items,
+  medias,
+  accountId: account,
+  profile,
+}) => {
   const client = createApolloClient(token);
   const {
     query: { siteId },
   } = useRouter();
+
 
   const { handleSubmit, state, errors, setState, handleChange } =
     performanceUseForm(performanceValidator, client, { type: 'add', account });
@@ -93,6 +101,8 @@ const create = ({ token, menuItems, items, medias, accountId: account }) => {
           setState={setState}
           handleSubmit={handleSubmit}
           errors={errors}
+          token={token}
+          profile={profile}
         />
 
         <Textposition
@@ -136,6 +146,8 @@ const create = ({ token, menuItems, items, medias, accountId: account }) => {
           getQuarters={getQuarters}
           errors={errors}
           items={items.error ? [] : items}
+          token={token}
+          profile={profile}
         />
         <ColumnSection className="mt-5 mb-5">
           <div className="mt-5 space-x-3 flex flex-row">
@@ -163,6 +175,7 @@ export async function getServerSideProps(ctx) {
   const session: Session = getSession(ctx.req, ctx.res);
   const user = new User(session.idToken);
   const item = new Items(session.idToken);
+  const site = new Site(session.idToken);
   if (!session) {
     return {
       redirect: {
@@ -170,47 +183,28 @@ export async function getServerSideProps(ctx) {
       },
     };
   }
-  const client = createApolloClient(session?.idToken);
   const profile = (await user.getProfile()).data;
   const media = new MediaClass(session.idToken);
 
-  let menuItems: any;
+
   let medias: any;
   let items: any;
+  const currentSite = await (
+    await site.getSite({
+      siteId: (ctx.query.siteId as unknown) as string,
+      accountId: profile.account.id,
+    })
+  ).data;
 
   try {
     const data = (await media.getMedias({ accountId: profile.account.id }))
-      .data as any;
-    medias = data.medias;
+      .data;
+    medias = data;
   } catch (error) {
     medias = { error: true };
   }
 
-  try {
-    const { data } = await client.query({
-      query: GET_SITE_MENUITEMS,
-      variables: {
-        filter: {
-          combinedFilter: {
-            filters: [
-              {
-                singleFilter: {
-                  field: 'siteId',
-                  operator: 'EQ',
-                  value: ctx.query.siteId,
-                },
-              },
-            ],
-          },
-        },
-      },
-    });
-    menuItems = data.siteMenuItems.header.menuItems
-      ? data.siteMenuItems.header.menuItems
-      : { error: true };
-  } catch (error) {
-    menuItems = { error: true };
-  }
+  
   try {
     const values = (
       await item.getAllItems({
@@ -246,10 +240,11 @@ export async function getServerSideProps(ctx) {
   return {
     props: {
       token: session?.idToken,
-      menuItems,
+      menuItems:currentSite.header.menuItems.filter(item => item.type == "PERFORMANCE"),
       medias,
       items,
       accountId: profile.account.id,
+      profile,
     },
   };
 }

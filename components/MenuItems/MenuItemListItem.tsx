@@ -69,7 +69,7 @@ export const MenuItemListItem = ({
         item={item}
         token={token}
       />
-      <tr className={`text-left  `} key={item.id}>
+      <tr className={`text-left hover:bg-vca-blue hover:bg-opacity-10 cursor-pointer`} key={item.id} onClick={() => setEditModalOpen(true)}>
         <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
           <input
             type="checkbox"

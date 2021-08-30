@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { ErrorProps } from '../../types/interfaces';
-import { SelectMediaModal } from '../utilsGroup/SelectMediaModal';
 import { HeaderTypeBtn } from './PageButtons';
 import {
   ColumnSection,
@@ -9,6 +8,7 @@ import {
   HeaderTypeWrapper,
   ImageSelectBox,
 } from './PageStyledElements';
+import SelectMediaModal from './SelectMediaModal';
 
 export interface PageHeaderStyleProps {
   onButtonClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
@@ -18,6 +18,8 @@ export interface PageHeaderStyleProps {
   medias: any;
   handleSubmit?: any;
   errors?: ErrorProps;
+  profile;
+  token;
 }
 
 export function PageHeaderStyle({
@@ -25,10 +27,15 @@ export function PageHeaderStyle({
   headerType,
   state,
   setState,
-  medias,
   errors,
-}: PageHeaderStyleProps) {
+  profile,
+  token,
+}: PageHeaderStyleProps): JSX.Element {
   const [open, setOpen] = React.useState(false);
+  const setMedia = (media: any) => {
+    console.error(media);
+    setState({ ...state, media: media.id, mediaUrl: media.image.small });
+  };
   return (
     <>
       <ColumnSection>
@@ -83,10 +90,12 @@ export function PageHeaderStyle({
         )}
         <SelectMediaModal
           open={open}
-          setOpen={setOpen}
-          medias={medias}
-          state={state}
-          setState={setState}
+          close={setOpen}
+          profile={profile}
+          selected={state.media}
+          setMedia={setMedia}
+          token={token}
+          type={"IMAGE"}
         />
       </ColumnSection>
     </>

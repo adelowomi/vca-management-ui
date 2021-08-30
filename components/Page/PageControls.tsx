@@ -7,12 +7,14 @@ export interface PageControlsProps {
   onSubmit: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   title: string;
   siteId: string | string[];
+  loading?: boolean;
 }
 
 export const PageControls = ({
   onSubmit,
   title,
   siteId,
+  loading = false
 }: PageControlsProps) => {
   return (
     <>
@@ -30,7 +32,7 @@ export const PageControls = ({
             onClick={onSubmit}
             type="submit"
           >
-            Save & Publish
+           {!loading ?"Save & Publish" : "Saving" } 
           </Btn>
         </div>
       </RowSection>

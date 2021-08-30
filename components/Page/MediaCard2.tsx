@@ -125,7 +125,7 @@ export default function MediaCard2({
               className="px-3 h-6 w-6 border border-gray-300 mr-3"
               onChange={() => setMedia(media)}
               checked={!selected ? false : 
-                media.id == selected.id ? true : false} 
+                media.id == selected.id ? true : media.id == selected ? true :  false} 
             />
           </div>
         </div>

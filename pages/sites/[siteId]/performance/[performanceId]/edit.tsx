@@ -29,7 +29,9 @@ import { performanceValidator } from '../../../../../helpers/performanceValidato
 import { performanceUseForm } from '../../../../../hooks/performance.hooks';
 import { createApolloClient } from '../../../../../lib/apollo';
 
-const edit = ({ token, menuItems, medias, performance, items, account }) => {
+const edit = ({ token, menuItems, medias, performance, items, account,profile }) => {
+  console.error({performance});
+  
   const client = createApolloClient(token);
   const {
     query: { siteId },
@@ -98,9 +100,10 @@ const edit = ({ token, menuItems, medias, performance, items, account }) => {
           state={state}
           setState={setState}
           handleSubmit={handleSubmit}
+          token={token}
+          profile={profile}
           errors={errors}
         />
-
         <Textposition
           headerText={state.headerText}
           handleChange={handleChange}
@@ -142,6 +145,8 @@ const edit = ({ token, menuItems, medias, performance, items, account }) => {
           getQuarters={getQuarters}
           errors={errors}
           items={items.error ? [] : items}
+          token={token}
+          profile={profile}
         />
         <ColumnSection className="mt-5 mb-5">
           <div className="mt-5 space-x-3 flex flex-row">
@@ -211,6 +216,8 @@ export async function getServerSideProps(ctx) {
 
     performance = data.performance ? data.performance : { error: true };
   } catch (error) {
+    console.error({error});
+    
     performance = { error: true };
   }
 
@@ -281,6 +288,7 @@ export async function getServerSideProps(ctx) {
       performance,
       items,
       account: profile.account.id ?? '',
+      profile:profile
     },
   };
 }

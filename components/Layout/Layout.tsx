@@ -83,7 +83,7 @@ const navigation = [
   },
   {
     name: 'Website Settings',
-    href: 'website-settings',
+    href: 'edit',
     icon: RiSettings4Line,
     current: false,
   },

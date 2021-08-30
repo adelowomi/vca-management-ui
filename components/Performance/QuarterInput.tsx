@@ -2,10 +2,10 @@ import React from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
 import { BaseDatePicker } from '../DatePicker/DatePicker';
+import { ItemsModal } from '../Page/ItemsModal';
 import { Input } from '../Page/PageInput';
 import { Grid, H2, ImageSelectBox } from '../Page/PageStyledElements';
-import ItemCard from '../utilsGroup/ItemCard';
-import { SelectItemsModal } from '../utilsGroup/SelectItemsModal';
+import SingleItem from '../Page/SingleItem';
 
 const QuarterInput = ({
   name,
@@ -16,16 +16,17 @@ const QuarterInput = ({
   id,
   handleChangeInput,
   setDate,
-  items,
   state,
-  getQuarterItems,
   handleSetItems,
-}) => {
+  profile,
+  token,
+}): JSX.Element => {
   const [open, setOpen] = React.useState(false);
+  console.error({ state });
 
   return (
     <div className=" py-6 mt-10 -ml-9 mr-12 px-9">
-      <SelectItemsModal
+      {/* <SelectItemsModal
         open={open}
         setOpen={setOpen}
         getItems={getQuarterItems}
@@ -35,6 +36,18 @@ const QuarterInput = ({
           setOpen(!open);
           handleSetItems(id);
         }}
+      /> */}
+      <ItemsModal
+        open={open}
+        close={setOpen}
+        existingItems={state}
+        setNewItems={(data) => {
+          // getQuarterItems(data)
+          handleSetItems(id, data);
+        }}
+        profile={profile}
+        token={token}
+        type={'Quarter'}
       />
       <H2 className="mt-5 mb-10">{name}</H2>
       <Grid className="space-x-5 mt-5">
@@ -119,19 +132,13 @@ const QuarterInput = ({
       >
         <p>+ Select posts</p>
       </ImageSelectBox>
-      <div className="grid grid-cols-3 gap-4">
-        {state.map((el: any) => {
-          return (
-            <ItemCard
-              key={el.id || el}
-              id={el.id}
-              media={el.mediaUrl}
-              featured={el.featured}
-              description={el.description}
-              createdAt={el.createdAt}
-            />
-          );
-        })}
+      <div className="mt-7">
+        <div className="grid grid-cols-4 gap-2">
+          {state.map((item, index) => {
+            console.error({ item });
+            return <SingleItem key={index} item={item} />;
+          })}
+        </div>
       </div>
     </div>
   );

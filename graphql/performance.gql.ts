@@ -70,10 +70,16 @@ const EDIT_PERFORMANCE = gql`
         actionSlug
         location
         media {
+          id
+          type
           image {
             small
             medium
             large
+          }
+          video{
+            url
+
           }
         }
         stock {
@@ -86,8 +92,8 @@ const EDIT_PERFORMANCE = gql`
 `;
 
 const GET_PERFORMANCES = gql`
-  query($accountId: String!) {
-    performances(accountId: $accountId) {
+  query($accountId: String!,$filter:FilterInput) {
+    performances(accountId: $accountId,filter:$filter) {
       id
       name
       year
@@ -111,10 +117,16 @@ const GET_PERFORMANCES = gql`
         }
 
         media {
+          id
+          type
           image {
             small
             medium
             large
+          }
+          video{
+            url
+            videoId
           }
         }
       }
@@ -146,9 +158,21 @@ const GET_PERFORMANCE = gql`
           description
           createdAt
           featured
+          media{
+            id
+            type
+            video{
+              url
+              videoId
+            }
+            image{ 
+              small
+              medium
+              large
+            }
+          }
         }
       }
-
       hero {
         type
         caption
@@ -164,10 +188,15 @@ const GET_PERFORMANCE = gql`
 
         media {
           id
+          type
           image {
             small
             medium
             large
+          }
+          video{
+            url
+            videoId
           }
         }
       }

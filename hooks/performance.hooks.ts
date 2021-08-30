@@ -1,5 +1,5 @@
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import React from 'react';
 import { useToasts } from 'react-toast-notifications';
 
@@ -17,6 +17,9 @@ export const performanceUseForm = (
     account
   }: { performance?: any; type: string; performanceId?: string, account: string }
 ) => {
+  const {
+    query: { siteId },
+  } = useRouter();
   const [state, setState] = React.useState({
     pageTitle: performance?.name || '',
     menuItem: performance?.menuItem || '',
@@ -69,6 +72,7 @@ export const performanceUseForm = (
           createPerformanceInput: {
             account,
             year: state.year,
+            site:siteId,
             name: state.name,
             description: state.description,
             start: state.start,
@@ -119,6 +123,7 @@ export const performanceUseForm = (
             description: state.description,
             start: state.start,
             stop: state.stop,
+            site:siteId,
             menuItem: state.menuItem === '' ? null : state.menuItem,
             quarter: state.quarters.map(({ ...obj }) => {
               delete obj.id;
@@ -150,7 +155,7 @@ export const performanceUseForm = (
         },
       });
       addToast('Performance is successfully Edited', { appearance: 'success' });
-      Router.reload();
+      // Router.reload();
     } catch (error) {
       addToast('Performance could not be Edited!', { appearance: 'error' });
     }
