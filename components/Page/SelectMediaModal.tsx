@@ -75,7 +75,6 @@ export const SelectMediaModal = ({
         return;
       }
       setMedias(data.data);
-      setMedia([])
     } catch (error) {
       setLoading(false);
       console.error(error);
@@ -197,7 +196,7 @@ export const SelectMediaModal = ({
                   </div>
                 </div>
               ) : (
-                <Container>
+                <Container>P
                   <Row>
                     <H1 className="mb-10">Select Media</H1>
                     <button
