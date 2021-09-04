@@ -52,7 +52,7 @@ const createStyles = ({
   );
   const [buttonStyle, setButtonStyle] = useState<StyleButtonInput>(
     {
-      font:existingStyle.button.font,
+      font:existingStyle.button?.font,
       buttonBorderStyle: existingStyle.button?.buttonBorderStyle,
       previewButton: existingStyle.button?.previewButton,
     }
@@ -220,7 +220,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     });
   } catch (error) {
     console.error(error);
-    existingStyle = {};
+    existingStyle = {data: {}};
   }
 
   return {

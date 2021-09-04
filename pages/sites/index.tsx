@@ -70,9 +70,11 @@ const Sites = ({
         <div className="mt-12 flex flex-col">
           <div className="flex flew-row justify-between items-center">
             <h1 className="text-4xl font-semibold">Sites</h1>
+            <Link href={`/sites/create`}>
             <PageActionsColOneBtn className="focus:outline-none">
-              <Link href={`/sites/create`}> Add New</Link>
+               Add New
             </PageActionsColOneBtn>
+            </Link>
           </div>
         </div>
         {error ? (
