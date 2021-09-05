@@ -61,7 +61,7 @@ export const create = ({ token,profile }): JSX.Element => {
   };
 
   return (
-    <Layout isPAdmin={true}>
+    <Layout isPAdmin={true} profile={profile}>
       <Container className="mt-12">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-row justify-between">

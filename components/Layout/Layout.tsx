@@ -1,10 +1,11 @@
-import { Dialog, Transition } from '@headlessui/react';
+import { Dialog, Menu, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
+import { ChevronDownIcon } from '@heroicons/react/solid';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Fragment, useState } from 'react';
 import { FiUsers } from 'react-icons/fi';
 import {
-  RiArrowDownSLine,
   RiBarChartLine,
   RiFileEditLine,
   RiFolder4Line,
@@ -17,7 +18,6 @@ import {
 import styled from 'styled-components';
 
 import { ExitIcon } from '../AssetsSVG';
-import { PageSearchInput } from '../Page/PageSearchInput';
 interface AnchorTagProps {
   current: boolean;
 }
@@ -95,10 +95,12 @@ function classNames(...classes) {
 export default function Layout({
   children,
   isPAdmin,
+  profile,
 }: {
   children: any;
   isPAdmin?: boolean;
-}) {
+  profile?: any;
+}): JSX.Element {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const {
     asPath,
@@ -265,12 +267,14 @@ export default function Layout({
               </nav>
             </div>
             {/* sidebar footer */}
-            <div className="flex-shrink-0 flex border-t border-gray-200 w-full py-5">
-              <div className="flex flex-row items-center text-gray-500 justify- w-full space-x-5 ml-6">
-                <span className="cursor-pointer">{ExitIcon}</span>
-                <p>Exit website</p>
+            <Link href="/sites">
+              <div className="flex-shrink-0 flex border-t border-gray-200 w-full py-5 hover:bg-vca-blue hover:bg-opacity-10 cursor-pointer">
+                <div className="flex flex-row items-center text-gray-500 justify- w-full space-x-5 ml-6">
+                  <span className="cursor-pointer">{ExitIcon}</span>
+                  <p>Exit website</p>
+                </div>
               </div>
-            </div>
+            </Link>
             {/* End of sidebar footer */}
           </div>
         </div>
@@ -290,41 +294,42 @@ export default function Layout({
 
           <div className="flex-1 px-4 flex justify-end items-center w-screen">
             <div className="flex flex-row items-center w-full justify-end space-x-3">
-              <PageSearchInput />
-              <div className="notification-icon-wrapper border-r border-gray-100 px-5">
-                <button className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                  <span className="sr-only">View notifications</span>
-
-                  <svg
-                    width="25"
-                    height="24"
-                    viewBox="0 0 25 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5 18H19V11.031C19 7.148 15.866 4 12 4C8.134 4 5 7.148 5 11.031V18ZM12 2C16.97 2 21 6.043 21 11.031V20H3V11.031C3 6.043 7.03 2 12 2ZM9.5 21H14.5C14.5 21.663 14.2366 22.2989 13.7678 22.7678C13.2989 23.2366 12.663 23.5 12 23.5C11.337 23.5 10.7011 23.2366 10.2322 22.7678C9.76339 22.2989 9.5 21.663 9.5 21Z"
-                      fill="black"
-                    />
-                    <circle
-                      cx="19.5"
-                      cy="9.5"
-                      r="4.5"
-                      fill="#1890FF"
-                      stroke="white"
-                      strokeWidth="2"
-                    />
-                  </svg>
-                </button>
-              </div>
               <div className="user-dropdown-wrapper text-blue-500 ">
-                <button
-                  className="flex items-center space-x-1 font-bold focus:outline-none"
-                  style={{ color: '#1890FF' }}
-                >
-                  <span>Username</span>
-                  <RiArrowDownSLine className="h-5 w-4 " aria-hidden="true" />
-                </button>
+                <Menu as="div" className="relative inline-block text-left">
+                  <div>
+                    <Menu.Button className="inline-flex justify-center w-full rounded-md border-0 px-4 py-2 bg-white font-bold text-sm text-blue-500 focus:outline-none">
+                      {profile ? profile.firstName : 'Username'}
+                      <ChevronDownIcon
+                        className="-mr-1 ml-2 h-5 w-5"
+                        aria-hidden="true"
+                      />
+                    </Menu.Button>
+                  </div>
+
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white font-bold ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+                      <div className="py-1">
+                        <Menu.Item>
+                          <Link href="/api/logout">
+                            <a
+                              className="text-blue-500 block px-4 py-2 text-sm"
+                            >
+                              Logout
+                            </a>
+                          </Link>
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
               </div>
             </div>
           </div>

@@ -78,7 +78,7 @@ const edit = ({ token, menuItems, medias, performance, items, account,profile })
   };
 
   return (
-    <Layout>
+    <Layout profile={profile}>
       <Container>
         <PageControls
           onSubmit={handleSubmit}

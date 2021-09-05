@@ -5,13 +5,16 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 
+import { LogicalOperatorEnum } from '../../../../classes/schema';
 import { Site } from '../../../../classes/Site';
 import { User } from '../../../../classes/User';
+import { FormInput } from '../../../../components/FormInput/formInput';
 import Layout from '../../../../components/Layout/Layout';
 import DeleteModal from '../../../../components/utilsGroup/DeleteModal';
 import { GqlErrorResponse } from '../../../../errors/GqlError';
@@ -65,14 +68,39 @@ const P = tw.p`
   text-left
 `;
 
-const Pages = ({ pages, menuItems, token }) => {
+const Pages = ({ pages, menuItems, token, profile }) => {
+  const router = useRouter();
+  const page = parseInt(router.query?.page as string, 10) || 0;
+  const currentPageUrl = router.asPath.split('?')[0];
+  const nextPage = `${currentPageUrl}?search=${
+    router.query?.search || ''
+  }&page=${page + 1}`;
+  const prevPage = `${currentPageUrl}?search=${
+    router.query?.search || ''
+  }&page=${page - 1 < 0 ? 0 : page - 1}`;
   const {
     query: { siteId },
   } = useRouter();
   const [open, setOpen] = React.useState(false);
   const [isDeleted, setIsDeleted] = React.useState(false);
   const [id, setId] = React.useState(null);
+  const [hide, setHide] = useState(false);
   const client = createApolloClient(token);
+
+  const onSubmit = async (data) => {
+    router.push({
+      query: {
+        search: data.search,
+        page: 0,
+      },
+    });
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const getId = (id: string) => {
     setOpen(!open);
@@ -105,7 +133,7 @@ const Pages = ({ pages, menuItems, token }) => {
   };
 
   return (
-    <Layout>
+    <Layout profile={profile}>
       <DeleteModal
         open={open}
         setOpen={setOpen}
@@ -121,29 +149,56 @@ const Pages = ({ pages, menuItems, token }) => {
             </PageActionsColOneBtn>
           </PageActionsColOne>
         </PageActionsWrapper>
-        <PageHeroWrapper className="flex flex-row justify-between mt-6 py-20 w0-full items-center">
-          <div className="second_col w-full">
-            <img src="/images/hero.png" alt="hero picture" />
+        <form
+          className="flex flex-row items-center mt-3"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="mt-2">
+            <FormInput
+              name="search"
+              label="Search"
+              register={register}
+              error={errors.search}
+              required={false}
+              disableLabel={true}
+            />
           </div>
-
-          <div className="flex flex-col justify-items-center w-full px-">
-            <div className="header_text mt-5 ">
-              <h3 className="px- text-xl text-gray-900 font-semibold">
-                Pages are layout types that are divided into 3 main sections:
-              </h3>
+          <button
+            type="submit"
+            className="ml-6 bg-vca-blue h-14 text-white font-bold text-sm"
+          >
+            <div className="flex flex-row mx-8 ">
+              <div className="mr-2">Search</div>
             </div>
-            <div className="body_text px- mt-5 mb-5">
-              <P>1. A hero</P>
-              <P>2. Widget slider</P>
-              <P>3. Post section that includes cards</P>
+          </button>
+        </form>
+        {!hide ? (
+          <PageHeroWrapper className="flex flex-row justify-between mt-6 py-20 w0-full items-center">
+            <div className="second_col w-full">
+              <img src="/images/hero.png" alt="hero picture" />
             </div>
-          </div>
-          <div className="w-full ">
-            <PageActionsColOneBtn className="ml-36">
-              Got it
-            </PageActionsColOneBtn>
-          </div>
-        </PageHeroWrapper>
+            <div className="flex flex-col justify-items-center w-full px-">
+              <div className="header_text mt-5 ">
+                <h3 className="px- text-xl text-gray-900 font-semibold">
+                  Pages are layout types that are divided into 3 main sections:
+                </h3>
+              </div>
+              <div className="body_text px- mt-5 mb-5">
+                <P>1. A hero</P>
+                <P>2. Widget slider</P>
+                <P>3. Post section that includes cards</P>
+              </div>
+            </div>
+            <div className="w-full ">
+              <PageActionsColOneBtn
+                className="ml-36"
+                onClick={() => setHide(!hide)}
+              >
+                Got it
+              </PageActionsColOneBtn>
+            </div>
+          </PageHeroWrapper>
+        ) : null}
         <PageTableWrapper>
           <div className="flex flex-col mt-5">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -230,6 +285,50 @@ const Pages = ({ pages, menuItems, token }) => {
                     </tbody>
                   </table>
                 </div>
+                <div className="mt-9 flex flex-row justify-between">
+                  <Link href={`${prevPage}`}>
+                    <a className="flex flex-row">
+                      <div>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                          />
+                        </svg>
+                      </div>
+                      <div className="ml-2">Previous</div>
+                    </a>
+                  </Link>
+                  <Link aria-label="Next" href={`${nextPage}`}>
+                    <a className="flex flex-row">
+                      <div className="mr-2">Next</div>
+                      <div>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                          />
+                        </svg>
+                      </div>
+                    </a>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -255,8 +354,54 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
+  let page = 0;
+  let variables;
   const user = new User(session.idToken);
   const site = new Site(session.idToken);
+
+  if (ctx.query.page) {
+    page = ctx.query.page as unknown as number;
+  }
+
+  variables = {
+    limit: 10,
+    offset: 10 * page,
+    filter: {
+      singleFilter: {
+        field: 'site',
+        operator: 'EQ',
+        value: ctx.query.siteId,
+      },
+    },
+  };
+
+  if (ctx.query.search) {
+    variables = {
+      ...variables,
+      filter: {
+        combinedFilter: {
+          logicalOperator: LogicalOperatorEnum.And,
+          filters: [
+            {
+              singleFilter: {
+                field: 'name',
+                operator: 'REGEX',
+                value: ctx.query.search ? ctx.query.search : '',
+                options: 'i',
+              },
+            },
+            {
+              singleFilter: {
+                field: 'site',
+                operator: 'EQ',
+                value: ctx.query.siteId,
+              },
+            },
+          ],
+        },
+      },
+    };
+  }
 
   const client = createApolloClient(session.idToken);
   try {
@@ -282,13 +427,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       query: PAGES_QUERY,
       variables: {
         accountId: account,
-        filter: {
-          singleFilter: {
-            field: 'site',
-            operator: 'EQ',
-            value: ctx.query.siteId,
-          },
-        },
+        ...variables,
       },
     });
 
@@ -298,6 +437,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         menuItems: currentSite.header.menuItems,
         token: session.idToken,
         error: null,
+        profile
       },
     };
   } catch (error) {

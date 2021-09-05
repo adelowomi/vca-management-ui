@@ -1,5 +1,3 @@
-
-
 import { GqlErrorResponse } from '../errors/GqlError';
 import {
   CREATE_PROFILE_QUERY,
@@ -10,7 +8,12 @@ import {
   USER_PROFILE_QUERY,
 } from '../graphql/profile';
 import { createApolloClient } from '../lib/apollo';
-import { CreateProfileInput, Profile, UpdateProfileInput } from './schema';
+import {
+  CreateProfileInput,
+  FilterInput,
+  Profile,
+  UpdateProfileInput,
+} from './schema';
 
 let client;
 export class User {
@@ -38,13 +41,24 @@ export class User {
 
   public getAllProfiles = async ({
     accountId,
+    skip,
+    limit,
+    filter,
   }: {
     accountId: string;
+    skip?: number;
+    limit?: number;
+    filter?: FilterInput;
   }): Promise<GqlResponse<Profile[]>> => {
     try {
       const { data } = await client.query({
         query: PROFILES_QUERY,
-        variables: { accountId: accountId },
+        variables: {
+          accountId: accountId,
+          skip: skip,
+          limit: limit,
+          filter: filter,
+        },
       });
       return Promise.resolve<GqlResponse<Profile[]>>({
         data: data.profiles,

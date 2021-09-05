@@ -92,8 +92,9 @@ const EDIT_PERFORMANCE = gql`
 `;
 
 const GET_PERFORMANCES = gql`
-  query($accountId: String!,$filter:FilterInput) {
-    performances(accountId: $accountId,filter:$filter) {
+  query($accountId: String!,$filter:FilterInput,$limit: Int
+    $skip: Int) {
+    performances(accountId: $accountId,filter:$filter,limit: $limit, skip: $skip) {
       id
       name
       year

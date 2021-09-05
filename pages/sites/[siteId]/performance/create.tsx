@@ -78,7 +78,7 @@ const create = ({
   };
 
   return (
-    <Layout>
+    <Layout profile={profile}>
       <Container>
         <PageControls
           onSubmit={handleSubmit}

@@ -10,6 +10,7 @@ import {
   ComparisonOperatorEnum,
   LogicalOperatorEnum,
   Page,
+  Profile,
   SiteView,
   UpdateSiteInput,
 } from '../../../classes/schema';
@@ -34,11 +35,13 @@ export const Edit = ({
   error,
   pages,
   token,
+  profile,
 }: {
   site: SiteView;
   error: GqlErrorResponse;
   token: any;
   pages: Page[];
+  profile: Profile;
 }): JSX.Element => {
   const {
     register,
@@ -96,7 +99,7 @@ export const Edit = ({
   };
 
   return (
-    <Layout isPAdmin={true}>
+    <Layout isPAdmin={false} profile={profile}>
       <Container className="mt-12">
         <form onSubmit={handleSubmit(submit)}>
           <div className="flex flex-row justify-between">
@@ -323,6 +326,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         user: session.user,
         token,
         pages,
+        profile
       },
     };
   } catch (error) {

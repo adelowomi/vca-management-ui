@@ -49,14 +49,18 @@ export class PerformanceClass {
   getAllBySite = async ({
     accountId,
     filter,
+    skip,
+    limit,
   }: {
     accountId: string;
     filter: FilterInput;
+    skip: number;
+    limit: number;
   }): Promise<GqlResponse<Performance[]>> => {
     try {
       const { data } =await client.query({
         query: GET_PERFORMANCES,
-        variables: { accountId: accountId, filter: filter },
+        variables: { accountId: accountId, filter: filter,skip: skip,limit: limit},
       });
       console.error(data);
       if (!data.performances) {

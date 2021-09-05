@@ -28,14 +28,23 @@ export class Site {
 
   public getAllSites = async ({
     accountId,
+    skip,
+    limit,
+    filter,
   }: {
     accountId: string;
+    skip?: number;
+    limit?: number;
+    filter?: FilterInput
   }): Promise<GqlResponse<SiteView[]>> => {
     try {
       const data = await client.query({
         query: SITES_QUERY,
         variables: {
           accountId: accountId,
+          skip: skip,
+          limit: limit,
+          filter: filter,
         },
       });
       return Promise.resolve<GqlResponse<SiteView[]>>({

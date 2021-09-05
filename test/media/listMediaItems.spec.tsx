@@ -75,6 +75,11 @@ const medias = [
   },
 ];
 
+const profile ={
+  firstName: '',
+
+}
+
 describe('List media page', () => {
   test('matches snapshot', async () => {
     const messages = locales['en'];
@@ -87,7 +92,7 @@ describe('List media page', () => {
               defaultLocale={'en'}
               messages={messages}
             >
-              <ListMedia medias={medias} />
+              <ListMedia medias={medias} profile={profile}/>
             </IntlProvider>
           </BaseProvider>
         </MockedProvider>
@@ -102,7 +107,7 @@ describe('List media page', () => {
     render(
       <UserProvider>
         <IntlProvider locale={'en'} defaultLocale={'en'} messages={messages}>
-          <ListMedia medias={medias} />
+          <ListMedia medias={medias} profile={profile}/>
         </IntlProvider>
       </UserProvider>,
 

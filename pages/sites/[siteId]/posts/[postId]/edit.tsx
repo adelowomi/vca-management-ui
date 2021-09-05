@@ -106,7 +106,7 @@ const edit = ({ token, post, error, profile }) => {
     return <ErrorPage statusCode={500} />;
   }
   return (
-    <Layout>
+    <Layout profile={profile}>
       <SelectMediaModal
         open={open}
         close={setOpen}
