@@ -4,13 +4,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
 import React from 'react';
+import { useForm } from 'react-hook-form';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 
 import { PerformanceClass } from '../../../../classes/Performance';
-import { ComparisonOperatorEnum } from '../../../../classes/schema';
+import { LogicalOperatorEnum } from '../../../../classes/schema';
 import { User } from '../../../../classes/User';
+import { FormInput } from '../../../../components/FormInput/formInput';
 import Layout from '../../../../components/Layout/Layout';
 import DeleteModal from '../../../../components/utilsGroup/DeleteModal';
 import { GET_SITE_MENUITEMS } from '../../../../graphql';
@@ -62,11 +64,35 @@ const P = tw.p`
   text-left
 `;
 
-const index = ({ performances, menuItems, token }) => {
+const index = ({ performances, menuItems, token,profile }) => {
+  const router = useRouter();
+  const page = parseInt(router.query?.page as string, 10) || 0;
+  const currentPageUrl = router.asPath.split('?')[0];
+  const nextPage = `${currentPageUrl}?search=${
+    router.query?.search || ''
+  }&page=${page + 1}`;
+  const prevPage = `${currentPageUrl}?search=${
+    router.query?.search || ''
+  }&page=${page - 1 < 0 ? 0 : page - 1}`;
   const [open, setOpen] = React.useState(false);
   const [isDeleted, setIsDeleted] = React.useState(false);
   const [id, setId] = React.useState(null);
   const client = createApolloClient(token);
+
+  const onSubmit = async (data) => {
+    router.push({
+      query: {
+        search: data.search,
+        page: 0,
+      },
+    });
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const {
     query: { siteId },
@@ -102,7 +128,7 @@ const index = ({ performances, menuItems, token }) => {
     }
   };
   return (
-    <Layout>
+    <Layout profile={profile}>
       <DeleteModal
         open={open}
         setOpen={setOpen}
@@ -115,12 +141,35 @@ const index = ({ performances, menuItems, token }) => {
             <h1 className="text-4xl font-semibold">Performance</h1>
             <Link href={`/sites/${siteId}/performance/create`}>
               <PageActionsColOneBtn className="focus:outline-none">
-                  {' '}
-                  Add New
+                {' '}
+                Add New
               </PageActionsColOneBtn>
             </Link>
           </PageActionsColOne>
         </PageActionsWrapper>
+        <form
+          className="flex flex-row items-center mt-3"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="mt-2">
+            <FormInput
+              name="search"
+              label="Search"
+              register={register}
+              error={errors.search}
+              required={false}
+              disableLabel={true}
+            />
+          </div>
+          <button
+            type="submit"
+            className="ml-6 bg-vca-blue h-14 text-white font-bold text-sm"
+          >
+            <div className="flex flex-row mx-8 ">
+              <div className="mr-2">Search</div>
+            </div>
+          </button>
+        </form>
         <PageHeroWrapper className="flex flex-row justify-between mt-6 py-20 w0-full items-center">
           <div className="second_col w-full">
             <img src="/images/hero.png" alt="hero picture" />
@@ -244,6 +293,50 @@ const index = ({ performances, menuItems, token }) => {
                     </tbody>
                   </table>
                 </div>
+                <div className="mt-9 flex flex-row justify-between">
+                  <Link href={`${prevPage}`}>
+                    <a className="flex flex-row">
+                      <div>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                          />
+                        </svg>
+                      </div>
+                      <div className="ml-2">Previous</div>
+                    </a>
+                  </Link>
+                  <Link aria-label="Next" href={`${nextPage}`}>
+                    <a className="flex flex-row">
+                      <div className="mr-2">Next</div>
+                      <div>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                          />
+                        </svg>
+                      </div>
+                    </a>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -262,6 +355,52 @@ export async function getServerSideProps(ctx) {
       },
     };
   }
+  let page = 0;
+  let variables;
+
+  if (ctx.query.page) {
+    page = ctx.query.page as unknown as number;
+  }
+
+  variables = {
+    limit: 10,
+    skip: 10 * page,
+    filter: {
+      singleFilter: {
+        field: 'site',
+        operator: 'EQ',
+        value: ctx.query.siteId,
+      },
+    },
+  };
+
+  if (ctx.query.search) {
+    variables = {
+      ...variables,
+      filter: {
+        combinedFilter: {
+          logicalOperator: LogicalOperatorEnum.And,
+          filters: [
+            {
+              singleFilter: {
+                field: 'name',
+                operator: 'REGEX',
+                value: ctx.query.search ? ctx.query.search : '',
+                options: 'i',
+              },
+            },
+            {
+              singleFilter: {
+                field: 'site',
+                operator: 'EQ',
+                value: ctx.query.siteId,
+              },
+            },
+          ],
+        },
+      },
+    };
+  }
 
   const user = new User(session.idToken);
   const _thisPerformance = new PerformanceClass(session.idToken);
@@ -269,17 +408,11 @@ export async function getServerSideProps(ctx) {
   const client = createApolloClient(session.idToken);
   let performances: any;
   let menuItems: any;
+  const profile = (await user.getProfile()).data;
   try {
-    const profile = (await user.getProfile()).data;
     const { data } = await _thisPerformance.getAllBySite({
       accountId: profile.account.id,
-      filter: {
-        singleFilter: {
-          value: ctx.query.siteId,
-          operator: ComparisonOperatorEnum.Eq,
-          field: 'site',
-        },
-      },
+      ...variables,
     });
 
     performances = data ? data : { error: true };
@@ -315,7 +448,7 @@ export async function getServerSideProps(ctx) {
     menuItems = { error: true };
   }
 
-  return { props: { performances, menuItems, token: session.idToken } };
+  return { props: { performances, menuItems, token: session.idToken,profile } };
 }
 
 export default withPageAuthRequired(index);

@@ -12,7 +12,7 @@ import { GET_ALL_MEDIA } from '../../../../graphql/media/mutation';
 import { PROFILE_QUERY } from '../../../../graphql/profile';
 import { createApolloClient } from '../../../../lib/apollo';
 
-export function ListMedia({ medias }) {
+export function ListMedia({ medias,profile }) {
   const {
     register,
     handleSubmit,
@@ -37,7 +37,7 @@ export function ListMedia({ medias }) {
   };
 
   return (
-    <Layout>
+    <Layout profile={profile}>
       <div className="bg-vca-grey-7">
         <div className="max-w-7xl px-4 sm:p-6 md:p-8 bg-vca-grey-7 m-auto">
           <div className="flex flex-col">
@@ -214,6 +214,7 @@ export async function getServerSideProps(ctx) {
       props: {
         medias: mediaItems.data.medias,
         error: null,
+        profile,
       },
     };
   } catch (error) {

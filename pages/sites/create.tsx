@@ -83,7 +83,7 @@ export const create = ({
     setMenuItems([...poppedItems]);
   };
   return (
-    <Layout isPAdmin={true}>
+    <Layout isPAdmin={true} profile={profile}>
       <Container className="mt-12">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-row justify-between">

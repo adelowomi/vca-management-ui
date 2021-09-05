@@ -7,7 +7,7 @@ const SITE_QUERY = gql`
       name
       createdAt
       page
-      social{
+      social {
         instagram
         facebook
         twitter
@@ -31,8 +31,13 @@ const SITE_QUERY = gql`
 `;
 
 const SITES_QUERY = gql`
-  query Sites($accountId: String!) {
-    sites(accountId: $accountId) {
+  query Sites(
+    $accountId: String!
+    $filter: FilterInput
+    $limit: Int
+    $skip: Int
+  ) {
+    sites(accountId: $accountId, filter: $filter, limit: $limit, skip: $skip) {
       id
       name
       createdAt
@@ -135,8 +140,8 @@ export const UPDATE_SITE = gql`
 `;
 
 export const CREATE_SITE = gql`
-  mutation createSite($CreateSiteInput:CreateSiteInput!){
-    createSite(createSiteInput: $CreateSiteInput){
+  mutation createSite($CreateSiteInput: CreateSiteInput!) {
+    createSite(createSiteInput: $CreateSiteInput) {
       id
       name
     }
@@ -150,8 +155,5 @@ export const REMOVE_SITE = gql`
     }
   }
 `;
-
-
-
 
 export { GET_PROFILE, GET_SITE_MENUITEMS, SITE_QUERY, SITES_QUERY };

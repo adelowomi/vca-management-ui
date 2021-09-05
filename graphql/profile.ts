@@ -13,8 +13,10 @@ export const PROFILE_QUERY = gql`
 `;
 
 export const PROFILES_QUERY = gql`
-  query profiles($accountId: String!) {
-    profiles(accountId: $accountId) {
+  query profiles($accountId: String!$filter: FilterInput
+    $limit: Int
+    $skip: Int) {
+    profiles(accountId: $accountId,filter: $filter, limit: $limit, skip: $skip) {
       id
       userId
       firstName

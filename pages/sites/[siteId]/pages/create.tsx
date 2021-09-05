@@ -121,7 +121,7 @@ const create = ({
   }
 
   return (
-    <Layout>
+    <Layout profile={profile}>
       <Container className="mt-12">
         <form onSubmit={handleSubmit(onSubmit)}>
           <RowSection className="justify-between">

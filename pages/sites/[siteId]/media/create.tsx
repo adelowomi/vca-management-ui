@@ -39,7 +39,7 @@ const videoValidation = (url: string, required: boolean) => {
   return true;
 };
 
-const CreateMedia = ({ imageParams, imageSignature, token, accountId }) => {
+const CreateMedia = ({ imageParams, imageSignature, token, accountId, profile }) => {
   const router = useRouter();
   const [uploadError, setUploadError] = useState<boolean>(false);
   const [showVideo, setShowVideo] = useState(false);
@@ -125,7 +125,7 @@ const CreateMedia = ({ imageParams, imageSignature, token, accountId }) => {
   }, [register, showVideo]);
 
   return (
-    <Layout>
+    <Layout profile={profile}>
       <div className="">
         <div className="rounded-sm">
           <Modal closeable={false} isOpen={isLoading}>
@@ -301,6 +301,7 @@ export async function getServerSideProps(ctx) {
         documentSignature,
         documentParams,
         token,
+        profile,
       },
     };
   } catch (error) {

@@ -11,7 +11,7 @@ import { GET_MEDIA } from '../../../../../graphql/media/query';
 import { PROFILE_QUERY } from '../../../../../graphql/profile';
 import { createApolloClient } from '../../../../../lib/apollo';
 
-export default function DocumentView({ media, token }) {
+export default function DocumentView({ media, token, profile}) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const client = createApolloClient(token);
@@ -33,7 +33,7 @@ export default function DocumentView({ media, token }) {
   };
 
   return (
-    <Layout>
+    <Layout profile={profile}>
       <DeleteModal
         open={open}
         setOpen={setOpen}
@@ -127,6 +127,7 @@ export async function getServerSideProps(ctx) {
       props: {
         token,
         media: { data: mediaItem.data.medias[0], error: null },
+        profile
       },
     };
   } catch (error) {

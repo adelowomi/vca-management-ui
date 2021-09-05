@@ -6,6 +6,7 @@ import { useToasts } from 'react-toast-notifications';
 
 import {
   CreateStyleInput,
+  Profile,
   StyleBodyInput,
   StyleButtonInput,
   StyleFooterInput,
@@ -29,11 +30,13 @@ const createStyles = ({
   token,
   siteId,
   account,
+  profile,
 }: {
   existingStyle: any;
   token: string;
   siteId: string;
   account: string;
+  profile: Profile;
 }): JSX.Element => {
   const [loading, setLoading] = useState(false);
   const { addToast } = useToasts();
@@ -156,7 +159,7 @@ const createStyles = ({
   };
 
   return (
-    <Layout>
+    <Layout profile={profile}>
       <div className="px-32 mt-8">
         <section className="flex items-center justify-between w-full h-">
           <div className="flex text-gray-600 items-center">
@@ -230,6 +233,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       account: profile.account.id,
       token,
       existingStyle: existingStyle.data,
+      profile
     },
   };
 };
