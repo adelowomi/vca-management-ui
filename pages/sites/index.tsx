@@ -22,12 +22,12 @@ const Sites = ({
   sites,
   error,
   token,
-  profile
+  profile,
 }: {
   sites: SiteView[];
   error: GqlErrorResponse;
   token: any;
-  profile:Profile;
+  profile: Profile;
 }): JSX.Element => {
   const router = useRouter();
   const page = parseInt(router.query?.page as string, 10) || 0;
@@ -217,7 +217,7 @@ const Sites = ({
                     </tbody>
                   </table>
                 </div>
-                <div className="mt-9 flex flex-row justify-between">
+                <div className="mt-9 flex flex-row justify-between pb-20">
                   <Link href={`${prevPage}`}>
                     <a className="flex flex-row">
                       <div>
@@ -239,7 +239,7 @@ const Sites = ({
                       <div className="ml-2">Previous</div>
                     </a>
                   </Link>
-                  <Link aria-label="Next" href={`${nextPage}`}>
+                  {/* <Link aria-label="Next" href={`${nextPage}`}>
                     <a className="flex flex-row">
                       <div className="mr-2">Next</div>
                       <div>
@@ -259,7 +259,32 @@ const Sites = ({
                         </svg>
                       </div>
                     </a>
-                  </Link>
+                  </Link> */}
+                  {sites.length !== 0 ? (
+                    <Link aria-label="Next" href={`${nextPage}`}>
+                      <a className="flex flex-row">
+                        <div className="mr-2">Next</div>
+                        <div>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M14 5l7 7m0 0l-7 7m7-7H3"
+                            />
+                          </svg>
+                        </div>
+                      </a>
+                    </Link>
+                  ) : (
+                    ''
+                  )}
                 </div>
               </div>
             </div>
@@ -332,7 +357,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         error: GqlErrorResponse(error),
         user: session.user,
         token: session.idToken,
-        profile
+        profile,
       },
     };
   }

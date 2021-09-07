@@ -1,8 +1,8 @@
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, {  useState } from 'react';
-import {  useForm,  } from 'react-hook-form';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useToasts } from 'react-toast-notifications';
 
 import { Pages } from '../../../../classes/Page';
@@ -21,17 +21,18 @@ import {
   H1,
   RowSection,
 } from '../../../../components/Page/PageStyledElements';
+import useUnsavedChangesWarning from '../../../../hooks/useUnsavedChangesWarning';
 
 const create = ({
   token,
   menuItems,
-  profile
+  profile,
 }: {
   token: string;
   menuItems: any[];
   medias: any[];
   errorss: any;
-  profile: any
+  profile: any;
 }) => {
   const router = useRouter();
   const {
@@ -47,26 +48,26 @@ const create = ({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
     watch,
   } = useForm();
 
-  const setOtherDetails = (data:any) =>{
-    setHeroDetails({...hero,...data});
-  }
+  const setOtherDetails = (data: any) => {
+    setHeroDetails({ ...hero, ...data });
+  };
 
   const watching = watch();
 
   const onSubmit = async (data: any) => {
     // console.error({hero});
     data.site = siteId;
-    data.tags = ["lifestyle"];
-    data.account = profile.account.id
+    data.tags = ['lifestyle'];
+    data.account = profile.account.id;
     data.hero = watching.hero;
     data.hero.media = hero.media;
     data.hero.location = hero.location;
-    data.hero.mediaUrl = "/";
-    data.hero.type = "Page";
+    data.hero.mediaUrl = '/';
+    data.hero.type = 'Page';
     data.hero.hasAction = data.hero.actionText ? true : false;
     data.menuItem = selectedMenu;
     console.error({ data });
@@ -78,7 +79,7 @@ const create = ({
     const data = { type: 'PAGE' };
     try {
       const result = await await _thisSite.updateMenuItem({
-        input: (data as unknown) as UpdateMenuitemInput,
+        input: data as unknown as UpdateMenuitemInput,
         menuId: selectedMenu,
       });
       if (!result.status) {
@@ -95,7 +96,9 @@ const create = ({
     }
   };
 
-  const createPage = async (data:any) => {
+  useUnsavedChangesWarning(isDirty);
+
+  const createPage = async (data: any) => {
     setWorking(true);
     try {
       const result = await _thisPage.createPage({
@@ -103,22 +106,28 @@ const create = ({
       });
       if (!result.status) {
         console.error(result);
-        addToast(data.error.message ? data.error.message : "An error occurred", { appearance: 'error' });
+        addToast(
+          data.error.message ? data.error.message : 'An error occurred',
+          { appearance: 'error' }
+        );
         setWorking(false);
         return;
       }
       addToast('Your Page has been created', { appearance: 'success' });
       setWorking(false);
       await updateMenuItem();
-      router.push(`/sites/${siteId}/pages`)
+      router.push(`/sites/${siteId}/pages`);
       return;
     } catch (error) {
       console.error(error);
-      addToast(error.error.message ? error.error.message :'An error occurred', { appearance: 'error' });
+      addToast(
+        error.error.message ? error.error.message : 'An error occurred',
+        { appearance: 'error' }
+      );
       setWorking(false);
     }
     console.error(data);
-  }
+  };
 
   return (
     <Layout profile={profile}>
@@ -132,8 +141,7 @@ const create = ({
               </Btn>
 
               <Btn color="secondary" $bg="primary" $px="lg" type="submit">
-                {working ? "Saving" : "Save & Publish"}
-                
+                {working ? 'Saving' : 'Save & Publish'}
               </Btn>
             </div>
           </RowSection>
@@ -158,8 +166,8 @@ const create = ({
               label="Add menu to page"
               options={menuItems.map((item, index) => {
                 return {
-                  value: (item.id as unknown) as string,
-                  name: (item.name as unknown) as string,
+                  value: item.id as unknown as string,
+                  name: item.name as unknown as string,
                   id: index,
                   unavailable: false,
                 };
@@ -196,24 +204,21 @@ export async function getServerSideProps(ctx) {
   const user = new User(session.idToken);
   const site = new Site(session.idToken);
 
-
   const profile = await (await user.getProfile()).data;
 
   const currentSite = await (
     await site.getSite({
-      siteId: (ctx.query.siteId as unknown) as string,
+      siteId: ctx.query.siteId as unknown as string,
       accountId: profile.account.id,
     })
   ).data;
-
-
 
   return {
     props: {
       token: session?.idToken,
       menuItems: currentSite.header.menuItems,
       site: currentSite,
-      profile
+      profile,
     },
   };
 }

@@ -35,7 +35,7 @@ export const FormInput = ({
       </label>
       <div className={disableLabel ? '' : 'mt-6'}>
         <input
-          {...register(`${name}`, { required, validate })}
+          {...register(`${name}`, { required, ...validate })}
           className={inputStyle}
           placeholder={`${label}`}
           aria-describedby={`${name}`}

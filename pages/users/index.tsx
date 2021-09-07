@@ -16,7 +16,15 @@ import { Container } from '../../components/Page/PageStyledElements';
 import DeleteModal from '../../components/utilsGroup/DeleteModal';
 import { PageActionsColOneBtn } from '../sites/[siteId]/pages';
 
-export const index = ({ profiles,token,profile }: { profiles: Profile[],token:any,profile:Profile }): JSX.Element => {
+export const index = ({
+  profiles,
+  token,
+  profile,
+}: {
+  profiles: Profile[];
+  token: any;
+  profile: Profile;
+}): JSX.Element => {
   const router = useRouter();
   const page = parseInt(router.query?.page as string, 10) || 0;
   const currentPageUrl = router.asPath.split('?')[0];
@@ -47,9 +55,11 @@ export const index = ({ profiles,token,profile }: { profiles: Profile[],token:an
 
   const removeUser = async () => {
     console.error(userToDelete);
-    
+
     try {
-      const result = await await new User(token).softDelete({userId:userToDelete});
+      const result = await await new User(token).softDelete({
+        userId: userToDelete,
+      });
       if (!result.status) {
         addToast('An Error Occurred', { appearance: 'error' });
         return;
@@ -60,7 +70,7 @@ export const index = ({ profiles,token,profile }: { profiles: Profile[],token:an
       console.error(error);
       addToast('An error occurred', { appearance: 'error' });
     }
-  }
+  };
 
   const refreshData = () => {
     router.replace(router.asPath);
@@ -143,71 +153,76 @@ export const index = ({ profiles,token,profile }: { profiles: Profile[],token:an
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {profiles.filter(p => p.isActive).map((profile, index) => (
-                      <tr className={`text-left`} key={index}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
-                          <input
-                            type="checkbox"
-                            className="px-3 h-5 w-6 border border-gray-300"
-                            name=""
-                            id=""
-                          />
-                        </td>
-                        <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
-                          <Link href={`/users/${profile.id}/edit`}>
-                            {`${profile.firstName} ${profile.lastName}`}
-                          </Link>
-                        </td>
-                        <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
-                          <Link href={`/users/${profile.id}/edit`}>
-                            {profile.accountType}
-                          </Link>
-                        </td>
-                        <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
-                          <Link href={`/users/${profile.id}/edit`}>
-                            <span>
-                              <p>{moment(profile.createdAt).format('llll')}</p>
-                            </span>
-                          </Link>
-                        </td>
-                        <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
-                          <span className="flex space-x-5">
-                            <Link href={`/users/${profile.id}/edit`}>
-                              <p>Edit</p>
-                            </Link>
-                            <RiDeleteBinLine
-                              className="h-6"
-                              onClick={() => triggerDelete(profile.userId)}
+                    {profiles
+                      .filter((p) => p.isActive)
+                      .map((profile, index) => (
+                        <tr className={`text-left`} key={index}>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
+                            <input
+                              type="checkbox"
+                              className="px-3 h-5 w-6 border border-gray-300"
+                              name=""
+                              id=""
                             />
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
+                          </td>
+                          <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
+                            <Link href={`/users/${profile.id}/edit`}>
+                              {`${profile.firstName} ${profile.lastName}`}
+                            </Link>
+                          </td>
+                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
+                            <Link href={`/users/${profile.id}/edit`}>
+                              {profile.accountType}
+                            </Link>
+                          </td>
+                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
+                            <Link href={`/users/${profile.id}/edit`}>
+                              <span>
+                                <p>
+                                  {moment(profile.createdAt).format('llll')}
+                                </p>
+                              </span>
+                            </Link>
+                          </td>
+                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
+                            <span className="flex space-x-5">
+                              <Link href={`/users/${profile.id}/edit`}>
+                                <p>Edit</p>
+                              </Link>
+                              <RiDeleteBinLine
+                                className="h-6"
+                                onClick={() => triggerDelete(profile.userId)}
+                              />
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
               <div className="mt-9 flex flex-row justify-between">
-                  <Link href={`${prevPage}`}>
-                    <a className="flex flex-row">
-                      <div>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                          />
-                        </svg>
-                      </div>
-                      <div className="ml-2">Previous</div>
-                    </a>
-                  </Link>
+                <Link href={`${prevPage}`}>
+                  <a className="flex flex-row">
+                    <div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                        />
+                      </svg>
+                    </div>
+                    <div className="ml-2">Previous</div>
+                  </a>
+                </Link>
+                {profiles.length !== 0 ? (
                   <Link aria-label="Next" href={`${nextPage}`}>
                     <a className="flex flex-row">
                       <div className="mr-2">Next</div>
@@ -229,8 +244,10 @@ export const index = ({ profiles,token,profile }: { profiles: Profile[],token:an
                       </div>
                     </a>
                   </Link>
-                </div>
-
+                ) : (
+                  ''
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -286,14 +303,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const profile = await (await user.getProfile()).data;
 
   const profiles = await (
-    await user.getAllProfiles({ accountId: profile.account.id,...variables })
+    await user.getAllProfiles({ accountId: profile.account.id, ...variables })
   ).data;
 
   return {
     props: {
       profiles,
       profile,
-      token:session.idToken
+      token: session.idToken,
     },
   };
 };

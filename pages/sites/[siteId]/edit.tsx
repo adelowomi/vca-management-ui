@@ -27,6 +27,7 @@ import {
   FormGroup,
 } from '../../../components/Page/PageStyledElements';
 import { GqlErrorResponse } from '../../../errors/GqlError';
+import useUnsavedChangesWarning from '../../../hooks/useUnsavedChangesWarning';
 
 //TODO: Implement flow for updating site without page passed
 
@@ -46,7 +47,7 @@ export const Edit = ({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<UpdateSiteInput>({
     defaultValues: {
       name: site.name,
@@ -54,12 +55,12 @@ export const Edit = ({
       header: {
         logoUrl: site.header.logoUrl,
       },
-      social:{
+      social: {
         facebook: site.social?.facebook,
         instagram: site.social?.instagram,
         twitter: site.social?.twitter,
-        linkedin: site.social?.linkedin
-      }
+        linkedin: site.social?.linkedin,
+      },
     },
   });
   const { addToast } = useToasts();
@@ -79,7 +80,7 @@ export const Edit = ({
     try {
       const result = await _thisSite.updateSite({
         siteId: site.id,
-        input: (data as unknown) as UpdateSiteInput,
+        input: data as unknown as UpdateSiteInput,
       });
       if (!result.status) {
         setWorking(false);
@@ -93,10 +94,14 @@ export const Edit = ({
       return;
     } catch (error) {
       console.error(error);
-      addToast(error.error.message ? error.error.message :'An error occurred', { appearance: 'error' });
+      addToast(
+        error.error.message ? error.error.message : 'An error occurred',
+        { appearance: 'error' }
+      );
       setWorking(false);
     }
   };
+  useUnsavedChangesWarning(isDirty);
 
   return (
     <Layout isPAdmin={false} profile={profile}>
@@ -152,8 +157,12 @@ export const Edit = ({
                 <FormSelect
                   defaultOption={{
                     id: 0,
-                    name: site.page ?  pages.filter((p) => p.id == site.page)[0].name : "Select a page",
-                    value: site.page ? pages.filter((p) => p.id == site.page)[0].id : "0",
+                    name: site.page
+                      ? pages.filter((p) => p.id == site.page)[0].name
+                      : 'Select a page',
+                    value: site.page
+                      ? pages.filter((p) => p.id == site.page)[0].id
+                      : '0',
                     unavailable: false,
                   }}
                   onChange={(data) => setNewPage(data.value)}
@@ -223,7 +232,7 @@ export const Edit = ({
         <div className="mt-10 mb-5 font-semibold leading-6 text-xl text-vca-grey-1 font-inter">
           Added Items
         </div>
-        <div className="flex flex-col mt-5">
+        <div className="flex flex-col mt-5 pb-20">
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="py-2 align-middle  min-w-full sm:px-6 lg:px-8">
               <div className="shadow overflow-hidden border-b border-gray-200">
@@ -297,7 +306,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const data = await (
       await site.getSite({
         accountId: profile.account.id,
-        siteId: (ctx.query.siteId as unknown) as string,
+        siteId: ctx.query.siteId as unknown as string,
       })
     ).data;
     const pages = await (
@@ -326,7 +335,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         user: session.user,
         token,
         pages,
-        profile
+        profile,
       },
     };
   } catch (error) {

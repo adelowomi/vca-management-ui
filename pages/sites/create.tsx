@@ -16,6 +16,7 @@ import { MenuItemListItem } from '../../components/MenuItems/MenuItemListItem';
 import { Btn } from '../../components/Page/PageButtons';
 import { Container, FormGroup } from '../../components/Page/PageStyledElements';
 import { GqlErrorResponse } from '../../errors/GqlError';
+import useUnsavedChangesWarning from '../../hooks/useUnsavedChangesWarning';
 
 export const create = ({
   token,
@@ -29,12 +30,12 @@ export const create = ({
   const [working, setWorking] = useState(false);
   const [menuItems, setMenuItems] = useState([]);
   const router = useRouter();
-  const _thisSite = new Site((token as unknown) as string);
+  const _thisSite = new Site(token as unknown as string);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm();
 
   const onSubmit = async (data) => {
@@ -71,6 +72,7 @@ export const create = ({
     }
     console.error(data);
   };
+  useUnsavedChangesWarning(isDirty);
 
   const addItem = (item) => {
     setMenuItems([...menuItems, item]);

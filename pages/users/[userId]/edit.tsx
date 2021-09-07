@@ -20,6 +20,7 @@ import {
   Container,
   FormGroup,
 } from '../../../components/Page/PageStyledElements';
+import useUnsavedChangesWarning from '../../../hooks/useUnsavedChangesWarning';
 
 const typeOptions = Object.values(AccountType);
 
@@ -33,7 +34,7 @@ export const edit = ({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<UpdateProfileInput>({
     defaultValues: {
       firstName: profile.firstName,
@@ -56,27 +57,34 @@ export const edit = ({
     setWorking(true);
     try {
       const result = await _thisUser.updateProfile({
-        input: (data as unknown) as UpdateProfileInput,
+        input: data as unknown as UpdateProfileInput,
         userId: profile.userId,
       });
       if (!result.status) {
-        addToast(data.error.message ? data.error.message : 'An error occurred', { appearance: 'error' });
+        addToast(
+          data.error.message ? data.error.message : 'An error occurred',
+          { appearance: 'error' }
+        );
         console.error(result);
         setWorking(false);
         return;
       }
       addToast('Updated Successfully', { appearance: 'success' });
       setWorking(false);
-      router.push('/users')
+      router.push('/users');
       refreshData();
       return;
     } catch (error) {
       console.error(error);
       setWorking(false);
-      addToast(error.error.message ? error.error.message :'An error occurred', { appearance: 'error' });
+      addToast(
+        error.error.message ? error.error.message : 'An error occurred',
+        { appearance: 'error' }
+      );
       return;
     }
   };
+  useUnsavedChangesWarning(isDirty);
 
   return (
     <Layout isPAdmin={true}>
@@ -130,8 +138,8 @@ export const edit = ({
               label="User Role"
               options={typeOptions.map((item, index) => {
                 return {
-                  value: (item as unknown) as string,
-                  name: (item as unknown) as string,
+                  value: item as unknown as string,
+                  name: item as unknown as string,
                   id: index,
                   unavailable: false,
                 };

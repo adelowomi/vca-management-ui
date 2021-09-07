@@ -307,27 +307,31 @@ const Pages = ({ pages, menuItems, token, profile }) => {
                       <div className="ml-2">Previous</div>
                     </a>
                   </Link>
-                  <Link aria-label="Next" href={`${nextPage}`}>
-                    <a className="flex flex-row">
-                      <div className="mr-2">Next</div>
-                      <div>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"
-                          />
-                        </svg>
-                      </div>
-                    </a>
-                  </Link>
+                  {pages.length !== 0 ? (
+                    <Link aria-label="Next" href={`${nextPage}`}>
+                      <a className="flex flex-row">
+                        <div className="mr-2">Next</div>
+                        <div>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M14 5l7 7m0 0l-7 7m7-7H3"
+                            />
+                          </svg>
+                        </div>
+                      </a>
+                    </Link>
+                  ) : (
+                    ''
+                  )}
                 </div>
               </div>
             </div>
@@ -437,7 +441,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         menuItems: currentSite.header.menuItems,
         token: session.idToken,
         error: null,
-        profile
+        profile,
       },
     };
   } catch (error) {

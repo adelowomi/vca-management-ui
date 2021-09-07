@@ -25,6 +25,7 @@ import { TagSelector } from '../../../../../components/utilsGroup/TagSelector';
 import { GqlErrorResponse } from '../../../../../errors/GqlError';
 import { GET_ALL_MEDIA } from '../../../../../graphql';
 import { EDIT_ITEM } from '../../../../../graphql/items.gql';
+import useUnsavedChangesWarning from '../../../../../hooks/useUnsavedChangesWarning';
 import { createApolloClient } from '../../../../../lib/apollo';
 
 const edit = ({ token, post, error, profile }) => {
@@ -44,7 +45,7 @@ const edit = ({ token, post, error, profile }) => {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm({
     defaultValues: {
       featured: post?.featured,
@@ -105,6 +106,8 @@ const edit = ({ token, post, error, profile }) => {
   if (error) {
     return <ErrorPage statusCode={500} />;
   }
+  useUnsavedChangesWarning(isDirty);
+
   return (
     <Layout profile={profile}>
       <SelectMediaModal
@@ -199,7 +202,7 @@ const edit = ({ token, post, error, profile }) => {
                 </div>
               </div>
             </section>
-            <section className="mt-6 grid grid-cols-3 h-full gap-4 items-center pb-10">
+            <section className="mt-6 grid grid-cols-3 h-full gap-10 items-center pb-12">
               <div className="col-span-2 h-full">
                 <h4 className="text-xl font-medium mb-4">Post content</h4>
                 <DraftEditor
@@ -208,6 +211,45 @@ const edit = ({ token, post, error, profile }) => {
                 />
                 {errors?.content && (
                   <p className="text-red-500">content is required!</p>
+                )}
+              </div>
+              <div className="col-span-1">
+                {preview ? (
+                  <div className="mt-4">
+                    <div className="flex xl:w-card-xl lg:w-card- 2xl:w-card-2xl md:w-card-md rounded">
+                      <div className="group w-full overflow-hidden hover:shadow-lg bg-white shadow-md">
+                        <div className="h-44 w-full">
+                          {media.type == 'IMAGE' ? (
+                            <img
+                              className="w-full h-full object-cover"
+                              src={media.image.small}
+                              alt="news image"
+                            />
+                          ) : (
+                            <ReactPlayer
+                              url={media.video.url}
+                              className="h-full w-full"
+                              height={'100%'}
+                              width={'100%'}
+                            />
+                          )}
+                        </div>
+                        <div className="px-3 py-4" style={{ height: '200px' }}>
+                          <div className="font-semibold text-lg mb-2">
+                            <a href={`#`}>{watch('featured')}</a>
+                          </div>
+                          <p className="text-gray-700 text-sm">
+                            {watch('description')}
+                          </p>
+                        </div>
+                        <button className="w-full bg-white text-gray-800 font-normal py-3 px-4 flex justify-left items-center text-xs italic rounded">
+                          Created on: {getStringDate(new Date())}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  ''
                 )}
               </div>
             </section>
@@ -223,50 +265,6 @@ const edit = ({ token, post, error, profile }) => {
                   {preview ? 'Hide preview' : 'Show preview'}
                 </ShadowBtn>
               </div>
-              <>
-                {preview ? (
-                  <div className="mt-7">
-                    <div className="grid grid-cols-4 gap-2">
-                      <div className="flex xl:w-card-xl lg:w-card- 2xl:w-card-2xl md:w-card-md rounded">
-                        <div className="group w-full overflow-hidden hover:shadow-lg bg-white shadow-md">
-                          <div className="h-44 w-full">
-                            {media.type == 'IMAGE' ? (
-                              <img
-                                className="w-full h-full object-cover"
-                                src={media.image.small}
-                                alt="news image"
-                              />
-                            ) : (
-                              <ReactPlayer
-                                url={media.video.url}
-                                className="h-full w-full"
-                                height={'100%'}
-                                width={'100%'}
-                              />
-                            )}
-                          </div>
-                          <div
-                            className="px-3 py-4"
-                            style={{ height: '200px' }}
-                          >
-                            <div className="font-semibold text-lg mb-2">
-                              <a href={`#`}>{watch('featured')}</a>
-                            </div>
-                            <p className="text-gray-700 text-sm">
-                              {watch('description')}
-                            </p>
-                          </div>
-                          <button className="w-full bg-white text-gray-800 font-normal py-3 px-4 flex justify-left items-center text-xs italic rounded">
-                            Created on: {getStringDate(new Date())}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  ''
-                )}
-              </>
             </section>
           </form>
         </div>
@@ -319,7 +317,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       })
     ).data;
-      
+
     const {
       data: { medias },
     } = await client.query({

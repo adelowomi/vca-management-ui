@@ -210,16 +210,13 @@ const posts = ({
                               {post.account.lastName}
                             </td>
                             <td className="px-6 py-4 text-gray-500 whitespace- ">
-                              {post.draft.toLocaleUpperCase()}
+                              {post.draft ? 'TRUE' : 'FALSE'}
                             </td>
                             <td className="px-6 py-4 text-gray-500 whitespace- ">
                               {moment(post.createdAt).format('llll')}
                             </td>
                             <td className="px-6 py-4 cursor-pointer whitespace- text-center text-gray-800">
                               <span className="flex space-x-3 text-gray-500">
-                                {/* <Link href={`/sites/${siteId}/posts/${post.id}`}>
-                                <FaEye className="h-6" />
-                              </Link> */}
                                 <Link
                                   href={`/sites/${siteId}/posts/${post.id}/edit`}
                                 >
@@ -259,27 +256,31 @@ const posts = ({
                       <div className="ml-2">Previous</div>
                     </a>
                   </Link>
-                  <Link aria-label="Next" href={`${nextPage}`}>
-                    <a className="flex flex-row">
-                      <div className="mr-2">Next</div>
-                      <div>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"
-                          />
-                        </svg>
-                      </div>
-                    </a>
-                  </Link>
+                  {posts.length !== 0 ? (
+                    <Link aria-label="Next" href={`${nextPage}`}>
+                      <a className="flex flex-row">
+                        <div className="mr-2">Next</div>
+                        <div>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M14 5l7 7m0 0l-7 7m7-7H3"
+                            />
+                          </svg>
+                        </div>
+                      </a>
+                    </Link>
+                  ) : (
+                    ''
+                  )}
                 </div>
               </div>
             </div>
@@ -322,8 +323,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   variables = {
-    limit:10,
-    offset:10 * page,
+    limit: 10,
+    offset: 10 * page,
     filter: {
       combinedFilter: {
         logicalOperator: LogicalOperatorEnum.And,
@@ -396,7 +397,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         token: session.idToken,
         error: null,
         posts,
-        profile
+        profile,
       },
     };
   } catch (error) {
