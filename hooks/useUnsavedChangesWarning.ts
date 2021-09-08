@@ -25,7 +25,7 @@ const useUnsavedChangesWarning = (
             if (!isDirty) return;
 
             if (window.confirm('Are you sure you want to leave?\nChanges you made may not be saved.'))
-                isDirty = true;
+                isDirty = false;
             else {
                 router.events.emit('routeChangeError');
                 throw 'routeChange aborted.';
