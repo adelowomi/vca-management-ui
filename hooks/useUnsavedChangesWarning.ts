@@ -1,11 +1,11 @@
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import { useEffect } from "react";
 
 
 const useUnsavedChangesWarning = (
     isDirty
 ) => {
-    const router = useRouter();
+    // const router = useRouter();
     const message = "Are you sure want to discard changes?";
 
     useEffect(() => {
@@ -20,19 +20,23 @@ const useUnsavedChangesWarning = (
     }, [isDirty]);
 
 
-    useEffect(() => {
-        router.events.on('routeChangeStart', () => {
-            if (!isDirty) return;
+    // useEffect(() => {
+    //     router.events.on('routeChangeStart', () => {
+    //         if (!isDirty) return;
 
-            if (window.confirm('Are you sure you want to leave?\nChanges you made may not be saved.'))
-                isDirty = false;
-            else {
-                router.events.emit('routeChangeError');
-                throw 'routeChange aborted.';
-            }
-        });
-
-    }, [isDirty]);
+    //         if (window.confirm('Are you sure you want to leave?\nChanges you made may not be saved.'))
+    //             isDirty = false;
+    //         else {
+    //             router.events.emit('routeChangeError');
+    //             throw 'routeChange aborted.';
+    //         }
+    //     });
+    //     return () => {
+    //         router.events.off('routeChangeStart', () => {
+    //             return false;
+    //         });
+    //     };
+    // }, [isDirty]);
 
 
 
