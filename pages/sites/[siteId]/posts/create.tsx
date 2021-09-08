@@ -54,7 +54,7 @@ const create = ({ token, accountId: account, error, profile }) => {
             description: data.description,
             featured: data.postTitle,
             slug: '/slug',
-            draft: 'false',
+            draft: data.draft,
             content: data.content,
             category: 'general',
             account,
