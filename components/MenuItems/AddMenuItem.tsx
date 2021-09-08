@@ -57,7 +57,7 @@ export const AddMenuItem = ({
 
   const onSubmit = async (data) => {
       data.active = newState;
-      type ? (data.type = type) : null;
+      type ? (data.type = type) : (data.type = "PAGE");
       if(newSite) {
           addMenuItem(data);
           reset();

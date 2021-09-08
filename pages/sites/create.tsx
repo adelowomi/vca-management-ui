@@ -27,7 +27,7 @@ const defaultStyle: CreateStyleInput = {
     accentColor: '#1890FF',
   },
   navigation: {
-    fontColor: '#bdbdbd',
+    fontColor: '#000000',
     backgroundColor: '#ffffff',
     accentColor: '#1890FF',
   },
@@ -43,7 +43,7 @@ const defaultStyle: CreateStyleInput = {
   },
   primaryButton: {
     fontColor: '#bdbdbd',
-    hoverFontColor: '#EB5757',
+    hoverFontColor: '#1890FF',
     backgroundColor: '#1890FF',
     hoverBackgroundColor: '#ffffff',
   },
