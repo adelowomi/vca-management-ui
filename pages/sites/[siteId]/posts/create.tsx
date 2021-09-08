@@ -216,7 +216,7 @@ const create = ({ token, accountId: account, error, profile }) => {
               </div>
               {preview ? (
                 <div className="mt-3 col-span-1">
-                  <div className="flex xl:w-card-xl lg:w-card- 2xl:w-card-2xl md:w-card-md rounded-sm">
+                  <div className="flex xl:w-card-xl lg:w-card- 2xl:w-card-2xl md:w-card-md rounded-sm w-3/4">
                     <div className="group w-full overflow-hidden hover:shadow-lg bg-white shadow-md">
                       <div className="h-44 w-full">
                         {media?.type == 'IMAGE' ? (
