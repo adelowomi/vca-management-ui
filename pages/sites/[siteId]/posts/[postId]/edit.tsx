@@ -175,6 +175,17 @@ const edit = ({ token, post, error, profile }) => {
                     <p className="text-red-500">description is required!</p>
                   )}
                 </div>
+                <div className="mt-12 space-x-3 flex flex-row btn-wrapper">
+                  <ShadowBtn
+                    bg="primary"
+                    type="button"
+                    className="py-5 px-10 shadow-sm rounded text-sm font-bold cursor-pointer"
+                    onClick={() => setPreview(!preview)}
+                  >
+                    {preview ? 'Hide preview' : 'Show preview'}
+                  </ShadowBtn>
+                </div>
+                
               </div>
             </section>
             <section className="mt-10">
@@ -213,10 +224,10 @@ const edit = ({ token, post, error, profile }) => {
                   <p className="text-red-500">content is required!</p>
                 )}
               </div>
-              <div className="col-span-1">
+              <div className="">
                 {preview ? (
                   <div className="mt-4">
-                    <div className="flex xl:w-card-xl lg:w-card- 2xl:w-card-2xl md:w-card-md rounded">
+                    <div className="flex xl:w-card-md md:w-card-md w-3/4  rounded">
                       <div className="group w-full overflow-hidden hover:shadow-lg bg-white shadow-md">
                         <div className="h-44 w-full">
                           {media.type == 'IMAGE' ? (
@@ -247,25 +258,14 @@ const edit = ({ token, post, error, profile }) => {
                         </button>
                       </div>
                     </div>
-                  </div>
+                    </div>
                 ) : (
                   ''
                 )}
               </div>
             </section>
             <hr className="border-gray-400 border-5 w-full mt-8" />
-            <section className="preview-section mb-10">
-              <div className="mt-5 space-x-3 flex flex-row btn-wrapper">
-                <ShadowBtn
-                  bg="primary"
-                  type="button"
-                  className="py-4 px-10 shadow-sm rounded text-sm font-bold cursor-pointer"
-                  onClick={() => setPreview(!preview)}
-                >
-                  {preview ? 'Hide preview' : 'Show preview'}
-                </ShadowBtn>
-              </div>
-            </section>
+            <section className="preview-section mb-10"></section>
           </form>
         </div>
       </div>
