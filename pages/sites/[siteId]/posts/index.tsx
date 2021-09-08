@@ -140,7 +140,7 @@ const posts = ({
             type="submit"
             className="ml-6 bg-vca-blue h-14 text-white font-bold text-sm"
           >
-            <div className="flex flex-row mx-8 ">
+            <div className="flex flex-row mx-8">
               <div className="mr-2">Search</div>
             </div>
           </button>
