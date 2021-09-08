@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import PasswordStrengthBar from 'react-password-strength-bar';
 import { useToasts } from 'react-toast-notifications';
 
 import { AccountType, CreateProfileInput } from '../../classes/schema';
@@ -13,14 +14,16 @@ import FormSelect from '../../components/FormSelect/VcaSelect';
 import Layout from '../../components/Layout/Layout';
 import { Btn } from '../../components/Page/PageButtons';
 import { Container, FormGroup } from '../../components/Page/PageStyledElements';
+import useUnsavedChangesWarning from '../../hooks/useUnsavedChangesWarning';
 
 const typeOptions = Object.values(AccountType);
 
-export const create = ({ token,profile }): JSX.Element => {
+export const create = ({ token, profile }): JSX.Element => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    watch,
+    formState: { errors, isDirty },
   } = useForm();
   const router = useRouter();
   const { addToast } = useToasts();
@@ -30,7 +33,7 @@ export const create = ({ token,profile }): JSX.Element => {
 
   const onSubmit = async (data) => {
     data.accountType = userRole;
-    data.account = profile.account.id
+    data.account = profile.account.id;
     setWorking(true);
     try {
       const result = await _thisUser.createProfile({
@@ -59,6 +62,7 @@ export const create = ({ token,profile }): JSX.Element => {
       return;
     }
   };
+  useUnsavedChangesWarning(isDirty);
 
   return (
     <Layout isPAdmin={true} profile={profile}>
@@ -113,7 +117,12 @@ export const create = ({ token,profile }): JSX.Element => {
                 register={register}
                 error={errors.password}
                 required={true}
+                validate={{
+                  minLength: 6,
+                  maxLength: 20,
+                }}
               />
+              <PasswordStrengthBar password={watch('password')} />
             </FormGroup>
           </div>
           <hr className="border-gray-400 border-5 w-full mt-8" />
@@ -130,8 +139,8 @@ export const create = ({ token,profile }): JSX.Element => {
               label="User Role"
               options={typeOptions.map((item, index) => {
                 return {
-                  value: (item as unknown) as string,
-                  name: (item as unknown) as string,
+                  value: item as unknown as string,
+                  name: item as unknown as string,
                   id: index,
                   unavailable: false,
                 };
@@ -155,7 +164,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       error: null,
       user: session.user,
       token: session.idToken,
-      profile
+      profile,
     },
   };
 };

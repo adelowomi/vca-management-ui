@@ -1,7 +1,7 @@
 import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import ReactPlayer from 'react-player';
@@ -20,6 +20,7 @@ import { TagSelector } from '../../../../components/utilsGroup/TagSelector';
 import { GqlErrorResponse } from '../../../../errors/GqlError';
 import { GET_ALL_MEDIA } from '../../../../graphql';
 import { ADD_ITEM } from '../../../../graphql/items.gql';
+import useUnsavedChangesWarning from '../../../../hooks/useUnsavedChangesWarning';
 import { createApolloClient } from '../../../../lib/apollo';
 
 const create = ({ token, accountId: account, error, profile }) => {
@@ -37,7 +38,7 @@ const create = ({ token, accountId: account, error, profile }) => {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm();
 
   const onSubmit = async (data: any) => {
@@ -64,8 +65,11 @@ const create = ({ token, accountId: account, error, profile }) => {
         },
       });
       setIsLoading(false);
-      addToast('Post is successfully created', { appearance: 'success' });
-      return router.push(`/sites/${siteId}/posts`);
+      addToast(
+        `Post is successfully ${data.draft ? 'saved as draft.' : 'created'}`,
+        { appearance: 'success' }
+      );
+      // return router.push(`/sites/${siteId}/posts`);
     } catch (error) {
       setIsLoading(false);
       addToast('Post could not be created!', { appearance: 'error' });
@@ -81,6 +85,9 @@ const create = ({ token, accountId: account, error, profile }) => {
       required: true,
     });
     register('tags');
+    register('draft', {
+      value: false,
+    });
     register('content', {
       required: true,
     });
@@ -94,6 +101,7 @@ const create = ({ token, accountId: account, error, profile }) => {
   if (error) {
     return <ErrorPage statusCode={400} />;
   }
+  useUnsavedChangesWarning(isDirty);
 
   return (
     <Layout profile={profile}>
@@ -105,15 +113,8 @@ const create = ({ token, accountId: account, error, profile }) => {
         setMedia={setMedia}
         token={token}
       />
-      {/* <SelectMediaModal
-        open={open}
-        setOpen={setOpen}
-        medias={medias}
-        state={media}
-        setState={setMedia}
-      /> */}
       <div className="wrapper">
-        <div className="px-24 mt-10">
+        <div className="px-24 mt-10 pb-6">
           <form action="" onSubmit={handleSubmit(onSubmit)}>
             <section className="flex items-center justify-between w-full h-">
               <div className="flex text-gray-600 items-center">
@@ -130,6 +131,7 @@ const create = ({ token, accountId: account, error, profile }) => {
                 </button>
                 <button
                   type="submit"
+                  onClick={() => setValue('draft', false)}
                   className="text-white bg-vca-blue rounded-sm text-sm py-4 font-bold px-10"
                 >
                   {isLoading ? 'Saving...' : 'Publish'}
@@ -201,7 +203,7 @@ const create = ({ token, accountId: account, error, profile }) => {
                 </div>
               </div>
             </section>
-            <section className="mt-6 grid grid-cols-3 h-full gap-4 items-center pb-10">
+            <section className="mt-6 grid grid-cols-3 h-full gap-12 items-center pb-10">
               <div className="col-span-2 h-full">
                 <h4 className="text-xl font-medium mb-4">Post content</h4>
                 <DraftEditor getContent={getContent} error={errors.content} />
@@ -212,32 +214,20 @@ const create = ({ token, accountId: account, error, profile }) => {
                   </p>
                 )}
               </div>
-            </section>
-          </form>
-          <>
-            <ShadowBtn
-              bg="primary"
-              type="button"
-              className="py-4 px-10 shadow-sm rounded text-sm font-bold cursor-pointer"
-              onClick={() => setPreview(!preview)}
-            >
-              {preview ? 'Hide preview' : 'Show preview'}
-            </ShadowBtn>
-            {preview ? (
-              <div className="mt-7">
-                <div className="grid grid-cols-4 gap-2">
-                  <div className="flex xl:w-card-xl lg:w-card- 2xl:w-card-2xl md:w-card-md rounded">
+              {preview ? (
+                <div className="mt-3 col-span-1">
+                  <div className="flex xl:w-card-xl lg:w-card- 2xl:w-card-2xl md:w-card-md rounded-sm">
                     <div className="group w-full overflow-hidden hover:shadow-lg bg-white shadow-md">
                       <div className="h-44 w-full">
-                        {media.type == 'IMAGE' ? (
+                        {media?.type == 'IMAGE' ? (
                           <img
                             className="w-full h-full object-cover"
-                            src={media.image.small}
+                            src={media?.image?.small}
                             alt="news image"
                           />
                         ) : (
                           <ReactPlayer
-                            url={media.video.url}
+                            url={media?.video.url}
                             className="h-full w-full"
                             height={'100%'}
                             width={'100%'}
@@ -252,17 +242,48 @@ const create = ({ token, accountId: account, error, profile }) => {
                           {watch('description')}
                         </p>
                       </div>
-                      <button className="w-full bg-white text-gray-800 font-normal py-3 px-4 flex justify-left items-center text-xs italic rounded">
+                      <button
+                        className="w-full 
+                          bg-white 
+                          text-gray-800 
+                            font-normal 
+                            py-3 px-4 
+                            flex 
+                            justify-left 
+                            items-center 
+                            text-xs 
+                            italic rounded"
+                      >
                         Created on: {getStringDate(new Date())}
                       </button>
                     </div>
                   </div>
                 </div>
+              ) : (
+                ''
+              )}
+            </section>
+            <section>
+              <div className="flex justify-start space-x-6">
+                <ShadowBtn
+                  bg="secondary"
+                  type="submit"
+                  className="py-4 px-10 shadow-sm rounded text-sm font-bold cursor-pointer"
+                  onClick={() => setValue('draft', true)}
+                >
+                  Save as draft
+                </ShadowBtn>
+                <ShadowBtn
+                  bg="primary"
+                  type="button"
+                  className="py-4 px-10 shadow-sm rounded text-sm font-bold cursor-pointer"
+                  onClick={() => setPreview(!preview)}
+                >
+                  {preview ? 'Hide preview' : 'Show preview'}
+                </ShadowBtn>
               </div>
-            ) : (
-              ''
-            )}
-          </>
+            </section>
+          </form>
         </div>
       </div>
     </Layout>

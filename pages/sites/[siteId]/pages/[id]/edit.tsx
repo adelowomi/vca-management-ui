@@ -30,6 +30,7 @@ import {
   RowSection,
 } from '../../../../../components/Page/PageStyledElements';
 import { CreateWidget } from '../../../../../components/Widget/CreateWidget';
+import useUnsavedChangesWarning from '../../../../../hooks/useUnsavedChangesWarning';
 
 const edit = ({
   token,
@@ -54,7 +55,7 @@ const edit = ({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
     watch,
   } = useForm<UpdatePageInput>({
     defaultValues: {
@@ -140,6 +141,8 @@ const edit = ({
     }
     console.error(data);
   };
+
+  useUnsavedChangesWarning(isDirty);
 
   return (
     <Layout profile={profile}>
