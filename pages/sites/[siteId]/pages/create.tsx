@@ -13,9 +13,8 @@ import { FormInput } from '../../../../components/FormInput/formInput';
 import FormSelect from '../../../../components/FormSelect/VcaSelect';
 import Layout from '../../../../components/Layout/Layout';
 import { AddEditHero } from '../../../../components/Page/Add&EditHerro';
-import { Btn, ShadowBtn } from '../../../../components/Page/PageButtons';
+import { Btn } from '../../../../components/Page/PageButtons';
 import {
-  ColumnSection,
   Container,
   FormGroup,
   H1,
@@ -178,13 +177,6 @@ const create = ({
           token={token}
           profile={profile}
         />
-        <ColumnSection>
-          <div className="mt-5">
-            <ShadowBtn className="py-4 px-10 shadow-sm rounded text-sm font-bold">
-              Save as draft
-            </ShadowBtn>
-          </div>
-        </ColumnSection>
       </Container>
     </Layout>
   );

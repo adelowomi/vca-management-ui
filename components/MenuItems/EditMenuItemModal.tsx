@@ -193,7 +193,7 @@ export const EditMenuItemModal = ({
                       label=""
                       register={register}
                       error={errors.slug}
-                      required={true}
+                      required={false}
                     />
                   </div>
                   <div className="w-full">

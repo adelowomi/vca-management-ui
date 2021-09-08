@@ -11,11 +11,11 @@ import tw from 'tailwind-styled-components';
 
 import { PerformanceClass } from '../../../../classes/Performance';
 import { LogicalOperatorEnum } from '../../../../classes/schema';
+import { Site } from '../../../../classes/Site';
 import { User } from '../../../../classes/User';
 import { FormInput } from '../../../../components/FormInput/formInput';
 import Layout from '../../../../components/Layout/Layout';
 import DeleteModal from '../../../../components/utilsGroup/DeleteModal';
-import { GET_SITE_MENUITEMS } from '../../../../graphql';
 import { DELETE_PERFORMANCE } from '../../../../graphql/performance.gql';
 import { createApolloClient } from '../../../../lib/apollo';
 
@@ -64,7 +64,7 @@ const P = tw.p`
   text-left
 `;
 
-const index = ({ performances, menuItems, token,profile }) => {
+const index = ({ performances, menuItems, token, profile }) => {
   const router = useRouter();
   const page = parseInt(router.query?.page as string, 10) || 0;
   const currentPageUrl = router.asPath.split('?')[0];
@@ -348,6 +348,7 @@ const index = ({ performances, menuItems, token,profile }) => {
 
 export async function getServerSideProps(ctx) {
   const session = getSession(ctx.req, ctx.res);
+  const site = new Site(session.idToken);
   if (!session) {
     return {
       redirect: {
@@ -401,14 +402,19 @@ export async function getServerSideProps(ctx) {
       },
     };
   }
-
   const user = new User(session.idToken);
-  const _thisPerformance = new PerformanceClass(session.idToken);
 
-  const client = createApolloClient(session.idToken);
+  const profile = (await user.getProfile()).data;
+  const currentSite = await (
+    await site.getSite({
+      siteId: ctx.query.siteId as unknown as string,
+      accountId: profile.account.id,
+    })
+  ).data;
+
+  const _thisPerformance = new PerformanceClass(session.idToken);
   let performances: any;
   let menuItems: any;
-  const profile = (await user.getProfile()).data;
   try {
     const { data } = await _thisPerformance.getAllBySite({
       accountId: profile.account.id,
@@ -422,33 +428,18 @@ export async function getServerSideProps(ctx) {
   }
 
   try {
-    const { data } = await client.query({
-      query: GET_SITE_MENUITEMS,
-      variables: {
-        filter: {
-          combinedFilter: {
-            filters: [
-              {
-                singleFilter: {
-                  field: 'siteId',
-                  operator: 'EQ',
-                  value: ctx.query.siteId,
-                },
-              },
-            ],
-          },
-        },
-      },
-    });
+    
 
-    menuItems = data.siteMenuItems.header.menuItems
-      ? data.siteMenuItems.header.menuItems
+    menuItems = currentSite.header.menuItems
+      ? currentSite.header.menuItems
       : { error: true };
   } catch (error) {
     menuItems = { error: true };
   }
 
-  return { props: { performances, menuItems, token: session.idToken,profile } };
+  return {
+    props: { performances, menuItems, token: session.idToken, profile },
+  };
 }
 
 export default withPageAuthRequired(index);

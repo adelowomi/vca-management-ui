@@ -49,9 +49,9 @@ export const performanceValidator = (values: any) => {
   if (!values.start) {
     errors.start = 'start date is required';
   }
-  if (!values.nasdaqId) {
-    errors.nasdaqId = 'nasdaqId is required';
-  }
+  // if (!values.nasdaqId) {
+  //   errors.nasdaqId = 'nasdaqId is required';
+  // }
 
   // if (values.quarters.length === 0) {
   //   errors.nasdaqId = 'nasdaqId is required';

@@ -6,18 +6,18 @@ import { Items } from '../../../../classes/Items';
 import { MediaClass } from '../../../../classes/media';
 import {
   ComparisonOperatorEnum,
+  HeroLocationType,
   LogicalOperatorEnum,
 } from '../../../../classes/schema';
 import { Site } from '../../../../classes/Site';
 import { User } from '../../../../classes/User';
+import { HeroPreview } from '../../../../components/Hero/Hero';
 import Layout from '../../../../components/Layout/Layout';
 import { CallToAction } from '../../../../components/Page/CtaComponent';
 import { PageHeaderStyle } from '../../../../components/Page/HeaderPageStyle';
-import { ShadowBtn } from '../../../../components/Page/PageButtons';
 import { PageControls } from '../../../../components/Page/PageControls';
 import { Input } from '../../../../components/Page/PageInput';
 import {
-  ColumnSection,
   Container,
   H2,
 } from '../../../../components/Page/PageStyledElements';
@@ -41,9 +41,8 @@ const create = ({
     query: { siteId },
   } = useRouter();
 
-
   const { handleSubmit, state, errors, setState, handleChange } =
-    performanceUseForm(performanceValidator, client, { type: 'add', account });
+    performanceUseForm(performanceValidator, client,token, { type: 'add', account });
 
   const onButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -104,7 +103,7 @@ const create = ({
           token={token}
           profile={profile}
         />
-
+        
         <Textposition
           headerText={state.headerText}
           handleChange={handleChange}
@@ -137,7 +136,23 @@ const create = ({
             </span>
           )}
         </div>
-
+        <HeroPreview
+          hero={{
+            heading:
+              (state && state.headerText),
+            hasAction:
+              (state && state.actionText ? true : false), 
+            location:
+              (state && (state.location as HeroLocationType)),
+            media: state && state.media,
+            actionText:
+              (state && state.actionText),
+            mediaUrl: state && state.mediaUrl,
+            type: '',
+            caption: state && state.captionText,
+            actionSlug: state && state.ctaLink,
+          }}
+        />
         <hr className="border-gray-400 border-5 w-full mt-8" />
         <FiscalYear
           state={state}
@@ -149,22 +164,7 @@ const create = ({
           token={token}
           profile={profile}
         />
-        <ColumnSection className="mt-5 mb-5">
-          <div className="mt-5 space-x-3 flex flex-row">
-            <ShadowBtn
-              bg="primary"
-              className="py-4 px-10 shadow-sm rounded text-sm font-bold"
-            >
-              Add a new quarter
-            </ShadowBtn>
-            <ShadowBtn
-              bg="secondary"
-              className="py-4 px-10 shadow-sm rounded text-sm font-bold"
-            >
-              Save as draft
-            </ShadowBtn>
-          </div>
-        </ColumnSection>
+        
       </Container>
     </Layout>
   );
@@ -186,12 +186,11 @@ export async function getServerSideProps(ctx) {
   const profile = (await user.getProfile()).data;
   const media = new MediaClass(session.idToken);
 
-
   let medias: any;
   let items: any;
   const currentSite = await (
     await site.getSite({
-      siteId: (ctx.query.siteId as unknown) as string,
+      siteId: ctx.query.siteId as unknown as string,
       accountId: profile.account.id,
     })
   ).data;
@@ -204,7 +203,6 @@ export async function getServerSideProps(ctx) {
     medias = { error: true };
   }
 
-  
   try {
     const values = (
       await item.getAllItems({
@@ -240,7 +238,7 @@ export async function getServerSideProps(ctx) {
   return {
     props: {
       token: session?.idToken,
-      menuItems:currentSite.header.menuItems.filter(item => item.type == "PERFORMANCE"),
+      menuItems: currentSite.header.menuItems,
       medias,
       items,
       accountId: profile.account.id,

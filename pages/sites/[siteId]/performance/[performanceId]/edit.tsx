@@ -6,39 +6,47 @@ import { Items } from '../../../../../classes/Items';
 import { MediaClass } from '../../../../../classes/media';
 import {
   ComparisonOperatorEnum,
+  HeroLocationType,
   LogicalOperatorEnum,
 } from '../../../../../classes/schema';
+import { Site } from '../../../../../classes/Site';
 import { User } from '../../../../../classes/User';
+import { HeroPreview } from '../../../../../components/Hero/Hero';
 import Layout from '../../../../../components/Layout/Layout';
 import { CallToAction } from '../../../../../components/Page/CtaComponent';
 import { PageHeaderStyle } from '../../../../../components/Page/HeaderPageStyle';
-import { ShadowBtn } from '../../../../../components/Page/PageButtons';
 import { PageControls } from '../../../../../components/Page/PageControls';
 import { Input } from '../../../../../components/Page/PageInput';
 import {
-  ColumnSection,
   Container,
   H2,
 } from '../../../../../components/Page/PageStyledElements';
 import { PageTitle } from '../../../../../components/Page/PageTitle';
 import { Textposition } from '../../../../../components/Page/TextPosition';
 import { FiscalYear } from '../../../../../components/Performance/FiscalYear';
-import { GET_SITE_MENUITEMS } from '../../../../../graphql';
 import { GET_PERFORMANCE } from '../../../../../graphql/performance.gql';
 import { performanceValidator } from '../../../../../helpers/performanceValidator';
 import { performanceUseForm } from '../../../../../hooks/performance.hooks';
 import { createApolloClient } from '../../../../../lib/apollo';
 
-const edit = ({ token, menuItems, medias, performance, items, account,profile }) => {
-  console.error({performance});
-  
+const edit = ({
+  token,
+  menuItems,
+  medias,
+  performance,
+  items,
+  account,
+  profile,
+}) => {
+  console.error({ performance });
+
   const client = createApolloClient(token);
   const {
     query: { siteId },
   } = useRouter();
 
-  const { handleSubmit, state, errors, setState, handleChange } =
-    performanceUseForm(performanceValidator, client, {
+  const { handleSubmit, state, errors, setState, handleChange, loading } =
+    performanceUseForm(performanceValidator, client, token, {
       type: 'edit',
       performance,
       performanceId: performance.id,
@@ -84,6 +92,7 @@ const edit = ({ token, menuItems, medias, performance, items, account,profile })
           onSubmit={handleSubmit}
           title="Edit performance page"
           siteId={siteId}
+          loading={loading}
         />
         <PageTitle
           pageTitle={state.pageTitle}
@@ -136,7 +145,19 @@ const edit = ({ token, menuItems, medias, performance, items, account,profile })
             </span>
           )}
         </div>
-
+        <HeroPreview
+          hero={{
+            heading: state && state.headerText,
+            hasAction: state && state.actionText ? true : false,
+            location: state && (state.location as HeroLocationType),
+            media: state && state.media,
+            actionText: state && state.actionText,
+            mediaUrl: state && state.mediaUrl,
+            type: '',
+            caption: state && state.captionText,
+            actionSlug: state && state.ctaLink,
+          }}
+        />
         <hr className="border-gray-400 border-5 w-full mt-8" />
         <FiscalYear
           state={state}
@@ -148,22 +169,6 @@ const edit = ({ token, menuItems, medias, performance, items, account,profile })
           token={token}
           profile={profile}
         />
-        <ColumnSection className="mt-5 mb-5">
-          <div className="mt-5 space-x-3 flex flex-row">
-            <ShadowBtn
-              bg="primary"
-              className="py-4 px-10 shadow-sm rounded text-sm font-bold"
-            >
-              Add a new quarter
-            </ShadowBtn>
-            <ShadowBtn
-              bg="secondary"
-              className="py-4 px-10 shadow-sm rounded text-sm font-bold"
-            >
-              Save as draft
-            </ShadowBtn>
-          </div>
-        </ColumnSection>
       </Container>
     </Layout>
   );
@@ -185,6 +190,7 @@ export async function getServerSideProps(ctx) {
   const client = createApolloClient(session?.idToken);
   const profile = (await user.getProfile()).data;
   const media = new MediaClass(session.idToken);
+  const site = new Site(session.idToken);
 
   let menuItems: any;
   let medias: any;
@@ -216,32 +222,20 @@ export async function getServerSideProps(ctx) {
 
     performance = data.performance ? data.performance : { error: true };
   } catch (error) {
-    console.error({error});
-    
+    console.error({ error });
+
     performance = { error: true };
   }
 
   try {
-    const { data } = await client.query({
-      query: GET_SITE_MENUITEMS,
-      variables: {
-        filter: {
-          combinedFilter: {
-            filters: [
-              {
-                singleFilter: {
-                  field: 'siteId',
-                  operator: 'EQ',
-                  value: ctx.query.siteId,
-                },
-              },
-            ],
-          },
-        },
-      },
-    });
-    menuItems = data.siteMenuItems.header.menuItems
-      ? data.siteMenuItems.header.menuItems
+    const currentSite = await (
+      await site.getSite({
+        siteId: ctx.query.siteId as unknown as string,
+        accountId: profile.account.id,
+      })
+    ).data;
+    menuItems = currentSite.header.menuItems
+      ? currentSite.header.menuItems
       : { error: true };
   } catch (error) {
     menuItems = { error: true };
@@ -288,7 +282,7 @@ export async function getServerSideProps(ctx) {
       performance,
       items,
       account: profile.account.id ?? '',
-      profile:profile
+      profile: profile,
     },
   };
 }

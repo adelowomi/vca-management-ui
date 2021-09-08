@@ -32,7 +32,7 @@ export const PageItems = ({
         token={token}
         profile={profile}
       />
-      <ColumnSection>
+      <ColumnSection className="pb-10">
         <H2 className="mt-4">3. Post section</H2>
         <ImageSelectBox
           className="mt-5 w-96 flex items-center justify-center cursor-pointer"
