@@ -1,11 +1,12 @@
 import { getSession } from '@auth0/nextjs-auth0';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import PasswordStrengthBar from 'react-password-strength-bar';
 import { useToasts } from 'react-toast-notifications';
+import * as yup from 'yup';
 
 import { AccountType, CreateProfileInput } from '../../classes/schema';
 import { User } from '../../classes/User';
@@ -18,13 +19,21 @@ import useUnsavedChangesWarning from '../../hooks/useUnsavedChangesWarning';
 
 const typeOptions = Object.values(AccountType);
 
+const schema = yup.object().shape({
+  firstName:yup.string().required("First Name is required"),
+  lastName:yup.string().required("Last Name is required"),
+  email:yup.string().required("Email is required"),
+  password:yup.string().required("Password is required").matches(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{8,})"),
+  "Password must be an alphanumeric character with at least one special character"),
+});
+
+
 export const create = ({ token, profile }): JSX.Element => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isDirty },
-  } = useForm();
+  } = useForm({resolver: yupResolver(schema)});
   const router = useRouter();
   const { addToast } = useToasts();
   const [working, setWorking] = useState(false);
@@ -117,12 +126,7 @@ export const create = ({ token, profile }): JSX.Element => {
                 register={register}
                 error={errors.password}
                 required={true}
-                validate={{
-                  minLength: 6,
-                  maxLength: 20,
-                }}
               />
-              <PasswordStrengthBar password={watch('password')} />
             </FormGroup>
           </div>
           <hr className="border-gray-400 border-5 w-full mt-8" />

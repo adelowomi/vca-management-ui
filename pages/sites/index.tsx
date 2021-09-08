@@ -202,7 +202,7 @@ const Sites = ({
                             </td>
                             <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
                               <span className="flex space-x-5">
-                                <Link href={`/sites/${site.id}/edit`}>
+                                <Link href={`/sites/${site.id}/settings`}>
                                   <p>Edit</p>
                                 </Link>
                                 <RiDeleteBinLine

@@ -3,7 +3,7 @@ import { FieldValues, UseFormRegister } from 'react-hook-form';
 interface FormInputProps {
   name: string;
   label: string;
-  register: UseFormRegister<FieldValues>;
+  register: UseFormRegister<FieldValues> ;
   error: any;
   required?: boolean;
   disableLabel?: boolean;
@@ -20,7 +20,7 @@ export const FormInput = ({
   validate = {},
 }: FormInputProps): JSX.Element => {
   const inputStyle =
-    error?.type === 'required'
+    error
       ? 'shadow-sm focus:ring-red-500 focus:border-red-500 focus:border-2 block w-96 h-14 sm:text-sm border border-red-500 rounded-sm pl-4'
       : 'shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:border-2 block w-96 h-14 sm:text-sm border border-gray-400 rounded-sm pl-4';
   return (
@@ -42,7 +42,7 @@ export const FormInput = ({
         />
       </div>
       <p className=" text-vca-red mt-2">
-        {error?.type === 'required' && `${name} is required`}
+        {error?.type === 'required' && `${name} is required` || error?.message}
       </p>
     </div>
   );
