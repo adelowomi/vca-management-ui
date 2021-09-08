@@ -22,7 +22,6 @@ const useUnsavedChangesWarning = (
 
     useEffect(() => {
         router.events.on('routeChangeStart', () => {
-
             if (!isDirty) return;
 
             if (window.confirm('Are you sure you want to leave?\nChanges you made may not be saved.'))
@@ -34,6 +33,8 @@ const useUnsavedChangesWarning = (
         });
 
     }, [isDirty]);
+
+
 
 };
 
