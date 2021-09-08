@@ -1,17 +1,16 @@
-import React from 'react';
-import { RiQuestionFill } from 'react-icons/ri';
+import React, { ChangeEvent } from 'react';
 
 import { ErrorProps } from '../../types/interfaces';
-import { SelectButton } from './PageButtons/SelectButton';
+import FormSelect from '../FormSelect/VcaSelect';
 import { Input, Label } from './PageInput';
 import { FormGroup, RowSection } from './PageStyledElements';
 
 export interface PageTitleProps {
   pageTitle: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>, data?: any) => void;
   errors: ErrorProps;
   menuItem: string;
-  options: any;
+  options: any[];
 }
 
 export const PageTitle: React.FC<PageTitleProps> = ({
@@ -25,7 +24,7 @@ export const PageTitle: React.FC<PageTitleProps> = ({
     <>
       <RowSection className="space-x-7 mt-10">
         <FormGroup className="">
-          <Label htmlFor="pageTitle" className="mb-6">
+          <Label htmlFor="pageTitle" className="mb-7">
             Page Title
           </Label>
           <Input
@@ -33,26 +32,41 @@ export const PageTitle: React.FC<PageTitleProps> = ({
             name="pageTitle"
             value={pageTitle}
             placeholder="ex: Home"
-            className="py-4"
+            className="pl-5"
+            style={{ padding: '1rem' }}
           />
           {errors && errors.pageTitle && (
             <span className="text-red-500 mt-1">{errors.pageTitle}</span>
           )}
         </FormGroup>
         <FormGroup className="">
-          <Label htmlFor="pageTitle" className="flex mb-6 ">
+          {/* <Label htmlFor="pageTitle" className="flex mb-6 ">
             Add menu to page
             <span className="ml-2"></span>
             <RiQuestionFill className="h-6 w-6 text-black" />
-          </Label>
-          <SelectButton
-            caption="Select menu"
-            py={4}
-            px={5}
-            handleChange={handleChange}
-            value={menuItem}
-            options={options}
-            name="menuItem"
+          </Label> */}
+          <FormSelect
+            defaultOption={{
+              id: 0,
+              name: options.filter(m => m.id == menuItem)[0]?.name ?? "Select Menu",
+              value: options.filter(m => m.id == menuItem)[0]?.id ?? null,
+              unavailable: false,
+            }}
+            onChange={(data) => {
+              let e: ChangeEvent<HTMLInputElement>;
+              handleChange(e, data.value);
+            }}
+            options={options.map((item, index) => {
+              return {
+                value: item.id as unknown as string,
+                name: item.name as unknown as string,
+                id: index,
+                unavailable: false,
+              };
+            })}
+            label="Add menu to page"
+            error={errors.menuItem}
+            errorText={'Add page to menu'}
           />
           {errors && errors.menuItem && (
             <span className="text-red-500 mt-1 text-sm font-medium">

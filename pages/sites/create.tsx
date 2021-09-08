@@ -6,8 +6,9 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useToasts } from 'react-toast-notifications';
 
-import { Profile } from '../../classes/schema';
+import { CreateStyleInput, Profile } from '../../classes/schema';
 import { Site } from '../../classes/Site';
+import { Style } from '../../classes/Style';
 import { User } from '../../classes/User';
 import { FormInput } from '../../components/FormInput/formInput';
 import Layout from '../../components/Layout/Layout';
@@ -16,6 +17,42 @@ import { MenuItemListItem } from '../../components/MenuItems/MenuItemListItem';
 import { Btn } from '../../components/Page/PageButtons';
 import { Container, FormGroup } from '../../components/Page/PageStyledElements';
 import { GqlErrorResponse } from '../../errors/GqlError';
+
+const defaultStyle: CreateStyleInput = {
+  body: {
+    bodyFont: 'inter',
+    fontColor: '#bdbdbd',
+    backgroundColor: '#ffffff',
+    accentColor: '#1890FF',
+  },
+  navigation: {
+    fontColor: '#bdbdbd',
+    backgroundColor: '#ffffff',
+    accentColor: '#1890FF',
+  },
+  footer: {
+    fontColor: '#bdbdbd',
+    backgroundColor: '#ffffff',
+    accentColor: '#1890FF',
+  },
+  button: {
+    font: 'inter',
+    buttonBorderStyle: 'rounded',
+    previewButton: 'rounded',
+  },
+  primaryButton: {
+    fontColor: '#bdbdbd',
+    hoverFontColor: '#EB5757',
+    backgroundColor: '#1890FF',
+    hoverBackgroundColor: '#ffffff',
+  },
+  secondaryButton: {
+    fontColor: '#bdbdbd',
+    hoverFontColor: '#ffffff',
+    backgroundColor: '#ffffff',
+    hoverBackgroundColor: '#000000',
+  },
+};
 
 export const create = ({
   token,
@@ -29,7 +66,7 @@ export const create = ({
   const [working, setWorking] = useState(false);
   const [menuItems, setMenuItems] = useState([]);
   const router = useRouter();
-  const _thisSite = new Site((token as unknown) as string);
+  const _thisSite = new Site(token as unknown as string);
 
   const {
     register,
@@ -58,6 +95,7 @@ export const create = ({
         return;
       }
       addToast('Your Site has been created', { appearance: 'success' });
+      await createStyle(defaultStyle, result.data.id);
       setWorking(false);
       router.push('/sites');
       return;
@@ -82,6 +120,23 @@ export const create = ({
     const poppedItems = items.splice(index, 1);
     setMenuItems([...poppedItems]);
   };
+
+  const _thisStyle = new Style(token);
+
+  const createStyle = async (input: CreateStyleInput, id: any) => {
+    input.button.previewButton = 'preview';
+    input.site = id;
+    input.account = profile.account.id;
+    try {
+      const result = await _thisStyle.createStyle({
+        input: input as unknown as CreateStyleInput,
+      });
+      console.error(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Layout isPAdmin={true} profile={profile}>
       <Container className="mt-12">

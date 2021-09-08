@@ -1,8 +1,11 @@
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
-import Router, { useRouter } from 'next/router';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { ChangeEvent } from 'react';
 import { useToasts } from 'react-toast-notifications';
 
+import { UpdateMenuitemInput } from '../classes/schema';
+import { Site } from '../classes/Site';
 import { ADD_PERFORMANCE, EDIT_PERFORMANCE } from '../graphql/performance.gql';
 import { stringToBoolean } from '../helpers/stringToBoolean';
 import { PerformanceErrorProps } from '../types/interfaces';
@@ -10,16 +13,26 @@ import { PerformanceErrorProps } from '../types/interfaces';
 export const performanceUseForm = (
   validator: any,
   client: ApolloClient<NormalizedCacheObject>,
+  token: string,
   {
     performance,
     type,
     performanceId,
-    account
-  }: { performance?: any; type: string; performanceId?: string, account: string }
+    account,
+  }: {
+    performance?: any;
+    type: string;
+    performanceId?: string;
+    account: string;
+  }
 ) => {
   const {
     query: { siteId },
   } = useRouter();
+  const _thisSite = new Site(token);
+
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [state, setState] = React.useState({
     pageTitle: performance?.name || '',
     menuItem: performance?.menuItem || '',
@@ -51,8 +64,32 @@ export const performanceUseForm = (
     setIsSubmitting(true);
   };
 
+  const updateMenuItem = async () => {
+    const data = { type: 'PERFORMANCE' };
+    try {
+      const result = await await _thisSite.updateMenuItem({
+        input: data as unknown as UpdateMenuitemInput,
+        menuId: state.menuItem,
+      });
+      if (!result.status) {
+        addToast('An Error Occurred', { appearance: 'error' });
+        return;
+      }
+      return;
+    } catch (error) {
+      console.error(error);
+      addToast(
+        error.error.message ? error.error.message : 'An error occurred',
+        { appearance: 'error' }
+      );
+    }
+  };
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, data?: any) => {
+    if (data) {
+      setState({ ...state, menuItem: data });
+      return;
+    }
     const { name, value } = e.target;
     setState({
       ...state,
@@ -65,6 +102,7 @@ export const performanceUseForm = (
   };
 
   const createPerformance = async () => {
+    setLoading(true);
     try {
       await client.mutate({
         mutation: ADD_PERFORMANCE,
@@ -72,7 +110,7 @@ export const performanceUseForm = (
           createPerformanceInput: {
             account,
             year: state.year,
-            site:siteId,
+            site: siteId,
             name: state.name,
             description: state.description,
             start: state.start,
@@ -106,12 +144,16 @@ export const performanceUseForm = (
       addToast('Performance is successfully Created', {
         appearance: 'success',
       });
-      Router.reload();
+      setLoading(false);
+      await updateMenuItem();
+      router.push(`/sites/${siteId}/performance`);
     } catch (error) {
+      setLoading(false);
       addToast('Performance could not be created!', { appearance: 'error' });
     }
   };
   const updatePerformance = async () => {
+    setLoading(true);
     try {
       await client.mutate({
         mutation: EDIT_PERFORMANCE,
@@ -123,7 +165,7 @@ export const performanceUseForm = (
             description: state.description,
             start: state.start,
             stop: state.stop,
-            site:siteId,
+            site: siteId,
             menuItem: state.menuItem === '' ? null : state.menuItem,
             quarter: state.quarters.map(({ ...obj }) => {
               delete obj.id;
@@ -155,8 +197,12 @@ export const performanceUseForm = (
         },
       });
       addToast('Performance is successfully Edited', { appearance: 'success' });
+      setLoading(false);
+      await updateMenuItem();
+      router.push(`/sites/${siteId}/performance`);
       // Router.reload();
     } catch (error) {
+      setLoading(false);
       addToast('Performance could not be Edited!', { appearance: 'error' });
     }
   };
@@ -169,5 +215,5 @@ export const performanceUseForm = (
     }
   }, [errors]);
 
-  return { errors, handleChange, handleSubmit, setState, state };
+  return { errors, handleChange, handleSubmit, setState, state, loading };
 };
