@@ -1,13 +1,13 @@
-import {useState} from 'react'
+import { useState } from 'react';
 import { FieldValues, UseFormRegister } from 'react-hook-form';
-import {AiFillEyeInvisible, AiFillEye} from 'react-icons/ai'
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 
 interface FormInputProps {
   name: string;
   label: string;
-  register: UseFormRegister<FieldValues> ;
+  register: UseFormRegister<FieldValues>;
   error: any;
-  type?:string;
+  type?: string;
   required?: boolean;
   disableLabel?: boolean;
   validate?: any;
@@ -25,12 +25,11 @@ export const FormInput = ({
   disableLabel = false,
   validate = {},
 }: FormInputProps): JSX.Element => {
-  const inputStyle =
-    error
-      ? 'shadow-sm focus:ring-red-500 focus:border-red-500 focus:border-2 block w-96 h-14 sm:text-sm border border-red-500 rounded-sm pl-4'
-      : 'shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:border-2 block w-96 h-14 sm:text-sm border border-gray-400 rounded-sm pl-4';
-  
-      const [passwordReveal, setPasswordReveal] = useState(false)
+  const inputStyle = error
+    ? 'shadow-sm focus:ring-red-500 focus:border-red-500 focus:border-2 block w-96 h-14 sm:text-sm border border-red-500 rounded-sm pl-4'
+    : 'shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:border-2 block w-96 h-14 sm:text-sm border border-gray-400 rounded-sm pl-4';
+
+  const [passwordReveal, setPasswordReveal] = useState(false);
   return (
     <div>
       <label
@@ -49,10 +48,18 @@ export const FormInput = ({
           type={`${passwordReveal ? 'text' : type}`}
           aria-describedby={`${name}`}
         />
-        {icon && <span className="absolute right-5 inset-y-5 cursor-pointer" onClick={() => setPasswordReveal(!passwordReveal)}>{passwordReveal ? <AiFillEyeInvisible /> :<AiFillEye />}</span>}
+        {icon && (
+          <span
+            className="absolute right-5 inset-y-5 cursor-pointer"
+            onClick={() => setPasswordReveal(!passwordReveal)}
+          >
+            {passwordReveal ? <AiFillEyeInvisible /> : <AiFillEye />}
+          </span>
+        )}
       </div>
       <p className=" text-vca-red mt-2">
-        {error?.type === 'required' && `${name} is required` || error?.message}
+        {(error?.type === 'required' && `${name} is required`) ||
+          error?.message}
       </p>
     </div>
   );
