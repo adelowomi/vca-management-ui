@@ -20,20 +20,26 @@ import useUnsavedChangesWarning from '../../hooks/useUnsavedChangesWarning';
 const typeOptions = Object.values(AccountType);
 
 const schema = yup.object().shape({
-  firstName:yup.string().required("First Name is required"),
-  lastName:yup.string().required("Last Name is required"),
-  email:yup.string().required("Email is required"),
-  password:yup.string().required("Password is required").matches(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{8,})"),
-  "Password must be an alphanumeric character with at least one special character"),
+  firstName: yup.string().required('First Name is required'),
+  lastName: yup.string().required('Last Name is required'),
+  email: yup.string().required('Email is required'),
+  password: yup
+    .string()
+    .required('Password is required')
+    .matches(
+      new RegExp(
+        '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{8,})'
+      ),
+      'Password must Contain, Uppercase and Lowercase characters, as well as a number and at least one special character'
+    ),
 });
-
 
 export const create = ({ token, profile }): JSX.Element => {
   const {
     register,
     handleSubmit,
     formState: { errors, isDirty },
-  } = useForm({resolver: yupResolver(schema)});
+  } = useForm({ resolver: yupResolver(schema) });
   const router = useRouter();
   const { addToast } = useToasts();
   const [working, setWorking] = useState(false);
@@ -123,9 +129,11 @@ export const create = ({ token, profile }): JSX.Element => {
               <FormInput
                 name="password"
                 label="Password"
+                type="password"
                 register={register}
                 error={errors.password}
                 required={true}
+                icon={true}
               />
             </FormGroup>
           </div>

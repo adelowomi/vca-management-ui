@@ -208,7 +208,7 @@ export const create = ({
                 label="Instagram"
                 register={register}
                 error={errors.instagram}
-                required={true}
+                required={false}
               />
             </FormGroup>
             <FormGroup className="">

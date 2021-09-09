@@ -114,12 +114,14 @@ const posts = ({
             <h1 className="text-3xl text-black font-bold">Posts</h1>
           </div>
           <div className="flex space-x-3">
+          <Link href={`/sites/${siteId}/posts/create`}>
             <button
               type="submit"
               className="text-white bg-vca-blue rounded-sm text-sm py-3 font-bold px-6"
             >
-              <Link href={`/sites/${siteId}/posts/create`}>Add new</Link>
+              Add new
             </button>
+            </Link>
           </div>
         </section>
         <form
@@ -188,7 +190,7 @@ const posts = ({
                           key={post.id}
                         >
                           <tr
-                            className={`text-left hover:bg-vca-blue hover:bg-opacity-10 cursor-pointer `}
+                            className={`text-left hover:bg-vca-blue hover:bg-opacity-10 cursor-pointer`}
                             key={post.id}
                           >
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
@@ -215,7 +217,7 @@ const posts = ({
                             <td className="px-6 py-4 text-gray-500 whitespace- ">
                               {moment(post.createdAt).format('llll')}
                             </td>
-                            <td className="px-6 py-4 cursor-pointer whitespace- text-center text-gray-800">
+                            <td className="px-6 py-4 cursor-pointer whitespace- text-center text-gray-800 relative z-30">
                               <span className="flex space-x-3 text-gray-500">
                                 <Link
                                   href={`/sites/${siteId}/posts/${post.id}/edit`}
