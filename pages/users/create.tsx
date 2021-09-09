@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { useToasts } from 'react-toast-notifications';
 import * as yup from 'yup';
 
+
 import { AccountType, CreateProfileInput } from '../../classes/schema';
 import { User } from '../../classes/User';
 import { FormInput } from '../../components/FormInput/formInput';
@@ -24,7 +25,7 @@ const schema = yup.object().shape({
   lastName:yup.string().required("Last Name is required"),
   email:yup.string().required("Email is required"),
   password:yup.string().required("Password is required").matches(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{8,})"),
-  "Password must be an alphanumeric character with at least one special character"),
+  "Password must Contain, Uppercase and Lowercase characters, as well as a number and at least one special character"),
 });
 
 
@@ -123,9 +124,11 @@ export const create = ({ token, profile }): JSX.Element => {
               <FormInput
                 name="password"
                 label="Password"
+                type="password"
                 register={register}
                 error={errors.password}
                 required={true}
+                icon={true}
               />
             </FormGroup>
           </div>

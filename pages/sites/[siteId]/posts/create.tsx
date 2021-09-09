@@ -24,9 +24,10 @@ import useUnsavedChangesWarning from '../../../../hooks/useUnsavedChangesWarning
 import { createApolloClient } from '../../../../lib/apollo';
 
 const create = ({ token, accountId: account, error, profile }) => {
+  const router = useRouter()
   const {
     query: { siteId },
-  } = useRouter();
+  } = router;
   const [open, setOpen] = React.useState(false);
   const client = createApolloClient(token);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -69,7 +70,7 @@ const create = ({ token, accountId: account, error, profile }) => {
         `Post is successfully ${data.draft ? 'saved as draft.' : 'created'}`,
         { appearance: 'success' }
       );
-      // return router.push(`/sites/${siteId}/posts`);
+      router.push(`/sites/${siteId}/posts`);
     } catch (error) {
       setIsLoading(false);
       addToast('Post could not be created!', { appearance: 'error' });

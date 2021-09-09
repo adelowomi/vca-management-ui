@@ -92,9 +92,11 @@ export const index = ({
         <div className="mt-12 flex flex-col">
           <div className="flex flew-row justify-between items-center">
             <h1 className="text-4xl font-semibold">Users</h1>
-            <PageActionsColOneBtn className="focus:outline-none">
-              <Link href={`/users/create`}> Add New</Link>
-            </PageActionsColOneBtn>
+            <Link href={`/users/create`}>
+              <PageActionsColOneBtn className="focus:outline-none">
+                Add New
+              </PageActionsColOneBtn>
+            </Link>
           </div>
         </div>
         <form
