@@ -85,9 +85,9 @@ export const performanceUseForm = (
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>, data?: any) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, data?: any, field?: string) => {
     if (data) {
-      setState({ ...state, menuItem: data });
+      setState({ ...state, [field]: data });
       return;
     }
     const { name, value } = e.target;

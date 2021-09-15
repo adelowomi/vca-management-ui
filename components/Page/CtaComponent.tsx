@@ -1,21 +1,22 @@
 import * as React from 'react';
+import { ChangeEvent } from 'react';
 
 import { ErrorProps } from '../../types/interfaces';
-import { SelectButton } from './PageButtons/SelectButton';
+import FormSelect from '../FormSelect/VcaSelect';
 import { Input } from './PageInput';
 import { ColumnSection, Grid, H2 } from './PageStyledElements';
 
 export interface CallToActionProps {
   actionText: string;
   ctaLink: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>, data?: any,field?:string) => void;
   hasAction?: boolean | string;
   errors: ErrorProps;
 }
 
 const options = [
-  { id: 'false', name: 'Inactive' },
-  { id: 'true', name: 'active' },
+  { id: 'false', name: 'Inactive', value: 'INACTIVE', unavailable: false },
+  { id: 'true', name: 'active', value: 'ACTIVE', unavailable: false },
 ];
 
 export const CallToAction: React.FC<CallToActionProps> = ({
@@ -30,16 +31,30 @@ export const CallToAction: React.FC<CallToActionProps> = ({
       <ColumnSection>
         <Grid className="space-x-5">
           <div className="flex flex-col w-full">
-            <H2 className="mb-5">Call to action button</H2>
-            <div className="w-full">
-              <SelectButton
-                name="hasAction"
-                caption="Select action"
-                px={5}
-                py={4}
-                handleChange={handleChange}
-                value={hasAction}
-                options={options}
+            <H2 className="">Call to action button</H2>
+            <div className="w-full -mt-0.5">
+              <FormSelect
+                defaultOption={{
+                  id: 0,
+                  name: hasAction && hasAction ? 'Active' : "inActive" ?? "Select state",
+                  value: hasAction && hasAction as unknown as string || "false",
+                  unavailable: false,
+                }}
+                onChange={(data) => {
+                  let e: ChangeEvent<HTMLInputElement>;
+                  handleChange(e, data.value as unknown as boolean,"hasAction");
+                }}
+                options={options.map((item, index) => {
+                  return {
+                    value: item.id as unknown as string,
+                    name: item.name as unknown as string,
+                    id: index,
+                    unavailable: false,
+                  };
+                })}
+                label=""
+                error={errors.hasAction}
+                errorText={'Add page to menu'}
               />
             </div>
           </div>

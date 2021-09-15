@@ -110,9 +110,11 @@ export const Edit = ({
           <div className="flex flex-row justify-between">
             <h1 className="font-bold text-3xl">Edit website settings</h1>
             <div className="flex flex-row justify-start space-x-5">
-              <Btn color="primary" $bg="secondary" $px="sm">
-                <Link href="/sites"> Cancel</Link>
-              </Btn>
+              <Link href="/sites">
+                <Btn color="primary" $bg="secondary" $px="sm">
+                  Cancel
+                </Btn>
+              </Link>
               <Btn color="secondary" $bg="primary" $px="lg">
                 {working ? 'Saving..' : 'Save Changes'}
               </Btn>

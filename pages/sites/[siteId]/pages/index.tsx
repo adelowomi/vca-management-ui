@@ -144,9 +144,11 @@ const Pages = ({ pages, menuItems, token, profile }) => {
         <PageActionsWrapper>
           <PageActionsColOne>
             <h1 className="text-4xl font-semibold">Pages</h1>
+            <Link href={`/sites/${siteId}/pages/create`}>
             <PageActionsColOneBtn className="focus:outline-none">
-              <Link href={`/sites/${siteId}/pages/create`}> Add New</Link>
+               Add New
             </PageActionsColOneBtn>
+            </Link>
           </PageActionsColOne>
         </PageActionsWrapper>
         <form

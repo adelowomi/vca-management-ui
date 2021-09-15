@@ -32,7 +32,7 @@ const create = ({ token, accountId: account, error, profile }) => {
   const client = createApolloClient(token);
   const [isLoading, setIsLoading] = React.useState(false);
   const { addToast } = useToasts();
-  const [preview, setPreview] = React.useState(false);
+  const [preview, setPreview] = React.useState(true);
   const [media, setMedia] = React.useState<Media>();
   const {
     register,
