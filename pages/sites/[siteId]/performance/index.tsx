@@ -229,73 +229,76 @@ const index = ({ performances, menuItems, token, profile }) => {
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {performances.map((performance: any) => (
-                        <Link
-                          href={`/sites/${siteId}/performance/${performance.id}/edit`}
+                        <tr
+                          className={`text-left hover:bg-vca-blue hover:bg-opacity-10 cursor-pointer `}
                           key={performance.id}
                         >
-                          <tr
-                            className={`text-left hover:bg-vca-blue hover:bg-opacity-10 cursor-pointer `}
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
+                            <input
+                              type="checkbox"
+                              className="px-3 h-5 w-6 border border-gray-300"
+                              name=""
+                              id=""
+                            />
+                          </td>
+
+                          <Link
+                            href={`/sites/${siteId}/performance/${performance.id}/edit`}
                             key={performance.id}
                           >
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
-                              <input
-                                type="checkbox"
-                                className="px-3 h-5 w-6 border border-gray-300"
-                                name=""
-                                id=""
+                            <>
+                              <Link
+                                href={`/sites/${siteId}/performance/${performance.id}/edit`}
+                              >
+                                <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
+                                  {performance.name}
+                                </td>
+                              </Link>
+                              <Link
+                                href={`/sites/${siteId}/performance/${performance.id}/edit`}
+                              >
+                                <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
+                                  {performance.menuItem
+                                    ? menuItems.filter(
+                                        (item) =>
+                                          item.id === performance.menuItem
+                                      )[0].name
+                                    : ''}
+                                </td>
+                              </Link>
+                              <Link
+                                href={`/sites/${siteId}/performance/${performance.id}edit`}
+                              >
+                                <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
+                                  <span>
+                                    <p>{performance.createdAt}</p>
+                                  </span>
+                                </td>
+                              </Link>
+                            </>
+                          </Link>
+                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
+                            <span className="flex space-x-5">
+                              <Link
+                                href={`/sites/${siteId}/performance/${performance.id}/edit`}
+                              >
+                                <p>Edit</p>
+                              </Link>
+
+                              <RiDeleteBinLine
+                                onClick={() => getId(performance.id)}
+                                className="h-6"
                               />
-                            </td>
-
-                            <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
-                              <Link
-                                href={`/sites/${siteId}/performance/${performance.id}/edit`}
-                              >
-                                {performance.name}
-                              </Link>
-                            </td>
-                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
-                              <Link
-                                href={`/sites/${siteId}/performance/${performance.id}/edit`}
-                              >
-                                {performance.menuItem
-                                  ? menuItems.filter(
-                                      (item) => item.id === performance.menuItem
-                                    )[0].name
-                                  : ''}
-                              </Link>
-                            </td>
-                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
-                              <Link
-                                href={`/sites/${siteId}/performance/${performance.id}`}
-                              >
-                                <span>
-                                  <p>{performance.createdAt}</p>
-                                </span>
-                              </Link>
-                            </td>
-                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
-                              <span className="flex space-x-5">
-                                <Link
-                                  href={`/sites/${siteId}/performance/${performance.id}/edit`}
-                                >
-                                  <p>Edit</p>
-                                </Link>
-
-                                <RiDeleteBinLine
-                                  onClick={() => getId(performance.id)}
-                                  className="h-6"
-                                />
-                              </span>
-                            </td>
-                          </tr>
-                        </Link>
+                            </span>
+                          </td>
+                        </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
                 <div className="mt-9 flex flex-row justify-between">
                   <Link href={`${prevPage}`}>
-                    <a className="flex flex-row">
+                    <a className="flex flex-row hover:text-vca-blue">
                       <div>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -316,7 +319,7 @@ const index = ({ performances, menuItems, token, profile }) => {
                     </a>
                   </Link>
                   <Link aria-label="Next" href={`${nextPage}`}>
-                    <a className="flex flex-row">
+                    <a className="flex flex-row hover:text-vca-blue">
                       <div className="mr-2">Next</div>
                       <div>
                         <svg
@@ -428,8 +431,6 @@ export async function getServerSideProps(ctx) {
   }
 
   try {
-    
-
     menuItems = currentSite.header.menuItems
       ? currentSite.header.menuItems
       : { error: true };

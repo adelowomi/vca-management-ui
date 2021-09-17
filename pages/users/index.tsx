@@ -204,7 +204,7 @@ export const index = ({
               </div>
               <div className="mt-9 flex flex-row justify-between">
                 <Link href={`${prevPage}`}>
-                  <a className="flex flex-row">
+                  <a className="flex flex-row hover:text-vca-blue">
                     <div>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -226,7 +226,7 @@ export const index = ({
                 </Link>
                 {profiles.length !== 0 ? (
                   <Link aria-label="Next" href={`${nextPage}`}>
-                    <a className="flex flex-row">
+                    <a className="flex flex-row hover:text-vca-blue">
                       <div className="mr-2">Next</div>
                       <div>
                         <svg

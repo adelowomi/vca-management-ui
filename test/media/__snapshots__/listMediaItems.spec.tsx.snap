@@ -661,7 +661,7 @@ exports[`List media page matches snapshot 1`] = `
                       href="?search=function search() { [native code] }&page=0"
                     />
                     <a
-                      class="flex flex-row"
+                      class="flex flex-row hover:text-vca-blue"
                     >
                       <div>
                         <svg
@@ -690,7 +690,7 @@ exports[`List media page matches snapshot 1`] = `
                       href="?search=function search() { [native code] }&page=1"
                     />
                     <a
-                      class="flex flex-row"
+                      class="flex flex-row hover:text-vca-blue"
                     >
                       <div
                         class="mr-2"

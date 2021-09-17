@@ -172,58 +172,64 @@ const Sites = ({
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {sites.map((site: any) => (
-                        <Link href={`/sites/${site.id}/pages`} key={site.id}>
-                          <tr
-                            className={`text-left  hover:bg-vca-blue hover:bg-opacity-10 cursor-pointer`}
-                          >
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
-                              <input
-                                type="checkbox"
-                                className="px-3 h-5 w-6 border border-gray-300"
-                                name=""
-                                id=""
-                              />
-                            </td>
-
-                            <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
-                              <Link href={`/sites/${site.id}/pages`}>
-                                {site.name}
-                              </Link>
-                            </td>
-                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
-                              <Link href={`/sites/${site.id}/pages`}>{''}</Link>
-                            </td>
-                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
-                              <Link href={`/sites/${site.id}/pages`}>
-                                <span>
-                                  <p>{moment(site.createdAt).format('llll')}</p>
-                                </span>
-                              </Link>
-                            </td>
-                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
-                              <span className="flex space-x-5">
-                                <Link href={`/sites/${site.id}/settings`}>
-                                  <p>Edit</p>
-                                </Link>
-                                <RiDeleteBinLine
-                                  className="h-6"
-                                  onClick={() => triggerDelete(site.id)}
+                        <tr
+                          className={`text-left  hover:bg-vca-blue hover:bg-opacity-10 cursor-pointer`}
+                          key={site.id}
+                        >
+                          <Link href={`/sites/${site.id}/pages`} key={site.id}>
+                            <>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
+                                <input
+                                  type="checkbox"
+                                  className="px-3 h-5 w-6 border border-gray-300"
+                                  name=""
+                                  id=""
                                 />
-                              </span>
-                            </td>
-                          </tr>
-                        </Link>
+                              </td>
+                                <Link href={`/sites/${site.id}/pages`}>
+                              <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
+                                  {site.name}
+                              </td>
+                                </Link>
+                                <Link href={`/sites/${site.id}/pages`}>
+                              <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
+                                  {''}
+                              </td>
+                                </Link>
+                                <Link href={`/sites/${site.id}/pages`}>
+                              <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
+                                  <span>
+                                    <p>
+                                      {moment(site.createdAt).format('llll')}
+                                    </p>
+                                  </span>
+                              </td>
+                                </Link>
+                            </>
+                          </Link>
+                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
+                            <span className="flex space-x-5">
+                              <Link href={`/sites/${site.id}/settings`}>
+                                <p>Edit</p>
+                              </Link>
+                              <RiDeleteBinLine
+                                className="h-6 z-50"
+                                onClick={() => triggerDelete(site.id)}
+                              />
+                            </span>
+                          </td>
+                        </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
                 <div className="mt-9 flex flex-row justify-between pb-20">
                   <Link href={`${prevPage}`}>
-                    <a className="flex flex-row">
-                      <div>
+                    <a className="flex flex-row hover:text-vca-blue">
+                      <div className="">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
+                          className="h-6 w-6 inherit"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -262,7 +268,7 @@ const Sites = ({
                   </Link> */}
                   {sites.length !== 0 ? (
                     <Link aria-label="Next" href={`${nextPage}`}>
-                      <a className="flex flex-row">
+                      <a className="flex flex-row hover:text-vca-blue">
                         <div className="mr-2">Next</div>
                         <div>
                           <svg

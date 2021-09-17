@@ -1,10 +1,12 @@
 import { getSession } from '@auth0/nextjs-auth0';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useToasts } from 'react-toast-notifications';
+import * as yup from 'yup';
 
 import { CreateStyleInput, Profile } from '../../classes/schema';
 import { Site } from '../../classes/Site';
@@ -55,6 +57,38 @@ const defaultStyle: CreateStyleInput = {
   },
 };
 
+const schema = yup.object().shape({
+  name: yup.string().required('Site Name is required'),
+  header: yup.object({
+    logoUrl: yup
+      .string()
+      .required('Please provide a logo url for your site')
+      .url('Please enter a valid url'),
+  }),
+  social: yup.object().shape({
+    facebook: yup
+      .string()
+      .nullable()
+      .notRequired()
+      .url('Please enter a valid url'),
+    twitter: yup
+      .string()
+      .nullable()
+      .notRequired()
+      .url('Please enter a valid url'),
+    instagram: yup
+      .string()
+      .nullable()
+      .notRequired()
+      .url('Please enter a valid url'),
+    linkedin: yup
+      .string()
+      .nullable()
+      .notRequired()
+      .url('Please enter a valid url'),
+  }),
+});
+
 export const create = ({
   token,
   profile,
@@ -73,7 +107,7 @@ export const create = ({
     register,
     handleSubmit,
     formState: { errors, isDirty },
-  } = useForm();
+  } = useForm({ resolver: yupResolver(schema) });
 
   const onSubmit = async (data) => {
     setWorking(true);
@@ -172,7 +206,7 @@ export const create = ({
                 name="header.logoUrl"
                 label="Logo Url"
                 register={register}
-                error={errors.header}
+                error={errors.header?.logoUrl}
                 required={true}
               />
             </FormGroup>
@@ -187,7 +221,7 @@ export const create = ({
                 name="social.facebook"
                 label="Facebook"
                 register={register}
-                error={errors.facebook}
+                error={errors.social?.facebook}
                 required={true}
               />
             </FormGroup>
@@ -196,7 +230,7 @@ export const create = ({
                 name="social.twitter"
                 label="Twitter"
                 register={register}
-                error={errors.twitter}
+                error={errors.social?.twitter}
                 required={true}
               />
             </FormGroup>
@@ -207,7 +241,7 @@ export const create = ({
                 name="social.instagram"
                 label="Instagram"
                 register={register}
-                error={errors.instagram}
+                error={errors.social?.instagram}
                 required={false}
               />
             </FormGroup>
@@ -216,7 +250,7 @@ export const create = ({
                 name="social.linkedin"
                 label="Linkedin"
                 register={register}
-                error={errors.linkedin}
+                error={errors.social?.linkedin}
                 required={true}
               />
             </FormGroup>
