@@ -114,13 +114,13 @@ const posts = ({
             <h1 className="text-3xl text-black font-bold">Posts</h1>
           </div>
           <div className="flex space-x-3">
-          <Link href={`/sites/${siteId}/posts/create`}>
-            <button
-              type="submit"
-              className="text-white bg-vca-blue rounded-sm text-sm py-3 font-bold px-6"
-            >
-              Add new
-            </button>
+            <Link href={`/sites/${siteId}/posts/create`}>
+              <button
+                type="submit"
+                className="text-white bg-vca-blue rounded-sm text-sm py-3 font-bold px-6"
+              >
+                Add new
+              </button>
             </Link>
           </div>
         </section>
@@ -185,60 +185,86 @@ const posts = ({
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {posts.map((post: any) => (
-                        <Link
-                          href={`/sites/${siteId}/posts/${post.id}/edit`}
+                        <tr
+                          className={`text-left hover:bg-vca-blue hover:bg-opacity-10 cursor-pointer`}
                           key={post.id}
                         >
-                          <tr
-                            className={`text-left hover:bg-vca-blue hover:bg-opacity-10 cursor-pointer`}
+                          <Link
+                            href={`/sites/${siteId}/posts/${post.id}/edit`}
                             key={post.id}
                           >
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
-                              <input
-                                type="checkbox"
-                                className="px-3 h-5 w-6 border border-gray-300"
-                                name=""
-                                id=""
-                              />
-                            </td>
-
-                            <td className="px-6 py-4 text-gray-500">
-                              <p className="line-clamp-1 w-40">
-                                {post.featured}
-                              </p>
-                            </td>
+                            <>
+                            <Link
+                              href={`/sites/${siteId}/posts/${post.id}/edit`}
+                              key={post.id}
+                            >
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
+                                <input
+                                  type="checkbox"
+                                  className="px-3 h-5 w-6 border border-gray-300"
+                                  name=""
+                                  id=""
+                                />
+                              </td>
+                            </Link>
+                            <Link
+                              href={`/sites/${siteId}/posts/${post.id}/edit`}
+                              key={post.id}
+                            >
+                              <td className="px-6 py-4 text-gray-500">
+                                <p className="line-clamp-1 w-40">
+                                  {post.featured}
+                                </p>
+                              </td>
+                            </Link>
+                            <Link
+                              href={`/sites/${siteId}/posts/${post.id}/edit`}
+                              key={post.id}
+                            >
                             <td className="px-6 py-4 cursor-pointer whitespace-  text-gray-500">
                               {post.account.firstName}
                               {post.account.lastName}
                             </td>
+                            </Link>
+                            <Link
+                              href={`/sites/${siteId}/posts/${post.id}/edit`}
+                              key={post.id}
+                            >
                             <td className="px-6 py-4 text-gray-500 whitespace- ">
                               {post.draft ? 'TRUE' : 'FALSE'}
                             </td>
+                            </Link>
+                            <Link
+                              href={`/sites/${siteId}/posts/${post.id}/edit`}
+                              key={post.id}
+                            >
                             <td className="px-6 py-4 text-gray-500 whitespace- ">
                               {moment(post.createdAt).format('llll')}
                             </td>
-                            <td className="px-6 py-4 cursor-pointer whitespace- text-center text-gray-800 relative z-30">
-                              <span className="flex space-x-3 text-gray-500">
-                                <Link
-                                  href={`/sites/${siteId}/posts/${post.id}/edit`}
-                                >
-                                  Edit
-                                </Link>
-                                <RiDeleteBinLine
-                                  className="h-6"
-                                  onClick={() => getId(post.id)}
-                                />
-                              </span>
-                            </td>
-                          </tr>
-                        </Link>
+                            </Link>
+                            </>
+                          </Link>
+                          <td className="px-6 py-4 cursor-pointer whitespace- text-center text-gray-800 relative z-30">
+                            <span className="flex space-x-3 text-gray-500">
+                              <Link
+                                href={`/sites/${siteId}/posts/${post.id}/edit`}
+                              >
+                                Edit
+                              </Link>
+                              <RiDeleteBinLine
+                                className="h-6"
+                                onClick={() => getId(post.id)}
+                              />
+                            </span>
+                          </td>
+                        </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
                 <div className="mt-9 flex flex-row justify-between">
                   <Link href={`${prevPage}`}>
-                    <a className="flex flex-row">
+                    <a className="flex flex-row hover:text-vca-blue">
                       <div>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -260,7 +286,7 @@ const posts = ({
                   </Link>
                   {posts.length !== 0 ? (
                     <Link aria-label="Next" href={`${nextPage}`}>
-                      <a className="flex flex-row">
+                      <a className="flex flex-row hover:text-vca-blue">
                         <div className="mr-2">Next</div>
                         <div>
                           <svg

@@ -144,9 +144,11 @@ const Pages = ({ pages, menuItems, token, profile }) => {
         <PageActionsWrapper>
           <PageActionsColOne>
             <h1 className="text-4xl font-semibold">Pages</h1>
-            <PageActionsColOneBtn className="focus:outline-none">
-              <Link href={`/sites/${siteId}/pages/create`}> Add New</Link>
-            </PageActionsColOneBtn>
+            <Link href={`/sites/${siteId}/pages/create`}>
+              <PageActionsColOneBtn className="focus:outline-none">
+                Add New
+              </PageActionsColOneBtn>
+            </Link>
           </PageActionsColOne>
         </PageActionsWrapper>
         <form
@@ -234,60 +236,76 @@ const Pages = ({ pages, menuItems, token, profile }) => {
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {pages.map((el: any) => (
-                        <Link
-                          href={`/sites/${siteId}/pages/${el.id}/edit`}
+                        <tr
+                          className={`text-left cursor-pointer hover:bg-vca-blue hover:bg-opacity-10`}
                           key={el.id}
                         >
-                          <tr
-                            className={`text-left cursor-pointer hover:bg-vca-blue hover:bg-opacity-10`}
+                          <Link
+                            href={`/sites/${siteId}/pages/${el.id}/edit`}
                             key={el.id}
                           >
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
-                              <input
-                                type="checkbox"
-                                className="px-3 h-5 w-6 border border-gray-300"
-                                name=""
-                                id=""
-                              />
-                            </td>
-
-                            <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
-                              {el.name}
-                            </td>
-                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
-                              {el.menuItem
-                                ? menuItems.filter(
-                                    (item) => item.id === el.menuItem
-                                  )[0].name
-                                : ''}
-                            </td>
-                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
-                              <span>
-                                <p>{moment(el.createdAt).format('llll')}</p>
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
-                              <span className="flex space-x-5">
-                                <Link
-                                  href={`/sites/${siteId}/pages/${el.id}/edit`}
-                                >
-                                  <p>Edit</p>
-                                </Link>
-                                <RiDeleteBinLine
-                                  onClick={() => getId(el.id)}
-                                  className="h-6"
+                            <>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-600">
+                                <input
+                                  type="checkbox"
+                                  className="px-3 h-5 w-6 border border-gray-300"
+                                  name=""
+                                  id=""
                                 />
-                              </span>
-                            </td>
-                          </tr>
-                        </Link>
+                              </td>
+                              <Link
+                                href={`/sites/${siteId}/pages/${el.id}/edit`}
+                                key={el.id}
+                              >
+                                <td className="px-6 py-4 text-gray-500 whitespace-nowrap ">
+                                  {el.name}
+                                </td>
+                              </Link>
+                              <Link
+                                href={`/sites/${siteId}/pages/${el.id}/edit`}
+                                key={el.id}
+                              >
+                                <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-500">
+                                  {el.menuItem
+                                    ? menuItems.filter(
+                                        (item) => item.id === el.menuItem
+                                      )[0].name
+                                    : ''}
+                                </td>
+                              </Link>
+                              <Link
+                                href={`/sites/${siteId}/pages/${el.id}/edit`}
+                                key={el.id}
+                              >
+                                <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-gray-500">
+                                  <span>
+                                    <p>{moment(el.createdAt).format('llll')}</p>
+                                  </span>
+                                </td>
+                              </Link>
+                            </>
+                          </Link>
+                          <td className="px-6 py-4 cursor-pointer whitespace-nowrap  text-gray-800">
+                            <span className="flex space-x-5">
+                              <Link
+                                href={`/sites/${siteId}/pages/${el.id}/edit`}
+                              >
+                                <p>Edit</p>
+                              </Link>
+                              <RiDeleteBinLine
+                                onClick={() => getId(el.id)}
+                                className="h-6"
+                              />
+                            </span>
+                          </td>
+                        </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
                 <div className="mt-9 flex flex-row justify-between">
                   <Link href={`${prevPage}`}>
-                    <a className="flex flex-row">
+                    <a className="flex flex-row hover:text-vca-blue">
                       <div>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -309,7 +327,7 @@ const Pages = ({ pages, menuItems, token, profile }) => {
                   </Link>
                   {pages.length !== 0 ? (
                     <Link aria-label="Next" href={`${nextPage}`}>
-                      <a className="flex flex-row">
+                      <a className="flex flex-row hover:text-vca-blue">
                         <div className="mr-2">Next</div>
                         <div>
                           <svg

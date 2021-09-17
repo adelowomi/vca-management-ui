@@ -7,7 +7,7 @@ import { FormGroup, RowSection } from './PageStyledElements';
 
 export interface PageTitleProps {
   pageTitle: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>, data?: any) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>, data?: any, field?: string) => void;
   errors: ErrorProps;
   menuItem: string;
   options: any[];
@@ -54,7 +54,7 @@ export const PageTitle: React.FC<PageTitleProps> = ({
             }}
             onChange={(data) => {
               let e: ChangeEvent<HTMLInputElement>;
-              handleChange(e, data.value);
+              handleChange(e, data.value,"menuItem");
             }}
             options={options.map((item, index) => {
               return {

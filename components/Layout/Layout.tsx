@@ -11,7 +11,6 @@ import {
   RiFolder4Line,
   RiImageAddLine,
   RiLayoutLine,
-  RiNumbersLine,
   RiPaletteLine,
   RiSettings4Line,
 } from 'react-icons/ri';
@@ -43,12 +42,6 @@ const adminNavigation = [
 ];
 
 const navigation = [
-  {
-    name: 'Dashboard',
-    href: 'dashboard',
-    icon: RiNumbersLine,
-    current: true,
-  },
   { name: 'Pages', href: 'pages', icon: RiLayoutLine, current: false },
   // { name: 'News', href: 'news', icon: RiPagesLine, current: false },
   {
@@ -165,27 +158,27 @@ export default function Layout({
               <div className="mt-5 flex-1 h-0 overflow-y-auto">
                 <nav className="flex-1 px- bg-white space-y-3">
                   {navigation.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className={classNames(
-                        item.current
-                          ? 'bg-blue-100 border-blue-500 border-l-8 text-gray-900'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                        'group flex items-center px-5 py-4 text-base font-normal'
-                      )}
-                    >
-                      <item.icon
+                    <Link href={item.href} key={item.name}>
+                      <a
                         className={classNames(
                           item.current
-                            ? 'text-gray-500'
-                            : 'text-gray-400 group-hover:text-gray-500',
-                          'mr-3 h-6 w-6'
+                            ? 'bg-blue-100 border-blue-500 border-l-8 text-gray-900'
+                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                          'group flex items-center px-5 py-4 text-base font-normal'
                         )}
-                        aria-hidden="true"
-                      />
-                      {item.name}
-                    </a>
+                      >
+                        <item.icon
+                          className={classNames(
+                            item.current
+                              ? 'text-gray-500'
+                              : 'text-gray-400 group-hover:text-gray-500',
+                            'mr-3 h-6 w-6'
+                          )}
+                          aria-hidden="true"
+                        />
+                        {item.name}
+                      </a>
+                    </Link>
                   ))}
                 </nav>
               </div>
@@ -319,9 +312,7 @@ export default function Layout({
                       <div className="py-1">
                         <Menu.Item>
                           <Link href="/api/logout">
-                            <a
-                              className="text-blue-500 block px-4 py-2 text-sm"
-                            >
+                            <a className="text-blue-500 block px-4 py-2 text-sm">
                               Logout
                             </a>
                           </Link>

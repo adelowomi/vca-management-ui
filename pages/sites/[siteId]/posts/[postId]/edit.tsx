@@ -35,7 +35,7 @@ const edit = ({ token, post, error, profile }) => {
   const [open, setOpen] = React.useState(false);
   const client = createApolloClient(token);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [preview, setPreview] = React.useState(false);
+  const [preview, setPreview] = React.useState(true);
   const { addToast } = useToasts();
 
   const [media, setMedia] = React.useState<Media>(post?.media);
@@ -249,7 +249,7 @@ const edit = ({ token, post, error, profile }) => {
                           <div className="font-semibold text-lg mb-2">
                             <a href={`#`}>{watch('featured')}</a>
                           </div>
-                          <p className="text-gray-700 text-sm">
+                          <p className="text-gray-700 text-sm w-full truncate">
                             {watch('description')}
                           </p>
                         </div>
@@ -264,7 +264,6 @@ const edit = ({ token, post, error, profile }) => {
                 )}
               </div>
             </section>
-            <hr className="border-gray-400 border-5 w-full mt-8" />
             <section className="preview-section mb-10"></section>
           </form>
         </div>

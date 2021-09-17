@@ -1,10 +1,12 @@
 import { getSession } from '@auth0/nextjs-auth0';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useToasts } from 'react-toast-notifications';
+import * as yup from 'yup';
 
 import {
   ComparisonOperatorEnum,
@@ -30,6 +32,39 @@ import { GqlErrorResponse } from '../../../errors/GqlError';
 import useUnsavedChangesWarning from '../../../hooks/useUnsavedChangesWarning';
 
 //TODO: Implement flow for updating site without page passed
+
+const schema = yup.object().shape({
+  name: yup.string().required('Site Name is required'),
+  header: yup.object({
+    logoUrl: yup
+      .string()
+      .required('Please provide a logo url for your site')
+      .url('Please enter a valid url'),
+  }),
+  social: yup.object().shape({
+    facebook: yup
+      .string()
+      .nullable()
+      .notRequired()
+      .url('Please enter a valid url'),
+    twitter: yup
+      .string()
+      .nullable()
+      .notRequired()
+      .url('Please enter a valid url'),
+    instagram: yup
+      .string()
+      .nullable()
+      .notRequired()
+      .url('Please enter a valid url'),
+    linkedin: yup
+      .string()
+      .nullable()
+      .notRequired()
+      .url('Please enter a valid url'),
+  }),
+});
+
 
 export const Edit = ({
   site,
@@ -62,6 +97,7 @@ export const Edit = ({
         linkedin: site.social?.linkedin,
       },
     },
+    resolver: yupResolver(schema)
   });
   const { addToast } = useToasts();
   const router = useRouter();
@@ -110,9 +146,11 @@ export const Edit = ({
           <div className="flex flex-row justify-between">
             <h1 className="font-bold text-3xl">Edit website settings</h1>
             <div className="flex flex-row justify-start space-x-5">
-              <Btn color="primary" $bg="secondary" $px="sm">
-                <Link href="/sites"> Cancel</Link>
-              </Btn>
+              <Link href="/sites">
+                <Btn color="primary" $bg="secondary" $px="sm">
+                  Cancel
+                </Btn>
+              </Link>
               <Btn color="secondary" $bg="primary" $px="lg">
                 {working ? 'Saving..' : 'Save Changes'}
               </Btn>
@@ -180,6 +218,7 @@ export const Edit = ({
                 />
               </FormGroup>
             )}
+            
           </div>
           <hr className="border-gray-400 border-5 w-full mt-8" />
           <div className="mt-10 mb-5 font-semibold leading-6 text-xl text-vca-grey-1 font-inter">
