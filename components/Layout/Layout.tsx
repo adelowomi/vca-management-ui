@@ -162,7 +162,7 @@ export default function Layout({
                       <a
                         className={classNames(
                           item.current
-                            ? 'bg-blue-100 border-blue-500 border-l-8 text-gray-900'
+                            ? 'bg-blue-100 border-vca-blue border-l-8 text-gray-900'
                             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                           'group flex items-center px-5 py-4 text-base font-normal'
                         )}

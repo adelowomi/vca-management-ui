@@ -202,8 +202,10 @@ export const performanceUseForm = (
       router.push(`/sites/${siteId}/performance`);
       // Router.reload();
     } catch (error) {
+      console.error(error);
+      
       setLoading(false);
-      addToast('Performance could not be Edited!', { appearance: 'error' });
+      addToast(error.message ? error.message : "Sorry, an error occurred", { appearance: 'error' });
     }
   };
   React.useEffect(() => {
