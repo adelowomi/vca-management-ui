@@ -20,17 +20,19 @@ import {
   H1,
   RowSection,
 } from '../../../../components/Page/PageStyledElements';
+import { GqlErrorResponse } from '../../../../errors/GqlError';
 import useUnsavedChangesWarning from '../../../../hooks/useUnsavedChangesWarning';
 
 const create = ({
   token,
   menuItems,
   profile,
+  errorss
 }: {
   token: string;
   menuItems: any[];
   medias: any[];
-  errorss: any;
+  errorss: GqlErrorResponse;
   profile: any;
 }) => {
   const router = useRouter();
@@ -43,6 +45,9 @@ const create = ({
   const [hero, setHeroDetails] = useState(undefined);
   const { addToast } = useToasts();
   const [working, setWorking] = useState(false);
+
+  console.log({errorss});
+  
 
   const {
     register,
@@ -204,6 +209,23 @@ export async function getServerSideProps(ctx) {
       accountId: profile.account.id,
     })
   ).data;
+  
+  let availableMenuItems;
+  let errors:GqlErrorResponse;
+  try {
+     const data = await(
+      await site.getAvailableItems({
+        siteId: ctx.query.siteId as unknown as string,
+      })
+    ).data
+    availableMenuItems = data;
+  } catch (error) {
+    console.error({error});
+    errors = error as GqlErrorResponse;
+    availableMenuItems = { error : true}
+  }
+
+  // console.log(availableItems);
 
   return {
     props: {
@@ -211,6 +233,7 @@ export async function getServerSideProps(ctx) {
       menuItems: currentSite.header.menuItems,
       site: currentSite,
       profile,
+      errorss: errors.error
     },
   };
 }

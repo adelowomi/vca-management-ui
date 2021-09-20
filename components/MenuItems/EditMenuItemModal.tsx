@@ -59,6 +59,7 @@ export const EditMenuItemModal = ({
   const [newState, setNewState] = useState(item.active);
   const [newType, setNewType] = useState('');
   const [updating,setUpdating] = useState(false);
+  const [externalLink, setExternalLink] = useState(item.slug ? true : false)
 
   
   
@@ -187,6 +188,20 @@ export const EditMenuItemModal = ({
                   />
                 </div>
                 <div className="grid grid-cols-2 mt-3 w-form-col">
+                <div className="flex mt-10" style={{ width: '380px' }}>
+                  <input
+                    type="checkbox"
+                    className="px-3 h-6 w-6 border border-gray-300 mr-3"
+                    name=""
+                    id=""
+                    checked={externalLink}
+                    onChange={() => setExternalLink(!externalLink)}
+                  />
+                  <label className="font-semibold leading-6 text-lg text-vca-grey-1 font-inter">
+                    This is an external link
+                  </label>
+                </div>
+                  {externalLink &&
                   <div className="flex flex-row justify-start space-x-5">
                     <FormInput
                       name="slug"
@@ -196,6 +211,7 @@ export const EditMenuItemModal = ({
                       required={false}
                     />
                   </div>
+                  }
                   <div className="w-full">
                     <Btn
                       color="secondary"

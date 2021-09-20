@@ -1,11 +1,6 @@
 import React from 'react';
 import CreatableSelect from 'react-select/creatable';
 
-const OPTS = [
-  { value: 'finance', label: 'finance' },
-  { value: 'money', label: 'money' },
-  { value: 'religion', label: 'religion' },
-];
 const customStyles = {
   option: (provided) => ({
     ...provided,
@@ -49,7 +44,6 @@ export const TagSelector = ({
       styles={customStyles}
       isMulti
       onChange={handleChange}
-      options={OPTS}
     />
   );
 };

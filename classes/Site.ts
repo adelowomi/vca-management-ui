@@ -6,6 +6,7 @@ import {
   REMOVE_SITE,
   UPDATE_SITE,
   UPDATE_SITE_MENUITEM,
+  AVAILABLE_MENU_ITEMS
 } from '../graphql/site';
 import { createApolloClient } from '../lib/apollo';
 import {
@@ -16,6 +17,7 @@ import {
   SiteView,
   UpdateMenuitemInput,
   UpdateSiteInput,
+  AvailableItems
 } from './schema';
 import { GqlResponse } from './User';
 
@@ -339,4 +341,39 @@ export class Site {
           });
     }
   }
+
+  public getAvailableItems = async ({
+    siteId,
+  }: {
+    siteId: string;
+  }): Promise<GqlResponse<AvailableItems[]>> => {
+    try {
+      const data = await client.query({
+        query: AVAILABLE_MENU_ITEMS,
+        variables: {
+          siteId: siteId,
+        },
+      });
+      if (!data.data.availableMenuItems) {
+        console.error({data});
+        return Promise.reject<GqlResponse<AvailableItems[]>>({
+          data: null,
+          error: data,
+          status: false,
+        });
+      }
+      return Promise.resolve<GqlResponse<AvailableItems[]>>({
+        data: data.data.availableMenuItems,
+        error: null,
+        status: true,
+      });
+    } catch (error) {
+      console.error({error});
+      return Promise.reject<GqlResponse<AvailableItems[]>>({
+        data: null,
+        error: error,
+        status: false,
+      });
+    }
+  };
 }

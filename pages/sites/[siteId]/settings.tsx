@@ -30,6 +30,8 @@ import {
 } from '../../../components/Page/PageStyledElements';
 import { GqlErrorResponse } from '../../../errors/GqlError';
 import useUnsavedChangesWarning from '../../../hooks/useUnsavedChangesWarning';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
+import { MdContentCopy } from 'react-icons/md'
 
 //TODO: Implement flow for updating site without page passed
 
@@ -103,6 +105,8 @@ export const Edit = ({
   const router = useRouter();
   const [newPage, setNewPage] = useState('');
   const [working, setWorking] = useState(false);
+  const [showSiteId, setShowSiteId] = useState(false)
+  const [showAccountId, setShowAccountId] = useState(false)
   const _thisSite = new Site(token);
 
   const refreshData = () => {
@@ -139,22 +143,46 @@ export const Edit = ({
   };
   useUnsavedChangesWarning(isDirty);
 
+  const copyToBoard = (content: string) => {
+    navigator.clipboard.writeText(content)
+    addToast('Copied', { appearance: 'success' });
+  }
+
   return (
     <Layout isPAdmin={false} profile={profile}>
       <Container className="mt-12">
         <form onSubmit={handleSubmit(submit)}>
           <div className="flex flex-row justify-between">
             <h1 className="font-bold text-3xl">Edit website settings</h1>
-            <div className="flex flex-row justify-start space-x-5">
-              <Link href="/sites">
-                <Btn color="primary" $bg="secondary" $px="sm">
-                  Cancel
+              <div className="flex flex-row justify-start space-x-5">
+                <Link href="/sites">
+                  <Btn color="primary" $bg="secondary" $px="sm">
+                    Cancel
+                  </Btn>
+                </Link>
+                <Btn color="secondary" $bg="primary" $px="lg">
+                  {working ? 'Saving..' : 'Save Changes'}
                 </Btn>
-              </Link>
-              <Btn color="secondary" $bg="primary" $px="lg">
-                {working ? 'Saving..' : 'Save Changes'}
-              </Btn>
+              </div>
+          </div>
+          <div className=' flex flex-col mt-4 w-96 p-2 rounded-md'>
+              <p>Site Id</p>
+            <div className='bg-vca-grey-5 my-1 flex p-1 rounded-md items-center justify-between'>
+              <input type={showSiteId ? 'text' : "password"} defaultValue={site.id} className='w-10/12 bg-transparent' style={{background: 'transparent'}} disabled/>
+              <div className="flex">
+              < MdContentCopy className="mr-2 cursor-pointer text-vca-grey-2" onClick={() => copyToBoard(site.id)}/>
+              { showSiteId ? <AiFillEyeInvisible onClick={() => setShowSiteId(!showSiteId)} className='cursor-pointer text-vca-grey-2'/> : <AiFillEye onClick={() => setShowSiteId(!showSiteId)} className='cursor-pointer text-vca-grey-2'/> }
+              </div>
             </div>
+            <p>Account Id</p>
+            <div className='bg-vca-grey-5 my-1 flex p-1 rounded-md items-center justify-between'>
+            <input type={showAccountId ? "text" : "password"} defaultValue={profile.account.id} className='w-10/12 bg-blue-200' style={{background: 'transparent'}} disabled/>
+            <div className="flex">
+            <MdContentCopy className="mr-2 cursor-pointer text-vca-grey-2" onClick={() => copyToBoard(profile.account.id)}/>
+            { showAccountId ? <AiFillEyeInvisible onClick={() => setShowAccountId(!showAccountId)} className='cursor-pointer text-vca-grey-2'/> : <AiFillEye onClick={() => setShowAccountId(!showAccountId)} className='cursor-pointer text-vca-grey-2'/> }
+            </div>
+            </div>
+            
           </div>
           <div className="mt-10 mb-5 font-semibold leading-6 text-xl text-vca-grey-1 font-inter">
             Add the site settings
@@ -218,7 +246,6 @@ export const Edit = ({
                 />
               </FormGroup>
             )}
-            
           </div>
           <hr className="border-gray-400 border-5 w-full mt-8" />
           <div className="mt-10 mb-5 font-semibold leading-6 text-xl text-vca-grey-1 font-inter">

@@ -65,3 +65,12 @@ export const GET_MEDIA_BY_ACCOUNT = gql`
     }
   }
 `;
+
+export const AVAILABLE_MENU_ITEMS = gql`
+  query availableMenuItems($siteId: String!) {
+    availableMenuItems(siteId: $siteId) {
+      id
+      name
+    }
+  }
+`;
