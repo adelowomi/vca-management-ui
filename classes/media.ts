@@ -37,7 +37,6 @@ export class MediaClass {
         query: GET_MEDIA_BY_ACCOUNT,
         variables: variables,
       });
-      console.error({data});
       
       return Promise.resolve<GqlResponse<Media[]>>({
         data: data.medias,

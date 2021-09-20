@@ -66,9 +66,7 @@ export const ItemsModal = ({
       return;
     }
     const currentItems = widgetItems;
-    console.error({ currentItems });
     const newItems = [...(currentItems as []), item];
-    console.error({ newItems });
 
     setWidgetItems(newItems);
     token && !type ? addToPage(item.id) : null;
@@ -109,7 +107,6 @@ export const ItemsModal = ({
               },
         })
       ).data;
-      console.error({ items });
       if (items.length <= 0) {
         setLoading(false);
         return;
@@ -125,11 +122,10 @@ export const ItemsModal = ({
 
   const addToPage = async (id) => {
     try {
-      const result = await _thisItem.addToPage({
+       await _thisItem.addToPage({
         itemId: id,
         pageId: pageId as string,
       });
-      console.error(result);
       router.replace(router.asPath);
       refresh();
     } catch (error) {
@@ -142,8 +138,7 @@ export const ItemsModal = ({
 
   const removeFromPage = async (id) => {
     try {
-      const result = await _thisItem.removeFromPage({ itemId: id });
-      console.error(result);
+       await _thisItem.removeFromPage({ itemId: id });
       router.replace(router.asPath);
     } catch (error) {
       console.error(error);

@@ -29,7 +29,6 @@ export function PageHeaderStyle({
 }: PageHeaderStyleProps): JSX.Element {
   const [open, setOpen] = React.useState(false);
   const setMedia = (media: any) => {
-    console.error(media);
     setState({ ...state, media: media.id, mediaUrl: media.image.large });
   };
   return (

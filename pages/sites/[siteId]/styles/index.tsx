@@ -95,8 +95,6 @@ const createStyles = ({
       account: account,
       site: siteId,
     };
-    console.error({data});
-    console.error({existingStyle});
     
     
     if (existingStyle) {

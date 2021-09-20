@@ -148,7 +148,6 @@ export const create = ({
 
   const addItem = (item) => {
     setMenuItems([...menuItems, item]);
-    console.error({ item });
   };
 
   const removeItem = (item, index) => {

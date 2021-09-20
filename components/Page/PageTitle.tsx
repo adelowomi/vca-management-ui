@@ -11,6 +11,7 @@ export interface PageTitleProps {
   errors: ErrorProps;
   menuItem: string;
   options: any[];
+  availableMenuItems: any[];
 }
 
 export const PageTitle: React.FC<PageTitleProps> = ({
@@ -19,7 +20,17 @@ export const PageTitle: React.FC<PageTitleProps> = ({
   errors,
   menuItem,
   options,
+  availableMenuItems,
 }) => {
+
+  
+  const selectableMenuItems = [
+    ...availableMenuItems,
+    {
+      name: options.filter((item) => item.id == menuItem)[0].name,
+      id: options.filter((item) => item.id == menuItem)[0].id,
+    },
+  ];
   return (
     <>
       <RowSection className="space-x-7 mt-10">
@@ -56,7 +67,7 @@ export const PageTitle: React.FC<PageTitleProps> = ({
               let e: ChangeEvent<HTMLInputElement>;
               handleChange(e, data.value,"menuItem");
             }}
-            options={options.map((item, index) => {
+            options={selectableMenuItems.map((item, index) => {
               return {
                 value: item.id as unknown as string,
                 name: item.name as unknown as string,

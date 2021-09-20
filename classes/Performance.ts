@@ -62,7 +62,6 @@ export class PerformanceClass {
         query: GET_PERFORMANCES,
         variables: { accountId: accountId, filter: filter,skip: skip,limit: limit},
       });
-      console.error(data);
       if (!data.performances) {
         return Promise.reject<GqlResponse<Performance[]>>({
           error: data,

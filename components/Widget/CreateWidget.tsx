@@ -59,10 +59,6 @@ export const CreateWidget = ({
   const onSubmit = async (data: any) => {
     setWorking(true);
     data.items = widgetItems.map((item) => item.id);
-    console.error(existingWidget);
-    console.error({widgetItems});
-    console.error(data.items);
-    
     
     if (existingWidget.id) {
       await updateWidget(data);
@@ -76,7 +72,6 @@ export const CreateWidget = ({
     data.disable = false;
     data.type = 'ITEM';
     data.account = profile.account.id;
-    console.error(data);
 
     try {
       const result = await _thisWidget.createWidget({
