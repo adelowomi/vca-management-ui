@@ -1,5 +1,8 @@
+import 'react-quill/dist/quill.snow.css';
+
 import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -15,7 +18,7 @@ import { ShadowBtn } from '../../../../components/Page/PageButtons';
 import { ImageSelectBox } from '../../../../components/Page/PageStyledElements';
 import { getStringDate } from '../../../../components/Page/PostList';
 import SelectMediaModal from '../../../../components/Page/SelectMediaModal';
-import { DraftEditor } from '../../../../components/utilsGroup/Editor';
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 import { TagSelector } from '../../../../components/utilsGroup/TagSelector';
 import { GqlErrorResponse } from '../../../../errors/GqlError';
 import { GET_ALL_MEDIA } from '../../../../graphql';
@@ -24,10 +27,11 @@ import useUnsavedChangesWarning from '../../../../hooks/useUnsavedChangesWarning
 import { createApolloClient } from '../../../../lib/apollo';
 
 const create = ({ token, accountId: account, error, profile }) => {
-  const router = useRouter()
   const {
     query: { siteId },
-  } = router;
+    push,
+  } = useRouter();
+
   const [open, setOpen] = React.useState(false);
   const client = createApolloClient(token);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -68,9 +72,9 @@ const create = ({ token, accountId: account, error, profile }) => {
       setIsLoading(false);
       addToast(
         `Post is successfully ${data.draft ? 'saved as draft.' : 'created'}`,
-        { appearance: 'success' }
+        { appearance: 'success' },
+        () => push(`/sites/${siteId}/posts`)
       );
-      router.push(`/sites/${siteId}/posts`);
     } catch (error) {
       setIsLoading(false);
       addToast('Post could not be created!', { appearance: 'error' });
@@ -80,6 +84,42 @@ const create = ({ token, accountId: account, error, profile }) => {
   const getTags = (tags: any) => {
     setValue('tags', tags ? tags.map((el) => el.value) : []);
   };
+
+  const getQuillContent = (
+    content: string,
+    _delta: any,
+    _source: any,
+    _editor: any
+  ) => {
+    setValue('content', content);
+  };
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{ color: [] }, { background: [] }],
+      ['link', 'image', 'video'],
+    ],
+  };
+
+  const formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'align',
+    'color',
+    'background',
+    'link',
+    'image',
+    'video',
+  ];
 
   React.useEffect(() => {
     register('media', {
@@ -96,9 +136,7 @@ const create = ({ token, accountId: account, error, profile }) => {
       setValue('media', media.id);
     }
   }, [register, media]);
-  const getContent = (content) => {
-    setValue('content', content);
-  };
+
   if (error) {
     return <ErrorPage statusCode={400} />;
   }
@@ -207,7 +245,12 @@ const create = ({ token, accountId: account, error, profile }) => {
             <section className="mt-6 grid grid-cols-3 h-full gap-12 items-center pb-10">
               <div className="col-span-2 h-full">
                 <h4 className="text-xl font-medium mb-4">Post content</h4>
-                <DraftEditor getContent={getContent} error={errors.content} />
+                <ReactQuill
+                  theme="snow"
+                  onChange={getQuillContent}
+                  modules={modules}
+                  formats={formats}
+                />
 
                 {errors?.content && (
                   <p className="text-red-500 text-sm mt-2">

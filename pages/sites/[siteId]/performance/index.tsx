@@ -425,7 +425,6 @@ export async function getServerSideProps(ctx) {
     });
 
     performances = data ? data : { error: true };
-    console.error({ performances: data });
   } catch (error) {
     performances = { error: true };
   }
