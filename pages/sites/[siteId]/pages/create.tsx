@@ -24,14 +24,14 @@ import useUnsavedChangesWarning from '../../../../hooks/useUnsavedChangesWarning
 
 const create = ({
   token,
-  menuItems,
   profile,
+  availableMenuItems
 }: {
   token: string;
   menuItems: any[];
   medias: any[];
-  errorss: any;
   profile: any;
+  availableMenuItems: any[]
 }) => {
   const router = useRouter();
   const {
@@ -43,6 +43,7 @@ const create = ({
   const [hero, setHeroDetails] = useState(undefined);
   const { addToast } = useToasts();
   const [working, setWorking] = useState(false);
+  
 
   const {
     register,
@@ -58,7 +59,6 @@ const create = ({
   const watching = watch();
 
   const onSubmit = async (data: any) => {
-    // console.error({hero});
     data.site = siteId;
     data.tags = ['lifestyle'];
     data.account = profile.account.id;
@@ -69,7 +69,6 @@ const create = ({
     data.hero.type = 'Page';
     data.hero.hasAction = data.hero.actionText ? true : false;
     data.menuItem = selectedMenu;
-    console.error({ data });
     await createPage(data);
     return;
   };
@@ -163,7 +162,7 @@ const create = ({
               }}
               onChange={(data) => setSelectedMenu(data.value)}
               label="Add menu to page"
-              options={menuItems.map((item, index) => {
+              options={availableMenuItems.map((item, index) => {
                 return {
                   value: item.id as unknown as string,
                   name: item.name as unknown as string,
@@ -204,6 +203,21 @@ export async function getServerSideProps(ctx) {
       accountId: profile.account.id,
     })
   ).data;
+  
+  let availableMenuItems;
+  try {
+     const data = await(
+      await site.getAvailableItems({
+        siteId: ctx.query.siteId as unknown as string,
+      })
+    ).data
+    availableMenuItems = data;
+  } catch (error) {
+    console.error({error});
+    availableMenuItems = { error : true}
+  }
+
+  // console.log(availableItems);
 
   return {
     props: {
@@ -211,6 +225,7 @@ export async function getServerSideProps(ctx) {
       menuItems: currentSite.header.menuItems,
       site: currentSite,
       profile,
+      availableMenuItems
     },
   };
 }

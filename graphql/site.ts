@@ -156,4 +156,13 @@ export const REMOVE_SITE = gql`
   }
 `;
 
+export const AVAILABLE_MENU_ITEMS = gql`
+  query availableMenuItems($siteId: String!) {
+    availableMenuItems(siteId: $siteId) {
+      id
+      name
+    }
+  }
+`;
+
 export { GET_PROFILE, GET_SITE_MENUITEMS, SITE_QUERY, SITES_QUERY };

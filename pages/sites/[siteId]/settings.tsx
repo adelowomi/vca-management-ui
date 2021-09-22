@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import { MdContentCopy } from 'react-icons/md';
 import { useToasts } from 'react-toast-notifications';
 import * as yup from 'yup';
 
@@ -65,7 +67,6 @@ const schema = yup.object().shape({
   }),
 });
 
-
 export const Edit = ({
   site,
   error,
@@ -97,12 +98,14 @@ export const Edit = ({
         linkedin: site.social?.linkedin,
       },
     },
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
   });
   const { addToast } = useToasts();
   const router = useRouter();
   const [newPage, setNewPage] = useState('');
   const [working, setWorking] = useState(false);
+  const [showSiteId, setShowSiteId] = useState(false);
+  const [showAccountId, setShowAccountId] = useState(false);
   const _thisSite = new Site(token);
 
   const refreshData = () => {
@@ -139,6 +142,11 @@ export const Edit = ({
   };
   useUnsavedChangesWarning(isDirty);
 
+  const copyToBoard = (content: string) => {
+    navigator.clipboard.writeText(content);
+    addToast('Copied', { appearance: 'success' });
+  };
+
   return (
     <Layout isPAdmin={false} profile={profile}>
       <Container className="mt-12">
@@ -154,6 +162,62 @@ export const Edit = ({
               <Btn color="secondary" $bg="primary" $px="lg">
                 {working ? 'Saving..' : 'Save Changes'}
               </Btn>
+            </div>
+          </div>
+          <div className=" flex flex-col mt-4 w-96 p-2 rounded-md">
+            <p>Site Id</p>
+            <div className="bg-vca-grey-5 my-1 flex p-1 rounded-md items-center justify-between">
+              <input
+                type={showSiteId ? 'text' : 'password'}
+                defaultValue={site.id}
+                className="w-10/12 bg-transparent"
+                style={{ background: 'transparent' }}
+                disabled
+              />
+              <div className="flex">
+                <MdContentCopy
+                  className="mr-2 cursor-pointer text-vca-grey-2"
+                  onClick={() => copyToBoard(site.id)}
+                />
+                {showSiteId ? (
+                  <AiFillEyeInvisible
+                    onClick={() => setShowSiteId(!showSiteId)}
+                    className="cursor-pointer text-vca-grey-2"
+                  />
+                ) : (
+                  <AiFillEye
+                    onClick={() => setShowSiteId(!showSiteId)}
+                    className="cursor-pointer text-vca-grey-2"
+                  />
+                )}
+              </div>
+            </div>
+            <p>Account Id</p>
+            <div className="bg-vca-grey-5 my-1 flex p-1 rounded-md items-center justify-between">
+              <input
+                type={showAccountId ? 'text' : 'password'}
+                defaultValue={profile.account.id}
+                className="w-10/12 bg-blue-200"
+                style={{ background: 'transparent' }}
+                disabled
+              />
+              <div className="flex">
+                <MdContentCopy
+                  className="mr-2 cursor-pointer text-vca-grey-2"
+                  onClick={() => copyToBoard(profile.account.id)}
+                />
+                {showAccountId ? (
+                  <AiFillEyeInvisible
+                    onClick={() => setShowAccountId(!showAccountId)}
+                    className="cursor-pointer text-vca-grey-2"
+                  />
+                ) : (
+                  <AiFillEye
+                    onClick={() => setShowAccountId(!showAccountId)}
+                    className="cursor-pointer text-vca-grey-2"
+                  />
+                )}
+              </div>
             </div>
           </div>
           <div className="mt-10 mb-5 font-semibold leading-6 text-xl text-vca-grey-1 font-inter">
@@ -218,7 +282,6 @@ export const Edit = ({
                 />
               </FormGroup>
             )}
-            
           </div>
           <hr className="border-gray-400 border-5 w-full mt-8" />
           <div className="mt-10 mb-5 font-semibold leading-6 text-xl text-vca-grey-1 font-inter">

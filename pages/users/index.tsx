@@ -54,7 +54,6 @@ export const index = ({
   } = useForm();
 
   const removeUser = async () => {
-    console.error(userToDelete);
 
     try {
       const result = await await new User(token).softDelete({

@@ -1,7 +1,8 @@
 import { PAGES_QUERY, SITE_QUERY, SITES_QUERY } from '../graphql';
 import {
   ADD_MENU_ITEM_TO_SITE,
-    CREATE_SITE,
+  AVAILABLE_MENU_ITEMS,
+  CREATE_SITE,
   DELETE_SITE_MENUITEM,
   REMOVE_SITE,
   UPDATE_SITE,
@@ -9,8 +10,9 @@ import {
 } from '../graphql/site';
 import { createApolloClient } from '../lib/apollo';
 import {
+  AvailableItems,
   CreateMenuitemInput,
-    CreateSiteInput,
+  CreateSiteInput,
   FilterInput,
   Page,
   SiteView,
@@ -35,7 +37,7 @@ export class Site {
     accountId: string;
     skip?: number;
     limit?: number;
-    filter?: FilterInput
+    filter?: FilterInput;
   }): Promise<GqlResponse<SiteView[]>> => {
     try {
       const data = await client.query({
@@ -171,7 +173,7 @@ export class Site {
     siteId: string;
   }): Promise<GqlResponse<SiteView>> => {
     try {
-      const {data} = await client.mutate({
+      const { data } = await client.mutate({
         mutation: REMOVE_SITE,
         variables: {
           siteId: siteId,
@@ -275,68 +277,116 @@ export class Site {
     }
   };
 
-  public updateSite = async ({input,siteId}:{input:UpdateSiteInput,siteId:string}): Promise<GqlResponse<SiteView>> => {
+  public updateSite = async ({
+    input,
+    siteId,
+  }: {
+    input: UpdateSiteInput;
+    siteId: string;
+  }): Promise<GqlResponse<SiteView>> => {
     try {
-        const data = await client.mutate({
-            mutation: UPDATE_SITE,
-            variables:{
-                UpdateSiteInput:input,
-                siteId:siteId
-            },
+      const data = await client.mutate({
+        mutation: UPDATE_SITE,
+        variables: {
+          UpdateSiteInput: input,
+          siteId: siteId,
+        },
+      });
+      if (!data.data.updateSite) {
+        console.error(data);
+        return Promise.reject<GqlResponse<SiteView>>({
+          data: null,
+          error: data,
+          status: false,
         });
-        if (!data.data.updateSite) {
-            console.error(data);
-            return Promise.reject<GqlResponse<SiteView>>({
-              data: null,
-              error: data,
-              status: false,
-            });
-        }
-        return Promise.resolve<GqlResponse<SiteView>>({
-            data: data.data.updateSite,
-            error: null,
-            status: true,
-          });
+      }
+      return Promise.resolve<GqlResponse<SiteView>>({
+        data: data.data.updateSite,
+        error: null,
+        status: true,
+      });
     } catch (error) {
-        console.error(error);
-        return Promise.reject<GqlResponse<SiteView>>({
-            data: null,
-            error: error,
-            status: false,
-          });
+      console.error(error);
+      return Promise.reject<GqlResponse<SiteView>>({
+        data: null,
+        error: error,
+        status: false,
+      });
     }
-  } 
+  };
 
-  public createSite = async ({input,token}:{input:CreateSiteInput,token:any}): Promise<GqlResponse<SiteView>> => {
-    try{
-        const newClient = createApolloClient(token);
-        const data = await newClient.mutate({
-            mutation:CREATE_SITE,
-            variables: {
-                CreateSiteInput:input as CreateSiteInput
-            },
-        });
-        
-        if(!data.data.createSite){
-            console.error(data);
-            return Promise.reject<GqlResponse<SiteView>>({
-                data: null,
-                error:data,
-                status: false,
-            });
-        }
-        return Promise.resolve<GqlResponse<SiteView>>({
-            data: data.data.createSite,
-            error: null,
-            status:true
-        })
-    }catch(error){
-        console.error(error);
+  public createSite = async ({
+    input,
+    token,
+  }: {
+    input: CreateSiteInput;
+    token: any;
+  }): Promise<GqlResponse<SiteView>> => {
+    try {
+      const newClient = createApolloClient(token);
+      const data = await newClient.mutate({
+        mutation: CREATE_SITE,
+        variables: {
+          CreateSiteInput: input as CreateSiteInput,
+        },
+      });
+
+      if (!data.data.createSite) {
+        console.error(data);
         return Promise.reject<GqlResponse<SiteView>>({
-            data: null,
-            error: error,
-            status: false,
-          });
+          data: null,
+          error: data,
+          status: false,
+        });
+      }
+      return Promise.resolve<GqlResponse<SiteView>>({
+        data: data.data.createSite,
+        error: null,
+        status: true,
+      });
+    } catch (error) {
+      console.error(error);
+      return Promise.reject<GqlResponse<SiteView>>({
+        data: null,
+        error: error,
+        status: false,
+      });
     }
-  }
+  };
+
+  public getAvailableItems = async ({
+    siteId,
+  }: {
+    siteId: string;
+  }): Promise<GqlResponse<AvailableItems[]>> => {
+    try {
+      const data = await client.query({
+        query: AVAILABLE_MENU_ITEMS,
+        variables: {
+          siteId: siteId,
+        },
+      });
+      if (!data.data.availableMenuItems) {
+        console.error({ data });
+        return Promise.reject<GqlResponse<AvailableItems[]>>({
+          data: null,
+          error: data,
+          status: false,
+        });
+      }
+      return Promise.resolve<GqlResponse<AvailableItems[]>>({
+        data: data.data.availableMenuItems,
+        error: null,
+        status: true,
+      });
+    } catch (error) {
+      console.error({ error });
+      
+      return Promise.reject<GqlResponse<AvailableItems[]>>({
+        data: null,
+        error: error,
+        status: false,
+      });
+    }
+  };
 }

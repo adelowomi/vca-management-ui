@@ -1228,3 +1228,8 @@ export type Styles = {
   updatedAt: Scalars['DateTime'];
   deletedAt: Scalars['DateTime'];
 };
+
+export type AvailableItems = {
+  id: Scalars['String'];
+  name: Scalars['String']
+}

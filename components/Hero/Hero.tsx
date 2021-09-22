@@ -13,7 +13,6 @@ export interface HeroProps {
 }
 
 export const HeroPreview = ({ hero }: { hero: Hero }): JSX.Element => {
-  console.error(hero.media);
   
   return (
     <>

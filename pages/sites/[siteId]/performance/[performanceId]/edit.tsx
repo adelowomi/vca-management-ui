@@ -37,8 +37,8 @@ const edit = ({
   items,
   account,
   profile,
+  availableMenuItems
 }) => {
-  console.error({ performance });
 
   const client = createApolloClient(token);
   const {
@@ -100,6 +100,7 @@ const edit = ({
           errors={errors}
           menuItem={state.menuItem}
           options={menuItems.error ? [] : menuItems}
+          availableMenuItems={availableMenuItems}
         />
         <hr className="border-gray-400 border-5 w-full mt-8" />
         <PageHeaderStyle
@@ -240,6 +241,19 @@ export async function getServerSideProps(ctx) {
   } catch (error) {
     menuItems = { error: true };
   }
+  let availableMenuItems;
+  try {
+     const data = await(
+      await site.getAvailableItems({
+        siteId: ctx.query.siteId as unknown as string,
+      })
+    ).data
+    availableMenuItems = data;
+  } catch (error) {
+    console.error({error});
+    availableMenuItems = { error : true}
+  }
+
 
   try {
     const values = (
@@ -283,6 +297,7 @@ export async function getServerSideProps(ctx) {
       items,
       account: profile.account.id ?? '',
       profile: profile,
+      availableMenuItems
     },
   };
 }

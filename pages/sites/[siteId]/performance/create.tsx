@@ -35,7 +35,9 @@ const create = ({
   medias,
   accountId: account,
   profile,
+  availableMenuItems
 }) => {
+  
   const client = createApolloClient(token);
   const {
     query: { siteId },
@@ -90,6 +92,7 @@ const create = ({
           errors={errors}
           menuItem={state.menuItem}
           options={menuItems}
+          availableMenuItems={availableMenuItems}
         />
         <hr className="border-gray-400 border-5 w-full mt-8" />
         <PageHeaderStyle
@@ -186,6 +189,19 @@ export async function getServerSideProps(ctx) {
   const profile = (await user.getProfile()).data;
   const media = new MediaClass(session.idToken);
 
+  let availableMenuItems;
+  try {
+     const data = await(
+      await site.getAvailableItems({
+        siteId: ctx.query.siteId as unknown as string,
+      })
+    ).data
+    availableMenuItems = data;
+  } catch (error) {
+    console.error({error});
+    availableMenuItems = { error : true}
+  }
+
   let medias: any;
   let items: any;
   const currentSite = await (
@@ -243,6 +259,7 @@ export async function getServerSideProps(ctx) {
       items,
       accountId: profile.account.id,
       profile,
+      availableMenuItems
     },
   };
 }

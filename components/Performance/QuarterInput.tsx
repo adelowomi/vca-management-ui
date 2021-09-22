@@ -22,7 +22,6 @@ const QuarterInput = ({
   token,
 }): JSX.Element => {
   const [open, setOpen] = React.useState(false);
-  console.error({ state });
 
   return (
     <div className=" py-6 mt-10 -ml-9 mr-12 px-9">
@@ -135,7 +134,6 @@ const QuarterInput = ({
       <div className="mt-7">
         <div className="grid grid-cols-4 gap-2">
           {state.map((item, index) => {
-            console.error({ item });
             return <SingleItem key={index} item={item} />;
           })}
         </div>

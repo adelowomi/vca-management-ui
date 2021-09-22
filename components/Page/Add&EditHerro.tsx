@@ -61,7 +61,6 @@ export const AddEditHero = ({
     
     setHero({ media: media.id });
     setSelectedMedia(media);
-    console.error(media);
   };
 
   return (

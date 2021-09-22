@@ -39,6 +39,7 @@ const edit = ({
   menuItems,
   items,
   existingWidget,
+  availableMenuItems,
   pageItems,
 }) => {
   const router = useRouter();
@@ -75,7 +76,6 @@ const edit = ({
   } = useRouter();
 
   const refreshData = () => {
-    console.error('refreshed');
     router.replace(router.asPath);
   };
 
@@ -142,6 +142,14 @@ const edit = ({
     console.error(data);
   };
 
+  const selectableMenuItems = [
+    ...availableMenuItems,
+    {
+      name: menuItems.filter((item) => item.id == page.menuItem)[0].name,
+      id: menuItems.filter((item) => item.id == page.menuItem)[0].id,
+    },
+  ];
+
   useUnsavedChangesWarning(isDirty);
 
   return (
@@ -183,7 +191,7 @@ const edit = ({
               }}
               onChange={(data) => setSelectedMenu(data.value)}
               label="Add menu to page"
-              options={menuItems.map(
+              options={selectableMenuItems.map(
                 (item, index) => {
                   return {
                     value: item.id as unknown as string,
@@ -293,7 +301,18 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     error = err;
   }
 
-  console.error({ page });
+  let availableMenuItems;
+  try {
+    const data = await (
+      await site.getAvailableItems({
+        siteId: ctx.query.siteId as unknown as string,
+      })
+    ).data;
+    availableMenuItems = data;
+  } catch (error) {
+    console.error({ error });
+    availableMenuItems = { error: true };
+  }
 
   const items = await (
     await item.getAllItems({
@@ -383,7 +402,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       })
     ).data;
-    console.error(existingWidget);
   } catch (error) {
     console.error(error);
     existingWidget = [];
@@ -401,6 +419,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       profile,
       pageItems,
       accountId: profile.account.id,
+      availableMenuItems,
     },
   };
 };
