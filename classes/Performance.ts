@@ -1,7 +1,4 @@
-import {
-  GET_PERFORMANCE,
-  GET_PERFORMANCES,
-} from '../graphql/performance.gql';
+import { GET_PERFORMANCE, GET_PERFORMANCES } from '../graphql/performance.gql';
 import { createApolloClient } from '../lib/apollo';
 import { FilterInput, Performance } from './schema';
 import { GqlResponse } from './User';
@@ -58,11 +55,15 @@ export class PerformanceClass {
     limit: number;
   }): Promise<GqlResponse<Performance[]>> => {
     try {
-      const { data } =await client.query({
+      const { data } = await client.query({
         query: GET_PERFORMANCES,
-        variables: { accountId: accountId, filter: filter,skip: skip,limit: limit},
+        variables: {
+          accountId: accountId,
+          filter: filter,
+          skip: skip,
+          limit: limit,
+        },
       });
-      console.error(data);
       if (!data.performances) {
         return Promise.reject<GqlResponse<Performance[]>>({
           error: data,

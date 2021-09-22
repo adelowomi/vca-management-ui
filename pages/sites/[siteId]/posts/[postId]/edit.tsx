@@ -1,10 +1,15 @@
+import 'react-quill/dist/quill.snow.css';
+
 import { getSession, Session, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import ReactPlayer from 'react-player';
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+
 import { useToasts } from 'react-toast-notifications';
 
 import { Items } from '../../../../../classes/Items';
@@ -20,7 +25,6 @@ import { ShadowBtn } from '../../../../../components/Page/PageButtons';
 import { ImageSelectBox } from '../../../../../components/Page/PageStyledElements';
 import { getStringDate } from '../../../../../components/Page/PostList';
 import SelectMediaModal from '../../../../../components/Page/SelectMediaModal';
-import { DraftEditor } from '../../../../../components/utilsGroup/Editor';
 import { TagSelector } from '../../../../../components/utilsGroup/TagSelector';
 import { GqlErrorResponse } from '../../../../../errors/GqlError';
 import { GET_ALL_MEDIA } from '../../../../../graphql';
@@ -31,6 +35,7 @@ import { createApolloClient } from '../../../../../lib/apollo';
 const edit = ({ token, post, error, profile }) => {
   const {
     query: { siteId, postId },
+    push,
   } = useRouter();
   const [open, setOpen] = React.useState(false);
   const client = createApolloClient(token);
@@ -71,8 +76,9 @@ const edit = ({ token, post, error, profile }) => {
         },
       });
       setIsLoading(false);
-      addToast('Post is successfully Edited.', { appearance: 'success' });
-      return;
+      addToast('Post is successfully Edited.', { appearance: 'success' }, () =>
+        push(`/sites/${siteId}/posts`)
+      );
     } catch (error) {
       setIsLoading(false);
       addToast('Post could not be Edited.', { appearance: 'error' });
@@ -80,13 +86,45 @@ const edit = ({ token, post, error, profile }) => {
     }
   };
 
-  const getContent = (content: any) => {
+  const getQuillContent = (
+    content: string,
+    _delta: any,
+    _source: any,
+    _editor: any
+  ) => {
     setValue('content', content);
   };
 
   const getTags = (tags: any) => {
     setValue('tags', tags ? tags?.map((el) => el.value) : []);
   };
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{ color: [] }, { background: [] }],
+      ['link', 'image', 'video'],
+    ],
+  };
+
+  const formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'align',
+    'color',
+    'background',
+    'link',
+    'image',
+    'video',
+  ];
 
   React.useEffect(() => {
     register('content', {
@@ -185,7 +223,6 @@ const edit = ({ token, post, error, profile }) => {
                     {preview ? 'Hide preview' : 'Show preview'}
                   </ShadowBtn>
                 </div>
-                
               </div>
             </section>
             <section className="mt-10">
@@ -216,9 +253,12 @@ const edit = ({ token, post, error, profile }) => {
             <section className="mt-6 grid grid-cols-3 h-full gap-10 items-center pb-12">
               <div className="col-span-2 h-full">
                 <h4 className="text-xl font-medium mb-4">Post content</h4>
-                <DraftEditor
-                  defaultValue={post.content}
-                  getContent={getContent}
+                <ReactQuill
+                  theme="snow"
+                  value={post.content}
+                  onChange={getQuillContent}
+                  modules={modules}
+                  formats={formats}
                 />
                 {errors?.content && (
                   <p className="text-red-500">content is required!</p>
@@ -258,7 +298,7 @@ const edit = ({ token, post, error, profile }) => {
                         </button>
                       </div>
                     </div>
-                    </div>
+                  </div>
                 ) : (
                   ''
                 )}
