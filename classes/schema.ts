@@ -84,6 +84,12 @@ export type Account = {
   isActive: Scalars['Boolean'];
 };
 
+export type SiteFooter = {
+  __typename?: 'SiteFooter';
+  termsOfUse: Scalars['String'];
+  privacyPolicy: Scalars['String'];
+}
+
 export type User = {
   __typename?: 'User';
   userId: Scalars['String'];
@@ -191,6 +197,7 @@ export type SiteView = {
   account: Account;
   isActive: Scalars['Boolean'];
   social?: Social;
+  footer?: SiteFooter;
 };
 
 export type Hero = {

@@ -10,6 +10,7 @@ import { MdContentCopy } from 'react-icons/md';
 import { useToasts } from 'react-toast-notifications';
 import * as yup from 'yup';
 
+import { Items } from '../../../classes/Items';
 import {
   ComparisonOperatorEnum,
   LogicalOperatorEnum,
@@ -73,12 +74,14 @@ export const Edit = ({
   pages,
   token,
   profile,
+  posts,
 }: {
   site: SiteView;
   error: GqlErrorResponse;
   token: any;
   pages: Page[];
   profile: Profile;
+  posts: any;
 }): JSX.Element => {
   const {
     register,
@@ -103,6 +106,8 @@ export const Edit = ({
   const { addToast } = useToasts();
   const router = useRouter();
   const [newPage, setNewPage] = useState('');
+  const [termsOfUse, setTermsOfUse] = useState(site.footer.termsOfUse);
+  const [privacyPolicy, setPrivacyPolicy] = useState(site.footer.privacyPolicy);
   const [working, setWorking] = useState(false);
   const [showSiteId, setShowSiteId] = useState(false);
   const [showAccountId, setShowAccountId] = useState(false);
@@ -114,8 +119,13 @@ export const Edit = ({
 
   const submit = async (data) => {
     setWorking(true);
+    const footer = {
+      termsOfUse: termsOfUse,
+      privacyPolicy: privacyPolicy,
+    };
     newPage ? (data.page = newPage) : null;
     data.page == undefined ? (data.page = null) : null;
+    data.footer = footer;
     try {
       const result = await _thisSite.updateSite({
         siteId: site.id,
@@ -147,6 +157,11 @@ export const Edit = ({
     addToast('Copied', { appearance: 'success' });
   };
 
+  const truncate = (text: string) => {
+    const newText = text.length > 20 ? text.slice(0, 45) + '...' : text;
+    return newText;
+  };
+
   return (
     <Layout isPAdmin={false} profile={profile}>
       <Container className="mt-12">
@@ -160,7 +175,7 @@ export const Edit = ({
                 </Btn>
               </Link>
               <Btn color="secondary" $bg="primary" $px="lg">
-                {working ? 'Saving..' : 'Save Changes'}
+                {working ? 'Saving...' : 'Save Changes'}
               </Btn>
             </div>
           </div>
@@ -283,6 +298,64 @@ export const Edit = ({
               </FormGroup>
             )}
           </div>
+          <hr className="border-gray-400 border-5 w-full my-8" />
+          <div className="grid grid-cols-2  w-form-col ">
+            <FormGroup className="">
+              <FormSelect
+                defaultOption={{
+                  id: 0,
+                  name: site.footer.termsOfUse
+                    ? posts.filter((p) => p.id == site.footer.termsOfUse)[0]
+                        .featured
+                    : 'Terms of Use',
+                  value: site.footer.termsOfUse
+                    ? posts.filter((p) => p.id == site.footer.termsOfUse)[0].id
+                    : '0',
+                  unavailable: false,
+                }}
+                onChange={(data) => setTermsOfUse(data.value)}
+                label="Terms of Use"
+                options={posts.map((post, index) => {
+                  return {
+                    id: index,
+                    name: truncate(post.featured),
+                    value: post.id,
+                    unavailable: false,
+                  };
+                })}
+                error={errors}
+                errorText={'select a page'}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormSelect
+                defaultOption={{
+                  id: 0,
+                  name: site.footer.privacyPolicy
+                    ? posts.filter((p) => p.id == site.footer.privacyPolicy)[0]
+                        .featured
+                    : 'Privacy policy',
+                  value: site.footer.privacyPolicy
+                    ? posts.filter((p) => p.id == site.footer.privacyPolicy)[0]
+                        .id
+                    : '0',
+                  unavailable: false,
+                }}
+                onChange={(data) => setPrivacyPolicy(data.value)}
+                label="Privacy Policy"
+                options={posts.map((post, index) => {
+                  return {
+                    id: index,
+                    name: truncate(post.featured),
+                    value: post.id,
+                    unavailable: false,
+                  };
+                })}
+                error={errors}
+                errorText={'select a Page'}
+              />
+            </FormGroup>
+          </div>
           <hr className="border-gray-400 border-5 w-full mt-8" />
           <div className="mt-10 mb-5 font-semibold leading-6 text-xl text-vca-grey-1 font-inter">
             Add site social handles
@@ -392,6 +465,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = getSession(ctx.req, ctx.res);
   const user = new User(session.idToken);
   const site = new Site(session.idToken);
+  const item = new Items(session.idToken);
   const token = session.idToken;
 
   if (!session) {
@@ -403,6 +477,29 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   const profile = await (await user.getProfile()).data;
+  const variables = {
+    filter: {
+      combinedFilter: {
+        logicalOperator: LogicalOperatorEnum.And,
+        filters: [
+          {
+            singleFilter: {
+              field: 'account',
+              operator: ComparisonOperatorEnum.Eq,
+              value: profile.account.id,
+            },
+          },
+          {
+            singleFilter: {
+              field: 'siteId',
+              operator: ComparisonOperatorEnum.Eq,
+              value: ctx.query.siteId,
+            },
+          },
+        ],
+      },
+    },
+  };
 
   try {
     const data = await (
@@ -430,6 +527,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       })
     ).data;
+    const posts = await (
+      await item.getAllItems({
+        accountId: profile.account.id,
+        ...variables,
+      })
+    ).data;
+
     return {
       props: {
         site: data,
@@ -438,6 +542,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         token,
         pages,
         profile,
+        posts,
       },
     };
   } catch (error) {
