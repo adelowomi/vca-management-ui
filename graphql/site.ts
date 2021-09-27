@@ -7,6 +7,10 @@ const SITE_QUERY = gql`
       name
       createdAt
       page
+      footer {
+        privacyPolicy
+        termsOfUse
+      }
       social {
         instagram
         facebook
