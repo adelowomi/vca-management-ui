@@ -10,6 +10,7 @@ import { MdContentCopy } from 'react-icons/md';
 import { useToasts } from 'react-toast-notifications';
 import * as yup from 'yup';
 
+import { Items } from '../../../classes/Items';
 import {
   ComparisonOperatorEnum,
   LogicalOperatorEnum,
@@ -18,7 +19,6 @@ import {
   SiteView,
   UpdateSiteInput,
 } from '../../../classes/schema';
-import { Items } from '../../../classes/Items';
 import { Site } from '../../../classes/Site';
 import { User } from '../../../classes/User';
 import { FormInput } from '../../../components/FormInput/formInput';
@@ -74,7 +74,7 @@ export const Edit = ({
   pages,
   token,
   profile,
-  posts
+  posts,
 }: {
   site: SiteView;
   error: GqlErrorResponse;
@@ -121,7 +121,7 @@ export const Edit = ({
     setWorking(true);
     const footer = {
       termsOfUse: termsOfUse,
-      privacyPolicy: privacyPolicy
+      privacyPolicy: privacyPolicy,
     };
     newPage ? (data.page = newPage) : null;
     data.page == undefined ? (data.page = null) : null;
@@ -158,9 +158,9 @@ export const Edit = ({
   };
 
   const truncate = (text: string) => {
-    const newText = text.length > 20 ? text.slice(0, 45) + '...' : text
-    return newText
-  }
+    const newText = text.length > 20 ? text.slice(0, 45) + '...' : text;
+    return newText;
+  };
 
   return (
     <Layout isPAdmin={false} profile={profile}>
@@ -300,58 +300,61 @@ export const Edit = ({
           </div>
           <hr className="border-gray-400 border-5 w-full my-8" />
           <div className="grid grid-cols-2  w-form-col ">
-          <FormGroup className="">
-            <FormSelect
-              defaultOption={{
-                id: 0,
-                name: site.footer.termsOfUse
-                  ? posts.filter((p) => p.id == site.footer.termsOfUse)[0].featured
-                  : 'Terms of Use',
-                value: site.footer.termsOfUse
-                  ? posts.filter((p) => p.id == site.footer.termsOfUse)[0].id
-                  : '0',
-                unavailable: false,
-              }}
-              onChange={(data) => setTermsOfUse(data.value)}
-              label="Terms of Use"
-              options={posts.map((post, index) => {
-                return {
-                  id: index,
-                  name: truncate(post.featured),
-                  value: post.id,
+            <FormGroup className="">
+              <FormSelect
+                defaultOption={{
+                  id: 0,
+                  name: site.footer.termsOfUse
+                    ? posts.filter((p) => p.id == site.footer.termsOfUse)[0]
+                        .featured
+                    : 'Terms of Use',
+                  value: site.footer.termsOfUse
+                    ? posts.filter((p) => p.id == site.footer.termsOfUse)[0].id
+                    : '0',
                   unavailable: false,
-                };
-              })}
-              error={errors}
-              errorText={'select a page'}
-            />
-          </FormGroup>
-          <FormGroup>
-            <FormSelect
-              defaultOption={{
-                id: 0,
-                name: site.footer.privacyPolicy
-                  ? posts.filter((p) => p.id == site.footer.privacyPolicy)[0].featured
-                  : 'Privacy policy',
-                value: site.footer.privacyPolicy
-                  ? posts.filter((p) => p.id == site.footer.privacyPolicy)[0].id
-                  : '0',
-                unavailable: false,
-              }}
-              onChange={(data) => setPrivacyPolicy(data.value)}
-              label="Privacy Policy"
-              options={posts.map((post, index) => {
-                return {
-                  id: index,
-                  name: truncate(post.featured),
-                  value: post.id,
+                }}
+                onChange={(data) => setTermsOfUse(data.value)}
+                label="Terms of Use"
+                options={posts.map((post, index) => {
+                  return {
+                    id: index,
+                    name: truncate(post.featured),
+                    value: post.id,
+                    unavailable: false,
+                  };
+                })}
+                error={errors}
+                errorText={'select a page'}
+              />
+            </FormGroup>
+            <FormGroup>
+              <FormSelect
+                defaultOption={{
+                  id: 0,
+                  name: site.footer.privacyPolicy
+                    ? posts.filter((p) => p.id == site.footer.privacyPolicy)[0]
+                        .featured
+                    : 'Privacy policy',
+                  value: site.footer.privacyPolicy
+                    ? posts.filter((p) => p.id == site.footer.privacyPolicy)[0]
+                        .id
+                    : '0',
                   unavailable: false,
-                };
-              })}
-              error={errors}
-              errorText={'select a Page'}
-            />
-          </FormGroup>
+                }}
+                onChange={(data) => setPrivacyPolicy(data.value)}
+                label="Privacy Policy"
+                options={posts.map((post, index) => {
+                  return {
+                    id: index,
+                    name: truncate(post.featured),
+                    value: post.id,
+                    unavailable: false,
+                  };
+                })}
+                error={errors}
+                errorText={'select a Page'}
+              />
+            </FormGroup>
           </div>
           <hr className="border-gray-400 border-5 w-full mt-8" />
           <div className="mt-10 mb-5 font-semibold leading-6 text-xl text-vca-grey-1 font-inter">
